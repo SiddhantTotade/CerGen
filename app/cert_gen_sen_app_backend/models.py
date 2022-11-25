@@ -8,10 +8,9 @@ class Event(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     event_name = models.CharField(max_length=20,null=True,blank=True)
     subject = models.CharField(max_length=20,null=True,blank=True)
-    from_date = models.DateField(auto_now_add=True)
-    to_date = models.DateField(auto_now_add=True,blank=True)
-    csv_file = models.FileField(upload_to='certificates/csv_files/')
-    certificates = models.FileField(upload_to='certificates/participant_certificates/')
+    from_date = models.DateField()
+    to_date = models.DateField()
+    xlsx_file = models.FileField(upload_to='certificates/csv_files/',null=True,blank=True)
     slug = models.SlugField(null=True,blank=True)
 
     def save(self, *args,**kwargs):
@@ -20,3 +19,4 @@ class Event(models.Model):
 
 class Participant(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE)
+    email = models.EmailField(max_length=254,null=True,blank=True)
