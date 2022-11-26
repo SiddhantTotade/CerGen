@@ -37,16 +37,17 @@ def generateCertificate(request):
 
     from_date = []
     to_date = []
-    df = pd.read_excel('/home/siddhanttotade/Documents/Docs/Programming/GIT/certificate-generator-and-sender/app/cert_gen_sen_app_backend/Certificate Data/Contact Information.xlsx', index_col=None)
+    df = pd.read_excel('./cert_gen_sen_app_backend/certificate_data/Contact Information.xlsx', index_col=None)
     key = df['Full Name'].tolist()
     from_dates = df['Event From Date'].tolist()
     to_dates = df['Event To Date'].tolist()
+    
     for date in from_dates:
         from_date.append(str(date.date()))
 
     for index, names in enumerate(key):
-        template = cv2.imread("/home/siddhanttotade/Documents/Docs/Programming/GIT/certificate-generator-and-sender/app/cert_gen_sen_app_backend/Certificate Data/certificate-generator/certificate-template.jpg")
-        signature = cv2.imread("/home/siddhanttotade/Documents/Docs/Programming/GIT/certificate-generator-and-sender/app/cert_gen_sen_app_backend/Certificate Data/certificate-generator/Galvin Belson.png", -1)
+        template = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/certificate-template.jpg")
+        signature = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/Galvin Belson.png", -1)
 
         x_offset = y_offset = 500
 
@@ -64,6 +65,6 @@ def generateCertificate(request):
                     cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (0, 0, 255), 1, cv2.LINE_AA)
         cv2.putText(template, from_date[index], (782, 552),
                     cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
-        cv2.imwrite(f'/home/siddhanttotade/Documents/Docs/Programming/GIT/certificate-generator-and-sender/app/cert_gen_sen_app_backend/Certificate Data/generated-certificates/{names}.jpg', template)
+        cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/generated-certificates/{names}.jpg', template)
         print(f'Processing {index + 1} / {len(key)}')
     return JsonResponse("Certificate Generated",safe=False)
