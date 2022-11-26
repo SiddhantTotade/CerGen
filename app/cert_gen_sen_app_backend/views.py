@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from .models import *
 from .serializers import *
+import pandas as pd
 
 # Create your views here.
 
@@ -23,3 +24,5 @@ class FilteredEvent(APIView):
             return JsonResponse(event_serializer.data,safe=False)
         return JsonResponse("No Data",safe=False)
 
+def generateCertificate(self,request):
+    pass
