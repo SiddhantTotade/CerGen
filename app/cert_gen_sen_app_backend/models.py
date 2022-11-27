@@ -10,7 +10,7 @@ class Event(models.Model):
     subject = models.CharField(max_length=20,null=True,blank=True)
     from_date = models.DateField()
     to_date = models.DateField()
-    xlsx_file = models.FileField(upload_to='certificates/csv_files/',null=True,blank=True)
+    xlsx_file = models.CharField(max_length=200,null=True,blank=True)
     slug = models.SlugField(null=True,blank=True)
 
     def save(self, *args,**kwargs):

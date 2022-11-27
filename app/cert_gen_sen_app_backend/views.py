@@ -22,7 +22,6 @@ class EventsOperations(APIView):
         return JsonResponse("No Data",safe=False)
     
     def post(self, request):
-        print(request.data)
         event_json_data = JSONParser().parse(request)
         event_serialized_data = EventSerializer(data=event_json_data)
 
