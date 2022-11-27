@@ -6,10 +6,13 @@ import pandas as pd
 import glob
 import os
 import cv2
+from rest_framework.parsers import JSONParser,MultiPartParser
 
 # Create your views here.
 
-class AllEvents(APIView):
+# Getting all events
+class EventsOperations(APIView):
+    parser_classes = (MultiPartParser,)
     def get(self, request):
         all_events = Event.objects.all()
 
@@ -18,6 +21,24 @@ class AllEvents(APIView):
             return JsonResponse(event_serializer_data.data,safe=False)
         return JsonResponse("No Data",safe=False)
     
+    def post(self, request):
+        print(request.data)
+        event_json_data = JSONParser().parse(request)
+        event_serialized_data = EventSerializer(data=event_json_data)
+
+        if event_serialized_data.is_valid():
+            event_serialized_data.save()
+            return JsonResponse("Event added successfully",safe=False)
+        return JsonResponse("Failed to add event",safe=False)
+    
+    def delete(self, request, slug):
+        event_by_slug = Event.objects.get(slug = slug)
+        event_by_slug.delete()
+        return JsonResponse("Event deleted successfully",safe=False)
+
+
+
+# Filtering Events by slug    
 class FilteredEvent(APIView):
     def get(self, request, slug):
         event = Event.objects.filter(slug=slug)
@@ -27,11 +48,15 @@ class FilteredEvent(APIView):
             return JsonResponse(event_serializer.data,safe=False)
         return JsonResponse("No Data",safe=False)
 
+    
+# Certificate directory cleaner
 def cleanUp():
     files = glob.glob('app/cert_gen_sen_app_backend/Certificate Data/generated-certificates/*')
     for f in files:
         os.remove(f)
 
+        
+# Ceertificate generator
 def generateCertificate(request):
     cleanUp()
 
@@ -66,5 +91,5 @@ def generateCertificate(request):
         cv2.putText(template, from_date[index], (782, 552),
                     cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
         cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/generated-certificates/{names}.jpg', template)
-        print(f'Processing {index + 1} / {len(key)}')
+        # print(f'Processing {index + 1} / {len(key)}')
     return JsonResponse("Certificate Generated",safe=False)
