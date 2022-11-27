@@ -1,4 +1,5 @@
 from rest_framework.views import APIView
+from rest_framework.viewsets import ModelViewSet
 from django.http import JsonResponse
 from .models import *
 from .serializers import *
@@ -6,13 +7,13 @@ import pandas as pd
 import glob
 import os
 import cv2
-from rest_framework.parsers import JSONParser,MultiPartParser
-
+from rest_framework.parsers import JSONParser,FileUploadParser
 # Create your views here.
 
 # Getting all events
 class EventsOperations(APIView):
-    parser_classes = (MultiPartParser,)
+    permission_classes=[]
+    parser_classes = (FileUploadParser,)
     def get(self, request):
         all_events = Event.objects.all()
 
@@ -21,9 +22,8 @@ class EventsOperations(APIView):
             return JsonResponse(event_serializer_data.data,safe=False)
         return JsonResponse("No Data",safe=False)
     
-    def post(self, request):
-        event_json_data = JSONParser().parse(request)
-        event_serialized_data = EventSerializer(data=event_json_data)
+    def post(self, request, *args, **kwargs):
+        event_serialized_data = EventSerializer(data=request.data,files=request.FILES)
 
         if event_serialized_data.is_valid():
             event_serialized_data.save()
