@@ -138,7 +138,7 @@ export default function MiniDrawer() {
                     </Typography>
                 </Toolbar>
                 <div className=' flex absolute right-2 hover:cursor-pointer rounded-md text-black top-20 gap-3 border-2 border-blue-500 p-4'>
-                    <PersonIcon/>
+                    <PersonIcon />
                     <p>User</p>
                 </div>
             </AppBar>
@@ -201,9 +201,6 @@ export default function MiniDrawer() {
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                 <DrawerHeader />
-                <Typography paragraph>
-                    Certificate Generator Application in Django
-                </Typography>
             </Box>
         </Box>
     );

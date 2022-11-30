@@ -1,5 +1,6 @@
 import React from "react";
 import Home from "./Home";
+import { AllEvents } from "./components/event_components/AllEvents";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
 function App() {
@@ -7,7 +8,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/api/all-events" element={<Home />} />
+        <Route path="/api/all-events" element={<AllEvents />} />
         <Route path="/api/create-event/" element={<Home />} />
         <Route path="/api/issue-certificate/" element={<Home />} />
       </Routes>
