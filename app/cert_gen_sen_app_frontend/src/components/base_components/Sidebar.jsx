@@ -19,7 +19,9 @@ import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import PaymentsIcon from '@mui/icons-material/Payments';
+import EventIcon from '@mui/icons-material/Event';
+import { Link } from 'react-router-dom';
+import PersonIcon from '@mui/icons-material/Person';
 
 const drawerWidth = 240;
 
@@ -90,15 +92,21 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 
 const listitem_sx = { display: 'block' }
 
-const listitemicon_sx = {
-    minWidth: 0,
-    mr: 3,
-    justifyContent: 'center',
-}
-
 export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
+
+    const listItemButton_sx = {
+        minHeight: 48,
+        justifyContent: open ? 'initial' : 'center',
+        px: 2.5,
+    }
+
+    const listItemIcon_sx = {
+        minWidth: 0,
+        mr: open ? 3 : 'auto',
+        justifyContent: 'center',
+    }
 
     const handleDrawerOpen = () => {
         setOpen(true);
@@ -129,6 +137,10 @@ export default function MiniDrawer() {
                         CerGen
                     </Typography>
                 </Toolbar>
+                <div className=' flex absolute right-2 hover:cursor-pointer rounded-md text-black top-20 gap-3 border-2 border-blue-500 p-4'>
+                    <PersonIcon/>
+                    <p>User</p>
+                </div>
             </AppBar>
             <Drawer variant="permanent" open={open}>
                 <DrawerHeader>
@@ -138,87 +150,53 @@ export default function MiniDrawer() {
                 </DrawerHeader>
                 <Divider />
                 <List>
-                    {['All Events'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={listitemicon_sx}
-                                >
-                                    {index % 2 === 0 ? <PaymentsIcon /> : ""}
+                    <Link to='/api/all-events'>
+                        <ListItem disablePadding sx={listitem_sx} key='logout'>
+                            <ListItemButton sx={listItemButton_sx}>
+                                <ListItemIcon sx={listItemIcon_sx}>
+                                    <EventIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                                <ListItemText primary='All Events' sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
                         </ListItem>
-                    ))}
-                    {['Create Event', 'Issue Certificate'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={listitem_sx}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ? <ArrowUpwardIcon /> : <AddCircleOutlineIcon />}
+                    </Link>
+                </List>
+                <List>
+                    <Link to='/api/create-event'>
+                        <ListItem disablePadding sx={listitem_sx} key='logout'>
+                            <ListItemButton sx={listItemButton_sx}>
+                                <ListItemIcon sx={listItemIcon_sx}>
+                                    <AddCircleOutlineIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                                <ListItemText primary='Create Event' sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
                         </ListItem>
-                    ))}
+                    </Link>
+                </List>
+                <List>
+                    <Link to='/api/issue-certificate'>
+                        <ListItem disablePadding sx={listitem_sx} key='logout'>
+                            <ListItemButton sx={listItemButton_sx}>
+                                <ListItemIcon sx={listItemIcon_sx}>
+                                    <ArrowUpwardIcon />
+                                </ListItemIcon>
+                                <ListItemText primary='Issue Certificate' sx={{ opacity: open ? 1 : 0 }} />
+                            </ListItemButton>
+                        </ListItem>
+                    </Link>
                 </List>
                 <Divider />
                 <List>
-                    <ListItem disablePadding sx={listitem_sx} key='logout'>
-                        <ListItemButton sx={{
-                            minHeight: 48,
-                            justifyContent: open ? 'initial' : 'center',
-                            px: 2.5,
-                        }}>
-                            <ListItemIcon sx={{
-                                minWidth: 0,
-                                mr: open ? 3 : 'auto',
-                                justifyContent: 'center',
-                            }}>
-                                <LogoutIcon />
-                            </ListItemIcon>
-                            <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
-                        </ListItemButton>
-                    </ListItem>
-                    {/* {['Logout'].map((text, index) => (
-                        <ListItem key={text} disablePadding sx={{ display: 'block' }}>
-                            <ListItemButton
-                                sx={{
-                                    minHeight: 48,
-                                    justifyContent: open ? 'initial' : 'center',
-                                    px: 2.5,
-                                }}
-                            >
-                                <ListItemIcon
-                                    sx={{
-                                        minWidth: 0,
-                                        mr: open ? 3 : 'auto',
-                                        justifyContent: 'center',
-                                    }}
-                                >
-                                    {index % 2 === 0 ? <LogoutIcon /> : " "}
+                    <Link to='/logout'>
+                        <ListItem disablePadding sx={listitem_sx} key='logout'>
+                            <ListItemButton sx={listItemButton_sx}>
+                                <ListItemIcon sx={listItemIcon_sx}>
+                                    <LogoutIcon />
                                 </ListItemIcon>
-                                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                                <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
                             </ListItemButton>
                         </ListItem>
-                    ))} */}
+                    </Link>
                 </List>
             </Drawer>
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>

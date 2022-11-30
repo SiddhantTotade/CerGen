@@ -7,6 +7,9 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Home />} />
+        <Route path="/api/all-events" element={<Home />} />
+        <Route path="/api/create-event/" element={<Home />} />
+        <Route path="/api/issue-certificate/" element={<Home />} />
       </Routes>
     </Router>
   );
