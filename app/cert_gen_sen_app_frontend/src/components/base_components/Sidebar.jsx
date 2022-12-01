@@ -22,6 +22,7 @@ import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import EventIcon from '@mui/icons-material/Event';
 import { Link } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
+import EventForm from '../event_components/EventForm';
 
 const drawerWidth = 240;
 
@@ -93,6 +94,9 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const listitem_sx = { display: 'block' }
 
 export default function MiniDrawer() {
+
+    const [form, setForm] = React.useState(false)
+
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
@@ -116,92 +120,103 @@ export default function MiniDrawer() {
         setOpen(false);
     };
 
+    const handleForm = () => {
+        setForm(true);
+    }
+
+    const handleFormClose = () => {
+        setForm(false);
+    }
+
     return (
-        <Box sx={{ display: 'flex' }}>
-            <CssBaseline />
-            <AppBar position="fixed" open={open}>
-                <Toolbar>
-                    <IconButton
-                        color="inherit"
-                        aria-label="open drawer"
-                        onClick={handleDrawerOpen}
-                        edge="start"
-                        sx={{
-                            marginRight: 5,
-                            ...(open && { display: 'none' }),
-                        }}
-                    >
-                        <MenuIcon />
-                    </IconButton>
-                    <Typography variant="h6" noWrap component="div">
-                        CerGen
-                    </Typography>
-                </Toolbar>
-                <div className=' flex absolute right-2 hover:cursor-pointer rounded-md text-black top-20 gap-3 border-2 border-blue-500 p-4'>
-                    <PersonIcon />
-                    <p>User</p>
-                </div>
-            </AppBar>
-            <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                    <IconButton onClick={handleDrawerClose}>
-                        {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                    </IconButton>
-                </DrawerHeader>
-                <Divider />
-                <List>
-                    <Link to='/api/all-events'>
-                        <ListItem disablePadding sx={listitem_sx} key='logout'>
-                            <ListItemButton sx={listItemButton_sx}>
-                                <ListItemIcon sx={listItemIcon_sx}>
-                                    <EventIcon />
-                                </ListItemIcon>
-                                <ListItemText primary='All Events' sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    </Link>
-                </List>
-                <List>
-                    <Link to='/api/create-event'>
-                        <ListItem disablePadding sx={listitem_sx} key='logout'>
-                            <ListItemButton sx={listItemButton_sx}>
-                                <ListItemIcon sx={listItemIcon_sx}>
-                                    <AddCircleOutlineIcon />
-                                </ListItemIcon>
-                                <ListItemText primary='Create Event' sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    </Link>
-                </List>
-                <List>
-                    <Link to='/api/issue-certificate'>
-                        <ListItem disablePadding sx={listitem_sx} key='logout'>
-                            <ListItemButton sx={listItemButton_sx}>
-                                <ListItemIcon sx={listItemIcon_sx}>
-                                    <ArrowUpwardIcon />
-                                </ListItemIcon>
-                                <ListItemText primary='Issue Certificate' sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    </Link>
-                </List>
-                <Divider />
-                <List>
-                    <Link to='/logout'>
-                        <ListItem disablePadding sx={listitem_sx} key='logout'>
-                            <ListItemButton sx={listItemButton_sx}>
-                                <ListItemIcon sx={listItemIcon_sx}>
-                                    <LogoutIcon />
-                                </ListItemIcon>
-                                <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
-                            </ListItemButton>
-                        </ListItem>
-                    </Link>
-                </List>
-            </Drawer>
-            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
+        <div>
+            <Box sx={{ display: 'flex' }}>
+                <CssBaseline />
+                <AppBar position="fixed" open={open}>
+                    <Toolbar>
+                        <IconButton
+                            color="inherit"
+                            aria-label="open drawer"
+                            onClick={handleDrawerOpen}
+                            edge="start"
+                            sx={{
+                                marginRight: 5,
+                                ...(open && { display: 'none' }),
+                            }}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography variant="h6" noWrap component="div">
+                            CerGen
+                        </Typography>
+                    </Toolbar>
+                    <div className=' flex absolute right-2 hover:cursor-pointer rounded-md text-black top-20 gap-3 border-2 border-blue-500 p-4'>
+                        <PersonIcon />
+                        <p>User</p>
+                    </div>
+                </AppBar>
+                <Drawer variant="permanent" open={open}>
+                    <DrawerHeader>
+                        <IconButton onClick={handleDrawerClose}>
+                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                        </IconButton>
+                    </DrawerHeader>
+                    <Divider />
+                    <List>
+                        <Link to='/api/all-events'>
+                            <ListItem disablePadding sx={listitem_sx} key='logout'>
+                                <ListItemButton sx={listItemButton_sx}>
+                                    <ListItemIcon sx={listItemIcon_sx}>
+                                        <EventIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary='All Events' sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
+                    </List>
+                    <List>
+                        <div onClick={handleForm}>
+                            <ListItem disablePadding sx={listitem_sx} key='logout'>
+                                <ListItemButton sx={listItemButton_sx}>
+                                    <ListItemIcon sx={listItemIcon_sx}>
+                                        <AddCircleOutlineIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Create Event' sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </div>
+                    </List>
+                    <List>
+                        <Link to='/api/issue-certificate'>
+                            <ListItem disablePadding sx={listitem_sx} key='logout'>
+                                <ListItemButton sx={listItemButton_sx}>
+                                    <ListItemIcon sx={listItemIcon_sx}>
+                                        <ArrowUpwardIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Issue Certificate' sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
+                    </List>
+                    <Divider />
+                    <List>
+                        <Link to='/logout'>
+                            <ListItem disablePadding sx={listitem_sx} key='logout'>
+                                <ListItemButton sx={listItemButton_sx}>
+                                    <ListItemIcon sx={listItemIcon_sx}>
+                                        <LogoutIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </Link>
+                    </List>
+                </Drawer>
+                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                    <DrawerHeader />
+                </Box>
+                <EventForm open={form} onClose={handleFormClose} />
             </Box>
-        </Box>
+        </div>
     );
 }

@@ -8,6 +8,8 @@ import glob
 import os
 import cv2
 from rest_framework.parsers import JSONParser,FileUploadParser
+from tablib import Dataset
+from .resources import *
 # Create your views here.
 
 # Getting all events
@@ -20,7 +22,7 @@ class EventsOperations(APIView):
         if all_events:
             event_serializer_data = EventSerializer(all_events,many=True)
             return JsonResponse(event_serializer_data.data,safe=False)
-        return JsonResponse("No Data",safe=False)
+        return JsonResponse("No event data",safe=False)
     
     def post(self, request, *args, **kwargs):
         event_serialized_data = EventSerializer(data=request.data,files=request.FILES)
@@ -35,6 +37,31 @@ class EventsOperations(APIView):
         event_by_slug.delete()
         return JsonResponse("Event deleted successfully",safe=False)
 
+
+# Getting data from csv and uploading to database
+class UploadParticipant(APIView):
+    def get(self, request):
+        all_participants = Participant.objects.all()
+
+        if all_participants:
+            participant_serializer = ParticipantSerializer(all_participants,many=True)
+            return JsonResponse(participant_serializer.data,safe=False)
+        return JsonResponse("No participant data",safe=False)
+
+    def post(request):
+        participant_resource = ParticipantResource()
+        dataset = Dataset()
+        new_participant = request.FILES['xlsx_file']
+
+        if not new_participant.name.endswith('xlsx'):
+            return JsonResponse("Wrong File Format",safe=False)
+
+        imported_data = dataset.load(new_participant.read(),format='xlsx')
+
+        for data in imported_data:
+            value = Participant(data[0],data[1],data[2],data[3],data[4])
+            value.save()
+        return JsonResponse("Participant uploaded successfully")
 
 
 # Filtering Events by slug    
