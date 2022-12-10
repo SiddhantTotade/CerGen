@@ -23,6 +23,8 @@ import EventIcon from '@mui/icons-material/Event';
 import { Link } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
 import EventForm from '../event_components/EventForm';
+import FileForm from '../event_components/FileForm';
+import FileUploadIcon from '@mui/icons-material/FileUpload';
 
 const drawerWidth = 240;
 
@@ -96,6 +98,7 @@ const listitem_sx = { display: 'block' }
 export default function MiniDrawer() {
 
     const [form, setForm] = React.useState(false)
+    const [csv_form, setCsvForm] = React.useState(false)
 
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
@@ -126,6 +129,14 @@ export default function MiniDrawer() {
 
     const handleFormClose = () => {
         setForm(false);
+    }
+
+    const handleCsvForm = () => {
+        setCsvForm(true);
+    }
+
+    const handleCsvFormClose = () => {
+        setCsvForm(false);
     }
 
     return (
@@ -164,7 +175,7 @@ export default function MiniDrawer() {
                     <Divider />
                     <List>
                         <Link to='/api/all-events'>
-                            <ListItem disablePadding sx={listitem_sx} key='logout'>
+                            <ListItem disablePadding sx={listitem_sx} key='all_events'>
                                 <ListItemButton sx={listItemButton_sx}>
                                     <ListItemIcon sx={listItemIcon_sx}>
                                         <EventIcon />
@@ -176,7 +187,7 @@ export default function MiniDrawer() {
                     </List>
                     <List>
                         <div onClick={handleForm}>
-                            <ListItem disablePadding sx={listitem_sx} key='logout'>
+                            <ListItem disablePadding sx={listitem_sx} key='create_events'>
                                 <ListItemButton sx={listItemButton_sx}>
                                     <ListItemIcon sx={listItemIcon_sx}>
                                         <AddCircleOutlineIcon />
@@ -187,8 +198,20 @@ export default function MiniDrawer() {
                         </div>
                     </List>
                     <List>
+                        <div onClick={handleCsvForm}>
+                            <ListItem disablePadding sx={listitem_sx} key='upload_csv'>
+                                <ListItemButton sx={listItemButton_sx}>
+                                    <ListItemIcon sx={listItemIcon_sx}>
+                                        <FileUploadIcon />
+                                    </ListItemIcon>
+                                    <ListItemText primary='Upload CSV' sx={{ opacity: open ? 1 : 0 }} />
+                                </ListItemButton>
+                            </ListItem>
+                        </div>
+                    </List>
+                    <List>
                         <Link to='/api/issue-certificate'>
-                            <ListItem disablePadding sx={listitem_sx} key='logout'>
+                            <ListItem disablePadding sx={listitem_sx} key='issue_certificate'>
                                 <ListItemButton sx={listItemButton_sx}>
                                     <ListItemIcon sx={listItemIcon_sx}>
                                         <ArrowUpwardIcon />
@@ -216,6 +239,7 @@ export default function MiniDrawer() {
                     <DrawerHeader />
                 </Box>
                 <EventForm open={form} onClose={handleFormClose} />
+                <FileForm open={csv_form} onClose={handleCsvFormClose} />
             </Box>
         </div>
     );

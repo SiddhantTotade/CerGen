@@ -7,18 +7,29 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 
 export default function EventForm(props) {
+    const [from_focus, from_setFocused] = React.useState(false)
+    const [from_hasValue, from_setHasValue] = React.useState(false)
+    const from_onFocus = () => from_setFocused(true)
+    const from_onBlur = () => from_setFocused(false)
+
+    const [to_focus, to_setFocused] = React.useState(false)
+    const [to_hasValue, to_setHasValue] = React.useState(false)
+    const to_onFocus = () => to_setFocused(true)
+    const to_onBlur = () => to_setFocused(false)
 
     return (
         <div className='w-full'>
             <Dialog {...props} >
                 <DialogTitle>Add Event</DialogTitle>
                 <DialogContent>
-                    <TextField autoFocus margin="dense" id="name" label="Event Name" type="email" fullWidth variant="standard" />
-                    <TextField autoFocus margin="dense" id="name"  type="date" fullWidth variant="standard" />
-                    <TextField autoFocus margin="dense" id="name" label="Email Address" type="email" fullWidth variant="standard" />
+                    <TextField autoFocus margin="dense" id="event_name" label="Event Name" type="text" fullWidth variant="standard" />
+                    <TextField autoFocus margin="dense" id="event_subject" label="Event Subject" type="text" fullWidth variant="standard" />
+                    <TextField onFocus={from_onFocus} onBlur={from_onBlur} onChange={(e) => { if (e.target.value) from_setHasValue(true); else from_setHasValue(false); }} type={from_hasValue || from_focus ? "date" : "text"} autoFocus margin="dense" id="event_from_date" label="Event From Date" fullWidth variant="standard" />
+                    <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} autoFocus margin="dense" id="event_to_date" label="Event To Date" fullWidth variant="standard" />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
+                    <Button >Create Event</Button>
                 </DialogActions>
             </Dialog>
         </div>
