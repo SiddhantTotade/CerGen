@@ -10,7 +10,6 @@ class Event(models.Model):
     subject = models.CharField(max_length=20,null=True,blank=True)
     from_date = models.DateField()
     to_date = models.DateField()
-    
     slug = models.SlugField(null=True,blank=True)
 
     def save(self, *args,**kwargs):

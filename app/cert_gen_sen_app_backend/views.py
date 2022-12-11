@@ -14,8 +14,6 @@ from .resources import *
 
 # Getting all events
 class EventsOperations(APIView):
-    permission_classes=[]
-    parser_classes = (FileUploadParser,)
     def get(self, request):
         all_events = Event.objects.all()
 
@@ -24,8 +22,9 @@ class EventsOperations(APIView):
             return JsonResponse(event_serializer_data.data,safe=False)
         return JsonResponse("No event data",safe=False)
     
-    def post(self, request, *args, **kwargs):
-        event_serialized_data = EventSerializer(data=request.data,files=request.FILES)
+    def post(self, request):
+        event_serialized_data = EventSerializer(data=request.data)
+        print(event_serialized_data)
 
         if event_serialized_data.is_valid():
             event_serialized_data.save()
