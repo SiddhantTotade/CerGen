@@ -10,12 +10,16 @@ class Event(models.Model):
     subject = models.CharField(max_length=20,null=True,blank=True)
     from_date = models.DateField()
     to_date = models.DateField()
-    xlsx_file = models.FileField(upload_to='certificates/csv_files/',null=True,blank=True)
+    
     slug = models.SlugField(null=True,blank=True)
 
     def save(self, *args,**kwargs):
         self.slug = slugify(self.event_name)
         return super().save(*args,**kwargs)
+
+class EventFile(models.Model):
+    event_name = models.ForeignKey(Event,on_delete=models.CASCADE)
+    xlsx_file = models.FileField(upload_to='certificates/csv_files/',null=True,blank=True)
 
 class Participant(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE)
