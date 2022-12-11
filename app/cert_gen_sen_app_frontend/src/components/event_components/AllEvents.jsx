@@ -39,9 +39,6 @@ export const AllEvents = () => {
         fetchData()
     }, [])
 
-    console.log(eventsData);
-
-
     return (
         <>
             <Sidebar />
