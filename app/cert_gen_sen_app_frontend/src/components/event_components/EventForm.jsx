@@ -28,7 +28,6 @@ export default function EventForm(props) {
 
     function handleSubmit(e) {
 
-        console.log(eventData);
         e.preventDefault();
         const url = 'http://127.0.0.1:8000/api/all-events/'
         axios.post(url, {
@@ -38,7 +37,6 @@ export default function EventForm(props) {
             'from_date': eventData.from_date,
             'to_date': eventData.to_date,
         }).then(res => console.log(res)).catch(err => console.log(err))
-
     }
 
     function handleEventData(event) {

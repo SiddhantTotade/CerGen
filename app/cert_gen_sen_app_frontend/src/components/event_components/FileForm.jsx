@@ -36,10 +36,29 @@ export default function FileForm(props) {
     const file_onBlur = () => file_setFocused(false)
 
     const [events, setEvents] = React.useState('');
+    const [eventFileData, setEventFileData] = React.useState({
+        eventID: "",
+        eventFile: null
+    })
 
     const handleChange = (event) => {
         setEvents(event.target.value);
     };
+
+    function handleFileChange(event) {
+        const newData = { ...eventFileData }
+        newData[event.target.id] = event.target.value
+        setEventFileData(newData)
+    }
+
+    function handleFileSubmit(event) {
+
+        e.preventDefault();
+        const url = 'http://127.0.0.1:8000/api/upload-participants/'
+        axios.post(url, {
+            'event_id': eventFileData.event_name,
+        }).then(res => console.log(res)).catch(err => console.log(err))
+    }
 
     return (
         <div className='w-full'>
@@ -58,7 +77,7 @@ export default function FileForm(props) {
                             return <MenuItem value={events.id}>{events.event_name}</MenuItem>
                         })}
                     </Select>
-                    <TextField onFocus={file_onFocus} onBlur={file_onBlur} onChange={(e) => { if (e.target.value) file_setHasValue(true); else file_setHasValue(false); }} type={file_hasValue || file_focus ? "file" : "file"} autoFocus margin="dense" id="event_name" label="File" fullWidth variant="standard" />
+                    <TextField onFocus={file_onFocus} onBlur={file_onBlur} onChange={(e) => { handleFileSubmit(e); if (e.target.value) file_setHasValue(true); else file_setHasValue(false); }} type={file_hasValue || file_focus ? "file" : "file"} autoFocus margin="dense" id="xlsx_file" label="File" fullWidth variant="standard" />
                 </FormControl>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
