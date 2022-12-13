@@ -50,9 +50,10 @@ class UploadParticipant(APIView):
         return JsonResponse("No participant data",safe=False)
 
     def post(self, request):
-        participant_data = request.data
+        event_id = request.data['eventId']
+        participant_file = request.data['xlsx_file']
 
-        wb = openpyxl.load_workbook(participant_data['xlsx_file'])
+        wb = openpyxl.load_workbook(participant_file)
         work_sheet = wb['Form Responses 1']
 
         excel_data = list()
@@ -67,8 +68,11 @@ class UploadParticipant(APIView):
         
         json_data = json.dumps(excel_data)
 
-        for data in json_data:
-            pass
+        for data in excel_data:
+            name = data['First_Name']
+            email = data['Email']
+            certificate_status = data['Certificate_Status']
+            Event = Participant.objects.create(event = '1',student_name = name,email = email, certificate_status = certificate_status)
         return JsonResponse("Participant uploaded successfully",safe=False)
 
 
