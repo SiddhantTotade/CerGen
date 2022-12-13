@@ -46,18 +46,21 @@ export default function FileForm(props) {
     };
 
     function handleFileChange(event) {
-        const newData = { ...eventFileData }
-        newData[event.target.id] = event.target.value
-        setEventFileData(newData)
+        setEventFileData(event.target.files[0])
     }
 
     function handleFileSubmit(event) {
 
-        e.preventDefault();
+        event.preventDefault();
+        const formData = new FormData()
+        formData.append('xlsx_file', eventFileData)
         const url = 'http://127.0.0.1:8000/api/upload-participants/'
-        axios.post(url, {
-            'event_id': eventFileData.event_name,
-        }).then(res => console.log(res)).catch(err => console.log(err))
+        const config = {
+            headers: {
+                'content-type': 'multipart/form-data',
+            }
+        }
+        axios.post(url, formData, config).then(res => console.log(res)).catch(err => console.log(err))
     }
 
     return (
@@ -74,14 +77,14 @@ export default function FileForm(props) {
                         onChange={handleChange}
                     >
                         {eventsData.map((events) => {
-                            return <MenuItem value={events.id}>{events.event_name}</MenuItem>
+                            return <MenuItem value={events.id} id="event_id" >{events.event_name}</MenuItem>
                         })}
                     </Select>
-                    <TextField onFocus={file_onFocus} onBlur={file_onBlur} onChange={(e) => { handleFileSubmit(e); if (e.target.value) file_setHasValue(true); else file_setHasValue(false); }} type={file_hasValue || file_focus ? "file" : "file"} autoFocus margin="dense" id="xlsx_file" label="File" fullWidth variant="standard" />
+                    <TextField onFocus={file_onFocus} onBlur={file_onBlur} onChange={(e) => { handleFileChange(e); if (e.target.value) file_setHasValue(true); else file_setHasValue(false); }} type={file_hasValue || file_focus ? "file" : "file"} autoFocus margin="dense" id="xlsx_file" label="File" fullWidth variant="standard" />
                 </FormControl>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
-                    <Button >Upload File</Button>
+                    <Button onClick={handleFileSubmit} >Upload File</Button>
                 </DialogActions>
             </Dialog>
         </div >

@@ -47,10 +47,11 @@ class UploadParticipant(APIView):
             return JsonResponse(participant_serializer.data,safe=False)
         return JsonResponse("No participant data",safe=False)
 
-    def post(request):
+    def post(self,request):
         participant_resource = ParticipantResource()
         dataset = Dataset()
         new_participant = request.FILES['xlsx_file']
+        print(new_participant)
 
         if not new_participant.name.endswith('xlsx'):
             return JsonResponse("Wrong File Format",safe=False)
