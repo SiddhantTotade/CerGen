@@ -36,6 +36,7 @@ export default function FileForm(props) {
     const file_onBlur = () => file_setFocused(false)
 
     const [events, setEvents] = React.useState('');
+    const [eventId, setEventId] = React.useState('');
     const [eventFileData, setEventFileData] = React.useState({
         eventID: "",
         eventFile: null
@@ -43,6 +44,7 @@ export default function FileForm(props) {
 
     const handleChange = (event) => {
         setEvents(event.target.value);
+        setEventId(event.target.value)
     };
 
     function handleFileChange(event) {
@@ -54,6 +56,7 @@ export default function FileForm(props) {
         event.preventDefault();
         const formData = new FormData()
         formData.append('xlsx_file', eventFileData)
+        formData.append('eventId', eventId)
         const url = 'http://127.0.0.1:8000/api/upload-participants/'
         const config = {
             headers: {
@@ -69,13 +72,7 @@ export default function FileForm(props) {
                 <DialogTitle>Upload File</DialogTitle>
                 <FormControl sx={{ minWidth: 400, margin: 2 }}>
                     <InputLabel id="events" >Events</InputLabel>
-                    <Select
-                        labelId="events"
-                        id="demo-simple-select"
-                        value={events}
-                        label="Events"
-                        onChange={handleChange}
-                    >
+                    <Select labelId="events" id="event_dropdown" value={events} label="Events" onChange={handleChange} >
                         {eventsData.map((events) => {
                             return <MenuItem value={events.id} id="event_id" >{events.event_name}</MenuItem>
                         })}

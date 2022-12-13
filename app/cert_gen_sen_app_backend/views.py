@@ -51,9 +51,11 @@ class UploadParticipant(APIView):
     def post(self,request):
         participant_resource = ParticipantResource()
         dataset = Dataset()
-        new_participant = request.FILES['xlsx_file']
+        new_participant_data = request.data
 
-        wb = openpyxl.load_workbook(new_participant)
+        print(new_participant_data)
+
+        wb = openpyxl.load_workbook(new_participant_data)
         work_sheet = wb['Form Responses 1']
 
         excel_data = list()
@@ -63,9 +65,8 @@ class UploadParticipant(APIView):
             for cell in row:
                 row_data.append(str(cell.value))
             excel_data.append(row_data)
-        print(excel_data[1][1])
         
-        if not new_participant.name.endswith('xlsx'):
+        if not new_participant_data.name.endswith('xlsx'):
             return JsonResponse("Wrong File Format",safe=False)
 
         # imported_data = dataset.load(new_participant.read(),format='xlsx')
