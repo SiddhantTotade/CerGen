@@ -57,7 +57,6 @@ class UploadParticipant(APIView):
         work_sheet = wb['Form Responses 1']
 
         excel_data = list()
-
         for row in islice(work_sheet.values,1,work_sheet.max_row):
             data = OrderedDict()
             data['id'] = row[0]
@@ -65,14 +64,14 @@ class UploadParticipant(APIView):
             data['Email'] = row[2]
             data['Certificate_Status'] = row[3]
             excel_data.append(data)
-        
-        json_data = json.dumps(excel_data)
 
+        event_new_id = Event.objects.get(id = event_id)
+        
         for data in excel_data:
             name = data['First_Name']
             email = data['Email']
             certificate_status = data['Certificate_Status']
-            Event = Participant.objects.create(event = '1',student_name = name,email = email, certificate_status = certificate_status)
+            Event.id = Participant.objects.create(event = event_new_id,student_name = name,email = email, certificate_status = certificate_status)
         return JsonResponse("Participant uploaded successfully",safe=False)
 
 
