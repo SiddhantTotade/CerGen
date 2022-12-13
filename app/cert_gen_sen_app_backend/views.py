@@ -10,6 +10,7 @@ import cv2
 from rest_framework.parsers import JSONParser,FileUploadParser
 from tablib import Dataset
 from .resources import *
+import openpyxl
 # Create your views here.
 
 # Getting all events
@@ -51,16 +52,27 @@ class UploadParticipant(APIView):
         participant_resource = ParticipantResource()
         dataset = Dataset()
         new_participant = request.FILES['xlsx_file']
-        print(new_participant)
 
+        wb = openpyxl.load_workbook(new_participant)
+        work_sheet = wb['Form Responses 1']
+
+        excel_data = list()
+
+        for row in work_sheet.iter_rows():
+            row_data = list()
+            for cell in row:
+                row_data.append(str(cell.value))
+            excel_data.append(row_data)
+        print(excel_data[1][1])
+        
         if not new_participant.name.endswith('xlsx'):
             return JsonResponse("Wrong File Format",safe=False)
 
-        imported_data = dataset.load(new_participant.read(),format='xlsx')
+        # imported_data = dataset.load(new_participant.read(),format='xlsx')
 
-        for data in imported_data:
-            value = Participant(data[0],data[1],data[2],data[3],data[4])
-            value.save()
+        # for data in imported_data:
+            # value = Participant(data[0],data[1],data[2],data[3])
+            # value.save()
         return JsonResponse("Participant uploaded successfully")
 
 

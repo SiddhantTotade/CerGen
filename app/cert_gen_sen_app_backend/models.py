@@ -15,6 +15,9 @@ class Event(models.Model):
     def save(self, *args,**kwargs):
         self.slug = slugify(self.event_name)
         return super().save(*args,**kwargs)
+    
+    def __str__(self):
+        return str(self.id)
 
 class EventFile(models.Model):
     event_name = models.ForeignKey(Event,on_delete=models.CASCADE)
