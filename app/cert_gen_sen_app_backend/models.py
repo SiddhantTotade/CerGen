@@ -27,4 +27,4 @@ class Participant(models.Model):
     event = models.ForeignKey(Event,on_delete=models.CASCADE)
     student_name = models.CharField(max_length=50,null=True,blank=True)
     email = models.EmailField(max_length=254,null=True,blank=True)
-    certificate_status = models.BooleanField(default=False)
+    certificate_status = models.CharField(max_length=10,null=True,blank=True)

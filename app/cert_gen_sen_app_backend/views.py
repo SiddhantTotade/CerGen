@@ -1,5 +1,4 @@
 from rest_framework.views import APIView
-from rest_framework.viewsets import ModelViewSet
 from django.http import JsonResponse
 from .models import *
 from .serializers import *
@@ -7,10 +6,12 @@ import pandas as pd
 import glob
 import os
 import cv2
-from rest_framework.parsers import JSONParser,FileUploadParser
-from tablib import Dataset
+from rest_framework.parsers import JSONParser
 from .resources import *
 import openpyxl
+import json
+from itertools import islice
+from collections import OrderedDict
 # Create your views here.
 
 # Getting all events
@@ -48,33 +49,27 @@ class UploadParticipant(APIView):
             return JsonResponse(participant_serializer.data,safe=False)
         return JsonResponse("No participant data",safe=False)
 
-    def post(self,request):
-        participant_resource = ParticipantResource()
-        dataset = Dataset()
-        new_participant_data = request.data
+    def post(self, request):
+        participant_data = request.data
 
-        print(new_participant_data)
-
-        wb = openpyxl.load_workbook(new_participant_data)
+        wb = openpyxl.load_workbook(participant_data['xlsx_file'])
         work_sheet = wb['Form Responses 1']
 
         excel_data = list()
 
-        for row in work_sheet.iter_rows():
-            row_data = list()
-            for cell in row:
-                row_data.append(str(cell.value))
-            excel_data.append(row_data)
+        for row in islice(work_sheet.values,1,work_sheet.max_row):
+            data = OrderedDict()
+            data['id'] = row[0]
+            data['First_Name'] = row[1]
+            data['Email'] = row[2]
+            data['Certificate_Status'] = row[3]
+            excel_data.append(data)
         
-        if not new_participant_data.name.endswith('xlsx'):
-            return JsonResponse("Wrong File Format",safe=False)
+        json_data = json.dumps(excel_data)
 
-        # imported_data = dataset.load(new_participant.read(),format='xlsx')
-
-        # for data in imported_data:
-            # value = Participant(data[0],data[1],data[2],data[3])
-            # value.save()
-        return JsonResponse("Participant uploaded successfully")
+        for data in json_data:
+            pass
+        return JsonResponse("Participant uploaded successfully",safe=False)
 
 
 # Filtering Events by slug    
