@@ -10,7 +10,7 @@ import { useState, useEffect } from 'react';
 import axios from 'axios'
 
 const card_sx = {
-    maxWidth: 345,
+    maxWidth: 400,
     transition: 'all 0.25s ease-in-out',
     cursor: 'pointer',
     '&:hover': {
