@@ -6,10 +6,8 @@ import pandas as pd
 import glob
 import os
 import cv2
-from rest_framework.parsers import JSONParser
 from .resources import *
 import openpyxl
-import json
 from itertools import islice
 from collections import OrderedDict
 # Create your views here.
