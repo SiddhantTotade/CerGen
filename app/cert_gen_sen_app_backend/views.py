@@ -77,10 +77,14 @@ class UploadParticipant(APIView):
 class FilteredEvent(APIView):
     def get(self, request, slug):
         event = Event.objects.filter(slug=slug)
+        new_event_id = 0
+        for event_id in event:
+            new_event_id = event_id
+        participants = Participant.objects.filter(event=new_event_id)
 
-        if event:
-            event_serializer = EventSerializer(event,many=True)
-            return JsonResponse(event_serializer.data,safe=False)
+        if participants:
+            participants = ParticipantSerializer(participants,many=True)
+            return JsonResponse(participants.data,safe=False)
         return JsonResponse("No Data",safe=False)
 
     

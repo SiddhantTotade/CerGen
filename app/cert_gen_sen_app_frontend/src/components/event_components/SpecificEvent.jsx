@@ -9,32 +9,19 @@ import Paper from '@mui/material/Paper';
 import Sidebar from '../base_components/Sidebar'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-
-function createData(name, calories, fat, carbs, protein) {
-    return { name, calories, fat, carbs, protein };
-}
-
-const rows = [
-    createData('Frozen yoghurt', 159, 3),
-    createData('Ice cream sandwich', 237, 3),
-    createData('Eclair', 262, 16.0),
-];
 
 export default function SpecificEvent() {
 
     const [eventsData, setEventsData] = useState([])
-
-    const url = useLocation()
-    const from = url.state
-
-    console.log(from);
+    const event_url = window.location.href
 
     useEffect(() => {
 
+        const new_event_url = event_url.replace("3000", "8000")
+
         const fetchData = async () => {
             try {
-                const response = await axios.get("")
+                const response = await axios.get(new_event_url)
                 setEventsData(response.data)
             }
             catch (error) {
@@ -42,9 +29,7 @@ export default function SpecificEvent() {
             }
         }
         fetchData()
-    }, [])
-
-    console.log(eventsData);
+    }, [event_url])
 
     return (
         <div className='flex justify-center items-center'>
@@ -60,11 +45,11 @@ export default function SpecificEvent() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {rows.map((row) => (
-                                <TableRow key={row.name} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell align="center">{row.calories}</TableCell>
-                                    <TableCell align="center">{row.fat}</TableCell>
-                                    <TableCell align="center">{row.carbs}</TableCell>
+                            {eventsData.map((row) => (
+                                <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                    <TableCell align="center">{row.student_name}</TableCell>
+                                    <TableCell align="center">{row.email}</TableCell>
+                                    <TableCell align="center">{row.certificate_status}</TableCell>
                                 </TableRow>
                             ))}
                         </TableBody>

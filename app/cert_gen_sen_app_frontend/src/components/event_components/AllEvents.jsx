@@ -46,7 +46,7 @@ export const AllEvents = () => {
                 {eventsData.map((event) => {
                     let event_url = '/api/event/' + event.slug
                     let delete_url = '/api/all-event/' + event.slug
-                    return <Link to={{ event_url }} state={{ event: event_url }}>
+                    return <Link to={event_url}>
                         <Card sx={card_sx}>
                             <CardContent>
                                 <div className='flex items-center justify-between'>
