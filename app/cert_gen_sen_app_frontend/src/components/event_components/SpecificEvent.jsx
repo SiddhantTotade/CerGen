@@ -7,6 +7,9 @@ import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Sidebar from '../base_components/Sidebar'
+import axios from 'axios';
+import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 
 function createData(name, calories, fat, carbs, protein) {
     return { name, calories, fat, carbs, protein };
@@ -19,6 +22,30 @@ const rows = [
 ];
 
 export default function SpecificEvent() {
+
+    const [eventsData, setEventsData] = useState([])
+
+    const url = useLocation()
+    const from = url.state
+
+    console.log(from);
+
+    useEffect(() => {
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.get("")
+                setEventsData(response.data)
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        fetchData()
+    }, [])
+
+    console.log(eventsData);
+
     return (
         <div className='flex justify-center items-center'>
             <Sidebar />

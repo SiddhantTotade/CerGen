@@ -44,7 +44,9 @@ export const AllEvents = () => {
             <Sidebar />
             <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                 {eventsData.map((event) => {
-                    return <Link to={event.slug}>
+                    let event_url = '/api/event/' + event.slug
+                    let delete_url = '/api/all-event/' + event.slug
+                    return <Link to={{ event_url }} state={{ event: event_url }}>
                         <Card sx={card_sx}>
                             <CardContent>
                                 <div className='flex items-center justify-between'>
@@ -61,8 +63,8 @@ export const AllEvents = () => {
                                 </Typography>
                             </CardContent>
                             <CardActions>
-                                <Button size="small"><Link sx={{ textDecoration: 'none' }} to={event.slug}>View</Link></Button>
-                                <Button size="small"><Link sx={{ textDecoration: 'none' }} to={event.slug}>Delete</Link></Button>
+                                <Button size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
+                                <Button size="small"><Link sx={{ textDecoration: 'none' }} to={delete_url}>Delete</Link></Button>
                             </CardActions>
                         </Card>
                     </Link>

@@ -10,7 +10,7 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/api/all-events" element={<AllEvents />} />
-        <Route path="/api/all-events/:slug" element={<SpecificEvent />} />
+        <Route path="/api/event/:slug" element={<SpecificEvent />} />
         <Route path="/api/create-event/" element={<Home />} />
         <Route path="/api/issue-certificate/" element={<Home />} />
       </Routes>
