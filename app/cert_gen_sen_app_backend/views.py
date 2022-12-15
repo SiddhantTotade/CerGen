@@ -85,7 +85,7 @@ class FilteredEvent(APIView):
         if participants:
             participants = ParticipantSerializer(participants,many=True)
             return JsonResponse(participants.data,safe=False)
-        return JsonResponse("No Data",safe=False)
+        return JsonResponse("0",safe=False)
 
     
 # Certificate directory cleaner

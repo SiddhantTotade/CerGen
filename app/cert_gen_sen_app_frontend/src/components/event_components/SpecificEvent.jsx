@@ -31,6 +31,8 @@ export default function SpecificEvent() {
         fetchData()
     }, [event_url])
 
+    console.log(typeof (eventsData));
+
     return (
         <div className='flex justify-center items-center'>
             <Sidebar />
@@ -45,13 +47,19 @@ export default function SpecificEvent() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {eventsData.map((row) => (
-                                <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                                    <TableCell align="center">{row.student_name}</TableCell>
-                                    <TableCell align="center">{row.email}</TableCell>
-                                    <TableCell align="center">{row.certificate_status}</TableCell>
-                                </TableRow>
-                            ))}
+                            {
+                                eventsData !== '0' ?
+                                    eventsData.map((row) => (
+                                        <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                            <TableCell align="center">{row.student_name}</TableCell>
+                                            <TableCell align="center">{row.email}</TableCell>
+                                            <TableCell align="center">{row.certificate_status}</TableCell>
+                                        </TableRow>
+                                    ))
+                                    : <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
+                                        <TableCell align="center">No Data</TableCell>
+                                    </TableRow>
+                            }
                         </TableBody>
                     </Table>
                 </TableContainer>
