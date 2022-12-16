@@ -209,18 +209,6 @@ export default function MiniDrawer() {
                             </ListItem>
                         </div>
                     </List>
-                    <List>
-                        <Link to='/api/issue-certificate'>
-                            <ListItem disablePadding sx={listitem_sx} key='issue_certificate'>
-                                <ListItemButton sx={listItemButton_sx}>
-                                    <ListItemIcon sx={listItemIcon_sx}>
-                                        <ArrowUpwardIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary='Issue Certificate' sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
-                        </Link>
-                    </List>
                     <Divider />
                     <List>
                         <Link to='/logout'>

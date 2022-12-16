@@ -15,6 +15,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import { Button } from '@mui/material';
+import CreateParticipant from '../participant_components/CreateParticipant';
 
 const createBtns = {
     background: '#3293a8',
@@ -47,13 +48,23 @@ export default function SpecificEvent() {
         fetchData()
     }, [event_url])
 
+    const [form, setForm] = React.useState(false)
+
+    const handleForm = () => {
+        setForm(true);
+    }
+
+    const handleFormClose = () => {
+        setForm(false);
+    }
+
     return (
         <div className='flex justify-center items-center'>
             <Sidebar />
             <div className='w-3/5 mt-32'>
                 <div className='gap-10'>
-                    <Button sx={createBtns}>Generate Certificate</Button>
-                    <Button sx={createBtns}>Create Participant</Button>
+                    <Button sx={createBtns}>Issue Certificate</Button>
+                    <Button sx={createBtns} onClick={handleForm}>Create Participant</Button>
                 </div>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 450 }} aria-label="simple table">
@@ -89,6 +100,7 @@ export default function SpecificEvent() {
                         </TableBody>
                     </Table>
                 </TableContainer>
+                <CreateParticipant open={form} onClose={handleFormClose} />
             </div>
         </div>
     );

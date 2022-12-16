@@ -9,15 +9,6 @@ import axios from 'axios';
 import { useState } from 'react';
 
 export default function CreateParticipant(props) {
-    const [from_focus, from_setFocused] = React.useState(false)
-    const [from_hasValue, from_setHasValue] = React.useState(false)
-    const from_onFocus = () => from_setFocused(true)
-    const from_onBlur = () => from_setFocused(false)
-
-    const [to_focus, to_setFocused] = React.useState(false)
-    const [to_hasValue, to_setHasValue] = React.useState(false)
-    const to_onFocus = () => to_setFocused(true)
-    const to_onBlur = () => to_setFocused(false)
 
     const [eventData, setEventData] = useState({
         event_name: "",
@@ -49,16 +40,16 @@ export default function CreateParticipant(props) {
     return (
         <div className='w-full'>
             <Dialog {...props} >
-                <DialogTitle>Add Event</DialogTitle>
+                <DialogTitle>Add Participant</DialogTitle>
                 <DialogContent>
-                    <TextField onChange={(e) => handleEventData(e)} value={eventData.event_name} autoFocus margin="dense" id="event_name" label="Event Name" type="text" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} value={eventData.subject} autoFocus margin="dense" id="subject" label="Event Subject" type="text" fullWidth variant="standard" />
-                    <TextField onFocus={from_onFocus} onBlur={from_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) from_setHasValue(true); else from_setHasValue(false); }} type={from_hasValue || from_focus ? "date" : "text"} value={eventData.from_date} autoFocus margin="dense" id="from_date" label="Event From Date" fullWidth variant="standard" />
-                    <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event To Date" fullWidth variant="standard" />
+                    <TextField disabled onChange={(e) => handleEventData(e)} value={eventData.id} autoFocus margin="dense" id="event_id" label="Event Id" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={eventData.subject} autoFocus margin="dense" id="subject" label="Participant Name" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={eventData.from_date} autoFocus margin="dense" id="from_date" label="Participant Email" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Certificate Status" type="text" fullWidth variant="standard" />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
-                    <Button onClick={handleSubmit} >Create Event</Button>
+                    <Button onClick={handleSubmit} >Create Participant</Button>
                 </DialogActions>
             </Dialog>
         </div>
