@@ -11,16 +11,16 @@ import { useState, useEffect } from 'react';
 export default function CreateParticipant(props) {
 
     const [participantData, setParticipantData] = useState({
-        event_id: "",
-        participant_name: "",
-        participant_email: "",
+        event: "",
+        student_name: "",
+        email: "",
         certificate_status: "",
     })
 
     const [eventsData, setEventsData] = useState([])
     const event_url = window.location.href
 
-    eventsData.map((event) => { return participantData.event_id = event.id })
+    eventsData.map((event) => { return participantData.event = event.id })
 
     useEffect(() => {
 
@@ -43,12 +43,14 @@ export default function CreateParticipant(props) {
         e.preventDefault();
         const url = 'http://127.0.0.1:8000/api/create-participant/'
         axios.post(url, {
-            'event_id': participantData,
-            'participant_name': participantData.event_name,
-            'participant_email': participantData.subject,
-            'certificate_status': participantData.from_date,
+            'event': participantData.event,
+            'student_name': participantData.student_name,
+            'email': participantData.email,
+            'certificate_status': participantData.certificate_status,
         }).then(res => console.log(res)).catch(err => console.log(err))
     }
+
+    console.log(participantData);
 
     function handleEventData(event) {
 
@@ -62,9 +64,9 @@ export default function CreateParticipant(props) {
             <Dialog {...props} >
                 <DialogTitle>Add Participant</DialogTitle>
                 <DialogContent>
-                    <TextField disabled onChange={(e) => handleEventData(e)} value={participantData.event_id} autoFocus margin="dense" id="event_id" label="Event Id" type="text" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} value={participantData.participant_name} autoFocus margin="dense" id="participant_name" label="Participant Name" type="text" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} value={participantData.participant_email} autoFocus margin="dense" id="participant_email" label="Participant Email" type="email" fullWidth variant="standard" />
+                    <TextField disabled onChange={(e) => handleEventData(e)} value={participantData.event} autoFocus margin="dense" id="event" label="Event Id" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={participantData.student_name} autoFocus margin="dense" id="student_name" label="Participant Name" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={participantData.email} autoFocus margin="dense" id="email" label="Participant Email" type="email" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} value={participantData.certificate_status} autoFocus margin="dense" id="certificate_status" label="Certificate Status" type="text" fullWidth variant="standard" />
                 </DialogContent>
                 <DialogActions>
