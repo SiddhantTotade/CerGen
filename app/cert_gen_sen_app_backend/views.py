@@ -68,7 +68,14 @@ class UploadParticipant(APIView):
         return JsonResponse("Participant uploaded successfully",safe=False)
 
 
-# Filtering Events by slug    
+def get_event_by_slug(request,slug):
+    event = Event.objects.filter(slug=slug)
+    if event:
+        event_data = EventSerializer(event,many=True)
+        return JsonResponse(event_data.data,safe= False)
+    return JsonResponse("No Data",safe=False)
+
+# Filtering Events by slug
 class FilteredEvent(APIView):
     def get(self, request, slug):
         event = Event.objects.filter(slug=slug)
