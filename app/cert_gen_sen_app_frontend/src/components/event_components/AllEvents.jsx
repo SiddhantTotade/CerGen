@@ -39,13 +39,25 @@ export const AllEvents = () => {
         fetchData()
     }, [])
 
+    function handleDelete(event) {
+        const url = 'http://127.0.0.1:8000/api/event/' + event
+        console.log(url);
+
+        try {
+            const response = axios.delete(url)
+            setEventsData(response.data)
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
     return (
         <>
             <Sidebar />
             <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                 {eventsData.map((event) => {
                     let event_url = '/api/event/' + event.slug
-                    let delete_url = '/api/all-event/' + event.slug
                     return <Link to={event_url}>
                         <Card sx={card_sx}>
                             <CardContent>
@@ -64,7 +76,7 @@ export const AllEvents = () => {
                             </CardContent>
                             <CardActions>
                                 <Button size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
-                                <Button size="small"><Link sx={{ textDecoration: 'none' }} to={delete_url}>Delete</Link></Button>
+                                <Button size="small" onClick={() => handleDelete(event.slug)} >Delete</Button>
                             </CardActions>
                         </Card>
                     </Link>

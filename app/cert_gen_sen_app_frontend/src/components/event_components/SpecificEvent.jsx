@@ -31,8 +31,6 @@ export default function SpecificEvent() {
         fetchData()
     }, [event_url])
 
-    console.log(typeof (eventsData));
-
     return (
         <div className='flex justify-center items-center'>
             <Sidebar />

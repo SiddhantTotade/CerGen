@@ -30,11 +30,6 @@ class EventsOperations(APIView):
             event_serialized_data.save()
             return JsonResponse("Event added successfully",safe=False)
         return JsonResponse("Failed to add event",safe=False)
-    
-    def delete(self, request, slug):
-        event_by_slug = Event.objects.get(slug = slug)
-        event_by_slug.delete()
-        return JsonResponse("Event deleted successfully",safe=False)
 
 
 # Getting data from csv and uploading to database
@@ -86,6 +81,11 @@ class FilteredEvent(APIView):
             participants = ParticipantSerializer(participants,many=True)
             return JsonResponse(participants.data,safe=False)
         return JsonResponse("0",safe=False)
+
+    def delete(self, request, slug):
+        event_by_slug = Event.objects.get(slug = slug)
+        event_by_slug.delete()
+        return JsonResponse("Event deleted successfully",safe=False)
 
     
 # Certificate directory cleaner
