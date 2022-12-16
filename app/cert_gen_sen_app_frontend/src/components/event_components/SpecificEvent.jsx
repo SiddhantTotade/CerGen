@@ -9,6 +9,22 @@ import Paper from '@mui/material/Paper';
 import Sidebar from '../base_components/Sidebar'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import DoneIcon from '@mui/icons-material/Done';
+import CloseIcon from '@mui/icons-material/Close';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
+import { Button } from '@mui/material';
+
+const createBtns = {
+    background: '#3293a8',
+    color: 'white',
+    marginBottom: '10px',
+    marginRight: '10px',
+    '&:hover': {
+        background: "#327fa8",
+    }
+}
 
 export default function SpecificEvent() {
 
@@ -35,6 +51,10 @@ export default function SpecificEvent() {
         <div className='flex justify-center items-center'>
             <Sidebar />
             <div className='w-3/5 mt-32'>
+                <div className='gap-10'>
+                    <Button sx={createBtns}>Generate Certificate</Button>
+                    <Button sx={createBtns}>Create Participant</Button>
+                </div>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 450 }} aria-label="simple table">
                         <TableHead>
@@ -42,6 +62,7 @@ export default function SpecificEvent() {
                                 <TableCell align='center'><b>Student Name</b></TableCell>
                                 <TableCell align='center'><b>Student Email</b></TableCell>
                                 <TableCell align='center'><b>Certificate Status</b></TableCell>
+                                <TableCell align='center'><b>Actions</b></TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -51,7 +72,14 @@ export default function SpecificEvent() {
                                         <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                             <TableCell align="center">{row.student_name}</TableCell>
                                             <TableCell align="center">{row.email}</TableCell>
-                                            <TableCell align="center">{row.certificate_status}</TableCell>
+                                            {row.certificate_status === 'F' ?
+                                                <TableCell align="center"><DoneIcon sx={{ color: "green" }} /></TableCell> : <TableCell align="center"><CloseIcon sx={{ color: "red" }} /></TableCell>
+                                            }
+                                            <TableCell align="center" sx={{}}>
+                                                <Button><EditIcon sx={{ color: "blue" }} /></Button>
+                                                <Button><DeleteIcon sx={{ color: "red" }} /></Button>
+                                                <Button><SendIcon sx={{ color: "grey" }} /></Button>
+                                            </TableCell>
                                         </TableRow>
                                     ))
                                     : <TableRow sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>

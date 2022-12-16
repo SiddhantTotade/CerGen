@@ -12,7 +12,6 @@ import axios from 'axios'
 const card_sx = {
     maxWidth: 400,
     transition: 'all 0.25s ease-in-out',
-    cursor: 'pointer',
     '&:hover': {
         background: "#fcfcfa",
         transform: 'scale(1.1)',
@@ -39,17 +38,20 @@ export const AllEvents = () => {
         fetchData()
     }, [])
 
-    function handleDelete(event) {
+    const handleDelete = async (event) => {
         const url = 'http://127.0.0.1:8000/api/event/' + event
-        console.log(url);
 
-        try {
-            const response = axios.delete(url)
-            setEventsData(response.data)
+        const deleteData = async () => {
+
+            try {
+                const response = await axios.delete(url)
+                setEventsData(response.data)
+            }
+            catch (error) {
+                console.log(error);
+            }
         }
-        catch (error) {
-            console.log(error);
-        }
+        deleteData()
     }
 
     return (
@@ -58,28 +60,26 @@ export const AllEvents = () => {
             <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                 {eventsData.map((event) => {
                     let event_url = '/api/event/' + event.slug
-                    return <Link to={event_url}>
-                        <Card sx={card_sx}>
-                            <CardContent>
-                                <div className='flex items-center justify-between'>
-                                    <Typography gutterBottom variant="h5" component="div">
-                                        {event.event_name}
-                                    </Typography>
-                                    <div>
-                                        <small>{event.from_date} - {event.to_date}</small>
-                                    </div>
-                                </div>
-                                <Typography variant="body2" color="text.secondary">
-                                    Lizards are a widespread group of squamate reptiles, with over 6,000
-                                    species, ranging across all continents except Antarctica
+                    return <Card sx={card_sx}>
+                        <CardContent>
+                            <div className='flex items-center justify-between'>
+                                <Typography gutterBottom variant="h5" component="div">
+                                    {event.event_name}
                                 </Typography>
-                            </CardContent>
-                            <CardActions>
-                                <Button size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
-                                <Button size="small" onClick={() => handleDelete(event.slug)} >Delete</Button>
-                            </CardActions>
-                        </Card>
-                    </Link>
+                                <div>
+                                    <small>{event.from_date} - {event.to_date}</small>
+                                </div>
+                            </div>
+                            <Typography variant="body2" color="text.secondary">
+                                Lizards are a widespread group of squamate reptiles, with over 6,000
+                                species, ranging across all continents except Antarctica
+                            </Typography>
+                        </CardContent>
+                        <CardActions>
+                            <Button size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
+                            <Button size="small" onClick={() => handleDelete(event.slug)} >Delete</Button>
+                        </CardActions>
+                    </Card>
                 })}
             </div>
         </>
