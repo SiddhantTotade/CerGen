@@ -82,6 +82,14 @@ class UploadEachParticipant(APIView):
             participant_serialized_data.save()
             return JsonResponse("Participant added successfully",safe=False)
         return JsonResponse("Failed to add participant",safe=False)
+    
+    def put(self, request):
+        participant_serialized_data = ParticipantSerializer(data=request.data)
+
+        if participant_serialized_data.is_valid():
+            participant_serialized_data.save()
+            return JsonResponse("Participant updated successfully",safe=False)
+        return JsonResponse("Failed to update participant",safe=False)
         
 
 # Filtering Events by slug

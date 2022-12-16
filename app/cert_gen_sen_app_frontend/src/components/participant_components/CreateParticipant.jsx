@@ -70,7 +70,7 @@ export default function CreateParticipant(props) {
                     <TextField onChange={(e) => handleEventData(e)} value={participantData.certificate_status} autoFocus margin="dense" id="certificate_status" label="Certificate Status" type="text" fullWidth variant="standard" />
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.onClose}>Cancel</Button>
+                    <Button onClick={props.onClose} >Cancel</Button>
                     <Button onClick={handleSubmit} >Create Participant</Button>
                 </DialogActions>
             </Dialog>
