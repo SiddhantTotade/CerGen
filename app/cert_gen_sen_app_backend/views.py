@@ -24,7 +24,6 @@ class EventsOperations(APIView):
     
     def post(self, request):
         event_serialized_data = EventSerializer(data=request.data)
-        print(event_serialized_data)
 
         if event_serialized_data.is_valid():
             event_serialized_data.save()
@@ -67,13 +66,23 @@ class UploadParticipant(APIView):
             Event.id = Participant.objects.create(event = event_new_id,student_name = name,email = email, certificate_status = certificate_status)
         return JsonResponse("Participant uploaded successfully",safe=False)
 
-
+# Getting single events by slug
 def get_event_by_slug(request,slug):
     event = Event.objects.filter(slug=slug)
     if event:
         event_data = EventSerializer(event,many=True)
         return JsonResponse(event_data.data,safe= False)
     return JsonResponse("No Data",safe=False)
+
+class UploadEachParticipant(APIView):
+    def post(self, request):
+        participant_serialized_data = ParticipantSerializer(data=request.data)
+
+        if participant_serialized_data.is_valid():
+            participant_serialized_data.save()
+            return JsonResponse("Participant added successfully",safe=False)
+        return JsonResponse("Failed to add participant",safe=False)
+        
 
 # Filtering Events by slug
 class FilteredEvent(APIView):

@@ -17,6 +17,6 @@ class ParticipantSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def create(self,validated_data):
-        event = Event.objects.create(event=validated_data['event'],student_name=validated_data['student_name'],email=validated_data['email'],certificate_status=validated_data['certificate_status'])
+        event = Participant.objects.create(event=validated_data['event'],student_name=validated_data['student_name'],email=validated_data['email'],certificate_status=validated_data['certificate_status'])
         event.save()
         return event

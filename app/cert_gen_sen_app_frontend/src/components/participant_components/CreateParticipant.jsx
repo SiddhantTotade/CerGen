@@ -17,27 +17,10 @@ export default function CreateParticipant(props) {
         certificate_status: "",
     })
 
-    function handleSubmit(e) {
-
-        e.preventDefault();
-        const url = 'http://127.0.0.1:8000/api/all-events/'
-        axios.post(url, {
-            'event_id': participantData,
-            'participant_name': participantData.event_name,
-            'participant_email': participantData.subject,
-            'certificate_status': participantData.from_date,
-        }).then(res => console.log(res)).catch(err => console.log(err))
-    }
-
-    function handleEventData(event) {
-
-        const newData = { ...participantData }
-        newData[event.target.id] = event.target.value
-        setParticipantData(newData)
-    }
-
     const [eventsData, setEventsData] = useState([])
     const event_url = window.location.href
+
+    eventsData.map((event) => { return participantData.event_id = event.id })
 
     useEffect(() => {
 
@@ -55,19 +38,34 @@ export default function CreateParticipant(props) {
         fetchData()
     }, [event_url])
 
-    console.log(eventsData.event_name);
+    function handleSubmit(e) {
+
+        e.preventDefault();
+        const url = 'http://127.0.0.1:8000/api/create-participant/'
+        axios.post(url, {
+            'event_id': participantData,
+            'participant_name': participantData.event_name,
+            'participant_email': participantData.subject,
+            'certificate_status': participantData.from_date,
+        }).then(res => console.log(res)).catch(err => console.log(err))
+    }
+
+    function handleEventData(event) {
+
+        const newData = { ...participantData }
+        newData[event.target.id] = event.target.value
+        setParticipantData(newData)
+    }
 
     return (
         <div className='w-full'>
             <Dialog {...props} >
                 <DialogTitle>Add Participant</DialogTitle>
                 <DialogContent>
-                    {eventsData.map((event) => {
-                        return <TextField disabled onChange={(e) => handleEventData(e)} value={event.id} autoFocus margin="dense" id="event_id" label="Event Id" type="text" fullWidth variant="standard" />
-                    })}
-                    <TextField onChange={(e) => handleEventData(e)} value={participantData.subject} autoFocus margin="dense" id="subject" label="Participant Name" type="text" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} value={participantData.from_date} autoFocus margin="dense" id="from_date" label="Participant Email" type="email" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} value={participantData.to_date} autoFocus margin="dense" id="to_date" label="Certificate Status" type="text" fullWidth variant="standard" />
+                    <TextField disabled onChange={(e) => handleEventData(e)} value={participantData.event_id} autoFocus margin="dense" id="event_id" label="Event Id" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={participantData.participant_name} autoFocus margin="dense" id="participant_name" label="Participant Name" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={participantData.participant_email} autoFocus margin="dense" id="participant_email" label="Participant Email" type="email" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={participantData.certificate_status} autoFocus margin="dense" id="certificate_status" label="Certificate Status" type="text" fullWidth variant="standard" />
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
