@@ -10,6 +10,7 @@ from .resources import *
 import openpyxl
 from itertools import islice
 from collections import OrderedDict
+from rest_framework.parsers import JSONParser
 # Create your views here.
 
 # Getting all events
@@ -83,7 +84,8 @@ class UploadEachParticipant(APIView):
             return JsonResponse("Participant added successfully",safe=False)
         return JsonResponse("Failed to add participant",safe=False)
     
-    def put(self, request):
+    def put(self, request, pk):
+        participant_json_data = JSONParser().parse(request)
         participant_serialized_data = ParticipantSerializer(data=request.data)
 
         if participant_serialized_data.is_valid():
