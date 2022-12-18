@@ -83,8 +83,7 @@ class UploadEachParticipant(APIView):
             participant_serialized_data.save()
             return JsonResponse("Participant added successfully",safe=False)
         return JsonResponse("Failed to add participant",safe=False)
-
-class UpdateEachParticipant(APIView):
+    
     def put(self, request, pk):
         participant_json_data = JSONParser().parse(request)
         participant_by_id = Participant.objects.get(pk = pk)
@@ -94,7 +93,6 @@ class UpdateEachParticipant(APIView):
             participant_serialized_data.save()
             return JsonResponse("Participant updated successfully",safe=False)
         return JsonResponse("Failed to update participant",safe=False)
-        
 
 # Filtering Events by slug
 class FilteredEvent(APIView):
