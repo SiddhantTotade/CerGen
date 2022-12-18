@@ -16,6 +16,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import { Button } from '@mui/material';
 import CreateParticipant from '../participant_components/CreateParticipant';
+import UpdateParticipant from '../participant_components/UpdateParticipant';
 
 const createBtns = {
     background: '#3293a8',
@@ -49,6 +50,7 @@ export default function SpecificEvent() {
     }, [event_url])
 
     const [form, setForm] = React.useState(false)
+    const [updateForm, setUpdateForm] = useState(false)
 
     const handleForm = () => {
         setForm(true);
@@ -56,6 +58,14 @@ export default function SpecificEvent() {
 
     const handleFormClose = () => {
         setForm(false);
+    }
+
+    const handleUpdateForm = () => {
+        setUpdateForm(true);
+    }
+
+    const handleUpdateFormClose = () => {
+        setUpdateForm(false);
     }
 
     return (
@@ -87,7 +97,7 @@ export default function SpecificEvent() {
                                                 <TableCell align="center"><DoneIcon sx={{ color: "green" }} /></TableCell> : <TableCell align="center"><CloseIcon sx={{ color: "red" }} /></TableCell>
                                             }
                                             <TableCell align="center" sx={{}}>
-                                                <Button><EditIcon sx={{ color: "blue" }} /></Button>
+                                                <Button onClick={handleUpdateForm} ><EditIcon sx={{ color: "blue" }} /></Button>
                                                 <Button><DeleteIcon sx={{ color: "red" }} /></Button>
                                                 <Button><SendIcon sx={{ color: "grey" }} /></Button>
                                             </TableCell>
@@ -101,6 +111,7 @@ export default function SpecificEvent() {
                     </Table>
                 </TableContainer>
                 <CreateParticipant open={form} onClose={handleFormClose} />
+                <UpdateParticipant open={updateForm} onClose={handleUpdateFormClose} />
             </div>
         </div>
     );
