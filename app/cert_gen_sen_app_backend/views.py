@@ -83,10 +83,12 @@ class UploadEachParticipant(APIView):
             participant_serialized_data.save()
             return JsonResponse("Participant added successfully",safe=False)
         return JsonResponse("Failed to add participant",safe=False)
-    
+
+class UpdateEachParticipant(APIView):
     def put(self, request, pk):
         participant_json_data = JSONParser().parse(request)
-        participant_serialized_data = ParticipantSerializer(data=request.data)
+        participant_by_id = Participant.objects.get(pk = pk)
+        participant_serialized_data = ParticipantSerializer(participant_by_id,data=participant_json_data)
 
         if participant_serialized_data.is_valid():
             participant_serialized_data.save()
