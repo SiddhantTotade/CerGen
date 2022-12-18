@@ -15,6 +15,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import { Button } from '@mui/material';
+import Tooltip from '@mui/material/Tooltip';
 import CreateParticipant from '../participant_components/CreateParticipant';
 import UpdateParticipant from '../participant_components/UpdateParticipant';
 
@@ -31,6 +32,13 @@ const createBtns = {
 export default function SpecificEvent() {
 
     const [eventsData, setEventsData] = useState([])
+    const [participantDetails] = useState({
+        event: "",
+        student_name: "",
+        email: "",
+        certificate_status: ""
+
+    })
     const event_url = window.location.href
 
     useEffect(() => {
@@ -60,8 +68,12 @@ export default function SpecificEvent() {
         setForm(false);
     }
 
-    const handleUpdateForm = () => {
+    const handleUpdateForm = (id, student_name, email, certificate_status) => {
         setUpdateForm(true);
+        participantDetails.event = id
+        participantDetails.student_name = student_name
+        participantDetails.email = email
+        participantDetails.certificate_status = certificate_status
     }
 
     const handleUpdateFormClose = () => {
@@ -94,12 +106,12 @@ export default function SpecificEvent() {
                                             <TableCell align="center">{row.student_name}</TableCell>
                                             <TableCell align="center">{row.email}</TableCell>
                                             {row.certificate_status === 'F' ?
-                                                <TableCell align="center"><DoneIcon sx={{ color: "green" }} /></TableCell> : <TableCell align="center"><CloseIcon sx={{ color: "red" }} /></TableCell>
+                                                <TableCell align="center"><CloseIcon sx={{ color: "red" }} /></TableCell> : <TableCell align="center"><DoneIcon sx={{ color: "green" }} /></TableCell>
                                             }
                                             <TableCell align="center" sx={{}}>
-                                                <Button onClick={handleUpdateForm} ><EditIcon sx={{ color: "blue" }} /></Button>
-                                                <Button><DeleteIcon sx={{ color: "red" }} /></Button>
-                                                <Button><SendIcon sx={{ color: "grey" }} /></Button>
+                                                <Tooltip title={`Edit : ${row.id}`} ><Button onClick={() => handleUpdateForm(row.id, row.student_name, row.email, row.certificate_status)} key={row.id} ><EditIcon sx={{ color: "blue" }} /></Button></Tooltip>
+                                                <Tooltip title={`Delete : ${row.id}`} ><Button><DeleteIcon sx={{ color: "red" }} /></Button></Tooltip>
+                                                <Tooltip title={`Send Certificate : ${row.id}`} ><Button><SendIcon sx={{ color: "grey" }} /></Button></Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     ))
@@ -111,8 +123,8 @@ export default function SpecificEvent() {
                     </Table>
                 </TableContainer>
                 <CreateParticipant open={form} onClose={handleFormClose} />
-                <UpdateParticipant open={updateForm} onClose={handleUpdateFormClose} />
+                <UpdateParticipant open={updateForm} onClose={handleUpdateFormClose} participant={participantDetails} />
             </div>
-        </div>
+        </div >
     );
 }

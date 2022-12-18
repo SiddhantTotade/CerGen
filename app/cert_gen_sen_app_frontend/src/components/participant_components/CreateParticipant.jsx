@@ -50,8 +50,6 @@ export default function CreateParticipant(props) {
         }).then(res => console.log(res)).catch(err => console.log(err))
     }
 
-    console.log(participantData);
-
     function handleEventData(event) {
 
         const newData = { ...participantData }
