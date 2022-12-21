@@ -12,16 +12,37 @@ export default function UpdateParticipant(props) {
 
     let [participantData, setParticipantData] = useState({})
 
+    // useEffect(() => {
+    //     setParticipantData(props.participant)
+    // }, [props.participant])
+
+    let [eventsData, setEventsData] = useState([])
+    const event_url = window.location.href
+
+    eventsData.map((event) => { return eventsData = event.id })
+
     useEffect(() => {
-        setParticipantData(props.participant)
-    }, [props.participant])
+
+        const new_event_url = event_url.replace("3000", "8000").replace("event", "event-details")
+
+        const fetchData = async () => {
+            try {
+                const response = await axios.get(new_event_url)
+                setEventsData(response.data)
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        fetchData()
+    }, [event_url])
 
     function handleSubmit(e) {
 
         e.preventDefault();
         const url = 'http://127.0.0.1:8000/api/update-participant/' + props.participant.event
         axios.put(url, {
-            'event': '7',
+            'event': eventsData,
             'student_name': participantData.student_name,
             'email': participantData.email,
             'certificate_status': participantData.certificate_status,

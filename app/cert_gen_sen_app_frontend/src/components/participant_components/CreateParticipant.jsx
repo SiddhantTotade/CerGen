@@ -39,7 +39,6 @@ export default function CreateParticipant(props) {
     }, [event_url])
 
     function handleSubmit(e) {
-
         e.preventDefault();
         const url = 'http://127.0.0.1:8000/api/create-participant/'
         axios.post(url, {
