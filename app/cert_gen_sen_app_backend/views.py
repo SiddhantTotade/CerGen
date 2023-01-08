@@ -66,6 +66,11 @@ class UploadParticipant(APIView):
             certificate_status = data['Certificate_Status']
             Event.id = Participant.objects.create(event = event_new_id,student_name = name,email = email, certificate_status = certificate_status)
         return JsonResponse("Participant uploaded successfully",safe=False)
+    
+    def delete(self, request, pk):
+        participant_by_slug = Participant.objects.get(pk = pk)
+        participant_by_slug.delete()
+        return JsonResponse("Participant deleted successfully",safe=False)
 
 # Getting single events by slug
 def get_event_by_slug(request,slug):

@@ -18,6 +18,7 @@ import { Button } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import CreateParticipant from '../participant_components/CreateParticipant';
 import UpdateParticipant from '../participant_components/UpdateParticipant';
+import DeleteParticipant from '../participant_components/DeleteParticipant';
 
 const createBtns = {
     background: '#3293a8',
@@ -59,6 +60,7 @@ export default function SpecificEvent() {
 
     const [form, setForm] = React.useState(false)
     const [updateForm, setUpdateForm] = useState(false)
+    const [deleteForm, setDeleteForm] = useState(false)
 
     const handleForm = () => {
         setForm(true);
@@ -78,6 +80,15 @@ export default function SpecificEvent() {
 
     const handleUpdateFormClose = () => {
         setUpdateForm(false);
+    }
+
+    const handleDeleteForm = (id) => {
+        setDeleteForm(true);
+        participantDetails.event = id
+    }
+
+    const handleDeleteFormClose = () => {
+        setDeleteForm(false);
     }
 
     return (
@@ -110,8 +121,8 @@ export default function SpecificEvent() {
                                             }
                                             <TableCell align="center" sx={{}}>
                                                 <Tooltip title={`Edit : ${row.id}`} ><Button onClick={() => handleUpdateForm(row.id, row.student_name, row.email, row.certificate_status)} key={row.id} ><EditIcon sx={{ color: "blue" }} /></Button></Tooltip>
-                                                <Tooltip title={`Delete : ${row.id}`} ><Button><DeleteIcon sx={{ color: "red" }} /></Button></Tooltip>
-                                                <Tooltip title={`Send Certificate : ${row.id}`} ><Button><SendIcon sx={{ color: "grey" }} /></Button></Tooltip>
+                                                <Tooltip title={`Delete : ${row.id}`} ><Button onClick={() => handleDeleteForm(row.id)} ><DeleteIcon sx={{ color: "red" }} /></Button></Tooltip>
+                                                <Tooltip title={`Send Certificate : ${row.email}`} ><Button><SendIcon sx={{ color: "grey" }} /></Button></Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     ))
@@ -124,6 +135,7 @@ export default function SpecificEvent() {
                 </TableContainer>
                 <CreateParticipant open={form} onClose={handleFormClose} />
                 <UpdateParticipant open={updateForm} onClose={handleUpdateFormClose} participant={participantDetails} />
+                <DeleteParticipant open={deleteForm} onClose={handleDeleteFormClose} participant={participantDetails} />
             </div>
         </div >
     );
