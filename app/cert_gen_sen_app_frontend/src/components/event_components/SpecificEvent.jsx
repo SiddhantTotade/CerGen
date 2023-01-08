@@ -80,6 +80,8 @@ export default function SpecificEvent() {
         setUpdateForm(false);
     }
 
+    // console.log(participantDetails);
+
     return (
         <div className='flex justify-center items-center'>
             <Sidebar />
