@@ -122,8 +122,9 @@ class FilteredEvent(APIView):
     
 # Certificate directory cleaner
 def cleanUp():
-    files = glob.glob('app/cert_gen_sen_app_backend/Certificate Data/generated-certificates/*')
-    for f in files:
+    files = "../app/cert_gen_sen_app_backend/certificate_data/generated-certificates"
+    filelist = glob.glob(os.path.join(files, "*"))
+    for f in filelist:
         os.remove(f)
 
         
@@ -150,16 +151,6 @@ def generateCertificate(request,slug):
     for participant in participants:
         participant_list.append([participant.student_name,participant.email,participant.certificate_status])
 
-    from_date = []
-    to_date = []
-    df = pd.read_excel('./cert_gen_sen_app_backend/certificate_data/Contact Information.xlsx', index_col=None)
-    key = df['Full Name'].tolist()
-    from_dates = df['Event From Date'].tolist()
-    to_dates = df['Event To Date'].tolist()
-    
-    for date in from_dates:
-        from_date.append(str(date.date()))
-
     for data in participant_list:
         template = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/certificate_of_completion.jpg")
         signature = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/Galvin Belson.png", -1)
@@ -177,12 +168,12 @@ def generateCertificate(request,slug):
             template[y1:y2, x1:x2, c] = (
                 alpha_s * signature[:, :, c] + alpha_l * template[y1:y2, x1:x2, c])
 
-        cv2.putText(template, data[0], (592, 704), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 4, (0, 0, 255), 3, cv2.LINE_AA)
-        cv2.putText(template, event_list[0], (1036, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (0, 0, 255), 2, cv2.LINE_AA)
+        cv2.putText(template, data[0], (592, 704), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 4, (255, 0, 30), 3, cv2.LINE_AA)
+        cv2.putText(template, event_list[0], (1036, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
         if event_date_check:
-            cv2.putText(template, event_list[1], (730, 886), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+            cv2.putText(template, event_list[1], (730, 886), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
         else:
-            cv2.putText(template, event_list[1], (732, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+            cv2.putText(template, event_list[1], (732, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
             # cv2.putText(template, event_list[2], (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
         cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/generated-certificates/{data[0]}.jpg', template)
         # print(f'Processing {index + 1} / {len(key)}')
