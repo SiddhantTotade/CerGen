@@ -1,5 +1,6 @@
 from .views import *
 from django.urls import path
+from .certificate_generator import *
 
 urlpatterns = [
     path("all-events/",EventsOperations.as_view()),
