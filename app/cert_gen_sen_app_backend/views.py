@@ -32,7 +32,7 @@ class EventsOperations(APIView):
         return JsonResponse("Failed to add event",safe=False)
 
 
-# Getting data from csv and uploading to database
+# Getting data from xlsx and uploading to database
 class UploadParticipant(APIView):
     def get(self, request):
         all_participants = Participant.objects.all()
@@ -80,6 +80,7 @@ def get_event_by_slug(request,slug):
         return JsonResponse(event_data.data,safe= False)
     return JsonResponse("No Data",safe=False)
 
+# Uploading each participant from xlsx file
 class UploadEachParticipant(APIView):
     def post(self, request):
         participant_serialized_data = ParticipantSerializer(data=request.data)

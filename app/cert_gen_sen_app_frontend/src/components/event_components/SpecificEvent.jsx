@@ -96,8 +96,9 @@ export default function SpecificEvent() {
             <Sidebar />
             <div className='w-3/5 mt-32'>
                 <div className='gap-10'>
-                    <Button sx={createBtns}>Issue Certificate</Button>
                     <Button sx={createBtns} onClick={handleForm}>Create Participant</Button>
+                    <Button sx={createBtns}>Issue Certificate</Button>
+                    <Button sx={createBtns}>Send Certificate</Button>
                 </div>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 450 }} aria-label="simple table">
