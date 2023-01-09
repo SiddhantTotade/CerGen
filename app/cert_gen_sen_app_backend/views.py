@@ -2,7 +2,6 @@ from rest_framework.views import APIView
 from django.http import JsonResponse
 from .models import *
 from .serializers import *
-import pandas as pd
 from .resources import *
 import openpyxl
 from itertools import islice
