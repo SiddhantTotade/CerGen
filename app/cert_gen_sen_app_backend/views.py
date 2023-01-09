@@ -128,8 +128,27 @@ def cleanUp():
 
         
 # Ceertificate generator
-def generateCertificate(request):
+def generateCertificate(request,slug):
     cleanUp()
+
+    event = Event.objects.filter(slug=slug)
+    event_list = []
+    for eve in event:
+        event_list.append(eve.event_name)
+        event_list.append(str(eve.from_date))
+        event_list.append(str(eve.to_date))
+    
+    event_date_check = False
+    if event_list[1] == event_list[2]:
+        event_date_check = True
+
+    new_event_id = 0
+    for event_id in event:
+        new_event_id = event_id
+    participants = Participant.objects.filter(event=new_event_id)
+    participant_list = []
+    for participant in participants:
+        participant_list.append([participant.student_name,participant.email,participant.certificate_status])
 
     from_date = []
     to_date = []
@@ -141,11 +160,12 @@ def generateCertificate(request):
     for date in from_dates:
         from_date.append(str(date.date()))
 
-    for index, names in enumerate(key):
-        template = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/certificate-template.jpg")
+    for data in participant_list:
+        template = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/certificate_of_completion.jpg")
         signature = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/Galvin Belson.png", -1)
 
-        x_offset = y_offset = 500
+        x_offset = 578
+        y_offset = 1020
 
         y1, y2 = y_offset, y_offset + signature.shape[0]
         x1, x2 = x_offset, x_offset + signature.shape[1]
@@ -157,10 +177,13 @@ def generateCertificate(request):
             template[y1:y2, x1:x2, c] = (
                 alpha_s * signature[:, :, c] + alpha_l * template[y1:y2, x1:x2, c])
 
-        cv2.putText(template, names, (500, 405),
-                    cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (0, 0, 255), 1, cv2.LINE_AA)
-        cv2.putText(template, from_date[index], (782, 552),
-                    cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
-        cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/generated-certificates/{names}.jpg', template)
+        cv2.putText(template, data[0], (592, 704), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 4, (0, 0, 255), 3, cv2.LINE_AA)
+        cv2.putText(template, event_list[0], (1036, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (0, 0, 255), 2, cv2.LINE_AA)
+        if event_date_check:
+            cv2.putText(template, event_list[1], (730, 886), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+        else:
+            cv2.putText(template, event_list[1], (732, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 2, cv2.LINE_AA)
+            # cv2.putText(template, event_list[2], (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/generated-certificates/{data[0]}.jpg', template)
         # print(f'Processing {index + 1} / {len(key)}')
     return JsonResponse("Certificate Generated",safe=False)
