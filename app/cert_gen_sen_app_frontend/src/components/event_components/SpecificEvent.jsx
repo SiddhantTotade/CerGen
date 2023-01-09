@@ -40,6 +40,7 @@ export default function SpecificEvent() {
         certificate_status: ""
 
     })
+
     const event_url = window.location.href
 
     useEffect(() => {
@@ -57,6 +58,36 @@ export default function SpecificEvent() {
         }
         fetchData()
     }, [event_url])
+
+    let event_slug = ""
+
+    for (let i = event_url.length - 1; i > 0; i--) {
+        event_slug += event_url[i]
+        if (event_url[i] === "/") {
+            break
+        }
+    }
+
+    const ReverseString = event_slug => [...event_slug].reverse().join('');
+    event_slug = ReverseString(event_slug.replace("/", ""))
+
+    const generateCertificate = async () => {
+
+        const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug
+
+        const certificateData = async () => {
+
+            try {
+                const response = await axios.get(url)
+                // setEventsData(response.data)
+                console.log(response);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        certificateData()
+    }
 
     const [form, setForm] = React.useState(false)
     const [updateForm, setUpdateForm] = useState(false)
@@ -97,7 +128,7 @@ export default function SpecificEvent() {
             <div className='w-3/5 mt-32'>
                 <div className='gap-10'>
                     <Button sx={createBtns} onClick={handleForm}>Create Participant</Button>
-                    <Button sx={createBtns}>Issue Certificate</Button>
+                    <Button sx={createBtns} onClick={generateCertificate} >Issue Certificate</Button>
                     <Button sx={createBtns}>Send Certificate</Button>
                 </div>
                 <TableContainer component={Paper}>
