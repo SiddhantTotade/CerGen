@@ -6,6 +6,10 @@ from django.http import JsonResponse
 from django.core.mail import EmailMessage
 from django.conf import settings
 
+# Certificate ID generator
+def certificateIdGenerator(student_id,event_by,event_year,event_date):
+    pass
+
 # Sending mail to each participant
 def sendMail(subject, message, email_to, certificate_file):
     try:

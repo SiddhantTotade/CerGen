@@ -7,7 +7,7 @@ class EventSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def create(self,validated_data):
-        event = Event.objects.create(user=validated_data['user'],event_name=validated_data['event_name'],subject=validated_data['subject'],from_date=validated_data['from_date'],to_date=validated_data['to_date'])
+        event = Event.objects.create(user=validated_data['user'],event_name=validated_data['event_name'],subject=validated_data['subject'],event_department=validated_data['event_department'],from_date=validated_data['from_date'],to_date=validated_data['to_date'],event_year=validated_data['event_year'])
         event.save()
         return event
 
@@ -17,6 +17,6 @@ class ParticipantSerializer(serializers.ModelSerializer):
         fields = '__all__'
     
     def create(self,validated_data):
-        event = Participant.objects.create(event=validated_data['event'],student_name=validated_data['student_name'],email=validated_data['email'],certificate_status=validated_data['certificate_status'])
+        event = Participant.objects.create(event=validated_data['event'],student_name=validated_data['student_name'],student_id=validated_data['student_id'],email=validated_data['email'],certificate_status=validated_data['certificate_status'])
         event.save()
         return event
