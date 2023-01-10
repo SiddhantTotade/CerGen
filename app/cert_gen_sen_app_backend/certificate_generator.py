@@ -3,6 +3,18 @@ import os
 import cv2
 from .models import *
 from django.http import JsonResponse
+from django.core.mail import EmailMessage
+from django.conf import settings
+
+# Sending mail to each participant
+def sendMail(subject, message, email_to, certificate_file):
+    try:
+        email_form = settings.EMAIL_HOST_USER
+        certificate = EmailMessage(subject,message,email_form,[email_to])
+        certificate.attach_file(certificate_file)
+        certificate.send()
+    except Exception as e :
+        print(e)
 
 # Certificate directory cleaner
 def cleanUp():
@@ -41,6 +53,7 @@ def meritCertificateGenerate(name, rank, event, from_date, to_date, template, si
         cv2.putText(template, to_date, (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
     cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(count)+" "+name}.jpg', template)
     count += 1
+    return count
 
         
 # Ceertificate generator
@@ -75,12 +88,15 @@ def generateCertificate(request,slug):
             if data[2] == "1":
                 template = cv2.imread(template_base_dir + "certificate_1st.jpg")
                 meritCertificateGenerate(data[0],data[2]+"st",event_list[0],event_list[1],event_list[2],template,signature,count)
+                sendMail("Certificate of Merit", "CONGRATULATIONS... You have secured 1st rank in the event and thank you for participanting in the event.", data[1], f'../app/cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(count)+" "+data[0]}.jpg')
             elif data[2] == "2":
                 template = cv2.imread(template_base_dir + "certificate_2nd.jpg")
                 meritCertificateGenerate(data[0],data[2]+"nd",event_list[0],event_list[1],event_list[2],template,signature,count)
+                sendMail("Certificate of Merit", "CONGRATULATIONS... You have secured 2nd rank in the event and thank you for participanting in the event.", data[1], f'../app/cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(count)+" "+data[0]}.jpg')
             elif data[2] == "3":
                 template = cv2.imread(template_base_dir + "certificate_3rd.jpg")
                 meritCertificateGenerate(data[0],data[2]+"rd",event_list[0],event_list[1],event_list[2],template,signature,count)
+                sendMail("Certificate of Merit", "CONGRATULATIONS... You have secured 3rd rank in the event and thank you for participanting in the event.", data[1], f'../app/cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(count)+" "+data[0]}.jpg')
         else:
             template = cv2.imread(template_base_dir + "certificate_of_completion.jpg")
             x_offset = 578
@@ -104,6 +120,7 @@ def generateCertificate(request,slug):
                 cv2.putText(template, event_list[1], (732, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
                 # cv2.putText(template, event_list[2], (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
             cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+data[0]}.jpg', template)
+            sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", data[1], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+data[0]}.jpg')
             count += 1
         # print(f'Processing {index + 1} / {len(key)}')
-    return JsonResponse("Certificate Generated",safe=False)
+    return JsonResponse("Certificate generated and sended successfully",safe=False)
