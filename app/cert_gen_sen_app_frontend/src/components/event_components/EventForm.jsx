@@ -5,8 +5,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
 import axios from 'axios';
 import { useState } from 'react';
+import { Select } from '@mui/material';
 
 export default function EventForm(props) {
     const [from_focus, from_setFocused] = React.useState(false)
@@ -24,6 +28,7 @@ export default function EventForm(props) {
         subject: "",
         from_date: "",
         to_date: "",
+        event_year: "",
     })
 
     function handleSubmit(e) {
@@ -36,6 +41,7 @@ export default function EventForm(props) {
             'subject': eventData.subject,
             'from_date': eventData.from_date,
             'to_date': eventData.to_date,
+            'event_year': eventData.event_year,
         }).then(res => console.log(res)).catch(err => console.log(err))
     }
 
@@ -43,8 +49,20 @@ export default function EventForm(props) {
 
         const newData = { ...eventData }
         newData[event.target.id] = event.target.value
+        console.log(newData);
         setEventData(newData)
     }
+
+    let maxOffset = 10;
+    let thisYear = (new Date()).getFullYear();
+    let allYears = [];
+    for (let x = 0; x <= maxOffset; x++) {
+        allYears.push(thisYear - x)
+    }
+
+    const yearList = allYears.map((x) => { return <MenuItem value={x}>{x}</MenuItem> });
+
+    // console.log(eventData);
 
     return (
         <div className='w-full'>
@@ -53,8 +71,17 @@ export default function EventForm(props) {
                 <DialogContent>
                     <TextField onChange={(e) => handleEventData(e)} value={eventData.event_name} autoFocus margin="dense" id="event_name" label="Event Name" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} value={eventData.subject} autoFocus margin="dense" id="subject" label="Event Subject" type="text" fullWidth variant="standard" />
-                    <TextField onFocus={from_onFocus} onBlur={from_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) from_setHasValue(true); else from_setHasValue(false); }} type={from_hasValue || from_focus ? "date" : "text"} value={eventData.from_date} autoFocus margin="dense" id="from_date" label="Event From Date" fullWidth variant="standard" />
-                    <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event To Date" fullWidth variant="standard" />
+                    <TextField onFocus={from_onFocus} onBlur={from_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) from_setHasValue(true); else from_setHasValue(false); }} type={from_hasValue || from_focus ? "date" : "text"} value={eventData.from_date} autoFocus margin="dense" id="from_date" label="Event - From Date" fullWidth variant="standard" />
+                    <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" fullWidth variant="standard" />
+                    <FormControl variant="standard" sx={{ width: "100%" }} >
+                        <InputLabel id="demo-simple-select-label" variant='standard' >Choose Event Year</InputLabel>
+                        <Select labelId="demo-simple-select-label" fullWidth id="demo-simple-select" variant="standard" onChange={(e) => handleEventData(e)} >
+                            <MenuItem value="">
+                                <em>None</em>
+                            </MenuItem>
+                            {yearList}
+                        </Select>
+                    </FormControl>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
