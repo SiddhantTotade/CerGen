@@ -29,6 +29,7 @@ export default function EventForm(props) {
         event_department: "",
         from_date: "",
         to_date: "",
+        event_year: "",
     })
 
     const [eventYear, setEventYear] = useState()
@@ -44,7 +45,7 @@ export default function EventForm(props) {
             'event_department': eventData.event_department,
             'from_date': eventData.from_date,
             'to_date': eventData.to_date,
-            'event_year': String(eventYear),
+            'event_year': eventData.event_year,
         }).then(res => console.log(res)).catch(err => console.log(err))
     }
 
@@ -57,7 +58,10 @@ export default function EventForm(props) {
 
     function handleEventYear(event) {
         setEventYear(event.target.value)
+        eventData.event_year = event.target.value
     }
+
+    console.log(eventData);
 
     let maxOffset = 10;
     let thisYear = (new Date()).getFullYear();
