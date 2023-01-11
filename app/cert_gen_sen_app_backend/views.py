@@ -49,18 +49,20 @@ class UploadParticipant(APIView):
         for row in islice(work_sheet.values,1,work_sheet.max_row):
             data = OrderedDict()
             data['id'] = row[0]
-            data['First_Name'] = row[1]
-            data['Email'] = row[2]
-            data['Certificate_Status'] = row[3]
+            data['Full_Name'] = row[1]
+            data['Student_Id'] = row[2]
+            data['Email'] = row[3]
+            data['Certificate_Status'] = row[4]
             excel_data.append(data)
 
         event_new_id = Event.objects.get(id = event_id)
         
         for data in excel_data:
-            name = data['First_Name']
+            name = data['Full_Name']
+            student_id = data['Student_Id']
             email = data['Email']
             certificate_status = data['Certificate_Status']
-            Event.id = Participant.objects.create(event = event_new_id,student_name = name,email = email, certificate_status = certificate_status)
+            Event.id = Participant.objects.create(event = event_new_id,student_name = name,student_id = student_id,email = email, certificate_status = certificate_status)
         return JsonResponse("Participant uploaded successfully",safe=False)
     
     def delete(self, request, pk):
