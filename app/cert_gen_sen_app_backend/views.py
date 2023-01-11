@@ -21,6 +21,7 @@ class EventsOperations(APIView):
     
     def post(self, request):
         event_serialized_data = EventSerializer(data=request.data)
+        print(event_serialized_data)
 
         if event_serialized_data.is_valid():
             event_serialized_data.save()
