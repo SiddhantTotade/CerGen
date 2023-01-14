@@ -22,6 +22,7 @@ import DeleteParticipant from '../participant_components/DeleteParticipant';
 import Gold from '../medals_images/gold-medal.png'
 import Silver from '../medals_images/silver-medal.png'
 import Bronze from '../medals_images/bronze-medal.png'
+import BackdropSpinner from '../base_components/Backdrop';
 
 const createBtns = {
     background: '#3293a8',
@@ -45,6 +46,8 @@ export default function SpecificEvent() {
 
     })
 
+    const [openSpinner, setOpenSpinner] = useState(false)
+
     const event_url = window.location.href
 
     useEffect(() => {
@@ -61,7 +64,7 @@ export default function SpecificEvent() {
             }
         }
         fetchData()
-    }, [eventsData])
+    }, [event_url])
 
     let event_slug = ""
 
@@ -77,12 +80,14 @@ export default function SpecificEvent() {
 
     const generateCertificate = async () => {
 
+        handleSpinner(true)
+
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug
 
         const certificateData = async () => {
 
             try {
-                const response = await axios.get(url)
+                const response = await axios.get(url).then(handleSpinner(false)).then(res => console.log(res))
                 setEventsData(response.data)
             }
             catch (error) {
@@ -112,6 +117,10 @@ export default function SpecificEvent() {
     const [form, setForm] = React.useState(false)
     const [updateForm, setUpdateForm] = useState(false)
     const [deleteForm, setDeleteForm] = useState(false)
+
+    const handleSpinner = (e) => {
+        setOpenSpinner(e)
+    }
 
     const handleForm = () => {
         setForm(true);
@@ -143,6 +152,8 @@ export default function SpecificEvent() {
         setDeleteForm(false);
     }
 
+    console.log(openSpinner);
+
     return (
         <div className='flex justify-center items-center'>
             <Sidebar />
@@ -173,10 +184,6 @@ export default function SpecificEvent() {
                                             {row.certificate_status === '1' ?
                                                 <TableCell align="center" sx={{ display: 'flex', justifyContent: 'center' }}><img src={Gold} className="w-10" alt="gold medal png" /></TableCell> : row.certificate_status === '2' ? <TableCell align="center" sx={{ display: 'flex', justifyContent: 'center' }}><img src={Silver} className="w-10" alt="silver medal png" /></TableCell> : row.certificate_status === '3' ? <TableCell align="center" sx={{ display: 'flex', justifyContent: 'center' }}><img src={Bronze} className="w-10" alt="bronze medal png" /></TableCell> : row.certificate_status === 'T' ? <TableCell align="center"><DoneIcon sx={{ color: 'green' }} /></TableCell> : <TableCell align="center"><CloseIcon sx={{ color: 'red' }} /></TableCell>
                                             }
-                                            {/* {row.certificate_status === '1' ?
-                                                <TableCell align="center"><Gold /></TableCell> : <TableCell align="center"><Bronze /></TableCell>
-                                            } */}
-
                                             <TableCell align="center" sx={{}}>
                                                 <Tooltip title={`Edit : ${row.id}`} ><Button onClick={() => handleUpdateForm(row.id, row.student_name, row.student_id, row.email, row.certificate_status)} key={row.id} ><EditIcon sx={{ color: "blue" }} /></Button></Tooltip>
                                                 <Tooltip title={`Delete : ${row.id}`} ><Button onClick={() => handleDeleteForm(row.id)} ><DeleteIcon sx={{ color: "red" }} /></Button></Tooltip>
@@ -194,6 +201,7 @@ export default function SpecificEvent() {
                 <CreateParticipant open={form} onClose={handleFormClose} />
                 <UpdateParticipant open={updateForm} onClose={handleUpdateFormClose} participant={participantDetails} />
                 <DeleteParticipant open={deleteForm} onClose={handleDeleteFormClose} participant={participantDetails} />
+                <BackdropSpinner open={openSpinner} />
             </div>
         </div >
     );
