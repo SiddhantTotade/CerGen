@@ -58,7 +58,6 @@ export default function SpecificEvent() {
             }
         }
         fetchData()
-        // eslint-disable-next-line
     }, [eventsData])
 
     let event_slug = ""
@@ -76,6 +75,23 @@ export default function SpecificEvent() {
     const generateCertificate = async () => {
 
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug
+
+        const certificateData = async () => {
+
+            try {
+                const response = await axios.get(url)
+                setEventsData(response.data)
+            }
+            catch (error) {
+                console.log(error);
+            }
+        }
+        certificateData()
+    }
+
+    const generateCertificateById = async (id) => {
+
+        const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug + "/" + id
 
         const certificateData = async () => {
 
@@ -130,8 +146,7 @@ export default function SpecificEvent() {
             <div className='w-3/5 mt-32'>
                 <div className='gap-10'>
                     <Button sx={createBtns} onClick={handleForm}>Create Participant</Button>
-                    <Button sx={createBtns} onClick={generateCertificate} >Issue Certificate</Button>
-                    <Button sx={createBtns}>Send Certificate</Button>
+                    <Button sx={createBtns} onClick={generateCertificate} >Issue and Send Certificate</Button>
                 </div>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 450 }} aria-label="simple table">
@@ -147,7 +162,7 @@ export default function SpecificEvent() {
                         <TableBody>
                             {
                                 eventsData !== '0' ?
-                                    eventsData.map((row) => (
+                                    Object.values(eventsData).map((row) => (
                                         <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                             <TableCell align="center">{row.student_name}</TableCell>
                                             <TableCell align="center">{row.student_id}</TableCell>
@@ -158,7 +173,7 @@ export default function SpecificEvent() {
                                             <TableCell align="center" sx={{}}>
                                                 <Tooltip title={`Edit : ${row.id}`} ><Button onClick={() => handleUpdateForm(row.id, row.student_name, row.student_id, row.email, row.certificate_status)} key={row.id} ><EditIcon sx={{ color: "blue" }} /></Button></Tooltip>
                                                 <Tooltip title={`Delete : ${row.id}`} ><Button onClick={() => handleDeleteForm(row.id)} ><DeleteIcon sx={{ color: "red" }} /></Button></Tooltip>
-                                                <Tooltip title={`Send Certificate : ${row.email}`} ><Button><SendIcon sx={{ color: "grey" }} /></Button></Tooltip>
+                                                <Tooltip title={`Send Certificate : ${row.email}`} ><Button onClick={() => generateCertificateById(row.id)}><SendIcon sx={{ color: "grey" }} /></Button></Tooltip>
                                             </TableCell>
                                         </TableRow>
                                     ))

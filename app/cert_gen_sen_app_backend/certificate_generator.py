@@ -143,17 +143,8 @@ def generateCertificate(request,slug):
 def generateCertificateById(request,slug,pk):
     cleanUp()
 
-    event = Event.objects.filter(slug=slug)
     participant = Participant.objects.filter(id=pk)
 
-    event_list = []
-    for eve in event:
-        event_list.append(eve.event_name)
-        event_list.append(eve.event_department)
-        event_list.append(str(eve.from_date))
-        event_list.append(str(eve.to_date))
-        event_list.append(eve.event_year)
-    
     participant_list = []
     for stu in participant:
         participant_list.append(stu.student_name)
@@ -164,9 +155,20 @@ def generateCertificateById(request,slug,pk):
     not_eligible = ""
 
     if participant_list[3] == "F":
-        not_eligible = "The Student " + participant_list[0]+" is not eligible for certificate"
+        not_eligible = "The Student "+participant_list[0]+" is not eligible for certificate"
         return JsonResponse(not_eligible,safe=False)
     else:
+        event_list = []
+
+        event = Event.objects.filter(slug=slug)
+
+        for eve in event:
+            event_list.append(eve.event_name)
+            event_list.append(eve.event_department)
+            event_list.append(str(eve.from_date))
+            event_list.append(str(eve.to_date))
+            event_list.append(eve.event_year)
+
         signature = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/Galvin Belson.png", -1)
         template_base_dir = "./cert_gen_sen_app_backend/certificate_data/certificate-generator/"
         template = cv2.imread(template_base_dir + "certificate_of_completion.jpg")
@@ -194,6 +196,7 @@ def generateCertificateById(request,slug,pk):
         cv2.putText(template, participant_list[0], (592, 704), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 4, (255, 0, 30), 3, cv2.LINE_AA)
         cv2.putText(template, event_list[0], (1036, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
         cv2.putText(template, certificate_id, (28, 1380), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (10, 10, 10), 1, cv2.LINE_AA)
+
         if event_date_check:
             cv2.putText(template, event_list[2], (730, 886), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
         else:
@@ -202,4 +205,4 @@ def generateCertificateById(request,slug,pk):
         cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+participant_list[0]}.jpg', template)
         sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", participant_list[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+participant_list[0]}.jpg')
             
-    return JsonResponse("Certificate generated and sended successfully",safe=False)
+        return JsonResponse("Certificate generated and sended successfully",safe=False)
