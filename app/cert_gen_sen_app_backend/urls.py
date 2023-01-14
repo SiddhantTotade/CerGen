@@ -11,4 +11,5 @@ urlpatterns = [
     path("delete-participant/<int:pk>",UploadParticipant.as_view()),
     path("upload-participants/",UploadParticipant.as_view()),
     path("generate-certificate/<slug:slug>",generateCertificate),
+    path("generate-certificate/<slug:slug>/<int:pk>",generateCertificateById),
 ]
