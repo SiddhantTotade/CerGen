@@ -155,7 +155,9 @@ def generateCertificateById(request,slug,pk):
     not_eligible = ""
 
     if participant_list[3] == "F":
+        print("1")
         not_eligible = "The Student "+participant_list[0]+" is not eligible for certificate"
+        print("2")
         return JsonResponse(not_eligible,safe=False)
     else:
         event_list = []

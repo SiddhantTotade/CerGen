@@ -19,6 +19,9 @@ import Tooltip from '@mui/material/Tooltip';
 import CreateParticipant from '../participant_components/CreateParticipant';
 import UpdateParticipant from '../participant_components/UpdateParticipant';
 import DeleteParticipant from '../participant_components/DeleteParticipant';
+import Gold from '../medals_images/gold-medal.png'
+import Silver from '../medals_images/silver-medal.png'
+import Bronze from '../medals_images/bronze-medal.png'
 
 const createBtns = {
     background: '#3293a8',
@@ -96,7 +99,7 @@ export default function SpecificEvent() {
         const certificateData = async () => {
 
             try {
-                const response = await axios.get(url)
+                const response = await axios.get(url).then(res => console.log(res))
                 setEventsData(response.data)
             }
             catch (error) {
@@ -167,9 +170,13 @@ export default function SpecificEvent() {
                                             <TableCell align="center">{row.student_name}</TableCell>
                                             <TableCell align="center">{row.student_id}</TableCell>
                                             <TableCell align="center">{row.email}</TableCell>
-                                            {row.certificate_status === 'F' ?
-                                                <TableCell align="center"><CloseIcon sx={{ color: "red" }} /></TableCell> : <TableCell align="center"><DoneIcon sx={{ color: "green" }} /></TableCell>
+                                            {row.certificate_status === '1' ?
+                                                <TableCell align="center" sx={{ display: 'flex', justifyContent: 'center' }}><img src={Gold} className="w-10" alt="gold medal png" /></TableCell> : row.certificate_status === '2' ? <TableCell align="center" sx={{ display: 'flex', justifyContent: 'center' }}><img src={Silver} className="w-10" alt="silver medal png" /></TableCell> : row.certificate_status === '3' ? <TableCell align="center" sx={{ display: 'flex', justifyContent: 'center' }}><img src={Bronze} className="w-10" alt="bronze medal png" /></TableCell> : row.certificate_status === 'T' ? <TableCell align="center"><DoneIcon sx={{ color: 'green' }} /></TableCell> : <TableCell align="center"><CloseIcon sx={{ color: 'red' }} /></TableCell>
                                             }
+                                            {/* {row.certificate_status === '1' ?
+                                                <TableCell align="center"><Gold /></TableCell> : <TableCell align="center"><Bronze /></TableCell>
+                                            } */}
+
                                             <TableCell align="center" sx={{}}>
                                                 <Tooltip title={`Edit : ${row.id}`} ><Button onClick={() => handleUpdateForm(row.id, row.student_name, row.student_id, row.email, row.certificate_status)} key={row.id} ><EditIcon sx={{ color: "blue" }} /></Button></Tooltip>
                                                 <Tooltip title={`Delete : ${row.id}`} ><Button onClick={() => handleDeleteForm(row.id)} ><DeleteIcon sx={{ color: "red" }} /></Button></Tooltip>
