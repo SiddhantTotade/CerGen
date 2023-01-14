@@ -46,7 +46,7 @@ export default function SpecificEvent() {
 
     })
 
-    const [openSpinner, setOpenSpinner] = useState(false)
+    let openSpinner = false
 
     const event_url = window.location.href
 
@@ -64,7 +64,8 @@ export default function SpecificEvent() {
             }
         }
         fetchData()
-    }, [event_url])
+        // eslint-disable-next-line
+    }, [])
 
     let event_slug = ""
 
@@ -80,7 +81,7 @@ export default function SpecificEvent() {
 
     const generateCertificate = async () => {
 
-        handleSpinner(true)
+        openSpinner = true
 
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug
 
@@ -119,7 +120,7 @@ export default function SpecificEvent() {
     const [deleteForm, setDeleteForm] = useState(false)
 
     const handleSpinner = (e) => {
-        setOpenSpinner(e)
+        openSpinner = e
     }
 
     const handleForm = () => {
