@@ -36,6 +36,7 @@ export default function SpecificEvent() {
     const [participantDetails] = useState({
         event: "",
         student_name: "",
+        student_id: "",
         email: "",
         certificate_status: ""
 
@@ -57,7 +58,8 @@ export default function SpecificEvent() {
             }
         }
         fetchData()
-    }, [event_url])
+        // eslint-disable-next-line
+    }, [eventsData])
 
     let event_slug = ""
 
@@ -79,8 +81,7 @@ export default function SpecificEvent() {
 
             try {
                 const response = await axios.get(url)
-                // setEventsData(response.data)
-                console.log(response);
+                setEventsData(response.data)
             }
             catch (error) {
                 console.log(error);
@@ -101,10 +102,11 @@ export default function SpecificEvent() {
         setForm(false);
     }
 
-    const handleUpdateForm = (id, student_name, email, certificate_status) => {
+    const handleUpdateForm = (id, student_name, student_id, email, certificate_status) => {
         setUpdateForm(true);
         participantDetails.event = id
         participantDetails.student_name = student_name
+        participantDetails.student_id = student_id
         participantDetails.email = email
         participantDetails.certificate_status = certificate_status
     }
@@ -136,6 +138,7 @@ export default function SpecificEvent() {
                         <TableHead>
                             <TableRow>
                                 <TableCell align='center'><b>Student Name</b></TableCell>
+                                <TableCell align='center'><b>Student Id</b></TableCell>
                                 <TableCell align='center'><b>Student Email</b></TableCell>
                                 <TableCell align='center'><b>Certificate Status</b></TableCell>
                                 <TableCell align='center'><b>Actions</b></TableCell>
@@ -147,12 +150,13 @@ export default function SpecificEvent() {
                                     eventsData.map((row) => (
                                         <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
                                             <TableCell align="center">{row.student_name}</TableCell>
+                                            <TableCell align="center">{row.student_id}</TableCell>
                                             <TableCell align="center">{row.email}</TableCell>
                                             {row.certificate_status === 'F' ?
                                                 <TableCell align="center"><CloseIcon sx={{ color: "red" }} /></TableCell> : <TableCell align="center"><DoneIcon sx={{ color: "green" }} /></TableCell>
                                             }
                                             <TableCell align="center" sx={{}}>
-                                                <Tooltip title={`Edit : ${row.id}`} ><Button onClick={() => handleUpdateForm(row.id, row.student_name, row.email, row.certificate_status)} key={row.id} ><EditIcon sx={{ color: "blue" }} /></Button></Tooltip>
+                                                <Tooltip title={`Edit : ${row.id}`} ><Button onClick={() => handleUpdateForm(row.id, row.student_name, row.student_id, row.email, row.certificate_status)} key={row.id} ><EditIcon sx={{ color: "blue" }} /></Button></Tooltip>
                                                 <Tooltip title={`Delete : ${row.id}`} ><Button onClick={() => handleDeleteForm(row.id)} ><DeleteIcon sx={{ color: "red" }} /></Button></Tooltip>
                                                 <Tooltip title={`Send Certificate : ${row.email}`} ><Button><SendIcon sx={{ color: "grey" }} /></Button></Tooltip>
                                             </TableCell>

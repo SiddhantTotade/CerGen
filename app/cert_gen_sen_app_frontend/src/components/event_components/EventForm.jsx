@@ -32,7 +32,7 @@ export default function EventForm(props) {
         event_year: "",
     })
 
-    const [eventYear, setEventYear] = useState()
+    const [eventYear, setEventYear] = useState("")
 
     function handleSubmit(e) {
 
@@ -46,7 +46,7 @@ export default function EventForm(props) {
             'from_date': eventData.from_date,
             'to_date': eventData.to_date,
             'event_year': eventData.event_year,
-        }).then(res => console.log(res)).catch(err => console.log(err))
+        }).then(res => console.log(res)).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {
@@ -56,12 +56,10 @@ export default function EventForm(props) {
         setEventData(newData)
     }
 
-    function handleEventYear(event) {
+    const handleEventYear = (event) => {
         setEventYear(event.target.value)
         eventData.event_year = event.target.value
     }
-
-    console.log(eventData);
 
     let maxOffset = 10;
     let thisYear = (new Date()).getFullYear();
@@ -84,7 +82,7 @@ export default function EventForm(props) {
                     <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" fullWidth variant="standard" />
                     <FormControl variant="standard" sx={{ width: "100%" }}  >
                         <InputLabel id="demo-simple-select-label" variant='standard' >Choose Event Year</InputLabel>
-                        <Select labelId="demo-simple-select-label" id="demo-simple-select" variant="standard" onChange={(e) => handleEventYear(e)} value={eventYear} >
+                        <Select labelId="demo-simple-select-label" id="demo-simple-select" variant="standard" onChange={handleEventYear} value={eventYear} >
                             <MenuItem value="">
                                 <em>None</em>
                             </MenuItem>

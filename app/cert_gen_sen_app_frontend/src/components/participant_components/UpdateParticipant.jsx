@@ -18,6 +18,7 @@ export default function UpdateParticipant(props) {
     const [participantData, setParticipantData] = useState({
         event: "",
         student_name: "",
+        student_id: "",
         email: "",
         certificate_status: ""
     })
@@ -25,6 +26,7 @@ export default function UpdateParticipant(props) {
     const [updateParticipantData, setUpdateParticipantData] = useState({
         event: "",
         student_name: "",
+        student_id: "",
         email: "",
         certificate_status: ""
     })
@@ -45,7 +47,8 @@ export default function UpdateParticipant(props) {
             }
         }
         fetchData()
-    }, [])
+        // eslint-disable-next-line
+    }, [participantData])
 
     function handleSubmit(e) {
 
@@ -54,6 +57,7 @@ export default function UpdateParticipant(props) {
         axios.put(url, {
             'event': eventsData,
             'student_name': updateParticipantData.student_name === "" ? participantData.student_name : updateParticipantData.student_name,
+            'student_id': updateParticipantData.student_id === "" ? participantData.student_id : updateParticipantData.student_id,
             'email': updateParticipantData.email === "" ? participantData.email : updateParticipantData.email,
             'certificate_status': updateParticipantData.certificate_status === "" ? participantData.certificate_status : updateParticipantData.certificate_status,
         }).then(res => console.log(res)).catch(err => console.log(err)).finally(props.onClose)
@@ -77,6 +81,7 @@ export default function UpdateParticipant(props) {
                 <DialogContent>
                     <TextField disabled defaultValue={props.participant.event} autoFocus margin="dense" id="event" label="Participant Id" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.student_name} autoFocus margin="dense" id="student_name" label="Participant Name" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.student_id} autoFocus margin="dense" id="student_id" label="Participant Id" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.email} autoFocus margin="dense" id="email" label="Participant Email" type="email" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.certificate_status} autoFocus margin="dense" id="certificate_status" label="Certificate Status" type="text" fullWidth variant="standard" />
                 </DialogContent>

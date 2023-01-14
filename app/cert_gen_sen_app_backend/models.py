@@ -1,29 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils.text import slugify
-import datetime
-from django.core.validators import MinValueValidator,MaxValueValidator
 
 # Create your models here.
-
-
-def current_year():
-    return datetime.date.today().year
-
-
-def max_value_current_year(value):
-    return MaxValueValidator(current_year())(value)
 
 class Event(models.Model):
     id = models.AutoField(primary_key = True)
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     event_name = models.CharField(max_length=20,null=True,blank=True)
-    subject = models.CharField(max_length=20,null=True,blank=True)
+    subject = models.CharField(max_length=250,null=True,blank=True)
     event_department = models.CharField(max_length=20,null=True,blank=True)
     from_date = models.DateField()
     to_date = models.DateField()
-    event_year = models.PositiveIntegerField(
-        default=current_year(), validators=[MinValueValidator(1984), max_value_current_year])
+    event_year = models.IntegerField(blank=True,null=True)
     slug = models.SlugField(null=True,blank=True)
 
     def save(self, *args,**kwargs):

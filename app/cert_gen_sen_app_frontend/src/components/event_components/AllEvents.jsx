@@ -36,7 +36,7 @@ export const AllEvents = () => {
             }
         }
         fetchData()
-    }, [])
+    }, [eventsData])
 
     const handleDelete = async (event) => {
         const url = 'http://127.0.0.1:8000/api/event/' + event

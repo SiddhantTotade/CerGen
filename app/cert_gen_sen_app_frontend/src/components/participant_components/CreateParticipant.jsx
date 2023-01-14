@@ -13,6 +13,7 @@ export default function CreateParticipant(props) {
     const [participantData, setParticipantData] = useState({
         event: "",
         student_name: "",
+        student_id: "",
         email: "",
         certificate_status: "",
     })
@@ -44,6 +45,7 @@ export default function CreateParticipant(props) {
         axios.post(url, {
             'event': participantData.event,
             'student_name': participantData.student_name,
+            'student_id': participantData.student_id,
             'email': participantData.email,
             'certificate_status': participantData.certificate_status,
         }).then(res => console.log(res)).catch(err => console.log(err))
@@ -63,6 +65,7 @@ export default function CreateParticipant(props) {
                 <DialogContent>
                     <TextField disabled onChange={(e) => handleEventData(e)} value={participantData.event} autoFocus margin="dense" id="event" label="Event Id" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} value={participantData.student_name} autoFocus margin="dense" id="student_name" label="Participant Name" type="text" fullWidth variant="standard" />
+                    <TextField onChange={(e) => handleEventData(e)} value={participantData.student_id} autoFocus margin="dense" id="student_id" label="Participant Id" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} value={participantData.email} autoFocus margin="dense" id="email" label="Participant Email" type="email" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} value={participantData.certificate_status} autoFocus margin="dense" id="certificate_status" label="Certificate Status" type="text" fullWidth variant="standard" />
                 </DialogContent>
