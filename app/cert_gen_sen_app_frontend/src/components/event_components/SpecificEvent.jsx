@@ -46,26 +46,15 @@ export default function SpecificEvent() {
 
     })
 
-    let openSpinner = false
-
     const event_url = window.location.href
 
     useEffect(() => {
-
+        const event_url = window.location.href
         const new_event_url = event_url.replace("3000", "8000")
-
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(new_event_url)
-                setEventsData(response.data)
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        fetchData()
-        // eslint-disable-next-line
+        axios.get(new_event_url).then(res => setEventsData(res.data))
     }, [])
+
+    const [openSpinner, setOpenSpinner] = useState(false)
 
     let event_slug = ""
 
@@ -81,14 +70,12 @@ export default function SpecificEvent() {
 
     const generateCertificate = async () => {
 
-        openSpinner = true
-
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug
 
         const certificateData = async () => {
 
             try {
-                const response = await axios.get(url).then(handleSpinner(false)).then(res => console.log(res))
+                const response = await axios.get(url).then(setOpenSpinner(false)).then(res => console.log(res))
                 setEventsData(response.data)
             }
             catch (error) {
@@ -119,10 +106,6 @@ export default function SpecificEvent() {
     const [updateForm, setUpdateForm] = useState(false)
     const [deleteForm, setDeleteForm] = useState(false)
 
-    const handleSpinner = (e) => {
-        openSpinner = e
-    }
-
     const handleForm = () => {
         setForm(true);
     }
@@ -152,8 +135,6 @@ export default function SpecificEvent() {
     const handleDeleteFormClose = () => {
         setDeleteForm(false);
     }
-
-    console.log(openSpinner);
 
     return (
         <div className='flex justify-center items-center'>

@@ -7,13 +7,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import AlertSnackbar from '../base_components/AlertSnackbar';
 
 export default function UpdateParticipant(props) {
 
     let [eventsData, setEventsData] = useState([])
-    const event_url = window.location.href
 
-    eventsData.map((event) => { return eventsData = event.id })
+    Object.values(eventsData).map((event) => { return eventsData = event.id })
 
     const [participantData, setParticipantData] = useState({
         event: "",
@@ -31,27 +31,22 @@ export default function UpdateParticipant(props) {
         certificate_status: ""
     })
 
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState("")
+    const [alertType, setAlertType] = useState("")
+
     useEffect(() => {
-
-        settingParticipatData()
-
+        const event_url = window.location.href
         const new_event_url = event_url.replace("3000", "8000").replace("event", "event-details")
+        axios.get(new_event_url).then(res => setEventsData(res.data))
+    }, [])
 
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(new_event_url)
-                setEventsData(response.data)
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        fetchData()
+    useEffect(() => {
+        settingParticipantData()
         // eslint-disable-next-line
-    }, [participantData])
+    }, [])
 
     function handleSubmit(e) {
-
         e.preventDefault();
         const url = 'http://127.0.0.1:8000/api/update-participant/' + props.participant.event
         axios.put(url, {
@@ -60,8 +55,14 @@ export default function UpdateParticipant(props) {
             'student_id': updateParticipantData.student_id === "" ? participantData.student_id : updateParticipantData.student_id,
             'email': updateParticipantData.email === "" ? participantData.email : updateParticipantData.email,
             'certificate_status': updateParticipantData.certificate_status === "" ? participantData.certificate_status : updateParticipantData.certificate_status,
-        }).then(res => console.log(res)).catch(err => console.log(err)).finally(props.onClose)
+        }).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("success") : setAlertType("error")).catch(err => console.log(err)).finally(props.onClose)
     }
+
+    // function handleSeverity(msg) {
+    //     message.message = msg
+    // }
+
+    console.log(message);
 
     function handleEventData(event) {
 
@@ -70,8 +71,12 @@ export default function UpdateParticipant(props) {
         setUpdateParticipantData(newData)
     }
 
-    function settingParticipatData() {
+    function settingParticipantData() {
         setParticipantData(props.participant)
+    }
+
+    function handleCloseSnackbar() {
+        setOpenSnack(false)
     }
 
     return (
@@ -90,6 +95,7 @@ export default function UpdateParticipant(props) {
                     <Button onClick={handleSubmit} >Update Participant</Button>
                 </DialogActions>
             </Dialog>
+            <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
         </div>
     );
 }
