@@ -45,7 +45,7 @@ export default function EventForm(props) {
 
         e.preventDefault();
         setOpenSpinner(true)
-        setTimeout(() => { setOpenSpinner(false) }, 2000)
+        setTimeout(() => { setOpenSpinner(false) }, 5000)
         const url = 'http://127.0.0.1:8000/api/all-events/'
         axios.post(url, {
             'user': 1,
@@ -55,7 +55,7 @@ export default function EventForm(props) {
             'from_date': eventData.from_date,
             'to_date': eventData.to_date,
             'event_year': eventData.event_year,
-        }).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
+        }).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {

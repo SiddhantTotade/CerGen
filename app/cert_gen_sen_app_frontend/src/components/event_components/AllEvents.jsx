@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import Sidebar from "../base_components/Sidebar";
 import { useState, useEffect } from 'react';
 import axios from 'axios'
+import BackdropSpinner from '../base_components/Backdrop';
+import AlertSnackbar from '../base_components/AlertSnackbar';
 
 const card_sx = {
     maxWidth: 400,
@@ -22,6 +24,10 @@ const card_sx = {
 export const AllEvents = () => {
 
     const [eventsData, setEventsData] = useState([])
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState("")
+    const [alertType, setAlertType] = useState("")
+    const [openSpinner, setOpenSpinner] = useState(false)
 
     useEffect(() => {
         const url = 'http://127.0.0.1:8000/api/all-events/'
@@ -36,22 +42,17 @@ export const AllEvents = () => {
             }
         }
         fetchData()
-    }, [eventsData])
+    }, [])
 
-    const handleDelete = async (event) => {
+    function handleDelete(event) {
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 2000)
         const url = 'http://127.0.0.1:8000/api/event/' + event
+        axios.delete(url).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
+    }
 
-        const deleteData = async () => {
-
-            try {
-                const response = await axios.delete(url)
-                setEventsData(response.data)
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        deleteData()
+    function handleCloseSnackbar() {
+        setOpenSnack(false)
     }
 
     return (
@@ -82,6 +83,8 @@ export const AllEvents = () => {
                     </Card>
                 })}
             </div>
+            <BackdropSpinner open={openSpinner} />
+            <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
         </>
     )
 }
