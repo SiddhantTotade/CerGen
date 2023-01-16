@@ -179,8 +179,6 @@ def generateCertificateById(request,slug,pk):
         event_date_check = False
         if event_list[2] == event_list[3]:
             event_date_check = True
-        
-        count = 1
 
         x_offset = 578
         y_offset = 1020
@@ -194,8 +192,8 @@ def generateCertificateById(request,slug,pk):
                 alpha_s * signature[:, :, c] + alpha_l * template[y1:y2, x1:x2, c])
 
         random_num = random.randint(1000,9999)
-
         certificate_id = str(participant_list[1][0:4])+str(event_list[1])+str(random_num)+str(event_list[4])+str(event_list[2].replace("-",""))
+
         cv2.putText(template, participant_list[0], (592, 704), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 4, (255, 0, 30), 3, cv2.LINE_AA)
         cv2.putText(template, event_list[0], (1036, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
         cv2.putText(template, certificate_id, (28, 1380), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (10, 10, 10), 1, cv2.LINE_AA)
@@ -205,7 +203,6 @@ def generateCertificateById(request,slug,pk):
         else:
             cv2.putText(template, event_list[2], (732, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
             # cv2.putText(template, event_list[3], (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
-        cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+participant_list[0]}.jpg', template)
+        cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+participant_list[0]}.jpg', template)
         # sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", participant_list[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+participant_list[0]}.jpg')
-            
         return JsonResponse("Certificate generated and sended successfully",safe=False)

@@ -74,15 +74,17 @@ export default function SpecificEvent() {
     event_slug = ReverseString(event_slug.replace("/", ""))
 
     function generateCertificate() {
-
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 3000)
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug
-        axios.get(url).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("success") : setAlertType("error")).catch(err => console.log(err))
+        axios.get(url).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("success") : setAlertType("error")).catch(err => console.log(err))
     }
 
     function generateCertificateById(id) {
-
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 3000)
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug + "/" + id
-        axios.get(url).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
+        axios.get(url).then(setTimeout(() => { setOpenSnack(true) }, 3000)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
     }
 
     const [form, setForm] = React.useState(false)

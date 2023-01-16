@@ -14,7 +14,7 @@ export default function UpdateParticipant(props) {
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState("")
     const [alertType, setAlertType] = useState("")
-    
+
     let [eventsData, setEventsData] = useState([])
 
     Object.values(eventsData).map((event) => { return eventsData = event.id })
@@ -56,7 +56,7 @@ export default function UpdateParticipant(props) {
             'student_id': updateParticipantData.student_id === "" ? participantData.student_id : updateParticipantData.student_id,
             'email': updateParticipantData.email === "" ? participantData.email : updateParticipantData.email,
             'certificate_status': updateParticipantData.certificate_status === "" ? participantData.certificate_status : updateParticipantData.certificate_status,
-        }).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("success") : setAlertType("error")).catch(err => console.log(err)).finally(props.onClose)
+        }).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {
