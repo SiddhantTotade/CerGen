@@ -8,12 +8,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import AlertSnackbar from '../base_components/AlertSnackbar';
+import BackdropSpinner from '../base_components/Backdrop';
 
 export default function UpdateParticipant(props) {
 
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState("")
     const [alertType, setAlertType] = useState("")
+    const [openSpinner, setOpenSpinner] = useState(false)
 
     let [eventsData, setEventsData] = useState([])
 
@@ -49,6 +51,8 @@ export default function UpdateParticipant(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 2000)
         const url = 'http://127.0.0.1:8000/api/update-participant/' + props.participant.event
         axios.put(url, {
             'event': eventsData,
@@ -56,7 +60,7 @@ export default function UpdateParticipant(props) {
             'student_id': updateParticipantData.student_id === "" ? participantData.student_id : updateParticipantData.student_id,
             'email': updateParticipantData.email === "" ? participantData.email : updateParticipantData.email,
             'certificate_status': updateParticipantData.certificate_status === "" ? participantData.certificate_status : updateParticipantData.certificate_status,
-        }).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
+        }).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {
@@ -90,6 +94,7 @@ export default function UpdateParticipant(props) {
                     <Button onClick={handleSubmit} >Update Participant</Button>
                 </DialogActions>
             </Dialog>
+            <BackdropSpinner open={openSpinner} />
             <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
         </div>
     );

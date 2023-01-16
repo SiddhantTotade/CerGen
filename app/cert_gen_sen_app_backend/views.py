@@ -63,7 +63,7 @@ class UploadParticipant(APIView):
             email = data['Email']
             certificate_status = data['Certificate_Status']
             Event.id = Participant.objects.create(event = event_new_id,student_name = name,student_id = student_id,email = email, certificate_status = certificate_status)
-        return JsonResponse("Participant uploaded successfully",safe=False)
+        return JsonResponse("Participants uploaded successfully",safe=False)
     
     def delete(self, request, pk):
         participant_by_slug = Participant.objects.get(pk = pk)

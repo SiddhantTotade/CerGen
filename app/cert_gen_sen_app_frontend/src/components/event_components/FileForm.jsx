@@ -10,10 +10,16 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
+import BackdropSpinner from '../base_components/Backdrop';
+import AlertSnackbar from '../base_components/AlertSnackbar';
 
 export default function FileForm(props) {
 
     const [eventsData, setEventsData] = useState([])
+    const [openSpinner, setOpenSpinner] = useState(false)
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState("")
+    const [alertType, setAlertType] = useState("")
 
     useEffect(() => {
         const url = 'http://127.0.0.1:8000/api/all-events/'
@@ -54,6 +60,8 @@ export default function FileForm(props) {
     function handleFileSubmit(event) {
 
         event.preventDefault();
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 5000)
         const formData = new FormData()
         formData.append('xlsx_file', eventFileData)
         formData.append('eventId', eventId)
@@ -63,7 +71,11 @@ export default function FileForm(props) {
                 'content-type': 'multipart/form-data',
             }
         }
-        axios.post(url, formData, config).then(res => console.log(res)).catch(err => console.log(err))
+        axios.post(url, formData, config).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Participants uploaded successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
+    }
+
+    function handleCloseSnackbar() {
+        setOpenSnack(false)
     }
 
     return (
@@ -84,6 +96,8 @@ export default function FileForm(props) {
                     <Button onClick={handleFileSubmit} >Upload File</Button>
                 </DialogActions>
             </Dialog>
+            <BackdropSpinner open={openSpinner} />
+            <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
         </div >
     );
 }

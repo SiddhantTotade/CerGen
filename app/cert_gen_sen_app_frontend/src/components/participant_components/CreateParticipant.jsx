@@ -8,12 +8,14 @@ import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import AlertSnackbar from '../base_components/AlertSnackbar';
+import BackdropSpinner from '../base_components/Backdrop';
 
 export default function CreateParticipant(props) {
 
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState("")
     const [alertType, setAlertType] = useState("")
+    const [openSpinner, setOpenSpinner] = useState(false)
 
     const [participantData, setParticipantData] = useState({
         event: "",
@@ -46,6 +48,8 @@ export default function CreateParticipant(props) {
 
     function handleSubmit(e) {
         e.preventDefault();
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 5000)
         const url = 'http://127.0.0.1:8000/api/create-participant/'
         axios.post(url, {
             'event': participantData.event,
@@ -53,7 +57,7 @@ export default function CreateParticipant(props) {
             'student_id': participantData.student_id,
             'email': participantData.email,
             'certificate_status': participantData.certificate_status,
-        }).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Participant added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
+        }).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Participant added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {
@@ -83,6 +87,7 @@ export default function CreateParticipant(props) {
                     <Button onClick={handleSubmit} >Create Participant</Button>
                 </DialogActions>
             </Dialog>
+            <BackdropSpinner open={openSpinner} />
             <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
         </div>
     );

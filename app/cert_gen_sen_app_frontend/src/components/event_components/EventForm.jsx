@@ -11,8 +11,15 @@ import FormControl from '@mui/material/FormControl';
 import axios from 'axios';
 import { useState } from 'react';
 import { Select } from '@mui/material';
+import AlertSnackbar from '../base_components/AlertSnackbar';
+import BackdropSpinner from '../base_components/Backdrop';
 
 export default function EventForm(props) {
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState("")
+    const [alertType, setAlertType] = useState("")
+    const [openSpinner, setOpenSpinner] = useState(false)
+
     const [from_focus, from_setFocused] = React.useState(false)
     const [from_hasValue, from_setHasValue] = React.useState(false)
     const from_onFocus = () => from_setFocused(true)
@@ -37,6 +44,8 @@ export default function EventForm(props) {
     function handleSubmit(e) {
 
         e.preventDefault();
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 2000)
         const url = 'http://127.0.0.1:8000/api/all-events/'
         axios.post(url, {
             'user': 1,
@@ -46,7 +55,7 @@ export default function EventForm(props) {
             'from_date': eventData.from_date,
             'to_date': eventData.to_date,
             'event_year': eventData.event_year,
-        }).then(res => console.log(res)).catch(err => console.log(err)).finally(props.onClose)
+        }).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {
@@ -69,6 +78,10 @@ export default function EventForm(props) {
     }
 
     const yearList = allYears.map((x) => { return <MenuItem value={x}>{x}</MenuItem> });
+
+    function handleCloseSnackbar() {
+        setOpenSnack(false)
+    }
 
     return (
         <div className='w-full'>
@@ -95,6 +108,8 @@ export default function EventForm(props) {
                     <Button onClick={handleSubmit} >Create Event</Button>
                 </DialogActions>
             </Dialog>
+            <BackdropSpinner open={openSpinner} />
+            <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
         </div>
     );
 }

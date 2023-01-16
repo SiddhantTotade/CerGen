@@ -40,6 +40,7 @@ export default function SpecificEvent() {
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState("")
     const [alertType, setAlertType] = useState("")
+    const [openSpinner, setOpenSpinner] = useState(false)
 
     const [eventsData, setEventsData] = useState([])
     const [participantDetails] = useState({
@@ -59,7 +60,6 @@ export default function SpecificEvent() {
         axios.get(new_event_url).then(res => setEventsData(res.data))
     }, [])
 
-    const [openSpinner, setOpenSpinner] = useState(false)
 
     let event_slug = ""
 
