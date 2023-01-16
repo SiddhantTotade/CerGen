@@ -5,26 +5,22 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useState } from 'react';
+import AlertSnackbar from '../base_components/AlertSnackbar';
 
 export default function DeleteParticipant(props) {
 
-    let [eventsData, setEventsData] = useState([])
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState("")
+    const [alertType, setAlertType] = useState("")
 
-    const handleDelete = async (id) => {
+    function handleDelete(id) {
 
         const url = 'http://127.0.0.1:8000/api/delete-participant/' + id
+        axios.delete(url).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Participant deleted successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose).finally(props.onClose)
+    }
 
-        const deleteData = async () => {
-
-            try {
-                const response = await axios.delete(url).finally(props.onClose)
-                setEventsData(response.data)
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        deleteData()
+    function handleCloseSnackbar() {
+        setOpenSnack(false)
     }
 
     return (
@@ -36,6 +32,7 @@ export default function DeleteParticipant(props) {
                     <Button onClick={() => handleDelete(props.participant.event)} >Yes</Button>
                 </DialogActions>
             </Dialog>
+            <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
         </div>
     );
 }

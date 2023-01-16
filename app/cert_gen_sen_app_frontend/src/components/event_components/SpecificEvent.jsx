@@ -23,6 +23,7 @@ import Gold from '../medals_images/gold-medal.png'
 import Silver from '../medals_images/silver-medal.png'
 import Bronze from '../medals_images/bronze-medal.png'
 import BackdropSpinner from '../base_components/Backdrop';
+import AlertSnackbar from '../base_components/AlertSnackbar';
 
 const createBtns = {
     background: '#3293a8',
@@ -35,6 +36,10 @@ const createBtns = {
 }
 
 export default function SpecificEvent() {
+
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState("")
+    const [alertType, setAlertType] = useState("")
 
     const [eventsData, setEventsData] = useState([])
     const [participantDetails] = useState({
@@ -68,38 +73,16 @@ export default function SpecificEvent() {
     const ReverseString = event_slug => [...event_slug].reverse().join('');
     event_slug = ReverseString(event_slug.replace("/", ""))
 
-    const generateCertificate = async () => {
+    function generateCertificate() {
 
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug
-
-        const certificateData = async () => {
-
-            try {
-                const response = await axios.get(url).then(setOpenSpinner(false)).then(res => console.log(res))
-                setEventsData(response.data)
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        certificateData()
+        axios.get(url).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("success") : setAlertType("error")).catch(err => console.log(err))
     }
 
-    const generateCertificateById = async (id) => {
+    function generateCertificateById(id) {
 
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug + "/" + id
-
-        const certificateData = async () => {
-
-            try {
-                const response = await axios.get(url).then(res => console.log(res))
-                setEventsData(response.data)
-            }
-            catch (error) {
-                console.log(error);
-            }
-        }
-        certificateData()
+        axios.get(url).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
     }
 
     const [form, setForm] = React.useState(false)
@@ -134,6 +117,10 @@ export default function SpecificEvent() {
 
     const handleDeleteFormClose = () => {
         setDeleteForm(false);
+    }
+
+    function handleCloseSnackbar() {
+        setOpenSnack(false)
     }
 
     return (
@@ -184,6 +171,7 @@ export default function SpecificEvent() {
                 <UpdateParticipant open={updateForm} onClose={handleUpdateFormClose} participant={participantDetails} />
                 <DeleteParticipant open={deleteForm} onClose={handleDeleteFormClose} participant={participantDetails} />
                 <BackdropSpinner open={openSpinner} />
+                <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
             </div>
         </div >
     );

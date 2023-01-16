@@ -7,8 +7,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import axios from 'axios';
 import { useState, useEffect } from 'react';
+import AlertSnackbar from '../base_components/AlertSnackbar';
 
 export default function CreateParticipant(props) {
+
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState("")
+    const [alertType, setAlertType] = useState("")
 
     const [participantData, setParticipantData] = useState({
         event: "",
@@ -48,7 +53,7 @@ export default function CreateParticipant(props) {
             'student_id': participantData.student_id,
             'email': participantData.email,
             'certificate_status': participantData.certificate_status,
-        }).then(res => console.log(res)).catch(err => console.log(err))
+        }).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Participant added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {
@@ -56,6 +61,10 @@ export default function CreateParticipant(props) {
         const newData = { ...participantData }
         newData[event.target.id] = event.target.value
         setParticipantData(newData)
+    }
+
+    function handleCloseSnackbar() {
+        setOpenSnack(false)
     }
 
     return (
@@ -74,6 +83,7 @@ export default function CreateParticipant(props) {
                     <Button onClick={handleSubmit} >Create Participant</Button>
                 </DialogActions>
             </Dialog>
+            <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
         </div>
     );
 }

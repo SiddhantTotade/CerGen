@@ -11,6 +11,10 @@ import AlertSnackbar from '../base_components/AlertSnackbar';
 
 export default function UpdateParticipant(props) {
 
+    const [openSnack, setOpenSnack] = useState(false)
+    const [message, setMessage] = useState("")
+    const [alertType, setAlertType] = useState("")
+    
     let [eventsData, setEventsData] = useState([])
 
     Object.values(eventsData).map((event) => { return eventsData = event.id })
@@ -31,9 +35,6 @@ export default function UpdateParticipant(props) {
         certificate_status: ""
     })
 
-    const [openSnack, setOpenSnack] = useState(false)
-    const [message, setMessage] = useState("")
-    const [alertType, setAlertType] = useState("")
 
     useEffect(() => {
         const event_url = window.location.href
@@ -57,12 +58,6 @@ export default function UpdateParticipant(props) {
             'certificate_status': updateParticipantData.certificate_status === "" ? participantData.certificate_status : updateParticipantData.certificate_status,
         }).then(setOpenSnack(true)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("success") : setAlertType("error")).catch(err => console.log(err)).finally(props.onClose)
     }
-
-    // function handleSeverity(msg) {
-    //     message.message = msg
-    // }
-
-    console.log(message);
 
     function handleEventData(event) {
 
