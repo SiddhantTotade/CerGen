@@ -137,7 +137,7 @@ def generateCertificate(request,slug):
                     # cv2.putText(template, event_list[3], (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
                 cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+data[0]}.jpg', template)
                 # sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", data[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+data[0]}.jpg')
-        # print(f'Processing {index + 1} / {len(key)}')
+                # print(f'Processing {index + 1} / {len(key)}')
     return JsonResponse("Certificate generated and sended successfully",safe=False)
 
 # Generate certificate by Id
