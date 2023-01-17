@@ -1,13 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Container, TextField, Typography, Button, Grid, Link } from '@mui/material';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const LoginPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isRegister, setIsRegister] = useState(false);
+    const navigate = useNavigate()
+
+    const [authenticated, setauthenticated] = useState(null);
+
+    // useEffect(() => {
+    //     const loggedInUser = localStorage.getItem("token");
+    //     if (loggedInUser) {
+    //         setauthenticated(loggedInUser);
+    //     }
+    // },[]);
+
+    // if (authenticated) {
+    //     navigate("/")
+    // }
+    // else {
+    //     navigate("/api/login")
+    // }
 
     const handleLogin = (e) => {
         e.preventDefault();
+        const url = "http://127.0.0.1:8000/api/login/"
+        axios.post(url, {
+            "username": username,
+            "password": password,
+        }).then(res => localStorage.setItem("token", res.data.token)).then(localStorage.getItem("token") === "" ? navigate("/api/login") : navigate("/")).catch(err => console.log(err))
         // Perform login logic here
     }
 
@@ -58,11 +82,11 @@ const LoginPage = () => {
                     >
                         {isRegister ? 'Register' : 'Login'}
                     </Button>
-                    <Link href="#" onClick={() => setIsRegister(!isRegister)}>
-                        {isRegister ? 'Already have an account? Login' : 'Don\'t have an account? Register'}
-                    </Link>
                 </Grid>
             </form>
+            <Link href="#" className='' onClick={() => setIsRegister(!isRegister)}>
+                {isRegister ? 'Already have an account? Login' : 'Don\'t have an account? Register'}
+            </Link>
         </Container>
     );
 };

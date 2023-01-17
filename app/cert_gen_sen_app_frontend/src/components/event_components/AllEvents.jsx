@@ -34,7 +34,7 @@ export const AllEvents = () => {
 
         const fetchData = async () => {
             try {
-                const response = await axios.get(url)
+                const response = await axios.get(url, { headers: { "Authorization": "Token 53f4ded18d6eb757b648cf2ec30f971b8fa3f4b3e07373e7a3f58054c7c18d24" } })
                 setEventsData(response.data)
             }
             catch (error) {

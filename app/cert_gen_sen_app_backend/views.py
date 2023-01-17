@@ -17,6 +17,8 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 # Create your views here.
 
 
@@ -44,6 +46,7 @@ class RegisterAPI(generics.GenericAPIView):
         })
 
 # Getting all events
+@permission_classes((IsAuthenticated,))
 class EventsOperations(APIView):
     def get(self, request):
         all_events = Event.objects.all()
@@ -105,6 +108,7 @@ class UploadParticipant(APIView):
         return JsonResponse("Participant deleted successfully",safe=False)
 
 # Getting single events by slug
+@permission_classes((IsAuthenticated,))
 def get_event_by_slug(request,slug):
     event = Event.objects.filter(slug=slug)
     if event:
@@ -133,6 +137,7 @@ class UploadEachParticipant(APIView):
         return JsonResponse("Failed to update participant",safe=False)
 
 # Filtering Events by slug
+@permission_classes((IsAuthenticated,))
 class FilteredEvent(APIView):
     def get(self, request, slug):
         event = Event.objects.filter(slug=slug)
