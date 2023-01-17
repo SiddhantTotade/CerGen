@@ -19,11 +19,14 @@ import ListItemText from '@mui/material/ListItemText';
 import LogoutIcon from '@mui/icons-material/Logout';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
 import EventIcon from '@mui/icons-material/Event';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import PersonIcon from '@mui/icons-material/Person';
 import EventForm from '../event_components/EventForm';
 import FileForm from '../event_components/FileForm';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
+import BackdropSpinner from './Backdrop';
+import axios from 'axios';
+import { useState } from 'react';
 
 const drawerWidth = 240;
 
@@ -102,6 +105,10 @@ export default function MiniDrawer() {
     const theme = useTheme();
     const [open, setOpen] = React.useState(false);
 
+    const navigate = useNavigate()
+
+    const [openSpinner, setOpenSpinner] = useState(false)
+
     const listItemButton_sx = {
         minHeight: 48,
         justifyContent: open ? 'initial' : 'center',
@@ -136,6 +143,14 @@ export default function MiniDrawer() {
 
     const handleCsvFormClose = () => {
         setCsvForm(false);
+    }
+
+    const handleLogout = (e) => {
+        e.preventDefault();
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 3000)
+        const url = "http://127.0.0.1:8000/api/logout/"
+        axios.post(url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(localStorage.clear()).then(setTimeout(() => navigate("/api/login"), 3000)).catch(err => console.log(err))
     }
 
     return (
@@ -210,7 +225,7 @@ export default function MiniDrawer() {
                     </List>
                     <Divider />
                     <List>
-                        <Link to='/logout'>
+                        <Link to='/api/logout' onClick={handleLogout}>
                             <ListItem disablePadding sx={listitem_sx} key='logout'>
                                 <ListItemButton sx={listItemButton_sx}>
                                     <ListItemIcon sx={listItemIcon_sx}>
@@ -228,6 +243,7 @@ export default function MiniDrawer() {
                 <EventForm open={form} onClose={handleFormClose} />
                 <FileForm open={csv_form} onClose={handleCsvFormClose} />
             </Box>
+            <BackdropSpinner open={openSpinner} />
         </div>
     );
 }

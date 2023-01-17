@@ -2,14 +2,20 @@ import React, { useState } from 'react';
 import { Container, TextField, Typography, Button, Grid, Link } from '@mui/material';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import BackdropSpinner from './Backdrop';
 
 const LoginPage = () => {
+
+    const [openSpinner, setOpenSpinner] = useState(false)
+
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const navigate = useNavigate()
 
     const handleLogin = (e) => {
         e.preventDefault();
+        setOpenSpinner(true)
+        setTimeout(() => { setOpenSpinner(false) }, 3000)
         const url = "http://127.0.0.1:8000/api/login/"
         axios.post(url, {
             "username": username,
@@ -54,6 +60,7 @@ const LoginPage = () => {
                     Don't have an account? Register
                 </Link>
             </Container>
+            <BackdropSpinner open={openSpinner} />
         </>
     );
 };
