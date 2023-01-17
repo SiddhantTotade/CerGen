@@ -3,16 +3,19 @@ import { Container, TextField, Typography, Button, Grid, Link } from '@mui/mater
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
-const LoginPage = () => {
+const RegisterPage = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [email, setEmail] = useState('');
+    const [isRegister, setIsRegister] = useState(false);
     const navigate = useNavigate()
 
-    const handleLogin = (e) => {
+    const handleRegister = (e) => {
         e.preventDefault();
-        const url = "http://127.0.0.1:8000/api/login/"
+        const url = "http://127.0.0.1:8000/api/register/"
         axios.post(url, {
             "username": username,
+            "email": email,
             "password": password,
         }).then(res => localStorage.setItem("token", res.data.token)).then(setTimeout(() => navigate("/"), 3000)).catch(err => console.log(err))
     }
@@ -20,7 +23,7 @@ const LoginPage = () => {
     return (
         <>
             <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)" }}>
-                <Typography variant="h4" align="center" gutterBottom>Login</Typography>
+                <Typography variant="h4" align="center" gutterBottom>Register</Typography>
                 <form>
                     <TextField
                         label="Username"
@@ -29,6 +32,15 @@ const LoginPage = () => {
                         variant="outlined"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
+                    />
+                    <TextField
+                        label="Email"
+                        fullWidth
+                        margin="normal"
+                        variant="outlined"
+                        type="email"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
                     />
                     <TextField
                         label="Password"
@@ -44,18 +56,19 @@ const LoginPage = () => {
                             type="submit"
                             variant="contained"
                             color="primary"
-                            onClick={handleLogin}
+                            onClick={handleRegister}
                             sx={{ marginBottom: "10px" }}
-                        >Login
+                        >
+                            Register
                         </Button>
                     </Grid>
                 </form>
-                <Link href="/api/register" >
-                    Don't have an account? Register
+                <Link href="/api/login" className='' onClick={() => setIsRegister(!isRegister)}>
+                    Already have an account? Login
                 </Link>
             </Container>
         </>
     );
 };
 
-export default LoginPage;
+export default RegisterPage;

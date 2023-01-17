@@ -57,7 +57,7 @@ export default function SpecificEvent() {
     useEffect(() => {
         const event_url = window.location.href
         const new_event_url = event_url.replace("3000", "8000")
-        axios.get(new_event_url, { headers: { "Authorization": "Token 53f4ded18d6eb757b648cf2ec30f971b8fa3f4b3e07373e7a3f58054c7c18d24" } }).then(res => setEventsData(res.data))
+        axios.get(new_event_url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => setEventsData(res.data))
     }, [])
 
 
