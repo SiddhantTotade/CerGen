@@ -31,6 +31,7 @@ const LoginPage = () => {
                     <TextField
                         label="Username"
                         fullWidth
+                        required
                         margin="normal"
                         variant="outlined"
                         value={username}
@@ -39,6 +40,7 @@ const LoginPage = () => {
                     <TextField
                         label="Password"
                         fullWidth
+                        required
                         margin="normal"
                         variant="outlined"
                         type="password"
