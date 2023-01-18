@@ -41,9 +41,6 @@ export default function SpecificEvent() {
     const [message, setMessage] = useState("")
     const [alertType, setAlertType] = useState("")
     const [openSpinner, setOpenSpinner] = useState(false)
-    const [event, setEvent] = useState({
-        event_name: ""
-    })
 
     const [eventsData, setEventsData] = useState([])
     const [participantDetails] = useState({
