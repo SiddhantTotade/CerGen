@@ -19,7 +19,7 @@ export default function DeleteParticipant(props) {
         setOpenSpinner(true)
         setTimeout(() => { setOpenSpinner(false) }, 1000)
         const url = 'http://127.0.0.1:8000/api/delete-participant/' + id
-        axios.delete(url).then(setTimeout(() => { setOpenSnack(true) }, 1000)).then(res => setMessage(res.data)).then(message === "Participant deleted successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose).finally(props.onClose)
+        axios.delete(url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 1000)).then(res => setMessage(res.data)).then(message === "Participant deleted successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose).finally(props.onClose)
     }
 
     function handleCloseSnackbar() {

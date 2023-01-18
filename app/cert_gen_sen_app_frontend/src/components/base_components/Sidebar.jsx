@@ -27,6 +27,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import BackdropSpinner from './Backdrop';
 import axios from 'axios';
 import { useState } from 'react';
+import Footer from './Footer';
 
 const drawerWidth = 240;
 
@@ -109,6 +110,8 @@ export default function MiniDrawer() {
 
     const [openSpinner, setOpenSpinner] = useState(false)
 
+    const username = localStorage.getItem('username')
+
     const listItemButton_sx = {
         minHeight: 48,
         justifyContent: open ? 'initial' : 'center',
@@ -154,96 +157,99 @@ export default function MiniDrawer() {
     }
 
     return (
-        <div>
-            <Box sx={{ display: 'flex' }}>
-                <CssBaseline />
-                <AppBar position="fixed" open={open}>
-                    <Toolbar>
-                        <IconButton
-                            color="inherit"
-                            aria-label="open drawer"
-                            onClick={handleDrawerOpen}
-                            edge="start"
-                            sx={{
-                                marginRight: 5,
-                                ...(open && { display: 'none' }),
-                            }}
-                        >
-                            <MenuIcon />
-                        </IconButton>
-                        <Typography variant="h6" noWrap component="div">
-                            CerGen
-                        </Typography>
-                    </Toolbar>
-                    <div className=' flex absolute right-2 hover:cursor-pointer rounded-md text-black top-20 gap-3 border-2 border-blue-500 p-4'>
-                        <PersonIcon />
-                        <p>User</p>
-                    </div>
-                </AppBar>
-                <Drawer variant="permanent" open={open}>
-                    <DrawerHeader>
-                        <IconButton onClick={handleDrawerClose}>
-                            {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
-                        </IconButton>
-                    </DrawerHeader>
-                    <Divider />
-                    <List>
-                        <Link to='/api/all-events'>
-                            <ListItem disablePadding sx={listitem_sx} key='all_events'>
-                                <ListItemButton sx={listItemButton_sx}>
-                                    <ListItemIcon sx={listItemIcon_sx}>
-                                        <EventIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary='All Events' sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
-                        </Link>
-                    </List>
-                    <List>
-                        <div onClick={handleForm}>
-                            <ListItem disablePadding sx={listitem_sx} key='create_events'>
-                                <ListItemButton sx={listItemButton_sx}>
-                                    <ListItemIcon sx={listItemIcon_sx}>
-                                        <AddCircleOutlineIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary='Create Event' sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
+        <>
+            <div>
+                <Box sx={{ display: 'flex' }}>
+                    <CssBaseline />
+                    <AppBar position="fixed" open={open}>
+                        <Toolbar>
+                            <IconButton
+                                color="inherit"
+                                aria-label="open drawer"
+                                onClick={handleDrawerOpen}
+                                edge="start"
+                                sx={{
+                                    marginRight: 5,
+                                    ...(open && { display: 'none' }),
+                                }}
+                            >
+                                <MenuIcon />
+                            </IconButton>
+                            <Typography variant="h6" noWrap component="div">
+                                CerGen
+                            </Typography>
+                        </Toolbar>
+                        <div className=' flex absolute right-2 hover:cursor-pointer rounded-md text-black top-20 gap-3 border-2 border-blue-500 p-4'>
+                            <PersonIcon />
+                            <p>{username}</p>
                         </div>
-                    </List>
-                    <List>
-                        <div onClick={handleCsvForm}>
-                            <ListItem disablePadding sx={listitem_sx} key='upload_csv'>
-                                <ListItemButton sx={listItemButton_sx}>
-                                    <ListItemIcon sx={listItemIcon_sx}>
-                                        <FileUploadIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary='Upload CSV' sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
-                        </div>
-                    </List>
-                    <Divider />
-                    <List>
-                        <Link to='/api/logout' onClick={handleLogout}>
-                            <ListItem disablePadding sx={listitem_sx} key='logout'>
-                                <ListItemButton sx={listItemButton_sx}>
-                                    <ListItemIcon sx={listItemIcon_sx}>
-                                        <LogoutIcon />
-                                    </ListItemIcon>
-                                    <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
-                                </ListItemButton>
-                            </ListItem>
-                        </Link>
-                    </List>
-                </Drawer>
-                <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                    <DrawerHeader />
+                    </AppBar>
+                    <Drawer variant="permanent" open={open}>
+                        <DrawerHeader>
+                            <IconButton onClick={handleDrawerClose}>
+                                {theme.direction === 'rtl' ? <ChevronRightIcon /> : <ChevronLeftIcon />}
+                            </IconButton>
+                        </DrawerHeader>
+                        <Divider />
+                        <List>
+                            <Link to='/api/all-events'>
+                                <ListItem disablePadding sx={listitem_sx} key='all_events'>
+                                    <ListItemButton sx={listItemButton_sx}>
+                                        <ListItemIcon sx={listItemIcon_sx}>
+                                            <EventIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary='All Events' sx={{ opacity: open ? 1 : 0 }} />
+                                    </ListItemButton>
+                                </ListItem>
+                            </Link>
+                        </List>
+                        <List>
+                            <div onClick={handleForm}>
+                                <ListItem disablePadding sx={listitem_sx} key='create_events'>
+                                    <ListItemButton sx={listItemButton_sx}>
+                                        <ListItemIcon sx={listItemIcon_sx}>
+                                            <AddCircleOutlineIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary='Create Event' sx={{ opacity: open ? 1 : 0 }} />
+                                    </ListItemButton>
+                                </ListItem>
+                            </div>
+                        </List>
+                        <List>
+                            <div onClick={handleCsvForm}>
+                                <ListItem disablePadding sx={listitem_sx} key='upload_csv'>
+                                    <ListItemButton sx={listItemButton_sx}>
+                                        <ListItemIcon sx={listItemIcon_sx}>
+                                            <FileUploadIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary='Upload CSV' sx={{ opacity: open ? 1 : 0 }} />
+                                    </ListItemButton>
+                                </ListItem>
+                            </div>
+                        </List>
+                        <Divider />
+                        <List>
+                            <Link to='/api/logout' onClick={handleLogout}>
+                                <ListItem disablePadding sx={listitem_sx} key='logout'>
+                                    <ListItemButton sx={listItemButton_sx}>
+                                        <ListItemIcon sx={listItemIcon_sx}>
+                                            <LogoutIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary='Logout' sx={{ opacity: open ? 1 : 0 }} />
+                                    </ListItemButton>
+                                </ListItem>
+                            </Link>
+                        </List>
+                    </Drawer>
+                    <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+                        <DrawerHeader />
+                    </Box>
+                    <EventForm open={form} onClose={handleFormClose} />
+                    <FileForm open={csv_form} onClose={handleCsvFormClose} />
                 </Box>
-                <EventForm open={form} onClose={handleFormClose} />
-                <FileForm open={csv_form} onClose={handleCsvFormClose} />
-            </Box>
-            <BackdropSpinner open={openSpinner} />
-        </div>
+                <BackdropSpinner open={openSpinner} />
+            </div>
+            <Footer />
+        </>
     );
 }

@@ -30,8 +30,8 @@ def cleanUp():
         os.remove(f)
 
 def meritCertificateGenerate(name, stu_id, rank, event, department, from_date, to_date, year, template, signature):
-    x_offset = 652
-    y_offset = 1170
+    x_offset = 664
+    y_offset = 1090
 
     y1, y2 = y_offset, y_offset + signature.shape[0]
     x1, x2 = x_offset, x_offset + signature.shape[1]
@@ -50,12 +50,13 @@ def meritCertificateGenerate(name, stu_id, rank, event, department, from_date, t
     cv2.putText(template, rank, (1048, 748), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
     cv2.putText(template, event, (812, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
     cv2.putText(template, certificate_id, (28, 1380), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (10, 10, 10), 1, cv2.LINE_AA)
-    # cv2.putText(template, year, (1210, 1034), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
+    cv2.putText(template, str(year), (1210, 1034), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
     if from_date == to_date:
         cv2.putText(template, from_date, (872, 938), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
     else:
-        cv2.putText(template, from_date, (732, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
-        cv2.putText(template, to_date, (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
+        cv2.putText(template, from_date, (866, 938), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+        cv2.putText(template, "to", (1148, 938), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+        cv2.putText(template, to_date, (1238, 938), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
     cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(certificate_id)+" "+name}.jpg', template)
     
     return certificate_id
@@ -133,11 +134,11 @@ def generateCertificate(request,slug):
                 if event_date_check:
                     cv2.putText(template, event_list[2], (730, 886), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
                 else:
-                    cv2.putText(template, event_list[2], (732, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
-                    # cv2.putText(template, event_list[3], (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
+                    cv2.putText(template, event_list[2], (706, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+                    cv2.putText(template, "to", (966, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+                    cv2.putText(template, event_list[3], (1034, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
                 cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+data[0]}.jpg', template)
-                # sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", data[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+data[0]}.jpg')
-                # print(f'Processing {index + 1} / {len(key)}')
+                sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", data[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+data[0]}.jpg')
     return JsonResponse("Certificate generated and sended successfully",safe=False)
 
 # Generate certificate by Id
@@ -156,9 +157,7 @@ def generateCertificateById(request,slug,pk):
     not_eligible = ""
 
     if participant_list[3] == "F":
-        print("1")
         not_eligible = "The Student "+participant_list[0]+" is not eligible for certificate"
-        print("2")
         return JsonResponse(not_eligible,safe=False)
     else:
         event_list = []
@@ -174,35 +173,50 @@ def generateCertificateById(request,slug,pk):
 
         signature = cv2.imread("./cert_gen_sen_app_backend/certificate_data/certificate-generator/Galvin Belson.png", -1)
         template_base_dir = "./cert_gen_sen_app_backend/certificate_data/certificate-generator/"
-        template = cv2.imread(template_base_dir + "certificate_of_completion.jpg")
 
-        event_date_check = False
-        if event_list[2] == event_list[3]:
-            event_date_check = True
-
-        x_offset = 578
-        y_offset = 1020
-        y1, y2 = y_offset, y_offset + signature.shape[0]
-        x1, x2 = x_offset, x_offset + signature.shape[1]
-        alpha_s = signature[:, :, 3] / 255.0
-        alpha_l = 1.0 - alpha_s
-
-        for c in range(0, 3):
-            template[y1:y2, x1:x2, c] = (
-                alpha_s * signature[:, :, c] + alpha_l * template[y1:y2, x1:x2, c])
-
-        random_num = random.randint(1000,9999)
-        certificate_id = str(participant_list[1][0:4])+str(event_list[1])+str(random_num)+str(event_list[4])+str(event_list[2].replace("-",""))
-
-        cv2.putText(template, participant_list[0], (592, 704), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 4, (255, 0, 30), 3, cv2.LINE_AA)
-        cv2.putText(template, event_list[0], (1036, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
-        cv2.putText(template, certificate_id, (28, 1380), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (10, 10, 10), 1, cv2.LINE_AA)
-
-        if event_date_check:
-            cv2.putText(template, event_list[2], (730, 886), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+        if participant_list[3] == "1":
+            template = cv2.imread(template_base_dir + "certificate_1st.jpg")
+            certificate_id = meritCertificateGenerate(participant_list[0],participant_list[1][0:4],participant_list[3]+"st",event_list[0],event_list[1],event_list[2],event_list[3],event_list[4],template,signature)
+            sendMail("Certificate of Merit", "CONGRATULATIONS... You have secured 1st rank in the event and thank you for participanting in the event.", participant_list[2], f'../app/cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(certificate_id)+" "+participant_list[0]}.jpg')
+        elif participant_list[3] == "2":
+            template = cv2.imread(template_base_dir + "certificate_2nd.jpg")
+            certificate_id = meritCertificateGenerate(participant_list[0],participant_list[1][0:4],participant_list[3]+"nd",event_list[0],event_list[1],event_list[2],event_list[3],event_list[4],template,signature)
+            sendMail("Certificate of Merit", "CONGRATULATIONS... You have secured 2nd rank in the event and thank you for participanting in the event.", participant_list[2], f'../app/cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(certificate_id)+" "+participant_list[0]}.jpg')
+        elif participant_list[3] == "3":
+            template = cv2.imread(template_base_dir + "certificate_3rd.jpg")
+            certificate_id = meritCertificateGenerate(participant_list[0],participant_list[1][0:4],participant_list[3]+"3rd",event_list[0],event_list[1],event_list[2],event_list[3],event_list[4],template,signature)
+            sendMail("Certificate of Merit", "CONGRATULATIONS... You have secured 3rd rank in the event and thank you for participanting in the event.", participant_list[2], f'../app/cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(certificate_id)+" "+participant_list[0]}.jpg')
         else:
-            cv2.putText(template, event_list[2], (732, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
-            # cv2.putText(template, event_list[3], (782, 552), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (0, 0, 255), 1, cv2.LINE_AA)
-        cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+participant_list[0]}.jpg', template)
-        # sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", participant_list[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(count)+" "+participant_list[0]}.jpg')
-        return JsonResponse("Certificate generated and sended successfully",safe=False)
+            template = cv2.imread(template_base_dir + "certificate_of_completion.jpg")
+
+            event_date_check = False
+            if event_list[2] == event_list[3]:
+                event_date_check = True
+
+            x_offset = 578
+            y_offset = 1020
+            y1, y2 = y_offset, y_offset + signature.shape[0]
+            x1, x2 = x_offset, x_offset + signature.shape[1]
+            alpha_s = signature[:, :, 3] / 255.0
+            alpha_l = 1.0 - alpha_s
+
+            for c in range(0, 3):
+                template[y1:y2, x1:x2, c] = (
+                    alpha_s * signature[:, :, c] + alpha_l * template[y1:y2, x1:x2, c])
+
+            random_num = random.randint(1000,9999)
+            certificate_id = str(participant_list[1][0:4])+str(event_list[1])+str(random_num)+str(event_list[4])+str(event_list[2].replace("-",""))
+
+            cv2.putText(template, participant_list[0], (592, 704), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 4, (255, 0, 30), 3, cv2.LINE_AA)
+            cv2.putText(template, event_list[0], (1036, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
+            cv2.putText(template, certificate_id, (28, 1380), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (10, 10, 10), 1, cv2.LINE_AA)
+
+            if event_date_check:
+                cv2.putText(template, event_list[2], (730, 886), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+            else:
+                cv2.putText(template, event_list[2], (706, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+                cv2.putText(template, "to", (966, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+                cv2.putText(template, event_list[3], (1034, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+            cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+participant_list[0]}.jpg', template)
+            sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", participant_list[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+participant_list[0]}.jpg')
+    return JsonResponse("Certificate generated and sended successfully",safe=False)

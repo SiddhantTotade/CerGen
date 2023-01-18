@@ -26,7 +26,7 @@ export default function FileForm(props) {
 
         const fetchData = async () => {
             try {
-                const response = await axios.get(url)
+                const response = await axios.get(url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } })
                 setEventsData(response.data)
             }
             catch (error) {
@@ -69,6 +69,7 @@ export default function FileForm(props) {
         const config = {
             headers: {
                 'content-type': 'multipart/form-data',
+                "Authorization": "Token " + localStorage.getItem("token")
             }
         }
         axios.post(url, formData, config).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Participants uploaded successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)

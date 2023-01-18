@@ -41,7 +41,7 @@ export default function UpdateParticipant(props) {
     useEffect(() => {
         const event_url = window.location.href
         const new_event_url = event_url.replace("3000", "8000").replace("event", "event-details")
-        axios.get(new_event_url).then(res => setEventsData(res.data))
+        axios.get(new_event_url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => setEventsData(res.data))
     }, [])
 
     useEffect(() => {
@@ -60,7 +60,7 @@ export default function UpdateParticipant(props) {
             'student_id': updateParticipantData.student_id === "" ? participantData.student_id : updateParticipantData.student_id,
             'email': updateParticipantData.email === "" ? participantData.email : updateParticipantData.email,
             'certificate_status': updateParticipantData.certificate_status === "" ? participantData.certificate_status : updateParticipantData.certificate_status,
-        }).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
+        }, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {

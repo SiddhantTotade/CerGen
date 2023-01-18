@@ -20,7 +20,7 @@ const LoginPage = () => {
         axios.post(url, {
             "username": username,
             "password": password,
-        }).then(res => localStorage.setItem("token", res.data.token)).then(setTimeout(() => navigate("/"), 3000)).catch(err => console.log(err))
+        }).then(res => localStorage.setItem("token", res.data.token)).then(localStorage.setItem('username', username)).then(setTimeout(() => navigate("/"), 3000)).catch(err => console.log(err))
     }
 
     return (

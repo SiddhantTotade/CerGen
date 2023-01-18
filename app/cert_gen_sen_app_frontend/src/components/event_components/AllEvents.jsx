@@ -14,6 +14,7 @@ import AlertSnackbar from '../base_components/AlertSnackbar';
 const card_sx = {
     maxWidth: 400,
     transition: 'all 0.25s ease-in-out',
+    display: "grid",
     '&:hover': {
         background: "#fcfcfa",
         transform: 'scale(1.1)',
@@ -58,12 +59,13 @@ export const AllEvents = () => {
     return (
         <>
             <Sidebar />
+            <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray", width: "55%", margin: "auto" }}>All Events</Typography>
             <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                 {eventsData.map((event) => {
                     let event_url = '/api/event/' + event.slug
                     return <Card sx={card_sx}>
                         <CardContent>
-                            <div className='flex items-center justify-between'>
+                            <div>
                                 <Typography gutterBottom variant="h5" component="div">
                                     {event.event_name}
                                 </Typography>
@@ -71,9 +73,8 @@ export const AllEvents = () => {
                                     <small>{event.from_date} - {event.to_date}</small>
                                 </div>
                             </div>
-                            <Typography variant="body2" color="text.secondary">
-                                Lizards are a widespread group of squamate reptiles, with over 6,000
-                                species, ranging across all continents except Antarctica
+                            <Typography variant="body2" color="text.secondary" sx={{ height: "5vh" }}>
+                                {event.subject}
                             </Typography>
                         </CardContent>
                         <CardActions>

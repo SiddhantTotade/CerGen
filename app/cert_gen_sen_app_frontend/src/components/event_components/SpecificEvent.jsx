@@ -14,7 +14,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
-import { Button } from '@mui/material';
+import { Button, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
 import CreateParticipant from '../participant_components/CreateParticipant';
 import UpdateParticipant from '../participant_components/UpdateParticipant';
@@ -41,6 +41,9 @@ export default function SpecificEvent() {
     const [message, setMessage] = useState("")
     const [alertType, setAlertType] = useState("")
     const [openSpinner, setOpenSpinner] = useState(false)
+    const [event, setEvent] = useState({
+        event_name: ""
+    })
 
     const [eventsData, setEventsData] = useState([])
     const [participantDetails] = useState({
@@ -60,7 +63,6 @@ export default function SpecificEvent() {
         axios.get(new_event_url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => setEventsData(res.data))
     }, [])
 
-
     let event_slug = ""
 
     for (let i = event_url.length - 1; i > 0; i--) {
@@ -77,14 +79,14 @@ export default function SpecificEvent() {
         setOpenSpinner(true)
         setTimeout(() => { setOpenSpinner(false) }, 5000)
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug
-        axios.get(url).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
+        axios.get(url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 10000)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
     }
 
     function generateCertificateById(id) {
         setOpenSpinner(true)
-        setTimeout(() => { setOpenSpinner(false) }, 3000)
+        setTimeout(() => { setOpenSpinner(false) }, 5000)
         const url = 'http://127.0.0.1:8000/api/generate-certificate/' + event_slug + "/" + id
-        axios.get(url).then(setTimeout(() => { setOpenSnack(true) }, 3000)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
+        axios.get(url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 10000)).then(res => setMessage(res.data)).then(message === "Certificate generated and sended successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
     }
 
     const [form, setForm] = React.useState(false)
@@ -128,8 +130,11 @@ export default function SpecificEvent() {
     return (
         <div className='flex justify-center items-center'>
             <Sidebar />
-            <div className='w-3/5 mt-32'>
-                <div className='gap-10'>
+            <div className='w-3/5 mt-24'>
+                <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray" }}>
+                    {event_slug.toUpperCase()}
+                </Typography>
+                <div className='gap-10 mt-10'>
                     <Button sx={createBtns} onClick={handleForm}>Create Participant</Button>
                     <Button sx={createBtns} onClick={generateCertificate} >Issue and Send Certificate</Button>
                 </div>

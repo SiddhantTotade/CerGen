@@ -57,7 +57,7 @@ export default function CreateParticipant(props) {
             'student_id': participantData.student_id,
             'email': participantData.email,
             'certificate_status': participantData.certificate_status,
-        }).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Participant added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
+        }, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Participant added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {
