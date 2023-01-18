@@ -5,6 +5,9 @@ module.exports = {
   ],
   theme: {
     extend: {},
+    fontFamily: {
+      'title': ['Lobster', 'cursive']
+    }
   },
   plugins: [],
 }
