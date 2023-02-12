@@ -30,6 +30,7 @@ import { useState } from 'react';
 import Footer from './Footer';
 import { Home } from './Home';
 import homeCss from '../styles/home.css'
+import { useLocation } from 'react-router-dom';
 
 const drawerWidth = 240;
 
@@ -102,6 +103,8 @@ const listitem_sx = { display: 'block' }
 
 export default function MiniDrawer() {
 
+    const location = useLocation()
+
     const [form, setForm] = React.useState(false)
     const [csv_form, setCsvForm] = React.useState(false)
 
@@ -160,7 +163,9 @@ export default function MiniDrawer() {
 
     return (
         <>
-            <div className="wave-container"></div>
+            {
+                location.pathname === '/' ? <div className="wave-container"></div> : ""
+            }
             <div>
                 <Box sx={{ display: 'flex' }}>
                     <CssBaseline />
@@ -182,7 +187,7 @@ export default function MiniDrawer() {
                                 CerGen
                             </Typography>
                         </Toolbar>
-                        <div className=' flex absolute right-2 hover:cursor-pointer rounded-md text-black top-20 gap-3 border-2 border-blue-500 p-4'>
+                        <div className=' flex absolute right-2 hover:cursor-pointer rounded-md text-white top-20 gap-3 border-2 border-white p-4'>
                             <PersonIcon />
                             <p>{username}</p>
                         </div>
@@ -244,7 +249,9 @@ export default function MiniDrawer() {
                             </Link>
                         </List>
                     </Drawer>
-                    <Home />
+                    {
+                        location.pathname === '/' ? <Home /> : ""
+                    }
                     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                         <DrawerHeader />
                     </Box>
