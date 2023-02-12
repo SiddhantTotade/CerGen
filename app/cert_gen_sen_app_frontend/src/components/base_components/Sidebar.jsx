@@ -28,6 +28,7 @@ import BackdropSpinner from './Backdrop';
 import axios from 'axios';
 import { useState } from 'react';
 import Footer from './Footer';
+import { Home } from './Home';
 
 const drawerWidth = 240;
 
@@ -241,6 +242,7 @@ export default function MiniDrawer() {
                             </Link>
                         </List>
                     </Drawer>
+                    <Home />
                     <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
                         <DrawerHeader />
                     </Box>
