@@ -29,6 +29,7 @@ import axios from 'axios';
 import { useState } from 'react';
 import Footer from './Footer';
 import { Home } from './Home';
+import homeCss from '../styles/home.css'
 
 const drawerWidth = 240;
 
@@ -159,6 +160,7 @@ export default function MiniDrawer() {
 
     return (
         <>
+            <div className="wave-container"></div>
             <div>
                 <Box sx={{ display: 'flex' }}>
                     <CssBaseline />
