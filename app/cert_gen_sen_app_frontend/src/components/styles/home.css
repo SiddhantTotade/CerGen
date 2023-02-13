@@ -28,7 +28,7 @@
     border: 1px solid #fff;
     border-radius: 20px;
     position: absolute;
-    top: 80%;
+    top: 85%;
     transform: translateX(-70%);
     animation: slide-in-anim 5s ease-out forwards;
 }
