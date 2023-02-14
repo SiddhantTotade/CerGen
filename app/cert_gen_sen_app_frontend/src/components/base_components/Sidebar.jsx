@@ -28,8 +28,8 @@ import BackdropSpinner from './Backdrop';
 import axios from 'axios';
 import { useState } from 'react';
 import Footer from './Footer';
-import { Home } from './Home';
-import homeCss from '../styles/home.css'
+import { Home } from '../../pages/Home';
+import homeCss from '../../pages/styles/home.css'
 import { useLocation } from 'react-router-dom';
 
 const drawerWidth = 240;

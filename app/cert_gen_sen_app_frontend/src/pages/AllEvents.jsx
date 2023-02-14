@@ -5,11 +5,11 @@ import CardContent from '@mui/material/CardContent';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
-import Sidebar from "../base_components/Sidebar";
+import Sidebar from "../components/base_components/Sidebar";
 import { useState, useEffect } from 'react';
 import axios from 'axios'
-import BackdropSpinner from '../base_components/Backdrop';
-import AlertSnackbar from '../base_components/AlertSnackbar';
+import BackdropSpinner from '../components/base_components/Backdrop';
+import AlertSnackbar from '../components/base_components/AlertSnackbar';
 
 const card_sx = {
     maxWidth: 400,

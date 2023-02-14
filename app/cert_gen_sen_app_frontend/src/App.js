@@ -1,9 +1,9 @@
 import React from "react";
 import Home from "./Home";
-import { AllEvents } from "./components/event_components/AllEvents";
-import SpecificEvent from "./components/event_components/SpecificEvent";
-import LoginPage from "./components/base_components/Login";
-import RegisterPage from "./components/base_components/Register";
+import { AllEvents } from "./pages/AllEvents";
+import SpecificEvent from "./pages/SpecificEvent";
+import LoginPage from "./pages/authentication/Login";
+import RegisterPage from "./pages/authentication/Register";
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import PrivateRoutes from "./PrivateRoutes";
 

@@ -6,7 +6,7 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Sidebar from '../base_components/Sidebar'
+import Sidebar from '../components/base_components/Sidebar'
 import axios from 'axios';
 import { useState, useEffect } from 'react';
 import DoneIcon from '@mui/icons-material/Done';
@@ -16,14 +16,14 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import SendIcon from '@mui/icons-material/Send';
 import { Button, Typography } from '@mui/material';
 import Tooltip from '@mui/material/Tooltip';
-import CreateParticipant from '../participant_components/CreateParticipant';
-import UpdateParticipant from '../participant_components/UpdateParticipant';
-import DeleteParticipant from '../participant_components/DeleteParticipant';
+import CreateParticipant from '../components/participant_components/CreateParticipant';
+import UpdateParticipant from '../components/participant_components/UpdateParticipant';
+import DeleteParticipant from '../components/participant_components/DeleteParticipant';
 import Gold from '../medals_images/gold-medal.png'
 import Silver from '../medals_images/silver-medal.png'
 import Bronze from '../medals_images/bronze-medal.png'
-import BackdropSpinner from '../base_components/Backdrop';
-import AlertSnackbar from '../base_components/AlertSnackbar';
+import BackdropSpinner from '../components/base_components/Backdrop';
+import AlertSnackbar from '../components/base_components/AlertSnackbar';
 
 const createBtns = {
     background: '#3293a8',
