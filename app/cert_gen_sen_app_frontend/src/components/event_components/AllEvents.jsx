@@ -65,7 +65,7 @@ export const AllEvents = () => {
             <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                 {eventsData !== '' ? eventsData.map((event) => {
                     let event_url = '/api/event/' + event.slug
-                    return <Card sx={card_sx}>
+                    return <Card sx={card_sx} key={event.id}>
                         <CardContent>
                             <div>
                                 <Typography gutterBottom variant="h5" component="div">

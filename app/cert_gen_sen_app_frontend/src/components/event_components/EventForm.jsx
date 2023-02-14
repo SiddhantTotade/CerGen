@@ -77,7 +77,7 @@ export default function EventForm(props) {
         allYears.push(thisYear - x)
     }
 
-    const yearList = allYears.map((x) => { return <MenuItem value={x}>{x}</MenuItem> });
+    const yearList = allYears.map((x) => { return <MenuItem value={x} key={x}>{x}</MenuItem> });
 
     function handleCloseSnackbar() {
         setOpenSnack(false)
@@ -95,8 +95,8 @@ export default function EventForm(props) {
                     <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" fullWidth variant="standard" />
                     <FormControl variant="standard" sx={{ width: "100%" }}  >
                         <InputLabel id="demo-simple-select-label" variant='standard' >Choose Event Year</InputLabel>
-                        <Select labelId="demo-simple-select-label" id="demo-simple-select" variant="standard" onChange={handleEventYear} value={eventYear} >
-                            <MenuItem value="">
+                        <Select labelId="demo-simple-select-label" id="demo-simple-select" variant="standard" onChange={handleEventYear} value={eventYear}>
+                            <MenuItem value="" key="" >
                                 <em>None</em>
                             </MenuItem>
                             {yearList}
