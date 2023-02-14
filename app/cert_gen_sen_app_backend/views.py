@@ -19,6 +19,13 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 # Create your views here.
 
+# ManageUser API
+class ManageUserAPI(generics.RetrieveUpdateAPIView):
+    serializer_class = UserSerializer
+    permission_classes = (permissions.IsAuthenticated,)
+
+    def get_object(self):
+        return self.request.user
 
 # Login API
 class LoginAPI(KnoxLoginView):
