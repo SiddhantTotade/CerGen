@@ -45,23 +45,25 @@ export const AllEvents = () => {
         fetchData()
     }, [])
 
-    function handleDelete(event) {
+    function handleDelete(event_slug) {
         setOpenSpinner(true)
         setTimeout(() => { setOpenSpinner(false) }, 2000)
-        const url = 'http://127.0.0.1:8000/api/event/' + event
-        axios.delete(url).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
+        const url = 'http://127.0.0.1:8000/api/event/' + event_slug
+        axios.delete(url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
     }
 
     function handleCloseSnackbar() {
         setOpenSnack(false)
     }
 
+    console.log()
+
     return (
         <>
             <Sidebar />
             <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray", width: "55%", margin: "auto" }}>All Events</Typography>
             <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
-                {eventsData.map((event) => {
+                {eventsData !== '' ? eventsData.map((event) => {
                     let event_url = '/api/event/' + event.slug
                     return <Card sx={card_sx}>
                         <CardContent>
@@ -82,7 +84,7 @@ export const AllEvents = () => {
                             <Button size="small" onClick={() => handleDelete(event.slug)} >Delete</Button>
                         </CardActions>
                     </Card>
-                })}
+                }) : <h2>No Data Available</h2>}
             </div>
             <BackdropSpinner open={openSpinner} />
             <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
