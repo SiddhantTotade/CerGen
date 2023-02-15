@@ -28,10 +28,15 @@ export const userAuthAPI = createApi({
                 }
             }
         }),
-        getLoggedInUser: builder.mutation({
+        getLoggedInUser: builder.query({
             query: (user) => {
                 return {
-                    url: ''
+                    url: 'profile/',
+                    method: 'GET',
+                    body: user,
+                    headers: {
+                        'Content-type': 'application/json'
+                    }
                 }
             }
         })
