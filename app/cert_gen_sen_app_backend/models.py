@@ -9,7 +9,7 @@ class Event(models.Model):
     user = models.ForeignKey(User,on_delete=models.CASCADE)
     event_name = models.CharField(max_length=20,null=True,blank=True)
     subject = models.CharField(max_length=250,null=True,blank=True)
-    event_department = models.CharField(max_length=20,null=True,blank=True)
+    event_department = models.CharField(max_length=20,null=True,blank=True) 
     from_date = models.DateField()
     to_date = models.DateField()
     event_year = models.IntegerField(blank=True,null=True)
