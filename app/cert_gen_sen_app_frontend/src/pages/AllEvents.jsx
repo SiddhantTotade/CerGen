@@ -24,11 +24,13 @@ const card_sx = {
 
 export const AllEvents = () => {
 
-    const [eventsData, setEventsData] = useState()
+    const [eventsData, setEventsData] = useState([])
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState("")
     const [alertType, setAlertType] = useState("")
     const [openSpinner, setOpenSpinner] = useState(false)
+
+    let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     useEffect(() => {
         const url = 'http://127.0.0.1:8000/api/all-events/'
@@ -61,17 +63,19 @@ export const AllEvents = () => {
             <Sidebar />
             <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray", width: "55%", margin: "auto" }}>All Events</Typography>
             <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
-                {eventsData !== undefined ? eventsData.map((event) => {
+                {eventsData !== 'No event data' ? eventsData.map((event) => {
                     let event_url = '/api/event/' + event.slug
-                    return <Card sx={card_sx} key={event.id}>
+                    return <Card sx={card_sx} key={event.id} >
                         <CardContent>
                             <div>
                                 <Typography gutterBottom variant="h5" component="div">
                                     {event.event_name}
                                 </Typography>
-                                <div>
+                                <div className='flex flex-col'>
+                                    <small>{days[new Date(event.from_date).getDay()]}</small>
                                     <small>{new Date(event.to_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
                                 </div>
+                                <br />
                             </div>
                             <Typography variant="body2" color="text.secondary" sx={{ height: "5vh" }}>
                                 {event.subject}

@@ -87,7 +87,7 @@ export default function FileForm(props) {
                     <InputLabel id="events" >Choose Event</InputLabel>
                     <Select labelId="events" id="event_dropdown" value={events} variant="standard" label="Events" onChange={handleChange} >
                         {eventsData !== undefined ? Object.values(eventsData).map((events) => {
-                            return <MenuItem value={events.id} key={events.id} >{events.event_name}</MenuItem>
+                            return <MenuItem value={events.id} key={events} >{events.event_name}</MenuItem>
                         }) : <MenuItem value={events.id} key={events.id}>No Data Available</MenuItem>}
                     </Select>
                     <TextField onFocus={file_onFocus} onBlur={file_onBlur} onChange={(e) => { handleFileChange(e); if (e.target.value) file_setHasValue(true); else file_setHasValue(false); }} type={file_hasValue || file_focus ? "file" : "file"} autoFocus margin="dense" id="xlsx_file" label="File" fullWidth variant="standard" />
