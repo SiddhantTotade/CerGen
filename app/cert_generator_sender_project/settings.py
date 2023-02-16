@@ -19,7 +19,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 USE_L10N = False
-DATE_INPUT_FORMATS = ['%d/%m/%Y']  
+DATE_INPUT_FORMATS = ['%d-%m-%Y']  
 
 
 # Quick-start development settings - unsuitable for production

@@ -56,6 +56,8 @@ class RegisterAPI(generics.GenericAPIView):
 class EventsOperations(APIView):
     def get(self, request):
         all_events = Event.objects.all()
+        for e in all_events:
+            print(e.from_date.date().strftime("%d-%m-%Y"))
 
         if all_events:
             event_serializer_data = EventSerializer(all_events,many=True)

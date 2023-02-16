@@ -24,7 +24,7 @@ const card_sx = {
 
 export const AllEvents = () => {
 
-    const [eventsData, setEventsData] = useState([])
+    const [eventsData, setEventsData] = useState()
     const [openSnack, setOpenSnack] = useState(false)
     const [message, setMessage] = useState("")
     const [alertType, setAlertType] = useState("")
@@ -56,14 +56,12 @@ export const AllEvents = () => {
         setOpenSnack(false)
     }
 
-    console.log()
-
     return (
         <>
             <Sidebar />
             <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray", width: "55%", margin: "auto" }}>All Events</Typography>
             <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
-                {eventsData !== '' ? eventsData.map((event) => {
+                {eventsData !== undefined ? eventsData.map((event) => {
                     let event_url = '/api/event/' + event.slug
                     return <Card sx={card_sx} key={event.id}>
                         <CardContent>
@@ -72,7 +70,7 @@ export const AllEvents = () => {
                                     {event.event_name}
                                 </Typography>
                                 <div>
-                                    <small>{event.from_date} - {event.to_date}</small>
+                                    <small>{new Date(event.to_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
                                 </div>
                             </div>
                             <Typography variant="body2" color="text.secondary" sx={{ height: "5vh" }}>
