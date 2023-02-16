@@ -70,8 +70,8 @@ def generateCertificate(request,slug):
     for eve in event:
         event_list.append(eve.event_name)
         event_list.append(eve.event_department)
-        event_list.append(str(eve.from_date))
-        event_list.append(str(eve.to_date))
+        event_list.append(str(eve.from_date.strftime('%d-%m-%Y')))
+        event_list.append(str(eve.to_date.strftime('%d-%m-%Y')))
         event_list.append(eve.event_year)
     
     event_date_check = False
@@ -132,13 +132,13 @@ def generateCertificate(request,slug):
                 cv2.putText(template, event_list[0], (1036, 838), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
                 cv2.putText(template, certificate_id, (28, 1380), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (10, 10, 10), 1, cv2.LINE_AA)
                 if event_date_check:
-                    cv2.putText(template, event_list[2], (730, 886), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
+                    cv2.putText(template, event_list[2], (730, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
                 else:
                     cv2.putText(template, event_list[2], (706, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
                     cv2.putText(template, "to", (966, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
                     cv2.putText(template, event_list[3], (1034, 914), cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
                 cv2.imwrite(f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+data[0]}.jpg', template)
-                sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", data[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+data[0]}.jpg')
+                # sendMail("Certificate of Participation", "Thank you for participanting in the Event/Contest", data[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+data[0]}.jpg')
     return JsonResponse("Certificate generated and sended successfully",safe=False)
 
 # Generate certificate by Id
