@@ -31,6 +31,7 @@ export const AllEvents = () => {
     const [openSpinner, setOpenSpinner] = useState(false)
 
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+    let attendance = 0
 
     useEffect(() => {
         const url = 'http://127.0.0.1:8000/api/all-events/'
@@ -71,12 +72,22 @@ export const AllEvents = () => {
                                 <Typography gutterBottom variant="h5" component="div">
                                     {event.event_name}
                                 </Typography>
-                                <div className='flex flex-col'>
+                                <div className='flex justify-between'>
                                     <div>
-                                        <small>{days[new Date(event.from_date).getDay()]}</small>
-                                        {event.from_date !== event.to_date ? <small> - {days[new Date(event.to_date).getDay()]}</small> : ""}
+                                        <div>
+                                            <small>{days[new Date(event.from_date).getDay()]}</small>
+                                            {event.from_date !== event.to_date ? <small> - {days[new Date(event.to_date).getDay()]}</small> : ""}
+                                        </div>
+                                        <small>{new Date(event.from_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
                                     </div>
-                                    <small>{new Date(event.from_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
+                                    <div className='flex'>
+                                        {eventsData.forEach(event => { return event.certificate_status === 'T' ? attendance++ : "" })}
+                                        <div className='flex flex-col'>
+                                            <small>P : {attendance}</small>
+                                            <small>A : {eventsData.length - attendance}</small>
+                                            <small>T : {eventsData.length}</small>
+                                        </div>
+                                    </div>
                                 </div>
                                 <br />
                             </div>
