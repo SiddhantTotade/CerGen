@@ -26,13 +26,8 @@ import BackdropSpinner from '../components/base_components/Backdrop';
 import AlertSnackbar from '../components/base_components/AlertSnackbar';
 
 const createBtns = {
-    background: '#3293a8',
-    color: 'white',
     marginBottom: '10px',
     marginRight: '10px',
-    '&:hover': {
-        background: "#327fa8",
-    }
 }
 
 export default function SpecificEvent() {
@@ -135,14 +130,14 @@ export default function SpecificEvent() {
                 {eventsData.forEach(event => { return event.certificate_status === 'T' ? attendance++ : "" })}
                 <div className='flex justify-end mt-2'>
                     <div className='flex flex-col'>
-                        <small>Attended Participants : {attendance}</small>
-                        <small>Absent Participants : {eventsData.length - attendance}</small>
-                        <small>Total Participants : {eventsData.length}</small>
+                        <small className='text-green-600'>Attended Participants : {attendance}</small>
+                        <small className='text-red-600'>Absent Participants : {eventsData.length - attendance}</small>
+                        <small className='text-blue-600'>Total Participants : {eventsData.length}</small>
                     </div>
                 </div>
                 <div className='gap-10 mt-2'>
-                    <Button sx={createBtns} onClick={handleForm}>Create Participant</Button>
-                    <Button sx={createBtns} onClick={generateCertificate} >Issue and Send Certificate</Button>
+                    <Button variant='contained' sx={createBtns} onClick={handleForm}>Create Participant</Button>
+                    <Button variant='contained' sx={createBtns} onClick={generateCertificate} >Issue and Send Certificate</Button>
                 </div>
                 <TableContainer component={Paper}>
                     <Table sx={{ minWidth: 450 }} aria-label="simple table">
