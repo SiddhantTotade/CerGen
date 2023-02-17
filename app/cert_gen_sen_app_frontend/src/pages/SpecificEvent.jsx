@@ -128,14 +128,12 @@ export default function SpecificEvent() {
                     {event_slug.toUpperCase()}
                 </Typography>
                 {eventsData.forEach(event => { return event.certificate_status === 'T' ? attendance++ : "" })}
-                <div className='flex justify-end mt-2'>
-                    <div className='flex flex-col'>
-                        <small className='text-green-600'>Attended Participants : {attendance}</small>
-                        <small className='text-red-600'>Absent Participants : {eventsData.length - attendance}</small>
-                        <small className='text-blue-600'>Total Participants : {eventsData.length}</small>
-                    </div>
+                <div className='flex justify-between mt-3'>
+                    <small className='text-blue-600'>Total Participants : {eventsData.length}</small>
+                    <small className='text-green-600'>Attended Participants : {attendance}</small>
+                    <small className='text-red-600'>Absent Participants : {eventsData.length - attendance}</small>
                 </div>
-                <div className='gap-10 mt-2'>
+                <div className='gap-10 mt-5'>
                     <Button variant='contained' sx={createBtns} onClick={handleForm}>Create Participant</Button>
                     <Button variant='contained' sx={createBtns} onClick={generateCertificate} >Issue and Send Certificate</Button>
                 </div>
