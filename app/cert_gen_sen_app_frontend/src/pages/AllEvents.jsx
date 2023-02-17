@@ -72,7 +72,10 @@ export const AllEvents = () => {
                                     {event.event_name}
                                 </Typography>
                                 <div className='flex flex-col'>
-                                    <small>{days[new Date(event.from_date).getDay()]}</small>
+                                    <div>
+                                        <small>{days[new Date(event.from_date).getDay()]}</small>
+                                        {event.from_date !== event.to_date ? <small> - {days[new Date(event.to_date).getDay()]}</small> : ""}
+                                    </div>
                                     <small>{new Date(event.from_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
                                 </div>
                                 <br />

@@ -53,6 +53,7 @@ export default function SpecificEvent() {
     })
 
     const event_url = window.location.href
+    let attendance = 0
 
     useEffect(() => {
         const event_url = window.location.href
@@ -131,7 +132,15 @@ export default function SpecificEvent() {
                 <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray" }}>
                     {event_slug.toUpperCase()}
                 </Typography>
-                <div className='gap-10 mt-10'>
+                {eventsData.forEach(event => { return event.certificate_status === 'T' ? attendance++ : "" })}
+                <div className='flex justify-end mt-2'>
+                    <div className='flex flex-col'>
+                        <small>Attended Participants : {attendance}</small>
+                        <small>Absent Participants : {eventsData.length - attendance}</small>
+                        <small>Total Participants : {eventsData.length}</small>
+                    </div>
+                </div>
+                <div className='gap-10 mt-2'>
                     <Button sx={createBtns} onClick={handleForm}>Create Participant</Button>
                     <Button sx={createBtns} onClick={generateCertificate} >Issue and Send Certificate</Button>
                 </div>
