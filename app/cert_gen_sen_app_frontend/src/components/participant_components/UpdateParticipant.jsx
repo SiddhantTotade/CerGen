@@ -83,7 +83,7 @@ export default function UpdateParticipant(props) {
             <Dialog {...props} >
                 <DialogTitle>Edit Participant</DialogTitle>
                 <DialogContent>
-                    <TextField disabled defaultValue={props.participant.event} autoFocus margin="dense" id="event" label="Participant Id" type="text" fullWidth variant="standard" />
+                    <TextField sx={{display:'none'}} disabled defaultValue={props.participant.event} autoFocus margin="dense" id="event" label="Participant Id" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.student_name} autoFocus margin="dense" id="student_name" label="Participant Name" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.student_id} autoFocus margin="dense" id="student_id" label="Participant Id" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.email} autoFocus margin="dense" id="email" label="Participant Email" type="email" fullWidth variant="standard" />
