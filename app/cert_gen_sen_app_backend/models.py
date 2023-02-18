@@ -33,3 +33,16 @@ class Participant(models.Model):
     student_id = models.CharField(max_length=50,null=True,blank=True)
     email = models.EmailField(max_length=254,null=True,blank=True)
     certificate_status = models.CharField(max_length=10,null=True,blank=True)
+
+class CompletionCertificateTemplate(models.Model):
+    event = models.ForeignKey(Event,on_delete=models.CASCADE)
+    template = models.ImageField(upload_to='completion_certificates_templates')
+
+class MeritCertificateTemplate(models.Model):
+    event = models.ForeignKey(Event,on_delete=models.CASCADE)
+    template = models.ImageField(upload_to='merit_certificates_templates')
+
+class CompletionTemplateCoordinates(models.Model):
+    template = models.ForeignKey(Event,on_delete=models.CASCADE)
+    x_coor_name = models.PositiveIntegerField()
+    y_coor_name = models.Inte()
