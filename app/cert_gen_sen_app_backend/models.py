@@ -44,5 +44,5 @@ class MeritCertificateTemplate(models.Model):
 
 class CompletionTemplateCoordinates(models.Model):
     template = models.ForeignKey(Event,on_delete=models.CASCADE)
-    x_coor_name = models.PositiveIntegerField()
-    y_coor_name = models.Inte()
+    x_coor_name = models.IntegerField()
+    y_coor_name = models.IntegerField()
