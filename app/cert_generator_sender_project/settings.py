@@ -19,7 +19,7 @@ from datetime import timedelta
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 USE_L10N = False
-DATE_INPUT_FORMATS = ['%d-%m-%Y']  
+DATE_INPUT_FORMATS = ['%d-%m-%Y']
 
 
 # Quick-start development settings - unsuitable for production
@@ -29,7 +29,7 @@ DATE_INPUT_FORMATS = ['%d-%m-%Y']
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config('DEBUG',cast=bool)
+DEBUG = config('DEBUG', cast=bool)
 
 ALLOWED_HOSTS = ["*"]
 
@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'import_export',
     'knox',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -82,12 +83,12 @@ TEMPLATES = [
 ]
 
 REST_KNOX = {
-  'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
-  'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-  'TOKEN_TTL': timedelta(days=1),
-  'USER_SERIALIZER': 'knox.serializers.UserSerializer',
-  'TOKEN_LIMIT_PER_USER': None,
-  'AUTO_REFRESH': False,
+    'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
+    'AUTH_TOKEN_CHARACTER_LENGTH': 64,
+    'TOKEN_TTL': timedelta(days=1),
+    'USER_SERIALIZER': 'knox.serializers.UserSerializer',
+    'TOKEN_LIMIT_PER_USER': None,
+    'AUTO_REFRESH': False,
 }
 
 WSGI_APPLICATION = 'cert_generator_sender_project.wsgi.application'
@@ -140,7 +141,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 MEDIA_URL = "/certificate_data/"
-MEDIA_ROOT = os.path.join(BASE_DIR,"certificate_data/")
+MEDIA_ROOT = os.path.join(BASE_DIR, "certificate_data/")
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
@@ -161,3 +162,30 @@ EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = config('EMAIL_USER')
 EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+
+# REST_FRAMEWORK = {
+#     'DEFAULT_AUTHENTICATION_CLASSES': (
+#         'rest_framework_simplejwt.authentication.JWTAuthentication',
+#     ),
+#     # 'DEFAULT_RENDERER_CLASSES':('rest_framework.renderers.JSONRenderer',)
+# }
+
+# SIMPLE_JWT = {
+#     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=40),
+#     'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+
+#     'AUTH_HEADER_TYPES': ('Bearer',),
+#     'AUTH_HEADER_NAME': 'HTTP_AUTHORIZATION',
+#     'USER_ID_FIELD': 'id',
+#     'USER_ID_CLAIM': 'user_id',
+#     'USER_AUTHENTICATION_RULE': 'rest_framework_simplejwt.authentication.default_user_authentication_rule',
+
+#     'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+#     'TOKEN_TYPE_CLAIM': 'token_type',
+#     'TOKEN_USER_CLASS': 'rest_framework_simplejwt.models.TokenUser',
+
+#     'JTI_CLAIM': 'jti',
+
+# }
+
+# PASSWORD_RESET_TIMEOUT = 900

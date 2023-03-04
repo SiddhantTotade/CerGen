@@ -1,0 +1,2 @@
+[console_scripts]
+python-pptx-text-replacer = python_pptx_text_replacer.TextReplacer:main

@@ -260,7 +260,7 @@ export default function MiniDrawer() {
                 </Box>
                 <BackdropSpinner open={openSpinner} />
             </div>
-            <Footer />
+            {/* <Footer /> */}
         </>
     );
 }

@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 
@@ -36,37 +36,37 @@ class UserManager(BaseUserManager):
         return user
 
 
-class User(AbstractBaseUser):
-    email = models.EmailField(
-        verbose_name="Email Address",
-        max_length=255,
-        unique=True
-    )
+# class User(AbstractBaseUser):
+#     email = models.EmailField(
+#         verbose_name="Email Address",
+#         max_length=255,
+#         unique=True
+#     )
 
-    name = models.CharField(max_length=200)
-    tc = models.BooleanField()
-    is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+#     name = models.CharField(max_length=200)
+#     tc = models.BooleanField()
+#     is_active = models.BooleanField(default=True)
+#     is_admin = models.BooleanField(default=False)
+#     created_at = models.DateTimeField(auto_now_add=True)
+#     updated_at = models.DateTimeField(auto_now_add=True)
 
-    object = UserManager()
+#     object = UserManager()
 
-    USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'tc']
+#     USERNAME_FIELD = 'email'
+#     REQUIRED_FIELDS = ['name', 'tc']
 
-    def __str__(self):
-        return self.email
+#     def __str__(self):
+#         return self.email
 
-    def has_perm(self, perm, obj=None):
-        return self.is_admin
+#     def has_perm(self, perm, obj=None):
+#         return self.is_admin
 
-    def has_module_perm(self, app_label):
-        return True
+#     def has_module_perm(self, app_label):
+#         return True
 
-    @property
-    def is_staff(self):
-        return self.is_admin
+#     @property
+#     def is_staff(self):
+#         return self.is_admin
 
 
 class Event(models.Model):
@@ -102,17 +102,17 @@ class Participant(models.Model):
     certificate_status = models.CharField(max_length=10, null=True, blank=True)
 
 
-class CompletionCertificateTemplate(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    template = models.ImageField(upload_to='completion_certificates_templates')
+# class CompletionCertificateTemplate(models.Model):
+#     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+#     template = models.ImageField(upload_to='completion_certificates_templates')
 
 
-class MeritCertificateTemplate(models.Model):
-    event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    template = models.ImageField(upload_to='merit_certificates_templates')
+# class MeritCertificateTemplate(models.Model):
+#     event = models.ForeignKey(Event, on_delete=models.CASCADE)
+#     template = models.ImageField(upload_to='merit_certificates_templates')
 
 
-class CompletionTemplateCoordinates(models.Model):
-    template = models.ForeignKey(Event, on_delete=models.CASCADE)
-    x_coor_name = models.IntegerField()
-    y_coor_name = models.IntegerField()
+# class CompletionTemplateCoordinates(models.Model):
+#     template = models.ForeignKey(Event, on_delete=models.CASCADE)
+#     x_coor_name = models.IntegerField()
+#     y_coor_name = models.IntegerField()
