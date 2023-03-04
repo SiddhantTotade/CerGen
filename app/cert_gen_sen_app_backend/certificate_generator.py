@@ -286,26 +286,12 @@ def generateCertificateById(request, slug, pk):
     return JsonResponse("Certificate generated and sended successfully", safe=False)
 
 
-def generate_certificate(request, slug, pk):
-    participant = Participant.objects.filter(id=pk)
-
-    stu_data = OrderedDict()
-
-    for stu in participant:
-        stu_data['name'] = stu.student_name
-        stu_data['student_id'] = stu.student_id
-        stu_data['email'] = stu.email
-        stu_data['certificate_status'] = stu.certificate_status
-        stu_data['certificate_id'] = stu.certificate_id
-
-    if stu_data["certificate_status"] == 'F':
-        return JsonResponse("This participant is not eligible for certificate", safe=False)
-
+def generate_participant_certificate(stu_name, cert_id):
     replacer = TextReplacer('./cert_gen_sen_app_backend/certificate_data/certificate-template/certificate_of_completion.pptx',
                             slides="", tables=True, charts=True, textframes=True)
 
     replacer.replace_text(
-        [("{{StudentName}}", stu_data["name"]), ("{{UID}}", stu_data["certificate_id"])])
+        [("{{StudentName}}", stu_name), ("{{UID}}", cert_id)])
 
     replacer.write_presentation_to_file(
         './cert_gen_sen_app_backend/certificate_data/ppt-certificates/certificate_of_completion.pptx')
@@ -321,5 +307,26 @@ def generate_certificate(request, slug, pk):
         move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/participants-certificates/"
         os.system(command)
         os.system(move_file)
+
+
+def generate_certificate_by_id(request, slug, pk):
+    participant = Participant.objects.filter(id=pk)
+
+    stu_data = OrderedDict()
+
+    for stu in participant:
+        stu_data['name'] = stu.student_name
+        stu_data['student_id'] = stu.student_id
+        stu_data['email'] = stu.email
+        stu_data['certificate_status'] = stu.certificate_status
+        stu_data['certificate_id'] = stu.certificate_id
+
+    if stu_data["certificate_status"] == 'F':
+        return JsonResponse("This participant is not eligible for certificate", safe=False)
+    elif stu_data["certificate_status"] == '1' or stu_data["certificate_status"] == '2' or stu_data["certificate_status"] == '3':
+        pass
+    else:
+        generate_participant_certificate(
+            stu_data["name"], stu_data["certificate_id"])
 
     return JsonResponse("Certificate Generated", safe=False)
