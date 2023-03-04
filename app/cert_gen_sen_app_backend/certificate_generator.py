@@ -296,6 +296,7 @@ def generate_certificate(request, slug, pk):
         stu_data['student_id'] = stu.student_id
         stu_data['email'] = stu.email
         stu_data['certificate_status'] = stu.certificate_status
+        stu_data['certificate_id'] = stu.certificate_id
 
     if stu_data["certificate_status"] == 'F':
         return JsonResponse("This participant is not eligible for certificate", safe=False)
@@ -303,7 +304,8 @@ def generate_certificate(request, slug, pk):
     replacer = TextReplacer('./cert_gen_sen_app_backend/certificate_data/certificate-template/certificate_of_completion.pptx',
                             slides="", tables=True, charts=True, textframes=True)
 
-    replacer.replace_text([("{{StudentName}}", stu_data["name"])])
+    replacer.replace_text(
+        [("{{StudentName}}", stu_data["name"]), ("{{UID}}", stu_data['certificate_id'])])
 
     replacer.write_presentation_to_file(
         './cert_gen_sen_app_backend/certificate_data/ppt-certificates/certificate_of_completion.pptx')

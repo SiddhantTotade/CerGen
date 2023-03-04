@@ -17,11 +17,29 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+import random
 # Create your views here.
 
+
+# Getting single events by slug
+@permission_classes((IsAuthenticated,))
+def get_event_by_slug(request, slug):
+    event = Event.objects.filter(slug=slug)
+    if event:
+        event_data = EventSerializer(event, many=True)
+        return JsonResponse(event_data.data, safe=False)
+    return JsonResponse("No Data", safe=False)
+
+
+# Generating UID
+def generate_uid(stu_id, eve_name, eve_dept, eve_date):
+    random_num = random.randint(1000, 9999)
+    certificate_id = str(stu_id)+str(eve_name)+str(eve_dept) + \
+        str(eve_date).replace("-", "")+str(random_num)
+    return certificate_id
+
+
 # ManageUser API
-
-
 class ManageUserAPI(generics.RetrieveUpdateAPIView):
     serializer_class = UserSerializer
     permission_classes = (permissions.IsAuthenticated,)
@@ -29,9 +47,8 @@ class ManageUserAPI(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user
 
+
 # Login API
-
-
 class LoginAPI(KnoxLoginView):
     permission_classes = (permissions.AllowAny,)
 
@@ -42,9 +59,8 @@ class LoginAPI(KnoxLoginView):
         login(request, user)
         return super(LoginAPI, self).post(request, format=None)
 
+
 # Register API
-
-
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = RegisterSerializer
 
@@ -57,9 +73,8 @@ class RegisterAPI(generics.GenericAPIView):
             "token": AuthToken.objects.create(user)[1]
         })
 
+
 # Getting all events
-
-
 @permission_classes((IsAuthenticated,))
 class EventsOperations(APIView):
     def get(self, request):
@@ -107,15 +122,31 @@ class UploadParticipant(APIView):
             data['Certificate_Status'] = row[4]
             excel_data.append(data)
 
+        eve_id = Event.objects.filter(id=event_id)
         event_new_id = Event.objects.get(id=event_id)
+
+        event_name = ''
+        event_dept = ''
+        event_date = ''
+
+        for eve in eve_id:
+            event_name = eve.event_name
+            event_dept = eve.event_department
+            event_date = eve.from_date
+
+        event_name_words = event_name.split()
+        event_name_chars_list = [word[0] for word in event_name_words]
+        event_name_chars_string = "".join(event_name_chars_list)
 
         for data in excel_data:
             name = data['Full_Name']
             student_id = data['Student_Id']
             email = data['Email']
             certificate_status = data['Certificate_Status']
+            certificate_id = generate_uid(data['Student_Id'], event_name_chars_string,
+                                          event_dept, event_date)
             Event.id = Participant.objects.create(
-                event=event_new_id, student_name=name, student_id=student_id, email=email, certificate_status=certificate_status)
+                event=event_new_id, student_name=name, student_id=student_id, email=email, certificate_status=certificate_status, certificate_id=certificate_id)
         return JsonResponse("Participants uploaded successfully", safe=False)
 
     def delete(self, request, pk):
@@ -123,20 +154,8 @@ class UploadParticipant(APIView):
         participant_by_slug.delete()
         return JsonResponse("Participant deleted successfully", safe=False)
 
-# Getting single events by slug
-
-
-@permission_classes((IsAuthenticated,))
-def get_event_by_slug(request, slug):
-    event = Event.objects.filter(slug=slug)
-    if event:
-        event_data = EventSerializer(event, many=True)
-        return JsonResponse(event_data.data, safe=False)
-    return JsonResponse("No Data", safe=False)
 
 # Uploading each participant from xlsx file
-
-
 class UploadEachParticipant(APIView):
     def post(self, request):
         participant_serialized_data = ParticipantSerializer(data=request.data)
@@ -175,6 +194,6 @@ class FilteredEvent(APIView):
         return JsonResponse("0", safe=False)
 
     def delete(self, request, slug):
-        event_by_slug = Event.objects.get(slug = slug)
+        event_by_slug = Event.objects.get(slug=slug)
         event_by_slug.delete()
         return JsonResponse("Event deleted successfully", safe=False)

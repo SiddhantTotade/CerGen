@@ -100,6 +100,7 @@ class Participant(models.Model):
     student_id = models.CharField(max_length=50, null=True, blank=True)
     email = models.EmailField(max_length=254, null=True, blank=True)
     certificate_status = models.CharField(max_length=10, null=True, blank=True)
+    certificate_id = models.CharField(max_length=20, null=True, blank=True)
 
 
 # class CompletionCertificateTemplate(models.Model):
