@@ -305,7 +305,7 @@ def generate_certificate(request, slug, pk):
                             slides="", tables=True, charts=True, textframes=True)
 
     replacer.replace_text(
-        [("{{StudentName}}", stu_data["name"]), ("{{UID}}", stu_data['certificate_id'])])
+        [("{{StudentName}}", stu_data["name"]), ("{{UID}}", stu_data["certificate_id"])])
 
     replacer.write_presentation_to_file(
         './cert_gen_sen_app_backend/certificate_data/ppt-certificates/certificate_of_completion.pptx')
