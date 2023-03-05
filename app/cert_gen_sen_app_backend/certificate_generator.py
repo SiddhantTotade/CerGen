@@ -11,6 +11,8 @@ from python_pptx_text_replacer import TextReplacer
 import tqdm
 import qrcode
 from pptx.util import Inches
+from pptx import shapes, Presentation
+from PIL import Image
 
 # Sending mail to each participant
 
@@ -288,36 +290,69 @@ def generateCertificateById(request, slug, pk):
     return JsonResponse("Certificate generated and sended successfully", safe=False)
 
 
+def place_qrcode(pptx_path, qrcode_path, replace_str):
+    pptx_file = Presentation(pptx_path)
+
+    for slide in pptx_file.slides:
+        for shape in slide.shapes:
+            if shape.has_text_frame:
+                if shape.text.find(replace_str) != -1:
+                    pic = slide.shapes.add_picture(
+                        qrcode_path, shape.left, shape.top)
+
+    pptx_file.save(pptx_path)
+
+
+def resize_qrcode(qrcode_path):
+    img = Image.open(qrcode_path)
+    width = 100
+    height = 100
+    resize = img.resize((width, height), Image.NEAREST)
+    resize.save(qrcode_path)
+
+
 def generate_qrcode(stu_name, stu_id, cert_id, eve_name, eve_department, eve_date):
-    qr_code = qrcode.make(
+    qr_code = qrcode.QRCode(
+        version=5, box_size=2, border=1)
+    qr_code.add_data(
         f"Participant Name - {stu_name}\nParticipant Id - {stu_id}\nEvent Name - {eve_name}\nEvent Department - {eve_department}\nEvent Date - {eve_date}\nCertificate Id - {cert_id}")
     type(qr_code)
-
-    qr_code.save(
+    qr_code.make(fit=True)
+    img = qr_code.make_image(fill_color="black", back_color="white")
+    img.save(
         f'./cert_gen_sen_app_backend/certificate_data/qr-code/{cert_id} - {stu_name}.png')
 
+    # resize_qrcode(
+    #     f'./cert_gen_sen_app_backend/certificate_data/qr-code/{cert_id} - {stu_name}.png')
 
-def generate_participant_certificate(stu_name, cert_id):
+    return f'./cert_gen_sen_app_backend/certificate_data/qr-code/{cert_id} - {stu_name}.png'
+
+
+def generate_participant_certificate(stu_name, cert_id, qrcode_path):
     replacer = TextReplacer('./cert_gen_sen_app_backend/certificate_data/certificate-template/certificate_of_completion.pptx',
                             slides="", tables=True, charts=True, textframes=True)
 
-    # replacer.replace_text(
-    #     [("{{StudentName}}", stu_name), ("{{UID}}", cert_id), ("{{QR}}", qr_code)])
+    replacer.replace_text(
+        [("{{StudentName}}", stu_name), ("{{UID}}", cert_id)])
 
-    # replacer.write_presentation_to_file(
-    #     f'./cert_gen_sen_app_backend/certificate_data/ppt-certificates/{cert_id} - {stu_name}.pptx')
+    replacer.write_presentation_to_file(
+        f'./cert_gen_sen_app_backend/certificate_data/ppt-certificates/{cert_id} - {stu_name}.pptx')
 
-    # path = './cert_gen_sen_app_backend/certificate_data/ppt-certificates'
-    # ext = 'pptx'
+    pptx_path = f'./cert_gen_sen_app_backend/certificate_data/ppt-certificates/{cert_id} - {stu_name}.pptx'
 
-    # files = [f for f in glob.glob(
-    #     path + "/**/*.{}".format(ext), recursive=True)]
+    place_qrcode(pptx_path, qrcode_path, "{{QR}}")
 
-    # for f in tqdm.tqdm(files):
-    #     command = "unoconv -f pdf \"{}\"".format(f)
-    #     move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/participants-certificates/"
-    #     os.system(command)
-    #     os.system(move_file)
+    path = './cert_gen_sen_app_backend/certificate_data/ppt-certificates'
+    ext = 'pptx'
+
+    files = [f for f in glob.glob(
+        path + "/**/*.{}".format(ext), recursive=True)]
+
+    for f in tqdm.tqdm(files):
+        command = "unoconv -f pdf \"{}\"".format(f)
+        move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/participants-certificates/"
+        os.system(command)
+        os.system(move_file)
 
 
 def generate_merit_certificate(stu_name, cert_id, cert_status):
@@ -341,7 +376,7 @@ def generate_certificate_by_id(request, slug, pk):
     for eve in event:
         eve_data['event_name'] = eve.event_name
         eve_data['event_department'] = eve.event_department
-        eve_data['from_date'] = eve.from_date
+        eve_data['from_date'] = eve.from_date.strftime('%d-%m-%Y')
 
     if stu_data["certificate_status"] == 'F':
         return JsonResponse("This participant is not eligible for certificate", safe=False)
@@ -349,9 +384,9 @@ def generate_certificate_by_id(request, slug, pk):
         generate_merit_certificate(
             stu_data["name"], stu_data["certificate_id"], stu_data["certificate_status"])
     else:
-        generate_qrcode(
+        qrcode_path = generate_qrcode(
             stu_data["name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
-        # generate_participant_certificate(
-        #     stu_data["name"], stu_data["certificate_id"])
+        generate_participant_certificate(
+            stu_data["name"], stu_data["certificate_id"], qrcode_path)
 
     return JsonResponse("Certificate Generated", safe=False)
