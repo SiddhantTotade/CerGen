@@ -297,7 +297,7 @@ def place_qrcode(pptx_path, qrcode_path, replace_str):
         for shape in slide.shapes:
             if shape.has_text_frame:
                 if shape.text.find(replace_str) != -1:
-                    pic = slide.shapes.add_picture(
+                    slide.shapes.add_picture(
                         qrcode_path, shape.left, shape.top)
 
     pptx_file.save(pptx_path)
@@ -353,6 +353,8 @@ def generate_participant_certificate(stu_name, cert_id, qrcode_path):
         move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/participants-certificates/"
         os.system(command)
         os.system(move_file)
+    
+    return f'./cert_gen_sen_app_backend/certificate_data/participants-certificates/{cert_id} - {stu_name}.pdf'
 
 
 def generate_merit_certificate(stu_name, cert_id, cert_status):
@@ -386,7 +388,9 @@ def generate_certificate_by_id(request, slug, pk):
     else:
         qrcode_path = generate_qrcode(
             stu_data["name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
-        generate_participant_certificate(
+        certificate_path = generate_participant_certificate(
             stu_data["name"], stu_data["certificate_id"], qrcode_path)
+        sendMail("Certificate of Participation",
+                 "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
 
     return JsonResponse("Certificate Generated", safe=False)
