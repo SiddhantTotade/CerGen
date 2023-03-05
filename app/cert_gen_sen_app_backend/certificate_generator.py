@@ -9,6 +9,8 @@ import random
 from collections import OrderedDict
 from python_pptx_text_replacer import TextReplacer
 import tqdm
+import qrcode
+from pptx.util import Inches
 
 # Sending mail to each participant
 
@@ -286,33 +288,48 @@ def generateCertificateById(request, slug, pk):
     return JsonResponse("Certificate generated and sended successfully", safe=False)
 
 
+def generate_qrcode(stu_name, stu_id, cert_id, eve_name, eve_department, eve_date):
+    qr_code = qrcode.make(
+        f"Participant Name - {stu_name}\nParticipant Id - {stu_id}\nEvent Name - {eve_name}\nEvent Department - {eve_department}\nEvent Date - {eve_date}\nCertificate Id - {cert_id}")
+    type(qr_code)
+
+    qr_code.save(
+        f'./cert_gen_sen_app_backend/certificate_data/qr-code/{cert_id} - {stu_name}.png')
+
+
 def generate_participant_certificate(stu_name, cert_id):
     replacer = TextReplacer('./cert_gen_sen_app_backend/certificate_data/certificate-template/certificate_of_completion.pptx',
                             slides="", tables=True, charts=True, textframes=True)
 
-    replacer.replace_text(
-        [("{{StudentName}}", stu_name), ("{{UID}}", cert_id)])
+    # replacer.replace_text(
+    #     [("{{StudentName}}", stu_name), ("{{UID}}", cert_id), ("{{QR}}", qr_code)])
 
-    replacer.write_presentation_to_file(
-        './cert_gen_sen_app_backend/certificate_data/ppt-certificates/certificate_of_completion.pptx')
+    # replacer.write_presentation_to_file(
+    #     f'./cert_gen_sen_app_backend/certificate_data/ppt-certificates/{cert_id} - {stu_name}.pptx')
 
-    path = './cert_gen_sen_app_backend/certificate_data/ppt-certificates'
-    ext = 'pptx'
+    # path = './cert_gen_sen_app_backend/certificate_data/ppt-certificates'
+    # ext = 'pptx'
 
-    files = [f for f in glob.glob(
-        path + "/**/*.{}".format(ext), recursive=True)]
+    # files = [f for f in glob.glob(
+    #     path + "/**/*.{}".format(ext), recursive=True)]
 
-    for f in tqdm.tqdm(files):
-        command = "unoconv -f pdf \"{}\"".format(f)
-        move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/participants-certificates/"
-        os.system(command)
-        os.system(move_file)
+    # for f in tqdm.tqdm(files):
+    #     command = "unoconv -f pdf \"{}\"".format(f)
+    #     move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/participants-certificates/"
+    #     os.system(command)
+    #     os.system(move_file)
+
+
+def generate_merit_certificate(stu_name, cert_id, cert_status):
+    pass
 
 
 def generate_certificate_by_id(request, slug, pk):
     participant = Participant.objects.filter(id=pk)
+    event = Event.objects.filter(slug=slug)
 
     stu_data = OrderedDict()
+    eve_data = OrderedDict()
 
     for stu in participant:
         stu_data['name'] = stu.student_name
@@ -321,12 +338,20 @@ def generate_certificate_by_id(request, slug, pk):
         stu_data['certificate_status'] = stu.certificate_status
         stu_data['certificate_id'] = stu.certificate_id
 
+    for eve in event:
+        eve_data['event_name'] = eve.event_name
+        eve_data['event_department'] = eve.event_department
+        eve_data['from_date'] = eve.from_date
+
     if stu_data["certificate_status"] == 'F':
         return JsonResponse("This participant is not eligible for certificate", safe=False)
     elif stu_data["certificate_status"] == '1' or stu_data["certificate_status"] == '2' or stu_data["certificate_status"] == '3':
-        pass
+        generate_merit_certificate(
+            stu_data["name"], stu_data["certificate_id"], stu_data["certificate_status"])
     else:
-        generate_participant_certificate(
-            stu_data["name"], stu_data["certificate_id"])
+        generate_qrcode(
+            stu_data["name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+        # generate_participant_certificate(
+        #     stu_data["name"], stu_data["certificate_id"])
 
     return JsonResponse("Certificate Generated", safe=False)
