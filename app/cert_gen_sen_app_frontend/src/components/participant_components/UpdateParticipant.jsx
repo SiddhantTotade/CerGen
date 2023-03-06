@@ -59,12 +59,13 @@ export default function UpdateParticipant(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    generateCertificateId(
+    const certificateId = generateCertificateId(
       updateParticipantData.student_id,
       props.event_slug,
       props.event_detail.eventDepartment,
       props.event_detail.eventDate
     );
+    console.log(certificateId);
     setOpenSpinner(true);
     setTimeout(() => {
       setOpenSpinner(false);
@@ -95,7 +96,7 @@ export default function UpdateParticipant(props) {
           certificate_id:
             updateParticipantData.certificate_id === ""
               ? participantData.certificate_id
-              : updateParticipantData.certificate_id,
+              : certificateId,
         },
         { headers: { Authorization: "Token " + localStorage.getItem("token") } }
       )
@@ -140,6 +141,8 @@ export default function UpdateParticipant(props) {
       student_id + event_name_char + event_department + event_date + random_num;
 
     setUpdateParticipantData({ certificate_id: certificateId });
+    return certificateId;
+    // console.log(student_id);
     // setParticipantData({ certificate_id: certificateId });
   }
 
