@@ -390,7 +390,7 @@ def generate_certificate_by_id(request, slug, pk):
             stu_data["name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
         certificate_path = generate_participant_certificate(
             stu_data["name"], stu_data["certificate_id"], qrcode_path)
-        sendMail("Certificate of Participation",
-                 "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
+        # sendMail("Certificate of Participation",
+        #          "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
 
     return JsonResponse("Certificate Generated", safe=False)

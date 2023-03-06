@@ -46,7 +46,10 @@ export default function SpecificEvent() {
     certificate_id: "",
   });
 
-  const [eventDate, setEventDate] = useState("");
+  const [eventDetail, setEventDetail] = useState({
+    eventDate: "",
+    eventDepartment: "",
+  });
 
   const event_url = window.location.href;
   let attendance = 0;
@@ -59,7 +62,11 @@ export default function SpecificEvent() {
         headers: { Authorization: "Token " + localStorage.getItem("token") },
       })
       .then((res) =>
-        handleResponse(res.data.participants_data, res.data.event_date)
+        handleResponse(
+          res.data.participants_data,
+          res.data.event_date,
+          res.data.event_department
+        )
       );
   }, []);
 
@@ -128,9 +135,12 @@ export default function SpecificEvent() {
   const [updateForm, setUpdateForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
 
-  const handleResponse = (participant, date) => {
+  const handleResponse = (participant, date, department) => {
     setEventsData(participant);
-    setEventDate(date.replace(/-/g, ""));
+    setEventDetail({
+      eventDate: date.replace(/-/g, ""),
+      eventDepartment: department,
+    });
   };
 
   const handleForm = () => {
@@ -336,6 +346,7 @@ export default function SpecificEvent() {
           onClose={handleUpdateFormClose}
           participant={participantDetails}
           event_slug={event_slug.toUpperCase()}
+          event_detail={eventDetail}
         />
         <DeleteParticipant
           open={deleteForm}

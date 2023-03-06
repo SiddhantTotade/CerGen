@@ -170,6 +170,7 @@ class UploadEachParticipant(APIView):
         participant_by_id = Participant.objects.get(pk=pk)
         participant_serialized_data = ParticipantSerializer(
             participant_by_id, data=participant_json_data)
+        print(participant_json_data)
 
         if participant_serialized_data.is_valid():
             participant_serialized_data.save()
@@ -184,15 +185,17 @@ class FilteredEvent(APIView):
     def get(self, request, slug):
         event = Event.objects.filter(slug=slug)
         event_date = ""
+        event_department = ""
         new_event_id = 0
         for event_id in event:
             new_event_id = event_id
             event_date = event_id.from_date
+            event_department = event_id.event_department
         participants = Participant.objects.filter(event=new_event_id)
 
         if participants:
             participants = ParticipantSerializer(participants, many=True)
-            return Response({'participants_data': participants.data, 'event_date': event_date})
+            return Response({'participants_data': participants.data, 'event_date': event_date, 'event_department': event_department})
         return JsonResponse("0", safe=False)
 
     def delete(self, request, slug):

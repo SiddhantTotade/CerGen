@@ -59,54 +59,59 @@ export default function UpdateParticipant(props) {
 
   function handleSubmit(e) {
     e.preventDefault();
-    generateCertificateId(participantData.student_id, props.event_slug);
-    // setOpenSpinner(true);
-    // setTimeout(() => {
-    //   setOpenSpinner(false);
-    // }, 2000);
-    // const url =
-    //   "http://127.0.0.1:8000/api/update-participant/" + props.participant.event;
-    // axios
-    //   .put(
-    //     url,
-    //     {
-    //       event: eventsData,
-    //       student_name:
-    //         updateParticipantData.student_name === ""
-    //           ? participantData.student_name
-    //           : updateParticipantData.student_name,
-    //       student_id:
-    //         updateParticipantData.student_id === ""
-    //           ? participantData.student_id
-    //           : updateParticipantData.student_id,
-    //       email:
-    //         updateParticipantData.email === ""
-    //           ? participantData.email
-    //           : updateParticipantData.email,
-    //       certificate_status:
-    //         updateParticipantData.certificate_status === ""
-    //           ? participantData.certificate_status
-    //           : updateParticipantData.certificate_status,
-    //       certificate_id:
-    //         updateParticipantData.certificate_id === ""
-    //           ? participantData.certificate_id
-    //           : updateParticipantData.certificate_id,
-    //     },
-    //     { headers: { Authorization: "Token " + localStorage.getItem("token") } }
-    //   )
-    //   .then(
-    //     setTimeout(() => {
-    //       setOpenSnack(true);
-    //     }, 2000)
-    //   )
-    //   .then((res) => setMessage(res.data))
-    //   .then(
-    //     message === "Participant updated successfully"
-    //       ? setAlertType("error")
-    //       : setAlertType("success")
-    //   )
-    //   .catch((err) => console.log(err))
-    //   .finally(props.onClose);
+    generateCertificateId(
+      updateParticipantData.student_id,
+      props.event_slug,
+      props.event_detail.eventDepartment,
+      props.event_detail.eventDate
+    );
+    setOpenSpinner(true);
+    setTimeout(() => {
+      setOpenSpinner(false);
+    }, 2000);
+    const url =
+      "http://127.0.0.1:8000/api/update-participant/" + props.participant.event;
+    axios
+      .put(
+        url,
+        {
+          event: eventsData,
+          student_name:
+            updateParticipantData.student_name === ""
+              ? participantData.student_name
+              : updateParticipantData.student_name,
+          student_id:
+            updateParticipantData.student_id === ""
+              ? participantData.student_id
+              : updateParticipantData.student_id,
+          email:
+            updateParticipantData.email === ""
+              ? participantData.email
+              : updateParticipantData.email,
+          certificate_status:
+            updateParticipantData.certificate_status === ""
+              ? participantData.certificate_status
+              : updateParticipantData.certificate_status,
+          certificate_id:
+            updateParticipantData.certificate_id === ""
+              ? participantData.certificate_id
+              : updateParticipantData.certificate_id,
+        },
+        { headers: { Authorization: "Token " + localStorage.getItem("token") } }
+      )
+      .then(
+        setTimeout(() => {
+          setOpenSnack(true);
+        }, 2000)
+      )
+      .then((res) => setMessage(res.data))
+      .then(
+        message === "Participant updated successfully"
+          ? setAlertType("error")
+          : setAlertType("success")
+      )
+      .catch((err) => console.log(err))
+      .finally(props.onClose);
   }
 
   function handleEventData(event) {
@@ -130,6 +135,12 @@ export default function UpdateParticipant(props) {
     event_date
   ) {
     let event_name_char = event_name.match(/\b(\w)/g).join("");
+    let random_num = Math.floor(1000 + Math.random() * 9000);
+    let certificateId =
+      student_id + event_name_char + event_department + event_date + random_num;
+
+    setUpdateParticipantData({ certificate_id: certificateId });
+    // setParticipantData({ certificate_id: certificateId });
   }
 
   return (
@@ -195,7 +206,7 @@ export default function UpdateParticipant(props) {
           />
           <TextField
             disabled
-            onChange={(e) => handleEventData(e)}
+            // onChange={(e) => handleEventData(e)}
             defaultValue={props.participant.certificate_id}
             autoFocus
             margin="dense"
