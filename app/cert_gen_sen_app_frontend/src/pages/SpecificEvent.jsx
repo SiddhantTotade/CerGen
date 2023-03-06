@@ -43,7 +43,10 @@ export default function SpecificEvent() {
     student_id: "",
     email: "",
     certificate_status: "",
+    certificate_id: "",
   });
+
+  const [eventDate, setEventDate] = useState("");
 
   const event_url = window.location.href;
   let attendance = 0;
@@ -55,7 +58,9 @@ export default function SpecificEvent() {
       .get(new_event_url, {
         headers: { Authorization: "Token " + localStorage.getItem("token") },
       })
-      .then((res) => setEventsData(res.data));
+      .then((res) =>
+        handleResponse(res.data.participants_data, res.data.event_date)
+      );
   }, []);
 
   let event_slug = "";
@@ -123,6 +128,11 @@ export default function SpecificEvent() {
   const [updateForm, setUpdateForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
 
+  const handleResponse = (participant, date) => {
+    setEventsData(participant);
+    setEventDate(date.replace(/-/g, ""));
+  };
+
   const handleForm = () => {
     setForm(true);
   };
@@ -136,7 +146,8 @@ export default function SpecificEvent() {
     student_name,
     student_id,
     email,
-    certificate_status
+    certificate_status,
+    certificate_id
   ) => {
     setUpdateForm(true);
     participantDetails.event = id;
@@ -144,6 +155,7 @@ export default function SpecificEvent() {
     participantDetails.student_id = student_id;
     participantDetails.email = email;
     participantDetails.certificate_status = certificate_status;
+    participantDetails.certificate_id = certificate_id;
   };
 
   const handleUpdateFormClose = () => {
@@ -286,7 +298,8 @@ export default function SpecificEvent() {
                               row.student_name,
                               row.student_id,
                               row.email,
-                              row.certificate_status
+                              row.certificate_status,
+                              row.certificate_id
                             )
                           }
                           key={row.id}
@@ -322,6 +335,7 @@ export default function SpecificEvent() {
           open={updateForm}
           onClose={handleUpdateFormClose}
           participant={participantDetails}
+          event_slug={event_slug.toUpperCase()}
         />
         <DeleteParticipant
           open={deleteForm}

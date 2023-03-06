@@ -1,101 +1,224 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import axios from 'axios';
-import { useState, useEffect } from 'react';
-import AlertSnackbar from '../base_components/AlertSnackbar';
-import BackdropSpinner from '../base_components/Backdrop';
+import * as React from "react";
+import Button from "@mui/material/Button";
+import TextField from "@mui/material/TextField";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogTitle from "@mui/material/DialogTitle";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import AlertSnackbar from "../base_components/AlertSnackbar";
+import BackdropSpinner from "../base_components/Backdrop";
 
 export default function UpdateParticipant(props) {
+  const [openSnack, setOpenSnack] = useState(false);
+  const [message, setMessage] = useState("");
+  const [alertType, setAlertType] = useState("");
+  const [openSpinner, setOpenSpinner] = useState(false);
 
-    const [openSnack, setOpenSnack] = useState(false)
-    const [message, setMessage] = useState("")
-    const [alertType, setAlertType] = useState("")
-    const [openSpinner, setOpenSpinner] = useState(false)
+  let [eventsData, setEventsData] = useState([]);
 
-    let [eventsData, setEventsData] = useState([])
+  Object.values(eventsData).map((event) => {
+    return (eventsData = event.id);
+  });
 
-    Object.values(eventsData).map((event) => { return eventsData = event.id })
+  const [participantData, setParticipantData] = useState({
+    event: "",
+    student_name: "",
+    student_id: "",
+    email: "",
+    certificate_status: "",
+    certificate_id: "",
+  });
 
-    const [participantData, setParticipantData] = useState({
-        event: "",
-        student_name: "",
-        student_id: "",
-        email: "",
-        certificate_status: ""
-    })
+  const [updateParticipantData, setUpdateParticipantData] = useState({
+    event: "",
+    student_name: "",
+    student_id: "",
+    email: "",
+    certificate_status: "",
+    certificate_id: "",
+  });
 
-    const [updateParticipantData, setUpdateParticipantData] = useState({
-        event: "",
-        student_name: "",
-        student_id: "",
-        email: "",
-        certificate_status: ""
-    })
+  useEffect(() => {
+    const event_url = window.location.href;
+    const new_event_url = event_url
+      .replace("3000", "8000")
+      .replace("event", "event-details");
+    axios
+      .get(new_event_url, {
+        headers: { Authorization: "Token " + localStorage.getItem("token") },
+      })
+      .then((res) => setEventsData(res.data));
+  }, []);
 
+  useEffect(() => {
+    settingParticipantData();
+    // eslint-disable-next-line
+  }, []);
 
-    useEffect(() => {
-        const event_url = window.location.href
-        const new_event_url = event_url.replace("3000", "8000").replace("event", "event-details")
-        axios.get(new_event_url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => setEventsData(res.data))
-    }, [])
+  function handleSubmit(e) {
+    e.preventDefault();
+    generateCertificateId(participantData.student_id, props.event_slug);
+    // setOpenSpinner(true);
+    // setTimeout(() => {
+    //   setOpenSpinner(false);
+    // }, 2000);
+    // const url =
+    //   "http://127.0.0.1:8000/api/update-participant/" + props.participant.event;
+    // axios
+    //   .put(
+    //     url,
+    //     {
+    //       event: eventsData,
+    //       student_name:
+    //         updateParticipantData.student_name === ""
+    //           ? participantData.student_name
+    //           : updateParticipantData.student_name,
+    //       student_id:
+    //         updateParticipantData.student_id === ""
+    //           ? participantData.student_id
+    //           : updateParticipantData.student_id,
+    //       email:
+    //         updateParticipantData.email === ""
+    //           ? participantData.email
+    //           : updateParticipantData.email,
+    //       certificate_status:
+    //         updateParticipantData.certificate_status === ""
+    //           ? participantData.certificate_status
+    //           : updateParticipantData.certificate_status,
+    //       certificate_id:
+    //         updateParticipantData.certificate_id === ""
+    //           ? participantData.certificate_id
+    //           : updateParticipantData.certificate_id,
+    //     },
+    //     { headers: { Authorization: "Token " + localStorage.getItem("token") } }
+    //   )
+    //   .then(
+    //     setTimeout(() => {
+    //       setOpenSnack(true);
+    //     }, 2000)
+    //   )
+    //   .then((res) => setMessage(res.data))
+    //   .then(
+    //     message === "Participant updated successfully"
+    //       ? setAlertType("error")
+    //       : setAlertType("success")
+    //   )
+    //   .catch((err) => console.log(err))
+    //   .finally(props.onClose);
+  }
 
-    useEffect(() => {
-        settingParticipantData()
-        // eslint-disable-next-line
-    }, [])
+  function handleEventData(event) {
+    const newData = { ...updateParticipantData };
+    newData[event.target.id] = event.target.value;
+    setUpdateParticipantData(newData);
+  }
 
-    function handleSubmit(e) {
-        e.preventDefault();
-        setOpenSpinner(true)
-        setTimeout(() => { setOpenSpinner(false) }, 2000)
-        const url = 'http://127.0.0.1:8000/api/update-participant/' + props.participant.event
-        axios.put(url, {
-            'event': eventsData,
-            'student_name': updateParticipantData.student_name === "" ? participantData.student_name : updateParticipantData.student_name,
-            'student_id': updateParticipantData.student_id === "" ? participantData.student_id : updateParticipantData.student_id,
-            'email': updateParticipantData.email === "" ? participantData.email : updateParticipantData.email,
-            'certificate_status': updateParticipantData.certificate_status === "" ? participantData.certificate_status : updateParticipantData.certificate_status,
-        }, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Participant updated successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
-    }
+  function settingParticipantData() {
+    setParticipantData(props.participant);
+  }
 
-    function handleEventData(event) {
+  function handleCloseSnackbar() {
+    setOpenSnack(false);
+  }
 
-        const newData = { ...updateParticipantData }
-        newData[event.target.id] = event.target.value
-        setUpdateParticipantData(newData)
-    }
+  function generateCertificateId(
+    student_id,
+    event_name,
+    event_department,
+    event_date
+  ) {
+    let event_name_char = event_name.match(/\b(\w)/g).join("");
+  }
 
-    function settingParticipantData() {
-        setParticipantData(props.participant)
-    }
-
-    function handleCloseSnackbar() {
-        setOpenSnack(false)
-    }
-
-    return (
-        <div className='w-full'>
-            <Dialog {...props} >
-                <DialogTitle>Edit Participant</DialogTitle>
-                <DialogContent>
-                    <TextField sx={{display:'none'}} disabled defaultValue={props.participant.event} autoFocus margin="dense" id="event" label="Participant Id" type="text" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.student_name} autoFocus margin="dense" id="student_name" label="Participant Name" type="text" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.student_id} autoFocus margin="dense" id="student_id" label="Participant Id" type="text" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.email} autoFocus margin="dense" id="email" label="Participant Email" type="email" fullWidth variant="standard" />
-                    <TextField onChange={(e) => handleEventData(e)} defaultValue={props.participant.certificate_status} autoFocus margin="dense" id="certificate_status" label="Certificate Status" type="text" fullWidth variant="standard" />
-                </DialogContent>
-                <DialogActions>
-                    <Button onClick={props.onClose} >Cancel</Button>
-                    <Button onClick={handleSubmit} >Update Participant</Button>
-                </DialogActions>
-            </Dialog>
-            <BackdropSpinner open={openSpinner} />
-            <AlertSnackbar open={openSnack} message={message} severity={alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} />
-        </div>
-    );
+  return (
+    <div className="w-full">
+      <Dialog {...props}>
+        <DialogTitle>Edit Participant</DialogTitle>
+        <DialogContent>
+          <TextField
+            sx={{ display: "none" }}
+            disabled
+            defaultValue={props.participant.event}
+            autoFocus
+            margin="dense"
+            id="event"
+            label="Participant Id"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            onChange={(e) => handleEventData(e)}
+            defaultValue={props.participant.student_name}
+            autoFocus
+            margin="dense"
+            id="student_name"
+            label="Participant Name"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            onChange={(e) => handleEventData(e)}
+            defaultValue={props.participant.student_id}
+            autoFocus
+            margin="dense"
+            id="student_id"
+            label="Participant Id"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            onChange={(e) => handleEventData(e)}
+            defaultValue={props.participant.email}
+            autoFocus
+            margin="dense"
+            id="email"
+            label="Participant Email"
+            type="email"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            onChange={(e) => handleEventData(e)}
+            defaultValue={props.participant.certificate_status}
+            autoFocus
+            margin="dense"
+            id="certificate_status"
+            label="Certificate Status"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            disabled
+            onChange={(e) => handleEventData(e)}
+            defaultValue={props.participant.certificate_id}
+            autoFocus
+            margin="dense"
+            id="certificate_id"
+            label="Certificate Id"
+            type="text"
+            fullWidth
+            variant="standard"
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={props.onClose}>Cancel</Button>
+          <Button onClick={handleSubmit}>Update Participant</Button>
+        </DialogActions>
+      </Dialog>
+      <BackdropSpinner open={openSpinner} />
+      <AlertSnackbar
+        open={openSnack}
+        message={message}
+        severity={alertType}
+        onClose={handleCloseSnackbar}
+        autoHideDuration={6000}
+      />
+    </div>
+  );
 }

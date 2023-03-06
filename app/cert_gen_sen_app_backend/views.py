@@ -183,14 +183,16 @@ class UploadEachParticipant(APIView):
 class FilteredEvent(APIView):
     def get(self, request, slug):
         event = Event.objects.filter(slug=slug)
+        event_date = ""
         new_event_id = 0
         for event_id in event:
             new_event_id = event_id
+            event_date = event_id.from_date
         participants = Participant.objects.filter(event=new_event_id)
 
         if participants:
             participants = ParticipantSerializer(participants, many=True)
-            return JsonResponse(participants.data, safe=False)
+            return Response({'participants_data': participants.data, 'event_date': event_date})
         return JsonResponse("0", safe=False)
 
     def delete(self, request, slug):
