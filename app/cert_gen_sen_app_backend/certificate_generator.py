@@ -14,21 +14,20 @@ from pptx.util import Inches
 from pptx import shapes, Presentation
 from PIL import Image
 
+
 # Sending mail to each participant
-
-
 def sendMail(subject, message, email_to, certificate_file):
     try:
         email_form = settings.EMAIL_HOST_USER
         certificate = EmailMessage(subject, message, email_form, [email_to])
         certificate.attach_file(certificate_file)
         certificate.send()
+        return "SENT"
     except Exception as e:
         print(e)
 
+
 # Certificate directory cleaner
-
-
 def cleanUp():
     participant_files = "../app/cert_gen_sen_app_backend/certificate_data/participants-certificates"
     participant_filelist = glob.glob(os.path.join(participant_files, "*"))
@@ -84,9 +83,8 @@ def meritCertificateGenerate(name, stu_id, rank, event, department, from_date, t
 
     return certificate_id
 
+
 # Certificate generator
-
-
 def generateCertificate(request, slug):
     cleanUp()
 
@@ -188,9 +186,8 @@ def generateCertificate(request, slug):
                          data[2], f'../app/cert_gen_sen_app_backend/certificate_data/participants-certificates/{str(certificate_id)+" "+data[0]}.jpg')
     return JsonResponse("Certificate generated and sended successfully", safe=False)
 
+
 # Generate certificate by Id
-
-
 def generateCertificateById(request, slug, pk):
     cleanUp()
 
@@ -390,7 +387,12 @@ def generate_certificate_by_id(request, slug, pk):
             stu_data["name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
         certificate_path = generate_participant_certificate(
             stu_data["name"], stu_data["certificate_id"], qrcode_path)
-        sendMail("Certificate of Participation",
-                 "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
+        send_certificate = sendMail("Certificate of Participation",
+                                    "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
+
+        if send_certificate == "SENT":
+            Participant.objects.filter(
+                id=pk).update(certificate_sent_status=True)
+            return JsonResponse("Certificate generated and sended successfully", safe=False)
 
     return JsonResponse("Certificate Generated", safe=False)
