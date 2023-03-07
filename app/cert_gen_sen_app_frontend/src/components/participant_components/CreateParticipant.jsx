@@ -118,18 +118,6 @@ export default function CreateParticipant(props) {
         <DialogTitle>Add Participant</DialogTitle>
         <DialogContent>
           <TextField
-            disabled
-            onChange={(e) => handleEventData(e)}
-            value={participantData.event}
-            autoFocus
-            margin="dense"
-            id="event"
-            label="Event Id"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
             onChange={(e) => handleEventData(e)}
             value={participantData.student_name}
             autoFocus

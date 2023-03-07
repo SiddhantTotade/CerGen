@@ -60,12 +60,13 @@ export default function UpdateParticipant(props) {
   function handleSubmit(e) {
     e.preventDefault();
     const certificateId = generateCertificateId(
-      updateParticipantData.student_id,
+      updateParticipantData.student_id === ""
+        ? participantData.student_id
+        : updateParticipantData.student_id,
       props.event_slug,
       props.event_detail.eventDepartment,
       props.event_detail.eventDate
     );
-    console.log(certificateId);
     setOpenSpinner(true);
     setTimeout(() => {
       setOpenSpinner(false);
@@ -93,10 +94,7 @@ export default function UpdateParticipant(props) {
             updateParticipantData.certificate_status === ""
               ? participantData.certificate_status
               : updateParticipantData.certificate_status,
-          certificate_id:
-            updateParticipantData.certificate_id === ""
-              ? participantData.certificate_id
-              : certificateId,
+          certificate_id: certificateId,
         },
         { headers: { Authorization: "Token " + localStorage.getItem("token") } }
       )
@@ -141,9 +139,8 @@ export default function UpdateParticipant(props) {
       student_id + event_name_char + event_department + event_date + random_num;
 
     setUpdateParticipantData({ certificate_id: certificateId });
+
     return certificateId;
-    // console.log(student_id);
-    // setParticipantData({ certificate_id: certificateId });
   }
 
   return (
@@ -203,18 +200,6 @@ export default function UpdateParticipant(props) {
             margin="dense"
             id="certificate_status"
             label="Certificate Status"
-            type="text"
-            fullWidth
-            variant="standard"
-          />
-          <TextField
-            disabled
-            // onChange={(e) => handleEventData(e)}
-            defaultValue={props.participant.certificate_id}
-            autoFocus
-            margin="dense"
-            id="certificate_id"
-            label="Certificate Id"
             type="text"
             fullWidth
             variant="standard"
