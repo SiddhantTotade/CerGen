@@ -44,6 +44,7 @@ export default function SpecificEvent() {
     email: "",
     certificate_status: "",
     certificate_id: "",
+    certificate_sent_status: "",
   });
 
   const [eventDetail, setEventDetail] = useState({
@@ -157,7 +158,8 @@ export default function SpecificEvent() {
     student_id,
     email,
     certificate_status,
-    certificate_id
+    certificate_id,
+    certificate_sent_status
   ) => {
     setUpdateForm(true);
     participantDetails.event = id;
@@ -166,6 +168,7 @@ export default function SpecificEvent() {
     participantDetails.email = email;
     participantDetails.certificate_status = certificate_status;
     participantDetails.certificate_id = certificate_id;
+    participantDetails.certificate_sent_status = certificate_sent_status;
   };
 
   const handleUpdateFormClose = () => {
@@ -244,7 +247,7 @@ export default function SpecificEvent() {
                   <b>Student Email</b>
                 </TableCell>
                 <TableCell align="center">
-                  <b>Certificate Status</b>
+                  <b>Eligible</b>
                 </TableCell>
                 <TableCell align="center">
                   <b>Actions</b>
@@ -299,35 +302,42 @@ export default function SpecificEvent() {
                         <CloseIcon sx={{ color: "red" }} />
                       </TableCell>
                     )}
-                    <TableCell align="center" sx={{}}>
-                      <Tooltip title={`Edit : ${row.id}`}>
-                        <Button
-                          onClick={() =>
-                            handleUpdateForm(
-                              row.id,
-                              row.student_name,
-                              row.student_id,
-                              row.email,
-                              row.certificate_status,
-                              row.certificate_id
-                            )
-                          }
-                          key={row.id}
-                        >
-                          <EditIcon sx={{ color: "blue" }} />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title={`Delete : ${row.id}`}>
-                        <Button onClick={() => handleDeleteForm(row.id)}>
-                          <DeleteIcon sx={{ color: "red" }} />
-                        </Button>
-                      </Tooltip>
-                      <Tooltip title={`Send Certificate : ${row.email}`}>
-                        <Button onClick={() => generateCertificateById(row.id)}>
-                          <SendIcon sx={{ color: "grey" }} />
-                        </Button>
-                      </Tooltip>
-                    </TableCell>
+                    {row.certificate_sent_status === false ? (
+                      <TableCell align="center">
+                        <Tooltip title={`Edit : ${row.id}`}>
+                          <Button
+                            onClick={() =>
+                              handleUpdateForm(
+                                row.id,
+                                row.student_name,
+                                row.student_id,
+                                row.email,
+                                row.certificate_status,
+                                row.certificate_id,
+                                row.certificate_sent_status
+                              )
+                            }
+                            key={row.id}
+                          >
+                            <EditIcon sx={{ color: "blue" }} />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title={`Delete : ${row.id}`}>
+                          <Button onClick={() => handleDeleteForm(row.id)}>
+                            <DeleteIcon sx={{ color: "red" }} />
+                          </Button>
+                        </Tooltip>
+                        <Tooltip title={`Send Certificate : ${row.email}`}>
+                          <Button
+                            onClick={() => generateCertificateById(row.id)}
+                          >
+                            <SendIcon sx={{ color: "grey" }} />
+                          </Button>
+                        </Tooltip>
+                      </TableCell>
+                    ) : (
+                      <TableCell align="center"></TableCell>
+                    )}
                   </TableRow>
                 ))
               ) : (
