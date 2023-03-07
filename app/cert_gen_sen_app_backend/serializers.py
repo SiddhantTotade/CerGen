@@ -61,6 +61,6 @@ class ParticipantSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         event = Participant.objects.create(event=validated_data['event'], student_name=validated_data['student_name'],
-                                           student_id=validated_data['student_id'], email=validated_data['email'], certificate_status=validated_data['certificate_status'], certifiate_id=validated_data['certificate_id'])
+                                           student_id=validated_data['student_id'], email=validated_data['email'], certificate_status=validated_data['certificate_status'], certificate_id=validated_data['certificate_id'])
         event.save()
         return event

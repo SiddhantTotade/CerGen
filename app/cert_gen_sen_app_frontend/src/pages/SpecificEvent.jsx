@@ -364,7 +364,13 @@ export default function SpecificEvent() {
             </TableBody>
           </Table>
         </TableContainer>
-        <CreateParticipant open={form} onClose={handleFormClose} />
+        <CreateParticipant
+          open={form}
+          onClose={handleFormClose}
+          participant={participantDetails}
+          event_slug={event_slug.toUpperCase()}
+          event_detail={eventDetail}
+        />
         <UpdateParticipant
           open={updateForm}
           onClose={handleUpdateFormClose}
