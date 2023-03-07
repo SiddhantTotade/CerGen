@@ -22,7 +22,6 @@ export default function CreateParticipant(props) {
     student_id: "",
     email: "",
     certificate_status: "",
-    certificate_id: "",
   });
 
   const [eventsData, setEventsData] = useState([]);
@@ -110,10 +109,7 @@ export default function CreateParticipant(props) {
     let certificateId =
       student_id + event_name_char + event_department + event_date + random_num;
 
-    // setUpdateParticipantData({ certificate_id: certificateId });
     return certificateId;
-    // console.log(student_id);
-    // setParticipantData({ certificate_id: certificateId });
   }
 
   return (
