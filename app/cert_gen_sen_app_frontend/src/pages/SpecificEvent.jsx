@@ -295,16 +295,30 @@ export default function SpecificEvent() {
                       </TableCell>
                     ) : row.certificate_status === "T" ? (
                       <TableCell align="center">
-                        <DoneIcon sx={{ color: "green" }} />
+                        <Tooltip
+                          className="cursor-pointer"
+                          title={
+                            row.certificate_sent_status === true
+                              ? `Certificate sended to ${row.student_name}`
+                              : `${row.student_name} is eligible for certificate`
+                          }
+                        >
+                          <DoneIcon sx={{ color: "green" }} />
+                        </Tooltip>
                       </TableCell>
                     ) : (
                       <TableCell align="center">
-                        <CloseIcon sx={{ color: "red" }} />
+                        <Tooltip
+                          className="cursor-pointer"
+                          title={`${row.student_name} is not eligible for certificate`}
+                        >
+                          <CloseIcon sx={{ color: "red" }} />
+                        </Tooltip>
                       </TableCell>
                     )}
                     {row.certificate_sent_status === false ? (
                       <TableCell align="center">
-                        <Tooltip title={`Edit : ${row.id}`}>
+                        <Tooltip title={`Edit : ${row.student_name}`}>
                           <Button
                             onClick={() =>
                               handleUpdateForm(
@@ -322,7 +336,7 @@ export default function SpecificEvent() {
                             <EditIcon sx={{ color: "blue" }} />
                           </Button>
                         </Tooltip>
-                        <Tooltip title={`Delete : ${row.id}`}>
+                        <Tooltip title={`Delete : ${row.student_name}`}>
                           <Button onClick={() => handleDeleteForm(row.id)}>
                             <DeleteIcon sx={{ color: "red" }} />
                           </Button>
