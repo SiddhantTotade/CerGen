@@ -358,6 +358,28 @@ def generate_merit_certificate(stu_name, cert_id, cert_status):
     pass
 
 
+def generate_certificate(request, slug):
+    obj_event = Event.objects.get(slug=slug)
+    event = Event.objects.filter(slug=slug)
+    participants = Participant.objects.filter(event=obj_event)
+
+    stu_data = []
+    eve_data = OrderedDict()
+
+    for stu in participants:
+        if stu.certificate_sent_status == False:
+            if stu.certificate_status == 'T' or stu.certificate_status == '1' or stu.certificate_status == '2' or stu.certificate_status == '3':
+                stu_data.append(dict(student_name=stu.student_name, student_id=stu.student_id, email=stu.email,
+                                     certificate_status=stu.certificate_status, certificate_id=stu.certificate_id))
+
+    for eve in event:
+        eve_data['event_name'] = eve.event_name
+        eve_data['event_department'] = eve.event_department
+        eve_data['from_date'] = eve.from_date.strftime('%d-%m-%Y')
+
+    return JsonResponse("Certificate generated and sended", safe=False)
+
+
 def generate_certificate_by_id(request, slug, pk):
     participant = Participant.objects.filter(id=pk)
     event = Event.objects.filter(slug=slug)
