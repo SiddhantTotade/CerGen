@@ -78,7 +78,7 @@ class RegisterAPI(generics.GenericAPIView):
 @permission_classes((IsAuthenticated,))
 class EventsOperations(APIView):
     def get(self, request):
-        all_events = Event.objects.all()
+        all_events = reversed(Event.objects.all())
 
         if all_events:
             event_serializer_data = EventSerializer(all_events, many=True)
@@ -189,7 +189,7 @@ class FilteredEvent(APIView):
             new_event_id = event_id
             event_date = event_id.from_date
             event_department = event_id.event_department
-        participants = Participant.objects.filter(event=new_event_id)
+        participants = reversed(Participant.objects.filter(event=new_event_id))
 
         if participants:
             participants = ParticipantSerializer(participants, many=True)
