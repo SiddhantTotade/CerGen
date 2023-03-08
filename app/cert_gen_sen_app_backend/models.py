@@ -2,8 +2,19 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
+import aspose.slides as slides
+import aspose.pydrawing as drawing
 
 # Create your models here.
+
+
+def convert_ppt2image(pptx):
+    pres = slides.Presentation("")
+
+    for sld in pres.slides:
+        bmp = sld.get_thumbnail(1, 1)
+        bmp.save(".jpg", format(num=str(sld.slide_number)),
+                 drawing.imaging.imageformat.jpg)
 
 
 class UserManager(BaseUserManager):
@@ -104,17 +115,31 @@ class Participant(models.Model):
     certificate_sent_status = models.BooleanField(default=False)
 
 
-# class CompletionCertificateTemplate(models.Model):
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-#     template = models.ImageField(upload_to='completion_certificates_templates')
+class CompletionCertificateTemplate(models.Model):
+    event = models.ForeignKey(User, on_delete=models.CASCADE)
+    template = models.FileField(
+        upload_to='./cert_gen_sen_app_backend/certificate_data/completion_certificate_templates')
+    template_img = models.ImageField(
+        upload_to='./cert_gen_sen_app_backend/certificate_data/completion_certificate_template_images')
+
+    def save(self, *args, **kwargs):
+        self.template_img = convert_ppt2image("pptx_path")
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.id)
 
 
-# class MeritCertificateTemplate(models.Model):
-#     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-#     template = models.ImageField(upload_to='merit_certificates_templates')
+class MeritCertificateTemplate(models.Model):
+    event = models.ForeignKey(User, on_delete=models.CASCADE)
+    template = models.FileField(
+        upload_to='./cert_gen_sen_app_backend/certificate_data/merit_certificate_templates')
+    template_img = models.ImageField(
+        upload_to='./cert_gen_sen_app_backend/certificate_data/merit_certificate_template_images')
 
+    def save(self, *args, **kwargs):
+        self.template_img = convert_ppt2image("pptx_path")
+        return super().save(*args, **kwargs)
 
-# class CompletionTemplateCoordinates(models.Model):
-#     template = models.ForeignKey(Event, on_delete=models.CASCADE)
-#     x_coor_name = models.IntegerField()
-#     y_coor_name = models.IntegerField()
+    def __str__(self):
+        return str(self.id)
