@@ -1,11 +1,8 @@
 import * as React from "react";
 import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Card, CardActions, CardContent, Typography } from "@mui/material";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import AlertSnackbar from "../base_components/AlertSnackbar";
@@ -13,7 +10,7 @@ import BackdropSpinner from "../base_components/Backdrop";
 import { Box, Tab } from "@mui/material";
 import { TabContext, TabList, TabPanel } from "@mui/lab";
 
-export default function UploadTemplate(props) {
+export default function CertificateTemplate(props) {
   const [openSnack, setOpenSnack] = useState(false);
   const [message, setMessage] = useState("");
   const [alertType, setAlertType] = useState("");
@@ -115,49 +112,75 @@ export default function UploadTemplate(props) {
     return certificateId;
   }
 
+  const [value, setValue] = React.useState("1");
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
   return (
-    <div className="w-full">
-      <Dialog {...props} sx={{ maxWidth: "100%", width: "100%" }}>
+    <div>
+      <Dialog
+        {...props}
+        PaperProps={{
+          style: {
+            minWidth: "50%",
+            maxHeight: "90%",
+          },
+        }}
+      >
         <DialogTitle>Template</DialogTitle>
-        <div className="flex justify-center items-center">
-          <DialogContent>
-            <Card sx={{ minWidth: 10 }}>
-              <CardContent>
-                <Typography
-                  sx={{ fontSize: 14 }}
-                  color="text.secondary"
-                  gutterBottom
-                >
-                  Word of the Day
-                </Typography>
-                <Typography sx={{ mb: 1.5 }} color="text.secondary">
-                  adjective
-                </Typography>
-                <Typography variant="body2">
-                  well meaning and kindly.
-                  <br />
-                  {'"a benevolent smile"'}
-                </Typography>
-              </CardContent>
-              <CardActions>
-                <Button size="small">Learn More</Button>
-              </CardActions>
-            </Card>
-          </DialogContent>
-          <DialogContent>
-            <TextField
-              //   onChange={(e) => handleEventData(e)}
-              autoFocus
-              margin="dense"
-              id="upload_file"
-              label="Upload File"
-              type="file"
-              fullWidth
-              inputProps={{ accept: "application/ppt, application/pptx" }}
-              variant="standard"
-            />
-          </DialogContent>
-        </div>
+        <Box>
+          <TabContext value={value}>
+            <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+              <TabList
+                onChange={handleChange}
+                aria-label="lab API tabs example"
+              >
+                <Tab label="Choose Template" value="1" />
+                <Tab label="Upload Template" value="2" />
+              </TabList>
+            </Box>
+            <TabPanel
+              value="1"
+              sx={{
+                display: "flex",
+                gap: "10px",
+                width: "100%",
+                border: "2px solid green",
+              }}
+            >
+              <div className="border-2 border-red-600 grid grid-cols-2 gap-3 w-2/4">
+                <img
+                  src="https://images.unsplash.com/photo-1678287759127-1ad7f38855cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80"
+                  alt=""
+                  width="300px"
+                  height="100px"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1678287759127-1ad7f38855cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80"
+                  alt=""
+                  width="300px"
+                  height="100px"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1678287759127-1ad7f38855cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80"
+                  alt=""
+                  width="300px"
+                  height="100px"
+                />
+                <img
+                  src="https://images.unsplash.com/photo-1678287759127-1ad7f38855cb?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1172&q=80"
+                  alt=""
+                  width="300px"
+                  height="100px"
+                />
+              </div>
+              <div className="border-2 border-red-900 w-2/4"></div>
+            </TabPanel>
+            <TabPanel value="2">Upload Template</TabPanel>
+          </TabContext>
+        </Box>
         <DialogActions>
           <Button onClick={props.onClose}>Cancel</Button>
           <Button onClick={handleSubmit}>Create Participant</Button>

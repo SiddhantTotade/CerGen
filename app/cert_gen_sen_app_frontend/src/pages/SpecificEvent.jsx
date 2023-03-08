@@ -19,7 +19,7 @@ import Tooltip from "@mui/material/Tooltip";
 import CreateParticipant from "../components/participant_components/CreateParticipant";
 import UpdateParticipant from "../components/participant_components/UpdateParticipant";
 import DeleteParticipant from "../components/participant_components/DeleteParticipant";
-import UploadTemplate from "../components/template_components/UploadTemplate";
+import CertificateTemplate from "../components/template_components/CertificateTemplate";
 import Gold from "../medals_images/gold-medal.png";
 import Silver from "../medals_images/silver-medal.png";
 import Bronze from "../medals_images/bronze-medal.png";
@@ -401,7 +401,7 @@ export default function SpecificEvent() {
           onClose={handleDeleteFormClose}
           participant={participantDetails}
         />
-        <UploadTemplate
+        <CertificateTemplate
           open={uploadTemplateForm}
           onClose={handleUploadTemplateFormClose}
         />
