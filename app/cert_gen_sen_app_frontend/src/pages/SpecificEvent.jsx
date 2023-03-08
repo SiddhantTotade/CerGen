@@ -19,6 +19,7 @@ import Tooltip from "@mui/material/Tooltip";
 import CreateParticipant from "../components/participant_components/CreateParticipant";
 import UpdateParticipant from "../components/participant_components/UpdateParticipant";
 import DeleteParticipant from "../components/participant_components/DeleteParticipant";
+import UploadTemplate from "../components/template_components/UploadTemplate";
 import Gold from "../medals_images/gold-medal.png";
 import Silver from "../medals_images/silver-medal.png";
 import Bronze from "../medals_images/bronze-medal.png";
@@ -132,7 +133,9 @@ export default function SpecificEvent() {
       .catch((err) => console.log(err));
   }
 
-  const [form, setForm] = React.useState(false);
+  const [createParticiapantForm, setCreateParticiapantForm] =
+    React.useState(false);
+  const [uploadTemplateForm, setUploadTemplateForm] = React.useState(false);
   const [updateForm, setUpdateForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
 
@@ -144,12 +147,20 @@ export default function SpecificEvent() {
     });
   };
 
+  const handleUploadTemplateForm = () => {
+    setUploadTemplateForm(true);
+  };
+
+  const handleUploadTemplateFormClose = () => {
+    setUploadTemplateForm(false);
+  };
+
   const handleForm = () => {
-    setForm(true);
+    setCreateParticiapantForm(true);
   };
 
   const handleFormClose = () => {
-    setForm(false);
+    setCreateParticiapantForm(false);
   };
 
   const handleUpdateForm = (
@@ -231,6 +242,13 @@ export default function SpecificEvent() {
             onClick={generateCertificate}
           >
             Issue and Send Certificate
+          </Button>
+          <Button
+            variant="contained"
+            sx={createBtns}
+            onClick={handleUploadTemplateForm}
+          >
+            Upload Template
           </Button>
         </div>
         <TableContainer component={Paper}>
@@ -365,7 +383,7 @@ export default function SpecificEvent() {
           </Table>
         </TableContainer>
         <CreateParticipant
-          open={form}
+          open={createParticiapantForm}
           onClose={handleFormClose}
           participant={participantDetails}
           event_slug={event_slug.toUpperCase()}
@@ -382,6 +400,10 @@ export default function SpecificEvent() {
           open={deleteForm}
           onClose={handleDeleteFormClose}
           participant={participantDetails}
+        />
+        <UploadTemplate
+          open={uploadTemplateForm}
+          onClose={handleUploadTemplateFormClose}
         />
         <BackdropSpinner open={openSpinner} />
         <AlertSnackbar
