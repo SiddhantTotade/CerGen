@@ -1,19 +1,16 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
 import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import AlertSnackbar from "../base_components/AlertSnackbar";
 import BackdropSpinner from "../base_components/Backdrop";
 import { Box, Tab } from "@mui/material";
-import { TabContext, TabList } from "@mui/lab";
 import PropTypes from "prop-types";
-import { Tabs, Typography } from "@mui/material";
+import { Tabs } from "@mui/material";
 import { UploadTemplate } from "./UploadTemplate";
 import { ChooseTemplate } from "./ChooseTemplate";
+
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
 
@@ -27,7 +24,7 @@ function TabPanel(props) {
     >
       {value === index && (
         <Box sx={{ p: 2 }}>
-          <Typography>{children}</Typography>
+          <div>{children}</div>
         </Box>
       )}
     </div>

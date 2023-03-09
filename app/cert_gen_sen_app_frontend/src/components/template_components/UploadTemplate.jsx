@@ -9,8 +9,6 @@ export const UploadTemplate = () => {
     setFile(URL.createObjectURL(e.target.files[0]));
   };
 
-  let linkToPPTFile =
-    "/home/siddhanttotade/Documents/Docs/Programming/GIT/certificate-generator-and-sender/app/cert_gen_sen_app_backend/certificate_data/certificate-template/certificate_of_completion.pptx";
   return (
     <>
       <Grid
@@ -59,16 +57,7 @@ export const UploadTemplate = () => {
                 //   ? `url(${selectedImage}) no-repeat center center / cover`
                 //   : "white",
               }}
-            >
-              {file && (
-                <iframe
-                  src={`https://view.officeapps.live.com/op/embed.aspx?src=${linkToPPTFile}`}
-                  width="100%"
-                  height="600px"
-                  title="ppt"
-                ></iframe>
-              )}
-            </Paper>
+            ></Paper>
           </Grid>
         </Grid>
         <DialogActions sx={{ marginTop: "20px" }}>
