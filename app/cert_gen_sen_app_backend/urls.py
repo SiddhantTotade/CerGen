@@ -4,6 +4,7 @@ from .certificate_generator import *
 from .views import RegisterAPI
 from knox import views as knox_views
 from .views import LoginAPI
+from .ppt_2_html import *
 
 urlpatterns = [
     path('register/', RegisterAPI.as_view(), name='register'),
@@ -21,4 +22,5 @@ urlpatterns = [
     path("upload-participants/", UploadParticipant.as_view()),
     path("generate-certificate/<slug:slug>", generate_certificate),
     path("generate-certificate/<slug:slug>/<int:pk>", generate_certificate_by_id),
+    path("ppt-to-html/", ppt_2_html),
 ]
