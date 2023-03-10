@@ -1,7 +1,36 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { TextField, Button, DialogActions, Grid, Paper } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
+import { UseScript } from "../base_components/UseScript.jsx";
+import $ from "jquery";
+import "jquery-ui-dist/jquery-ui";
+import Jquery from "../../external_libraries/PPTXjs/js/jquery-1.11.3.min.js";
+import PPT_1 from "../../external_libraries/PPTXjs/js/ppt_1.js";
+// import "../../external_libraries/PPTX2HTML/css/font-awesome.min.css";
+// import "../../external_libraries/PPTX2HTML/css/pptx2html.css";
+// import "../../external_libraries/PPTXjs/js/jquery-1.11.3.min.js";
+// import "../../external_libraries/PPTXjs/js/jszip.min.js"
+// import "../../external_libraries/PPTXjs/js/filereader.js"
+// import "../../external_libraries/PPTXjs/js/d3.min.js"
+// import "../../external_libraries/PPTXjs/js/nv.d3.min.js"
+// import "../../external_libraries/PPTXjs/js/pptxjs.js"
+// import "../../external_libraries/PPTXjs/js/divs2slides.js"
+// import "../../external_libraries/PPTXjs/js/jquery.fullscreen-min.js"
+// import "../../external_libraries/PPTXjs/js/ppt_1.js";
+
+const MyComponent = (props) => {
+  UseScript(Jquery);
+  // UseScript("../../external_libraries/PPTXjs/js/jszip.min.js");
+  // UseScript("../../external_libraries/PPTXjs/js/filereader.js");
+  // UseScript("../../external_libraries/PPTXjs/js/d3.min.js");
+  // UseScript("../../external_libraries/PPTXjs/js/nv.d3.min.js");
+  // UseScript("../../external_libraries/PPTXjs/js/pptxjs.js");
+  // UseScript("../../external_libraries/PPTXjs/js/divs2slides.js");
+  // UseScript("../../external_libraries/PPTXjs/js/jquery.fullscreen-min.js");
+  UseScript(PPT_1);
+  // UseScript("../../external_libraries/PPTXjs/js/ppt_2.js");
+};
 
 export const UploadTemplate = () => {
   const [file, setFile] = useState(null);
@@ -19,9 +48,13 @@ export const UploadTemplate = () => {
         Authorization: "Token " + localStorage.getItem("token"),
       },
     };
-    // console.log(config);
+
     axios.post(url, formData, config).then((res) => console.log(res));
   };
+
+  useEffect(() => {
+    console.log(PPT_1);
+  });
 
   return (
     <>
@@ -49,15 +82,20 @@ export const UploadTemplate = () => {
               spacing={2}
               sx={{ display: "flex", alignItems: "center" }}
             >
+              <MyComponent />
               <TextField
                 autoFocus
                 margin="dense"
-                id="upload_file"
+                id="uploadFileInput"
                 label="Upload File"
+                inputProps={{
+                  accept:
+                    "application/vnd.openxmlformats-officedocument.presentationml.presentation",
+                }}
                 type="file"
+                className="upload"
                 fullWidth
                 variant="standard"
-                onChange={uploadFile}
               />
             </Grid>
           </Grid>
@@ -67,13 +105,13 @@ export const UploadTemplate = () => {
               style={{
                 width: "100%",
                 height: "100%",
-                // background: selectedImage
-                //   ? `url(${selectedImage}) no-repeat center center / cover`
-                //   : "white",
               }}
-            ></Paper>
+            >
+              <div id="result"></div>
+            </Paper>
           </Grid>
         </Grid>
+
         <DialogActions sx={{ marginTop: "20px" }}>
           <Button variant="contained">Cancel</Button>
           <Button variant="contained">Upload</Button>
