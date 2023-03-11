@@ -111,7 +111,7 @@ export default function FileForm(props) {
             {eventsData !== undefined ? (
               Object.values(eventsData).map((events) => {
                 return (
-                  <MenuItem value={events.id} key={events}>
+                  <MenuItem value={events.id} key={events.id}>
                     {events.event_name}
                   </MenuItem>
                 );
