@@ -16,9 +16,6 @@ export const UploadTemplate = () => {
 
   const [file, setFile] = useState(null);
 
-  axios.defaults.xsrfCookieName = "csrftoken";
-  axios.defaults.xsrfHeaderName = "X-CSRFToken";
-
   function handleFileChange(event) {
     setEventFileData(event.target.files[0]);
     uploadFile()

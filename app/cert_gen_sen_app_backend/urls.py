@@ -4,6 +4,7 @@ from .certificate_generator import *
 from .views import RegisterAPI
 from knox import views as knox_views
 from .views import LoginAPI
+from .ppt_2_html import *
 
 urlpatterns = [
     path('register/', RegisterAPI.as_view(), name='register'),

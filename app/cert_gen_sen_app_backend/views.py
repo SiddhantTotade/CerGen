@@ -200,9 +200,3 @@ class FilteredEvent(APIView):
         event_by_slug = Event.objects.get(slug=slug)
         event_by_slug.delete()
         return JsonResponse("Event deleted successfully", safe=False)
-
-
-def ppttohtml(request):
-    print(request.data)
-
-    return JsonResponse("OK", safe=False)
