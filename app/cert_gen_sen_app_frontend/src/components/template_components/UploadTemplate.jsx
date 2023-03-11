@@ -3,33 +3,10 @@ import { TextField, Button, DialogActions, Grid, Paper } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
 import { UseScript } from "../base_components/UseScript.jsx";
-import $ from "jquery";
 import "jquery-ui-dist/jquery-ui";
-import Jquery from "../../external_libraries/PPTXjs/js/jquery-1.11.3.min.js";
-import PPT_1 from "../../external_libraries/PPTXjs/js/ppt_1.js";
-// import "../../external_libraries/PPTX2HTML/css/font-awesome.min.css";
-// import "../../external_libraries/PPTX2HTML/css/pptx2html.css";
-// import "../../external_libraries/PPTXjs/js/jquery-1.11.3.min.js";
-// import "../../external_libraries/PPTXjs/js/jszip.min.js"
-// import "../../external_libraries/PPTXjs/js/filereader.js"
-// import "../../external_libraries/PPTXjs/js/d3.min.js"
-// import "../../external_libraries/PPTXjs/js/nv.d3.min.js"
-// import "../../external_libraries/PPTXjs/js/pptxjs.js"
-// import "../../external_libraries/PPTXjs/js/divs2slides.js"
-// import "../../external_libraries/PPTXjs/js/jquery.fullscreen-min.js"
-// import "../../external_libraries/PPTXjs/js/ppt_1.js";
 
 const MyComponent = (props) => {
-  UseScript(Jquery);
-  // UseScript("../../external_libraries/PPTXjs/js/jszip.min.js");
-  // UseScript("../../external_libraries/PPTXjs/js/filereader.js");
-  // UseScript("../../external_libraries/PPTXjs/js/d3.min.js");
-  // UseScript("../../external_libraries/PPTXjs/js/nv.d3.min.js");
-  // UseScript("../../external_libraries/PPTXjs/js/pptxjs.js");
-  // UseScript("../../external_libraries/PPTXjs/js/divs2slides.js");
-  // UseScript("../../external_libraries/PPTXjs/js/jquery.fullscreen-min.js");
-  UseScript(PPT_1);
-  // UseScript("../../external_libraries/PPTXjs/js/ppt_2.js");
+  UseScript("https://github.com/g21589/PPTX2HTML/blob/12f654fd23008f4b57c6ae43c5144eb370115b6f/js/jquery-1.11.3.min.js")
 };
 
 export const UploadTemplate = () => {
@@ -52,9 +29,7 @@ export const UploadTemplate = () => {
     axios.post(url, formData, config).then((res) => console.log(res));
   };
 
-  useEffect(() => {
-    console.log(PPT_1);
-  });
+  useEffect(() => {});
 
   return (
     <>
