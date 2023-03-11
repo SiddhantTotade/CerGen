@@ -1,13 +1,7 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { TextField, Button, DialogActions, Grid, Paper } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
-import { UseScript } from "../base_components/UseScript.jsx";
-import "jquery-ui-dist/jquery-ui";
-
-const MyComponent = (props) => {
-  UseScript("https://github.com/g21589/PPTX2HTML/blob/12f654fd23008f4b57c6ae43c5144eb370115b6f/js/jquery-1.11.3.min.js")
-};
 
 export const UploadTemplate = () => {
   const [file, setFile] = useState(null);
@@ -28,8 +22,6 @@ export const UploadTemplate = () => {
 
     axios.post(url, formData, config).then((res) => console.log(res));
   };
-
-  useEffect(() => {});
 
   return (
     <>
@@ -57,11 +49,10 @@ export const UploadTemplate = () => {
               spacing={2}
               sx={{ display: "flex", alignItems: "center" }}
             >
-              <MyComponent />
               <TextField
                 autoFocus
                 margin="dense"
-                id="uploadFileInput"
+                id="upload_file"
                 label="Upload File"
                 inputProps={{
                   accept:

@@ -22,5 +22,5 @@ urlpatterns = [
     path("upload-participants/", UploadParticipant.as_view()),
     path("generate-certificate/<slug:slug>", generate_certificate),
     path("generate-certificate/<slug:slug>/<int:pk>", generate_certificate_by_id),
-    path("ppt-to-html/", ppt_2_html),
+    path("ppttohtml/", ppt_2_html),
 ]
