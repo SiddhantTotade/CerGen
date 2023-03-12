@@ -1,9 +1,10 @@
-import aspose.slides as slides
 # import aspose.pydrwaing as drawing
 from django.http import JsonResponse
+from .models import *
 
 
-def ppttohtml(self, request):
-    print(request.data)
+def ppttohtml(request):
+    event = Event.objects.all()
+    print(request.FILES.get('pptx_file'))
 
     return JsonResponse("OK", safe=False)
