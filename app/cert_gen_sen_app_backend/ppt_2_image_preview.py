@@ -9,6 +9,9 @@ import base64
 
 
 class Ppt2Image(APIView):
+    def clear_preview():
+        pass
+
     def post(self, request):
         letters_and_digits = string.ascii_letters + string.digits
         file_name_str = "".join(random.choice(

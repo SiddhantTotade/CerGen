@@ -18,7 +18,6 @@ from knox.views import LoginView as KnoxLoginView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 import random
-import django
 # Create your views here.
 
 
