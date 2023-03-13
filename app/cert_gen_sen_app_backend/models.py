@@ -16,6 +16,8 @@ def convert_ppt2image(pptx):
         bmp.save(".jpg", format(num=str(sld.slide_number)),
                  drawing.imaging.imageformat.jpg)
 
+    return bmp
+
 
 class UserManager(BaseUserManager):
     def create_user(self, email, name, tc, password=None, password2=None):

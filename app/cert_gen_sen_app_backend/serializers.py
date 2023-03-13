@@ -64,3 +64,15 @@ class ParticipantSerializer(serializers.ModelSerializer):
                                            student_id=validated_data['student_id'], email=validated_data['email'], certificate_status=validated_data['certificate_status'], certificate_id=validated_data['certificate_id'])
         event.save()
         return event
+
+
+class CompletionCertificate(serializers.ModelSerializer):
+    class Meta:
+        model = CompletionCertificateTemplate
+        fields = '__all__'
+
+    def create(self, validated_data):
+        completion_template = CompletionCertificateTemplate.objects.create(
+            user=validated_data['user'], template=validated_data['pptx_file'])
+        completion_template.save()
+        return completion_template

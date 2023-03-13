@@ -200,3 +200,8 @@ class FilteredEvent(APIView):
         event_by_slug = Event.objects.get(slug=slug)
         event_by_slug.delete()
         return JsonResponse("Event deleted successfully", safe=False)
+
+
+class UploadCompletionTemplate(APIView):
+    def post(self, request):
+        pptx_file = request.FILES('pptx_file')
