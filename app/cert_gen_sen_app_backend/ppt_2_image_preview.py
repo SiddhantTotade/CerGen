@@ -9,8 +9,9 @@ import base64
 
 
 class Ppt2Image(APIView):
-    def clear_preview():
-        pass
+    def clear_preview(self):
+        clear_command = 'rm -rf ./cert_gen_sen_app_backend/certificate_data/preview-template-ppts/*'
+        os.system(clear_command)
 
     def post(self, request):
         letters_and_digits = string.ascii_letters + string.digits
@@ -38,5 +39,7 @@ class Ppt2Image(APIView):
         response = HttpResponse(
             str, content_type='image/jpg')
         response['Content-Disposition'] = f'attachment; filename={file_name}'
+
+        self.clear_preview()
 
         return response

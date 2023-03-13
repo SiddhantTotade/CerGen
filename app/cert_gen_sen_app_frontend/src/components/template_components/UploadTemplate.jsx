@@ -4,11 +4,15 @@ import {
   Button,
   DialogActions,
   Grid,
+  Checkbox,
   Paper,
   FormControl,
+  FormControlLabel,
+  Tooltip,
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
+import InfoIcon from "@mui/icons-material/Info";
 
 export const UploadTemplate = () => {
   const [file_focus, file_setFocused] = React.useState(false);
@@ -67,7 +71,7 @@ export const UploadTemplate = () => {
           >
             <Grid
               container
-              spacing={2}
+              spacing={1}
               sx={{ display: "flex", alignItems: "center" }}
             >
               <FormControl>
@@ -88,6 +92,23 @@ export const UploadTemplate = () => {
                   fullWidth
                   variant="standard"
                 />
+                <div className="flex items-center">
+                  <FormControlLabel
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "flex-start",
+                    }}
+                    control={<Checkbox name="contribute" />}
+                    label="Contribute"
+                  />
+                  <Tooltip
+                    sx={{ cursor: "pointer" }}
+                    title="By checking this other people can also use your template/s"
+                  >
+                    <InfoIcon sx={{ cursor: "pointer", color: "#8cd0fa" }} />
+                  </Tooltip>
+                </div>
               </FormControl>
             </Grid>
           </Grid>
@@ -109,7 +130,6 @@ export const UploadTemplate = () => {
             </Paper>
           </Grid>
         </Grid>
-
         <DialogActions sx={{ marginTop: "20px" }}>
           <Button variant="contained">Cancel</Button>
           <Button variant="contained" onClick={uploadFile}>
