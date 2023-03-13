@@ -248,7 +248,7 @@ export default function SpecificEvent() {
             sx={createBtns}
             onClick={handleUploadTemplateForm}
           >
-            Upload Template
+            Templates
           </Button>
         </div>
         <TableContainer component={Paper}>
