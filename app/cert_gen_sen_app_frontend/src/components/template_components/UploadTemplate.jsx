@@ -9,6 +9,7 @@ import {
   FormControl,
   FormControlLabel,
   Tooltip,
+  Typography,
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
@@ -93,7 +94,30 @@ export const UploadTemplate = () => {
                   fullWidth
                   variant="standard"
                 />
-                <div className="flex items-center">
+                <div className="items-center mt-4">
+                  <Typography>What you are uploading ?</Typography>
+                  <div className="flex">
+                    <FormControlLabel
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                      control={<Checkbox name="contribute" />}
+                      label="Participation Template"
+                    />
+                    <FormControlLabel
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "flex-start",
+                      }}
+                      control={<Checkbox name="contribute" />}
+                      label="Merit Template"
+                    />
+                  </div>
+                </div>
+                <div className="flex items-center mt-4">
                   <FormControlLabel
                     sx={{
                       display: "flex",

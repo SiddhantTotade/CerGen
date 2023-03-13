@@ -116,7 +116,7 @@ class Participant(models.Model):
 
 
 class CompletionCertificateTemplate(models.Model):
-    event = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     template = models.FileField(
         upload_to='./cert_gen_sen_app_backend/certificate_data/completion_certificate_templates')
     template_img = models.ImageField(
@@ -131,7 +131,7 @@ class CompletionCertificateTemplate(models.Model):
 
 
 class MeritCertificateTemplate(models.Model):
-    event = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     template = models.FileField(
         upload_to='./cert_gen_sen_app_backend/certificate_data/merit_certificate_templates')
     template_img = models.ImageField(
