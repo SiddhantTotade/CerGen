@@ -106,7 +106,9 @@ export const UploadTemplate = () => {
                     sx={{ cursor: "pointer" }}
                     title="By checking this other people can also use your template/s"
                   >
-                    <InfoIcon sx={{ cursor: "pointer", color: "#8cd0fa" }} />
+                    <InfoIcon
+                      sx={{ cursor: "pointer", color: "#8cd0fa", width: "6%" }}
+                    />
                   </Tooltip>
                 </div>
               </FormControl>
