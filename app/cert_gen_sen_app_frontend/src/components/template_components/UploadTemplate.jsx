@@ -87,6 +87,7 @@ export const UploadTemplate = () => {
                   autoFocus
                   margin="dense"
                   id="upload_file"
+                  inputProps={{ accept: "application/vnd.ms-powerpoint" }}
                   label="Upload File"
                   className="upload"
                   fullWidth
