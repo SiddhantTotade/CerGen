@@ -9,7 +9,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 import axios from "axios";
-import Cookie from "js-cookie";
 
 export const UploadTemplate = () => {
   const [file_focus, file_setFocused] = React.useState(false);
@@ -18,37 +17,31 @@ export const UploadTemplate = () => {
   const file_onBlur = () => file_setFocused(false);
 
   const [eventFileData, setEventFileData] = React.useState({
-    pptx_file: null,
+    pptx_file: "",
   });
 
-  const [file, setFile] = useState(null);
+  const [previewFile, setPreviewFile] = useState(null);
+
+  localStorage.setItem("certificatePreview", previewFile);
 
   function handleFileChange(event) {
     setEventFileData(event.target.files[0]);
   }
 
-  // console.log(eventFileData);
-
-  const uploadFile = (e) => {
-    e.preventDefault();
-    // setFile(URL.createObjectURL(e.target.files[0]));
-
-    const formData = new FormData();
+  const uploadFile = () => {
+    let formData = new FormData();
     formData.append("pptx_file", eventFileData);
 
-    console.log(eventFileData);
+    const url = "http://127.0.0.1:8000/api/preview-certificate/";
 
-    const url = "http://127.0.0.1:8000/api/ppttohtml/";
-    const config = {
+    let config = {
       headers: {
         "content-type": "multipart/form-data",
         Authorization: "Token " + localStorage.getItem("token"),
       },
     };
 
-    axios
-      .post(url, { pptx_file: eventFileData }, config)
-      .then((res) => console.log(res));
+    axios.post(url, formData, config).then((res) => setPreviewFile(res.data));
   };
 
   return (
@@ -105,15 +98,24 @@ export const UploadTemplate = () => {
                 width: "100%",
                 height: "100%",
               }}
-            ></Paper>
+            >
+              <img
+                src={
+                  "data:image/jpg;base64, " +
+                  localStorage.getItem("certificatePreview")
+                }
+                alt=""
+              />
+            </Paper>
           </Grid>
         </Grid>
 
         <DialogActions sx={{ marginTop: "20px" }}>
           <Button variant="contained">Cancel</Button>
           <Button variant="contained" onClick={uploadFile}>
-            Upload
+            Preview
           </Button>
+          <Button variant="contained">Upload</Button>
         </DialogActions>
       </Grid>
     </>
