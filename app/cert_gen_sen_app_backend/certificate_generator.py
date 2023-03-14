@@ -14,7 +14,6 @@ from pptx import Presentation
 from PIL import Image
 import smtplib
 import ssl
-import email
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
