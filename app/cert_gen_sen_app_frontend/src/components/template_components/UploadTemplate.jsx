@@ -9,6 +9,8 @@ import {
   FormControl,
   FormControlLabel,
   Tooltip,
+  Radio,
+  RadioGroup,
   Typography,
 } from "@mui/material";
 import { useState } from "react";
@@ -25,15 +27,17 @@ export const UploadTemplate = () => {
     pptx_file: "",
   });
 
-  const [previewFile, setPreviewFile] = useState(null);
+  const [certificateType, setCertificateType] = useState("");
+  console.log(certificateType);
 
+  const [previewFile, setPreviewFile] = useState(null);
   localStorage.setItem("certificatePreview", previewFile);
 
   function handleFileChange(event) {
     setEventFileData(event.target.files[0]);
   }
 
-  const uploadFile = () => {
+  const previewTemplateFile = () => {
     let formData = new FormData();
     formData.append("pptx_file", eventFileData);
 
@@ -47,6 +51,23 @@ export const UploadTemplate = () => {
     };
 
     axios.post(url, formData, config).then((res) => setPreviewFile(res.data));
+  };
+
+  const uploadCompletionTemplate = () => {
+    const url = "http://127.0.0.1:8000/api/upload-completion-template/";
+
+    let formData = new FormData();
+    formData.append("user", "1");
+    formData.append("pptx_file", eventFileData);
+
+    let config = {
+      headers: {
+        "content-type": "multipart/form-data",
+        Authorization: "Token " + localStorage.getItem("token"),
+      },
+    };
+
+    axios.post(url, formData, config).then((res) => console.log(res));
   };
 
   return (
@@ -97,24 +118,44 @@ export const UploadTemplate = () => {
                 <div className="items-center mt-4">
                   <Typography>What you are uploading ?</Typography>
                   <div className="flex">
-                    <FormControlLabel
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                      }}
-                      control={<Checkbox name="contribute" />}
-                      label="Participation Template"
-                    />
-                    <FormControlLabel
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "flex-start",
-                      }}
-                      control={<Checkbox name="contribute" />}
-                      label="Merit Template"
-                    />
+                    <FormControl>
+                      <RadioGroup
+                        aria-labelledby="demo-radio-buttons-group-label"
+                        defaultValue=""
+                        name="radio-buttons-group"
+                      >
+                        <FormControlLabel
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-start",
+                          }}
+                          control={
+                            <Radio
+                              onChange={(e) =>
+                                setCertificateType("Participation")
+                              }
+                            />
+                          }
+                          label="Participation Template"
+                          value="Participation"
+                        />
+                        <FormControlLabel
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "flex-start",
+                          }}
+                          control={
+                            <Radio
+                              onChange={(e) => setCertificateType("Merit")}
+                            />
+                          }
+                          label="Merit Template"
+                          value="Merit"
+                        />
+                      </RadioGroup>
+                    </FormControl>
                   </div>
                 </div>
                 <div className="flex items-center mt-4">
@@ -159,10 +200,12 @@ export const UploadTemplate = () => {
         </Grid>
         <DialogActions sx={{ marginTop: "20px" }}>
           <Button variant="contained">Cancel</Button>
-          <Button variant="contained" onClick={uploadFile}>
+          <Button variant="contained" onClick={previewTemplateFile}>
             Preview
           </Button>
-          <Button variant="contained">Upload</Button>
+          <Button variant="contained" onClick={uploadCompletionTemplate}>
+            Upload
+          </Button>
         </DialogActions>
       </Grid>
     </>

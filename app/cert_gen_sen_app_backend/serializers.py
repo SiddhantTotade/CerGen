@@ -66,7 +66,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
         return event
 
 
-class CompletionCertificate(serializers.ModelSerializer):
+class CompletionCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompletionCertificateTemplate
         fields = '__all__'

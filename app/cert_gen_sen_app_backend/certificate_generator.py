@@ -12,6 +12,48 @@ import tqdm
 import qrcode
 from pptx import Presentation
 from PIL import Image
+import smtplib
+import ssl
+import email
+from email import encoders
+from email.mime.base import MIMEBase
+from email.mime.multipart import MIMEMultipart
+from email.mime.text import MIMEText
+
+
+def send_mail(subject, body, email_to, certificate_file):
+    email_from = settings.EMAIL_HOST_USER
+    password = settings.EMAIL_HOST_PASSWORD
+    try:
+        message = MIMEMultipart()
+        message['From'] = email_from
+        message['To'] = email_to
+        message['Subject'] = subject
+        message['Bcc'] = email_to
+
+        message.attach(MIMEText(body, 'plain'))
+        file = certificate_file
+
+        with open(file, 'rb') as attachment:
+            part = MIMEBase('application', 'octet-stream')
+            part.set_payload(attachment.read())
+
+        encoders.encode_base64(part)
+
+        part.add_header('Content-Disposition',
+                        f"attachment;filename={file.replace('./cert_gen_sen_app_backend/certificate_data/participants-certificates/', '')}")
+
+        message.attach(part)
+        text = message.as_string()
+
+        context = ssl.create_default_context()
+        with smtplib.SMTP_SSL('smtp.gmail.com', 465, context=context) as server:
+            server.login(email_from, password)
+            server.sendmail(email_from, email_to, text)
+
+        return "SENT"
+    except Exception as e:
+        print(e)
 
 
 # Sending mail to each participant
@@ -187,8 +229,8 @@ def generate_certificate(request, slug):
                 stu["student_name"], stu["student_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
             certificate_path = generate_participant_certificate(
                 stu["student_name"], stu["certificate_id"], qrcode_path)
-            send_certificate = sendMail("Certificate of Participation",
-                                        "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
+            send_certificate = send_mail("Certificate of Participation",
+                                         "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
 
             if send_certificate == "SENT":
                 Participant.objects.filter(
@@ -229,8 +271,8 @@ def generate_certificate_by_id(request, slug, pk):
             stu_data["student_name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
         certificate_path = generate_participant_certificate(
             stu_data["student_name"], stu_data["certificate_id"], qrcode_path)
-        send_certificate = sendMail("Certificate of Participation",
-                                    "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
+        send_certificate = send_mail("Certificate of Participation",
+                                     "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
 
         if send_certificate == "SENT":
             Participant.objects.filter(

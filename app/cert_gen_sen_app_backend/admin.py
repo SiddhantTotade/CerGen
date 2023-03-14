@@ -30,3 +30,5 @@ from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 admin.site.register(Event)
 admin.site.register(Participant)
 admin.site.register(EventFile)
+admin.site.register(CompletionCertificateTemplate)
+admin.site.register(MeritCertificateTemplate)

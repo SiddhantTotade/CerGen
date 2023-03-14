@@ -17,7 +17,10 @@ from rest_framework.authtoken.serializers import AuthTokenSerializer
 from knox.views import LoginView as KnoxLoginView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+from django.conf import settings
 import random
+import os
+import string
 # Create your views here.
 
 
@@ -204,4 +207,29 @@ class FilteredEvent(APIView):
 
 class UploadCompletionTemplate(APIView):
     def post(self, request):
-        pptx_file = request.FILES('pptx_file')
+        letters_and_digits = string.ascii_letters + string.digits
+        file_name_str = "".join(random.choice(
+            letters_and_digits)for i in range(15))
+
+        completion_certificate = request.FILES['pptx_file']
+        user = request.user.id
+        user_id = User.objects.get(id=user)
+
+        file_name = file_name_str + completion_certificate.name
+
+        img_file_name = os.path.splitext(file_name)[0]
+
+        file_path = os.path.join(
+            settings.BASE_DIR, './cert_gen_sen_app_backend/certificate_data/upload-ppt-file/', file_name)
+
+        with open(file_path, 'wb+') as destination:
+            for chunk in completion_certificate.chunks():
+                destination.write(chunk)
+
+        ppt_to_image_command = f'unoconv -f jpg ./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{file_name}'
+        os.system(ppt_to_image_command)
+
+        file_upload = CompletionCertificateTemplate.objects.create(
+            user=user_id, template=f'./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{file_name}', template_img=f'./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{img_file_name}.jpg')
+        file_upload.save()
+        return JsonResponse("Template uploaded successsfully", safe=False)
