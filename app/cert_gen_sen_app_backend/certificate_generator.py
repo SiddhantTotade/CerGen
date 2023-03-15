@@ -224,19 +224,17 @@ def generate_certificate(request, slug):
         if stu['certificate_status'] == "1":
             pass
         else:
-            pass
-            # qrcode_path = generate_qrcode(
-            #     stu["student_name"], stu["student_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
-            # certificate_path = generate_participant_certificate(
-            #     stu["student_name"], stu["certificate_id"], qrcode_path)
-            # send_certificate = send_mail("Certificate of Participation",
-            #                              "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
+            qrcode_path = generate_qrcode(
+                stu["student_name"], stu["student_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+            certificate_path = generate_participant_certificate(
+                stu["student_name"], stu["certificate_id"], qrcode_path)
+            send_certificate = send_mail("Certificate of Participation",
+                                         "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
 
-            # if send_certificate == "SENT":
-            #     Participant.objects.filter(
-            #         id=stu['id']).update(certificate_sent_status=True)
-            #     return JsonResponse("Certificate generated and sended successfully", safe=False)
-    print(stu_data)
+            if send_certificate == "SENT":
+                Participant.objects.filter(
+                    id=stu['id']).update(certificate_sent_status=True)
+                # return JsonResponse("Certificate generated and sended successfully", safe=False)
 
     return JsonResponse("Some problem occured while sending", safe=False)
 
