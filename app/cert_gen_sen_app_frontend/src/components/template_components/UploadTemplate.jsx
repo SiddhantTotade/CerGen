@@ -28,7 +28,6 @@ export const UploadTemplate = () => {
   });
 
   const [certificateType, setCertificateType] = useState("");
-  console.log(certificateType);
 
   const [previewFile, setPreviewFile] = useState(null);
   localStorage.setItem("certificatePreview", previewFile);

@@ -122,9 +122,5 @@ class MeritCertificateTemplate(models.Model):
     template_img = models.ImageField(
         upload_to='./cert_gen_sen_app_backend/certificate_data/merit_certificate_template_images')
 
-    def save(self, *args, **kwargs):
-        self.template_img = convert_ppt2image("pptx_path")
-        return super().save(*args, **kwargs)
-
     def __str__(self):
         return str(self.id)
