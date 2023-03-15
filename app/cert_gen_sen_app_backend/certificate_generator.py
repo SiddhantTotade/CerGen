@@ -234,9 +234,9 @@ def generate_certificate(request, slug):
             if send_certificate == "SENT":
                 Participant.objects.filter(
                     id=stu['id']).update(certificate_sent_status=True)
-                # return JsonResponse("Certificate generated and sended successfully", safe=False)
-
-    return JsonResponse("Some problem occured while sending", safe=False)
+                
+    return JsonResponse("Certificate generated and sended successfully", safe=False)
+    # return JsonResponse("Some problem occured while sending", safe=False)
 
 
 # Generate certificates for specific participant
