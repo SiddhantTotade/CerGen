@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { DialogActions, Button, Paper, Grid } from "@mui/material";
+import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
 import axios from "axios";
 
@@ -18,6 +18,8 @@ export const ChooseTemplate = () => {
       .then((res) => setImages(res.data));
   }, []);
 
+  console.log(images)
+
   return (
     <Grid
       sx={{
@@ -34,21 +36,25 @@ export const ChooseTemplate = () => {
       >
         <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
           <Grid container spacing={2}>
-            {Object.values(images).map((imageUrl, index) => (
-              <Grid item key={index}>
-                <Paper
-                  onClick={() => setSelectedImage(imageUrl.template_img)}
-                  style={{
-                    width: 100,
-                    height: 100,
-                    background: `url(${
-                      "http://127.0.0.1:8000" + imageUrl.template_img
-                    }) no-repeat center center / cover`,
-                    cursor: "pointer",
-                  }}
-                />
-              </Grid>
-            ))}
+            {images !== "Failed to get images" ? (
+              Object.values(images).map((imageUrl, index) => (
+                <Grid item key={index}>
+                  <Paper
+                    onClick={() => setSelectedImage(imageUrl.template_img)}
+                    style={{
+                      width: 100,
+                      height: 100,
+                      background: `url(${
+                        "http://127.0.0.1:8000" + imageUrl.template_img
+                      }) no-repeat center center / cover`,
+                      cursor: "pointer",
+                    }}
+                  />
+                </Grid>
+              ))
+            ) : (
+              <Typography>No template</Typography>
+            )}
           </Grid>
         </Grid>
         <Grid item xs={6}>
