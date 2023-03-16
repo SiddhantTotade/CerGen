@@ -9,6 +9,7 @@ from collections import OrderedDict
 from rest_framework.parsers import JSONParser
 from rest_framework import generics, permissions
 from rest_framework.response import Response
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework.viewsets import ModelViewSet
 from knox.models import AuthToken
 from .serializers import UserSerializer, RegisterSerializer
@@ -151,8 +152,7 @@ class UploadParticipant(APIView):
                                           event_dept, event_date)
             Event.id = Participant.objects.create(
                 event=event_new_id, student_name=name, student_id=student_id, email=email, certificate_status=certificate_status, certificate_id=certificate_id)
-        
-        print(excel_data)
+
         return JsonResponse("Participants uploaded successfully", safe=False)
 
     def delete(self, request, pk):
@@ -209,16 +209,28 @@ class FilteredEvent(APIView):
 
 
 class UploadCompletionTemplate(ModelViewSet):
-    queryset = CompletionCertificateTemplate.objects.all()
-    serializer_class = CompletionCertificateSerializer
-    # def post(self, request):
+    parser_classes = (MultiPartParser, FormParser)
+
+    def post(self, request):
+        # pptx_file_serializer = CompletionCertificateSerializer(
+        #     data=request.data)
+
+        # print(request.data)
+
+        # if pptx_file_serializer.is_valid():
+        #     pptx_file_serializer.save()
+
+        file = request.FILES['pptx_file']
+        user = request.user.id
+        user_id = User.objects.get(id=user)
+        CompletionCertificateTemplate.objects.create(
+            user=user_id, template=file).save()
+
         # letters_and_digits = string.ascii_letters + string.digits
         # file_name_str = "".join(random.choice(
         #     letters_and_digits)for i in range(15))
 
         # completion_certificate = request.FILES['pptx_file']
-        # user = request.user.id
-        # user_id = User.objects.get(id=user)
 
         # file_name = file_name_str + completion_certificate.name
 
@@ -237,4 +249,5 @@ class UploadCompletionTemplate(ModelViewSet):
         # file_upload = CompletionCertificateTemplate.objects.create(
         #     user=user_id, template=f'./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{file_name}', template_img=f'./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{img_file_name}.jpg')
         # file_upload.save()
-        # return JsonResponse("Template uploaded successsfully", safe=False)
+
+        return JsonResponse("Template uploaded successfully", safe=False)

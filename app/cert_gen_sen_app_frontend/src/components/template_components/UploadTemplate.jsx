@@ -56,7 +56,7 @@ export const UploadTemplate = () => {
     const url = "http://127.0.0.1:8000/api/upload-completion-template/";
 
     let formData = new FormData();
-    formData.append("user", "1");
+    formData.append("user", "Siddhant");
     formData.append("pptx_file", eventFileData);
 
     let config = {

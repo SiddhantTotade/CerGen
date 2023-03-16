@@ -2,8 +2,16 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
+import os
 
 # Create your models here.
+
+
+def convert_to_img(file_name):
+    ppt_to_image_command = f'unoconv -f jpg ./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{file_name}'
+    os.system(ppt_to_image_command)
+
+    return file_name
 
 
 class UserManager(BaseUserManager):
@@ -107,9 +115,14 @@ class Participant(models.Model):
 class CompletionCertificateTemplate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     template = models.FileField(
-        upload_to='./cert_gen_sen_app_backend/certificate_data/completion_certificate_templates')
+        upload_to='certificate_data/completion_certificate_templates')
     template_img = models.ImageField(
-        upload_to='./cert_gen_sen_app_backend/certificate_data/completion_certificate_template_images')
+        upload_to='certificate_data/completion_certificate_template_images', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.template_img = convert_to_img(
+            f'certificate_data/completion_certificate_templates/{self.template}')
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.id)
