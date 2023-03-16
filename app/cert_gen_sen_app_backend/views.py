@@ -209,11 +209,9 @@ class FilteredEvent(APIView):
 
 
 class UploadCompletionTemplate(APIView):
-    # parser_classes = (MultiPartParser, FormParser)
-    # queryset = CompletionCertificateTemplate.objects.all()
-
     def get(self, request):
-        image_file = CompletionCertificateTemplate.objects.filter(user=request.user.id)
+        image_file = CompletionCertificateTemplate.objects.filter(
+            user=request.user.id)
 
         if image_file:
             image_serializer = CompletionCertificateSerializer(
