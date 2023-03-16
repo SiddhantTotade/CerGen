@@ -69,10 +69,4 @@ class ParticipantSerializer(serializers.ModelSerializer):
 class CompletionCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompletionCertificateTemplate
-        fields = ['user', 'template']
-
-    def create(self, validated_data):
-        completion_template = CompletionCertificateTemplate.objects.create(
-            user=validated_data['user'], template=validated_data['pptx_file'])
-        completion_template.save()
-        return completion_template
+        fields = ['template_img']

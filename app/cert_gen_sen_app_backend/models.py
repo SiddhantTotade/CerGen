@@ -8,10 +8,15 @@ import os
 
 
 def convert_to_img(file_name):
-    ppt_to_image_command = f'unoconv -f jpg ./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{file_name}'
+    pptx_file_name = str(file_name).replace(
+        'completion_certificate_templates/', "")
+
+    ppt_to_image_command = f'unoconv -f jpg certificate-data/{pptx_file_name}'
     os.system(ppt_to_image_command)
 
-    return file_name
+    img_file_name = os.path.splitext(str(pptx_file_name))[0]
+
+    return f"{img_file_name}.jpg"
 
 
 class UserManager(BaseUserManager):
@@ -115,13 +120,13 @@ class Participant(models.Model):
 class CompletionCertificateTemplate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     template = models.FileField(
-        upload_to='certificate_data/completion_certificate_templates')
+        upload_to='completion-certificate-templates/')
     template_img = models.ImageField(
-        upload_to='certificate_data/completion_certificate_template_images', null=True, blank=True)
+        upload_to='completion-certificate-template-images/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.template_img = convert_to_img(
-            f'certificate_data/completion_certificate_templates/{self.template}')
+
+        self.template_img = convert_to_img(self.template)
         return super().save(*args, **kwargs)
 
     def __str__(self):

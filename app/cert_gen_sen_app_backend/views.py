@@ -208,46 +208,24 @@ class FilteredEvent(APIView):
         return JsonResponse("Event deleted successfully", safe=False)
 
 
-class UploadCompletionTemplate(ModelViewSet):
-    parser_classes = (MultiPartParser, FormParser)
+class UploadCompletionTemplate(APIView):
+    # parser_classes = (MultiPartParser, FormParser)
+    # queryset = CompletionCertificateTemplate.objects.all()
+
+    def get(self, request):
+        image_file = CompletionCertificateTemplate.objects.filter(user=request.user.id)
+
+        if image_file:
+            image_serializer = CompletionCertificateSerializer(
+                image_file, many=True)
+            return JsonResponse(image_serializer.data, safe=False)
+        return JsonResponse("Failed to get images", safe=False)
 
     def post(self, request):
-        # pptx_file_serializer = CompletionCertificateSerializer(
-        #     data=request.data)
-
-        # print(request.data)
-
-        # if pptx_file_serializer.is_valid():
-        #     pptx_file_serializer.save()
-
         file = request.FILES['pptx_file']
         user = request.user.id
         user_id = User.objects.get(id=user)
         CompletionCertificateTemplate.objects.create(
             user=user_id, template=file).save()
-
-        # letters_and_digits = string.ascii_letters + string.digits
-        # file_name_str = "".join(random.choice(
-        #     letters_and_digits)for i in range(15))
-
-        # completion_certificate = request.FILES['pptx_file']
-
-        # file_name = file_name_str + completion_certificate.name
-
-        # img_file_name = os.path.splitext(file_name)[0]
-
-        # file_path = os.path.join(
-        #     settings.BASE_DIR, './cert_gen_sen_app_backend/certificate_data/upload-ppt-file/', file_name)
-
-        # with open(file_path, 'wb+') as destination:
-        #     for chunk in completion_certificate.chunks():
-        #         destination.write(chunk)
-
-        # ppt_to_image_command = f'unoconv -f jpg ./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{file_name}'
-        # os.system(ppt_to_image_command)
-
-        # file_upload = CompletionCertificateTemplate.objects.create(
-        #     user=user_id, template=f'./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{file_name}', template_img=f'./cert_gen_sen_app_backend/certificate_data/upload-ppt-file/{img_file_name}.jpg')
-        # file_upload.save()
 
         return JsonResponse("Template uploaded successfully", safe=False)

@@ -1,19 +1,23 @@
 import React, { useState } from "react";
 import { DialogActions, Button, Paper, Grid } from "@mui/material";
+import { useEffect } from "react";
+import axios from "axios";
 
 export const ChooseTemplate = () => {
   const [selectedImage, setSelectedImage] = useState(null);
-  const images = [
-    "https://images.unsplash.com/photo-1678329887232-a48991da8286?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-    "https://plus.unsplash.com/premium_photo-1674740444237-6677634b6838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60",
-    "https://images.unsplash.com/photo-1678347761208-b181d59781b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-    "https://images.unsplash.com/photo-1678329887232-a48991da8286?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-    "https://plus.unsplash.com/premium_photo-1674740444237-6677634b6838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60",
-    "https://images.unsplash.com/photo-1678347761208-b181d59781b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-    "https://images.unsplash.com/photo-1678329887232-a48991da8286?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyfHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-    "https://plus.unsplash.com/premium_photo-1674740444237-6677634b6838?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwyNXx8fGVufDB8fHx8&auto=format&fit=crop&w=500&q=60",
-    "https://images.unsplash.com/photo-1678347761208-b181d59781b1?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHw4fHx8ZW58MHx8fHw%3D&auto=format&fit=crop&w=500&q=60",
-  ];
+
+  const [images, setImages] = useState("");
+
+  useEffect(() => {
+    const url = "http://127.0.0.1:8000/api/upload-completion-template/";
+
+    axios
+      .get(url, {
+        headers: { Authorization: "Token " + localStorage.getItem("token") },
+      })
+      .then((res) => setImages(res.data));
+  }, []);
+
   return (
     <Grid
       sx={{
@@ -30,14 +34,16 @@ export const ChooseTemplate = () => {
       >
         <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
           <Grid container spacing={2}>
-            {images.map((imageUrl, index) => (
+            {Object.values(images).map((imageUrl, index) => (
               <Grid item key={index}>
                 <Paper
-                  onClick={() => setSelectedImage(imageUrl)}
+                  onClick={() => setSelectedImage(imageUrl.template_img)}
                   style={{
                     width: 100,
                     height: 100,
-                    background: `url(${imageUrl}) no-repeat center center / cover`,
+                    background: `url(${
+                      "http://127.0.0.1:8000" + imageUrl.template_img
+                    }) no-repeat center center / cover`,
                     cursor: "pointer",
                   }}
                 />
@@ -51,11 +57,14 @@ export const ChooseTemplate = () => {
             style={{
               width: "100%",
               height: "100%",
-              background: selectedImage
-                ? `url(${selectedImage}) no-repeat center center / cover`
-                : "white",
             }}
-          />
+          >
+            <img
+              src={
+                selectedImage ? "http://127.0.0.1:8000/" + selectedImage : ""
+              }
+            />
+          </Paper>
         </Grid>
       </Grid>
       <DialogActions sx={{ marginTop: "20px" }}>

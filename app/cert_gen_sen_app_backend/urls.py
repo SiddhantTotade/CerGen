@@ -24,5 +24,5 @@ urlpatterns = [
     path("generate-certificate/<slug:slug>/<int:pk>", generate_certificate_by_id),
     path("preview-certificate/", Ppt2Image.as_view()),
     path("upload-completion-template/",
-         UploadCompletionTemplate.as_view({'get': 'list'})),
+         UploadCompletionTemplate.as_view()),
 ]
