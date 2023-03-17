@@ -125,7 +125,6 @@ class CompletionCertificateTemplate(models.Model):
         upload_to='completion-certificate-template-images/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
-
         self.template_img = convert_to_img(self.template)
         return super().save(*args, **kwargs)
 
@@ -136,9 +135,13 @@ class CompletionCertificateTemplate(models.Model):
 class MeritCertificateTemplate(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     template = models.FileField(
-        upload_to='./cert_gen_sen_app_backend/certificate_data/merit_certificate_templates')
+        upload_to='merit-certificate-templates/')
     template_img = models.ImageField(
-        upload_to='./cert_gen_sen_app_backend/certificate_data/merit_certificate_template_images')
+        upload_to='merit-certificate-template-images/', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.template_img = convert_to_img(self.template)
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return str(self.id)

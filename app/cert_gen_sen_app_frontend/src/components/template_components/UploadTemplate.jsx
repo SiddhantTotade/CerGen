@@ -52,11 +52,18 @@ export const UploadTemplate = () => {
     axios.post(url, formData, config).then((res) => setPreviewFile(res.data));
   };
 
-  const uploadCompletionTemplate = () => {
-    const url = "http://127.0.0.1:8000/api/upload-completion-template/";
+  const handleUploadTemplate = () => {
+    let url = "";
+
+    if (certificateType === "Participation") {
+      url = "http://127.0.0.1:8000/api/upload-completion-template/";
+    } else if (certificateType === "Merit") {
+      url = "http://127.0.0.1:8000/api/upload-merit-template/";
+    } else {
+      return console.log("Select one of the option below");
+    }
 
     let formData = new FormData();
-    formData.append("user", "Siddhant");
     formData.append("pptx_file", eventFileData);
 
     let config = {
@@ -202,7 +209,7 @@ export const UploadTemplate = () => {
           <Button variant="contained" onClick={previewTemplateFile}>
             Preview
           </Button>
-          <Button variant="contained" onClick={uploadCompletionTemplate}>
+          <Button variant="contained" onClick={handleUploadTemplate}>
             Upload
           </Button>
         </DialogActions>

@@ -227,3 +227,24 @@ class UploadCompletionTemplate(APIView):
             user=user_id, template=file).save()
 
         return JsonResponse("Template uploaded successfully", safe=False)
+
+
+class UploadMeritTemplate(APIView):
+    def get(self, request):
+        image_file = MeritCertificateTemplate.objects.filter(
+            user=request.user.id)
+
+        if image_file:
+            image_serializer = MeritCertificateSerializer(
+                image_file, many=True)
+            return JsonResponse(image_serializer.data, safe=False)
+        return JsonResponse("Failed to get images", safe=False)
+
+    def post(self, request):
+        file = request.FILES['pptx_file']
+        user = request.user.id
+        user_id = User.objects.get(id=user)
+        MeritCertificateTemplate.objects.create(
+            user=user_id, template=file).save()
+
+        return JsonResponse("Template uploaded successfully", safe=False)

@@ -4,7 +4,10 @@ import { useEffect } from "react";
 import axios from "axios";
 
 export const ChooseTemplate = () => {
-  const [selectedImage, setSelectedImage] = useState(null);
+  const [selectedImage, setSelectedImage] = useState({
+    url: null,
+    id: "",
+  });
 
   const [images, setImages] = useState("");
 
@@ -17,8 +20,6 @@ export const ChooseTemplate = () => {
       })
       .then((res) => setImages(res.data));
   }, []);
-
-  console.log(images)
 
   return (
     <Grid
@@ -40,7 +41,12 @@ export const ChooseTemplate = () => {
               Object.values(images).map((imageUrl, index) => (
                 <Grid item key={index}>
                   <Paper
-                    onClick={() => setSelectedImage(imageUrl.template_img)}
+                    onClick={() =>
+                      setSelectedImage({
+                        url: imageUrl.template_img,
+                        id: index,
+                      })
+                    }
                     style={{
                       width: 100,
                       height: 100,
@@ -48,6 +54,7 @@ export const ChooseTemplate = () => {
                         "http://127.0.0.1:8000" + imageUrl.template_img
                       }) no-repeat center center / cover`,
                       cursor: "pointer",
+                      border: selectedImage.id === index ? "2px solid blue" : "",
                     }}
                   />
                 </Grid>
@@ -63,12 +70,18 @@ export const ChooseTemplate = () => {
             style={{
               width: "100%",
               height: "100%",
+              display:'flex',
+              justifyContent:'center',
+              alignItems:'center'
             }}
           >
             <img
               src={
-                selectedImage ? "http://127.0.0.1:8000/" + selectedImage : ""
+                selectedImage.url
+                  ? "http://127.0.0.1:8000/" + selectedImage.url
+                  : ""
               }
+              alt="Preview"
             />
           </Paper>
         </Grid>

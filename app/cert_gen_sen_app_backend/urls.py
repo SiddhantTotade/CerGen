@@ -25,4 +25,6 @@ urlpatterns = [
     path("preview-certificate/", Ppt2Image.as_view()),
     path("upload-completion-template/",
          UploadCompletionTemplate.as_view()),
+    path("upload-merit-template/",
+         UploadMeritTemplate.as_view()),
 ]
