@@ -246,7 +246,7 @@ export default function MiniDrawer() {
                       <FileUploadIcon />
                     </ListItemIcon>
                     <ListItemText
-                      primary="Upload CSV"
+                      primary="Upload Participants"
                       sx={{ opacity: open ? 1 : 0 }}
                     />
                   </ListItemButton>

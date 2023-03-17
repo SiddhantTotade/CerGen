@@ -3,7 +3,7 @@ import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
 import axios from "axios";
 
-export const ChooseTemplate = () => {
+export const ChooseCompletionTemplate = () => {
   const [selectedImage, setSelectedImage] = useState({
     url: null,
     id: "",

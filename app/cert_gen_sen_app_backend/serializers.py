@@ -74,5 +74,5 @@ class CompletionCertificateSerializer(serializers.ModelSerializer):
 
 class MeritCertificateSerializer(serializers.ModelSerializer):
     class Meta:
-        models = MeritCertificateTemplate
+        model = MeritCertificateTemplate
         fields = ['template_img']

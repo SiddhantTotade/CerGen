@@ -9,7 +9,8 @@ import { Box, Tab } from "@mui/material";
 import PropTypes from "prop-types";
 import { Tabs } from "@mui/material";
 import { UploadTemplate } from "./UploadTemplate";
-import { ChooseTemplate } from "./ChooseTemplate";
+import { ChooseCompletionTemplate } from "./ChooseCompletionTemplate";
+import { ChooseMeritTemplate } from "./ChooseMeritCertificate";
 
 function TabPanel(props) {
   const { children, value, index, ...other } = props;
@@ -170,14 +171,18 @@ export default function CertificateTemplate(props) {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <Tab label="Choose Template" {...a11yProps(0)} />
-              <Tab label="Upload Template" {...a11yProps(1)} />
+              <Tab label="Choose Participantion Template" {...a11yProps(0)} />
+              <Tab label="Choose Merit Template" {...a11yProps(1)} />
+              <Tab label="Upload Template" {...a11yProps(2)} />
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <ChooseTemplate />
+            <ChooseCompletionTemplate />
           </TabPanel>
           <TabPanel value={value} index={1}>
+            <ChooseMeritTemplate />
+          </TabPanel>
+          <TabPanel value={value} index={2}>
             <UploadTemplate />
           </TabPanel>
         </Box>
