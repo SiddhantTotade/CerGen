@@ -25,17 +25,21 @@ import Silver from "../medals_images/silver-medal.png";
 import Bronze from "../medals_images/bronze-medal.png";
 import BackdropSpinner from "../components/base_components/Backdrop";
 import AlertSnackbar from "../components/base_components/AlertSnackbar";
+import { ChooseCompletionTemplate } from "../components/template_components/ChooseCompletionTemplate";
 
 const createBtns = {
   marginBottom: "10px",
   marginRight: "10px",
 };
 
-export default function SpecificEvent() {
+export default function SpecificEvent(props) {
   const [openSnack, setOpenSnack] = useState(false);
   const [message, setMessage] = useState("");
   const [alertType, setAlertType] = useState("");
   const [openSpinner, setOpenSpinner] = useState(false);
+
+  const completionImagePath = props.completionImagePath;
+  const meritImagePath = props.meritImagePath;
 
   const [eventsData, setEventsData] = useState([]);
   const [participantDetails] = useState({
@@ -85,13 +89,23 @@ export default function SpecificEvent() {
   event_slug = ReverseString(event_slug.replace("/", ""));
 
   function generateCertificate() {
+    if (completionImagePath || meritImagePath === undefined) {
+      return console.log("Please select a template to generate certificate");
+    }
+
     setOpenSpinner(true);
     setTimeout(() => {
       setOpenSpinner(false);
     }, 5000);
+
     const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
+
+    const formData = new FormData();
+    formData.append("completion", completionImagePath);
+    formData.append("merit", meritImagePath);
+
     axios
-      .get(url, {
+      .post(url, formData, {
         headers: { Authorization: "Token " + localStorage.getItem("token") },
       })
       .then(
