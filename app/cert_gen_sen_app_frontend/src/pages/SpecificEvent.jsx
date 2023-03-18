@@ -25,21 +25,20 @@ import Silver from "../medals_images/silver-medal.png";
 import Bronze from "../medals_images/bronze-medal.png";
 import BackdropSpinner from "../components/base_components/Backdrop";
 import AlertSnackbar from "../components/base_components/AlertSnackbar";
-import { ChooseCompletionTemplate } from "../components/template_components/ChooseCompletionTemplate";
 
 const createBtns = {
   marginBottom: "10px",
   marginRight: "10px",
 };
 
-export default function SpecificEvent(props) {
+export default function SpecificEvent() {
   const [openSnack, setOpenSnack] = useState(false);
   const [message, setMessage] = useState("");
   const [alertType, setAlertType] = useState("");
   const [openSpinner, setOpenSpinner] = useState(false);
 
-  const completionImagePath = props.completionImagePath;
-  const meritImagePath = props.meritImagePath;
+  const completionImagePath = localStorage.getItem("CompletionCertifcatePath");
+  const meritImagePath = localStorage.getItem("MeritCertificatePath");
 
   const [eventsData, setEventsData] = useState([]);
   const [participantDetails] = useState({
@@ -89,7 +88,7 @@ export default function SpecificEvent(props) {
   event_slug = ReverseString(event_slug.replace("/", ""));
 
   function generateCertificate() {
-    if (completionImagePath || meritImagePath === undefined) {
+    if ((completionImagePath || meritImagePath) === undefined) {
       return console.log("Please select a template to generate certificate");
     }
 

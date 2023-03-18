@@ -2,7 +2,6 @@ import React, { useState } from "react";
 import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
 import { useEffect } from "react";
 import axios from "axios";
-import SpecificEvent from "../../pages/SpecificEvent";
 
 export const ChooseMeritTemplate = () => {
   const [selectedImage, setSelectedImage] = useState({
@@ -11,8 +10,6 @@ export const ChooseMeritTemplate = () => {
   });
 
   const [images, setImages] = useState("");
-
-  const [imagePath, setImagePath] = useState("");
 
   useEffect(() => {
     const url = "http://127.0.0.1:8000/api/upload-merit-template/";
@@ -95,15 +92,15 @@ export const ChooseMeritTemplate = () => {
           <Button variant="contained">Cancel</Button>
           <Button
             variant="contained"
-            onClick={(e) => setImagePath(selectedImage.url)}
+            onClick={localStorage.setItem(
+              "MeritCertificatePath",
+              selectedImage.url
+            )}
           >
             Use this template
           </Button>
         </DialogActions>
       </Grid>
-      <div className="hidden">
-        <SpecificEvent meritImagePath={imagePath} />
-      </div>
     </>
   );
 };
