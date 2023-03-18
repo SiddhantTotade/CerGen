@@ -37,8 +37,8 @@ export default function SpecificEvent() {
   const [alertType, setAlertType] = useState("");
   const [openSpinner, setOpenSpinner] = useState(false);
 
-  const completionImagePath = localStorage.getItem("CompletionCertifcatePath");
-  const meritImagePath = localStorage.getItem("MeritCertificatePath");
+  let completionImagePath = localStorage.getItem("CompletionCertifcatePath");
+  let meritImagePath = localStorage.getItem("MeritCertificatePath");
 
   const [eventsData, setEventsData] = useState([]);
   const [participantDetails] = useState({
@@ -87,8 +87,10 @@ export default function SpecificEvent() {
   const ReverseString = (event_slug) => [...event_slug].reverse().join("");
   event_slug = ReverseString(event_slug.replace("/", ""));
 
+  // console.log(localStorage.getItem("CompletionCertificatePath") === "null");
+
   function generateCertificate() {
-    if ((completionImagePath || meritImagePath) === undefined) {
+    if (completionImagePath === "null" || meritImagePath === "null") {
       return console.log("Please select a template to generate certificate");
     }
 
