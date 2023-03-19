@@ -1,28 +1,25 @@
-from rest_framework.views import APIView
+from django.contrib.auth import login
 from django.http import JsonResponse
-from .models import *
-from .serializers import *
-from .resources import *
-import openpyxl
-from itertools import islice
-from collections import OrderedDict
+from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from rest_framework import generics, permissions
 from rest_framework.response import Response
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.viewsets import ModelViewSet
-from knox.models import AuthToken
-from .serializers import UserSerializer, RegisterSerializer
-from django.contrib.auth import login
 from rest_framework import permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
-from knox.views import LoginView as KnoxLoginView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
-from django.conf import settings
+from .models import *
+from .serializers import *
+from .resources import *
+from .serializers import UserSerializer, RegisterSerializer
+from itertools import islice
+from collections import OrderedDict
+from knox.models import AuthToken
+from knox.views import LoginView as KnoxLoginView
+from itertools import chain
+import openpyxl
 import random
-import os
-import string
+import json
 # Create your views here.
 
 
@@ -221,12 +218,18 @@ class UploadCompletionTemplate(APIView):
 
     def post(self, request):
         file = request.FILES['pptx_file']
-        user = request.user.id
-        user_id = User.objects.get(id=user)
-        CompletionCertificateTemplate.objects.create(
-            user=user_id, template=file).save()
+        contribute = request.data['contribute']
 
-        return JsonResponse("Template uploaded successfully", safe=False)
+        if contribute == "true":
+            ContributedCompletionCertificates.objects.create(
+                template=file).save()
+        else:
+            user = request.user.id
+            user_id = User.objects.get(id=user)
+            CompletionCertificateTemplate.objects.create(
+                user=user_id, template=file).save()
+
+        return JsonResponse("Completion template uploaded successfully", safe=False)
 
 
 class UploadMeritTemplate(APIView):
@@ -242,9 +245,36 @@ class UploadMeritTemplate(APIView):
 
     def post(self, request):
         file = request.FILES['pptx_file']
-        user = request.user.id
-        user_id = User.objects.get(id=user)
-        MeritCertificateTemplate.objects.create(
-            user=user_id, template=file).save()
+        contribute = request.data['contribute']
 
-        return JsonResponse("Template uploaded successfully", safe=False)
+        if contribute == "true":
+            ContributedMeritCertificates.objects.create(template=file).save()
+        else:
+            user = request.user.id
+            user_id = User.objects.get(id=user)
+            MeritCertificateTemplate.objects.create(
+                user=user_id, template=file).save()
+
+        return JsonResponse("Merit template uploaded successfully", safe=False)
+
+
+class ContributeCompletion(APIView):
+    def get(self, request):
+        contribute_img = ContributedCompletionCertificates.objects.all()
+
+        if contribute_img:
+            contribute_img_serializers = ContributeCompletionCertificateSerializer(
+                contribute_img, many=True)
+            return JsonResponse(contribute_img_serializers.data, safe=False)
+        return JsonResponse("Failed to get images", safe=False)
+
+
+class ContributeMerit(APIView):
+    def get(self, request):
+        contribute_img = ContributedMeritCertificates.objects.all()
+
+        if contribute_img:
+            contribute_img_serializers = ContributeMeritCertificateSerializer(
+                contribute_img, many=True)
+            return JsonResponse(contribute_img_serializers.data, safe=False)
+        return JsonResponse("Failed to get images", safe=False)

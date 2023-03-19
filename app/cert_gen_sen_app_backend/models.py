@@ -118,7 +118,7 @@ class Participant(models.Model):
 
 
 class CompletionCertificateTemplate(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     template = models.FileField(
         upload_to='completion-certificate-templates/')
     template_img = models.ImageField(
@@ -133,11 +133,39 @@ class CompletionCertificateTemplate(models.Model):
 
 
 class MeritCertificateTemplate(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     template = models.FileField(
         upload_to='merit-certificate-templates/')
     template_img = models.ImageField(
         upload_to='merit-certificate-template-images/', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.template_img = convert_to_img(self.template)
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class ContributedCompletionCertificates(models.Model):
+    template = models.FileField(
+        upload_to='contributed-completion-certificate-templates/')
+    template_img = models.ImageField(
+        upload_to='contributed-completion-certificate-template-images/', null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        self.template_img = convert_to_img(self.template)
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.id)
+
+
+class ContributedMeritCertificates(models.Model):
+    template = models.FileField(
+        upload_to='contributed-merit-certificate-templates/')
+    template_img = models.ImageField(
+        upload_to='contributed-merit-certificate-template-images/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.template_img = convert_to_img(self.template)

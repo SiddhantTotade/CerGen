@@ -76,3 +76,15 @@ class MeritCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = MeritCertificateTemplate
         fields = ['template_img']
+
+
+class ContributeCompletionCertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContributedCompletionCertificates
+        fields = ['template_img']
+
+
+class ContributeMeritCertificateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ContributedMeritCertificates
+        fields = ['template_img']

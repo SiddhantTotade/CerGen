@@ -30,8 +30,6 @@ export const UploadTemplate = () => {
   const [certificateType, setCertificateType] = useState("");
   const [contribute, setContribute] = useState(false)
 
-  console.log(contribute);
-
   const [previewFile, setPreviewFile] = useState(null);
   localStorage.setItem("certificatePreview", previewFile);
 
@@ -68,6 +66,7 @@ export const UploadTemplate = () => {
 
     let formData = new FormData();
     formData.append("pptx_file", eventFileData);
+    formData.append("contribute", contribute);
 
     let config = {
       headers: {

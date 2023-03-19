@@ -10,6 +10,7 @@ export const ChooseCompletionTemplate = () => {
   });
 
   const [images, setImages] = useState("");
+  const [contributeImage, setContributeImages] = useState("")
 
   useEffect(() => {
     const url = "http://127.0.0.1:8000/api/upload-completion-template/";
@@ -19,6 +20,16 @@ export const ChooseCompletionTemplate = () => {
         headers: { Authorization: "Token " + localStorage.getItem("token") },
       })
       .then((res) => setImages(res.data));
+  }, []);
+
+  useEffect(() => {
+    const url = "http://127.0.0.1:8000/api/contribute-completion-template/";
+
+    axios
+      .get(url, {
+        headers: { Authorization: "Token " + localStorage.getItem("token") },
+      })
+      .then((res) => setContributeImages(res.data));
   }, []);
 
   return (
@@ -39,7 +50,7 @@ export const ChooseCompletionTemplate = () => {
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
             <Grid container spacing={2}>
               {images !== "Failed to get images" ? (
-                Object.values(images).map((imageUrl, index) => (
+                Object.values(images.concat(contributeImage)).map((imageUrl, index) => (
                   <Grid item key={index}>
                     <Paper
                       onClick={() =>
@@ -51,9 +62,8 @@ export const ChooseCompletionTemplate = () => {
                       style={{
                         width: 150,
                         height: 100,
-                        background: `url(${
-                          "http://127.0.0.1:8000" + imageUrl.template_img
-                        }) no-repeat center center / cover`,
+                        background: `url(${"http://127.0.0.1:8000" + imageUrl.template_img
+                          }) no-repeat center center / cover`,
                         cursor: "pointer",
                         border:
                           selectedImage.id === index ? "2px solid blue" : "2px solid gainsboro",
