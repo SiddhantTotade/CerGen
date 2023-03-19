@@ -37,8 +37,8 @@ export default function SpecificEvent() {
   const [alertType, setAlertType] = useState("");
   const [openSpinner, setOpenSpinner] = useState(false);
 
-  let completionImagePath = localStorage.getItem("CompletionCertifcatePath");
-  let meritImagePath = localStorage.getItem("MeritCertificatePath");
+  let completionImagePath = localStorage.getItem("CompletionCertificatePath").replace('jpg', 'pptx')
+  let meritImagePath = localStorage.getItem("MeritCertificatePath").replace('jpg', 'pptx');
 
   const [eventsData, setEventsData] = useState([]);
   const [participantDetails] = useState({
@@ -88,7 +88,7 @@ export default function SpecificEvent() {
   event_slug = ReverseString(event_slug.replace("/", ""));
 
   function generateCertificate() {
-    if (completionImagePath === "null" || meritImagePath === "null") {
+    if (completionImagePath == "null" || meritImagePath == "null") {
       return console.log("Please select a template to generate certificate");
     }
 
@@ -100,8 +100,8 @@ export default function SpecificEvent() {
     const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
 
     const formData = new FormData();
-    formData.append("completion", completionImagePath.replace("jpg", "pptx"));
-    formData.append("merit", meritImagePath.replace("jpg", "pptx"));
+    formData.append("completion", completionImagePath);
+    formData.append("merit", meritImagePath);
 
     axios
       .post(url, formData, {

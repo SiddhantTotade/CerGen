@@ -168,9 +168,9 @@ def generate_qrcode(stu_name, stu_id, cert_id, eve_name, eve_department, eve_dat
 
 # Generate certificates for all participants type
 def generate_participant_certificate(stu_name, cert_id, qrcode_path, merit_certificate_path, completion_certificate_path):
-    replacer = TextReplacer('./cert_gen_sen_app_backend/certificate_data/certificate-template/certificate_of_completion.pptx',
+    replacer = TextReplacer(f'../app{completion_certificate_path}',
                             slides="", tables=True, charts=True, textframes=True)
-
+    
     replacer.replace_text(
         [("{{StudentName}}", stu_name), ("{{UID}}", cert_id)])
 
@@ -208,8 +208,8 @@ class GenerateCertificate(APIView):
         event = Event.objects.filter(slug=slug)
         participants = Participant.objects.filter(event=obj_event)
 
-        merit_certificate_path = request.data['merit']
         completion_certificate_path = request.data['completion']
+        merit_certificate_path = request.data['merit']
 
         stu_data = []
         eve_data = OrderedDict()
@@ -233,12 +233,12 @@ class GenerateCertificate(APIView):
                     stu["student_name"], stu["student_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                 certificate_path = generate_participant_certificate(
                     stu["student_name"], stu["certificate_id"], qrcode_path, merit_certificate_path, completion_certificate_path)
-                send_certificate = send_mail("Certificate of Participation",
-                                             "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
+                # send_certificate = send_mail("Certificate of Participation",
+                #                              "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
 
-                if send_certificate == "SENT":
-                    Participant.objects.filter(
-                        id=stu['id']).update(certificate_sent_status=True)
+                # if send_certificate == "SENT":
+                #     Participant.objects.filter(
+                #         id=stu['id']).update(certificate_sent_status=True)
 
         return JsonResponse("Certificate generated and sended successfully", safe=False)
         # return JsonResponse("Some problem occured while sending", safe=False)
