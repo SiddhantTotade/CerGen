@@ -87,8 +87,6 @@ export default function SpecificEvent() {
   const ReverseString = (event_slug) => [...event_slug].reverse().join("");
   event_slug = ReverseString(event_slug.replace("/", ""));
 
-  // console.log(localStorage.getItem("CompletionCertificatePath") === "null");
-
   function generateCertificate() {
     if (completionImagePath === "null" || meritImagePath === "null") {
       return console.log("Please select a template to generate certificate");
@@ -102,8 +100,8 @@ export default function SpecificEvent() {
     const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
 
     const formData = new FormData();
-    formData.append("completion", completionImagePath);
-    formData.append("merit", meritImagePath);
+    formData.append("completion", completionImagePath.replace("jpg", "pptx"));
+    formData.append("merit", meritImagePath.replace("jpg", "pptx"));
 
     axios
       .post(url, formData, {
