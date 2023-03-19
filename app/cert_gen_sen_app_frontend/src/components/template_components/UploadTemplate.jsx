@@ -192,6 +192,9 @@ export const UploadTemplate = () => {
               style={{
                 width: "100%",
                 height: "100%",
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
               }}
             >
               <img
@@ -199,7 +202,7 @@ export const UploadTemplate = () => {
                   "data:image/jpg;base64, " +
                   localStorage.getItem("certificatePreview")
                 }
-                alt=""
+                alt="Preview"
               />
             </Paper>
           </Grid>

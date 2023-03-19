@@ -167,10 +167,10 @@ def generate_qrcode(stu_name, stu_id, cert_id, eve_name, eve_department, eve_dat
 
 
 # Generate certificates for all participants type
-def generate_participant_certificate(stu_name, cert_id, qrcode_path, merit_certificate_path, completion_certificate_path):
+def generate_participant_certificate(stu_name, cert_id, qrcode_path, completion_certificate_path):
     replacer = TextReplacer(f'../app{completion_certificate_path}',
                             slides="", tables=True, charts=True, textframes=True)
-    
+
     replacer.replace_text(
         [("{{StudentName}}", stu_name), ("{{UID}}", cert_id)])
 
@@ -197,8 +197,40 @@ def generate_participant_certificate(stu_name, cert_id, qrcode_path, merit_certi
 
 
 # Generate certificates for merit participants
-def generate_merit_certificate(stu_name, cert_id, cert_status):
-    pass
+def generate_merit_certificate(stu_name, cert_id, rank, qrcode_path, merit_certificate_path):
+    replacer = TextReplacer(f'../app{merit_certificate_path}',
+                            slides="", tables=True, charts=True, textframes=True)
+
+    if (rank == "1"):
+        replacer.replace_text(
+            [("{{StudentName}}", stu_name), ("{{UID}}", cert_id), ("{{POS}}", f"{rank} st")])
+    elif (rank == "2"):
+        replacer.replace_text(
+            [("{{StudentName}}", stu_name), ("{{UID}}", cert_id), ("{{POS}}", f"{rank} nd")])
+    elif (rank == "3"):
+        replacer.replace_text(
+            [("{{StudentName}}", stu_name), ("{{UID}}", cert_id), ("{{POS}}", f"{rank} rd")])
+
+    replacer.write_presentation_to_file(
+        f'./cert_gen_sen_app_backend/certificate_data/ppt-certificates/{cert_id} - {stu_name}.pptx')
+
+    pptx_path = f'./cert_gen_sen_app_backend/certificate_data/ppt-certificates/{cert_id} - {stu_name}.pptx'
+
+    place_qrcode(pptx_path, qrcode_path, "{{QR}}")
+
+    path = './cert_gen_sen_app_backend/certificate_data/ppt-certificates'
+    ext = 'pptx'
+
+    files = [f for f in glob.glob(
+        path + "/**/*.{}".format(ext), recursive=True)]
+
+    for f in tqdm.tqdm(files):
+        command = "unoconv -f pdf \"{}\"".format(f)
+        move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/participants-certificates/"
+        os.system(command)
+        os.system(move_file)
+
+    return f'./cert_gen_sen_app_backend/certificate_data/merit-certificates/{cert_id} - {stu_name}.pdf'
 
 
 # Generate certificates for all
@@ -226,13 +258,22 @@ class GenerateCertificate(APIView):
             eve_data['from_date'] = eve.from_date.strftime('%d-%m-%Y')
 
         for stu in stu_data:
-            if stu['certificate_status'] == "1":
-                pass
+            if stu['certificate_status'] == "1" or stu['certificate_status'] == "2" or stu['certificate_status'] == "3":
+                qrcode_path = generate_qrcode(
+                    stu["student_name"], stu["student_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+                certificate_path = generate_merit_certificate(
+                    stu['student_name'], stu['certificate_id'], stu['certificate_status'], qrcode_path, merit_certificate_path)
+                # send_certificate = send_mail("Certificate of Participation",
+                #                              "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
+
+                # if send_certificate == "SENT":
+                #     Participant.objects.filter(
+                #         id=stu['id']).update(certificate_sent_status=True)
             else:
                 qrcode_path = generate_qrcode(
                     stu["student_name"], stu["student_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                 certificate_path = generate_participant_certificate(
-                    stu["student_name"], stu["certificate_id"], qrcode_path, merit_certificate_path, completion_certificate_path)
+                    stu["student_name"], stu["certificate_id"], qrcode_path, completion_certificate_path)
                 # send_certificate = send_mail("Certificate of Participation",
                 #                              "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
 

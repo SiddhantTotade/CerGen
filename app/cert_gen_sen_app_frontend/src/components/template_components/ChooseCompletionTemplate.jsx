@@ -49,14 +49,14 @@ export const ChooseCompletionTemplate = () => {
                         })
                       }
                       style={{
-                        width: 130,
+                        width: 150,
                         height: 100,
                         background: `url(${
                           "http://127.0.0.1:8000" + imageUrl.template_img
                         }) no-repeat center center / cover`,
                         cursor: "pointer",
                         border:
-                          selectedImage.id === index ? "2px solid blue" : "",
+                          selectedImage.id === index ? "2px solid blue" : "2px solid gainsboro",
                       }}
                     />
                   </Grid>
