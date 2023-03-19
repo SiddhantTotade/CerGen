@@ -28,6 +28,9 @@ export const UploadTemplate = () => {
   });
 
   const [certificateType, setCertificateType] = useState("");
+  const [contribute, setContribute] = useState(false)
+
+  console.log(contribute);
 
   const [previewFile, setPreviewFile] = useState(null);
   localStorage.setItem("certificatePreview", previewFile);
@@ -171,7 +174,7 @@ export const UploadTemplate = () => {
                       alignItems: "center",
                       justifyContent: "flex-start",
                     }}
-                    control={<Checkbox name="contribute" />}
+                    control={<Checkbox name="contribute" onClick={() => contribute ? setContribute(false) : setContribute(true)} />}
                     label="Contribute"
                   />
                   <Tooltip
