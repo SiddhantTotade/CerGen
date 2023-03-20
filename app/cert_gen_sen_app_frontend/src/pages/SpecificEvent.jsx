@@ -13,6 +13,8 @@ import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import CameraAltIcon from '@mui/icons-material/CameraAlt';
+import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import SendIcon from "@mui/icons-material/Send";
 import { Button, Typography } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
@@ -49,6 +51,7 @@ export default function SpecificEvent() {
     certificate_status: "",
     certificate_id: "",
     certificate_sent_status: "",
+    student_img: null,
   });
 
   const [eventDetail, setEventDetail] = useState({
@@ -100,8 +103,8 @@ export default function SpecificEvent() {
     const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
 
     const formData = new FormData();
-    formData.append("completion", completionImagePath.replace('jpg','pptx'));
-    formData.append("merit", meritImagePath.replace('jpg','pptx'));
+    formData.append("completion", completionImagePath.replace('jpg', 'pptx'));
+    formData.append("merit", meritImagePath.replace('jpg', 'pptx'));
 
     axios
       .post(url, formData, {
@@ -183,7 +186,8 @@ export default function SpecificEvent() {
     email,
     certificate_status,
     certificate_id,
-    certificate_sent_status
+    certificate_sent_status,
+    student_img
   ) => {
     setUpdateForm(true);
     participantDetails.event = id;
@@ -193,6 +197,7 @@ export default function SpecificEvent() {
     participantDetails.certificate_status = certificate_status;
     participantDetails.certificate_id = certificate_id;
     participantDetails.certificate_sent_status = certificate_sent_status;
+    participantDetails.student_img = student_img;
   };
 
   const handleUpdateFormClose = () => {
@@ -269,16 +274,19 @@ export default function SpecificEvent() {
             <TableHead>
               <TableRow>
                 <TableCell align="center">
-                  <b>Student Name</b>
+                  <b>Participant Name</b>
                 </TableCell>
                 <TableCell align="center">
-                  <b>Student Id</b>
+                  <b>Participant Id</b>
                 </TableCell>
                 <TableCell align="center">
-                  <b>Student Email</b>
+                  <b>Participant Email</b>
                 </TableCell>
                 <TableCell align="center">
                   <b>Eligible</b>
+                </TableCell>
+                <TableCell align="center">
+                  <b>Photos</b>
                 </TableCell>
                 <TableCell align="center">
                   <b>Actions</b>
@@ -346,7 +354,19 @@ export default function SpecificEvent() {
                           <CloseIcon sx={{ color: "red" }} />
                         </Tooltip>
                       </TableCell>
-                    )}
+                    )}{
+                      row.student_image === null ?
+                        <TableCell align="center">
+                          <Button>
+                            <CameraAltIcon />
+                          </Button>
+                        </TableCell> :
+                        <TableCell align="center">
+                          <Button>
+                            <InsertPhotoIcon />
+                          </Button>
+                        </TableCell>
+                    }
                     {row.certificate_sent_status === false ? (
                       <TableCell align="center">
                         <Tooltip title={`Edit : ${row.student_name}`}>
@@ -359,7 +379,8 @@ export default function SpecificEvent() {
                                 row.email,
                                 row.certificate_status,
                                 row.certificate_id,
-                                row.certificate_sent_status
+                                row.certificate_sent_status,
+                                row.student_img
                               )
                             }
                             key={row.id}
