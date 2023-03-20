@@ -115,6 +115,8 @@ class Participant(models.Model):
     certificate_status = models.CharField(max_length=10, null=True, blank=True)
     certificate_id = models.CharField(max_length=50, null=True, blank=True)
     certificate_sent_status = models.BooleanField(default=False)
+    student_image = models.ImageField(
+        upload_to='students-images/', blank=True)
 
 
 class CompletionCertificateTemplate(models.Model):
