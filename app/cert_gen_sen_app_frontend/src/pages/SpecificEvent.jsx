@@ -88,7 +88,7 @@ export default function SpecificEvent() {
   event_slug = ReverseString(event_slug.replace("/", ""));
 
   function generateCertificate() {
-    if (completionImagePath == "null" || meritImagePath == "null") {
+    if (completionImagePath === "null" || meritImagePath === "null") {
       return console.log("Please select a template to generate certificate");
     }
 
