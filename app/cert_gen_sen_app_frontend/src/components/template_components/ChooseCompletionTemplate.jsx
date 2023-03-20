@@ -49,8 +49,8 @@ export const ChooseCompletionTemplate = () => {
         >
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
             <Grid container spacing={2}>
-              {images !== "Failed to get images" ? (
-                Object.values(images.concat(contributeImage)).map((imageUrl, index) => (
+              {(images !== "Failed to get images" || contributeImage !== "Failed to get images") ? (
+                Object.values(images !== "Failed to get images" ? contributeImage.concat(images) : contributeImage).map((imageUrl, index) => (
                   <Grid item key={index}>
                     <Paper
                       onClick={() =>
