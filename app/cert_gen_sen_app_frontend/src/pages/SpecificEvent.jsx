@@ -52,7 +52,7 @@ export default function SpecificEvent() {
     certificate_status: "",
     certificate_id: "",
     certificate_sent_status: "",
-    student_img: null,
+    student_img: "",
   });
 
   const [eventDetail, setEventDetail] = useState({
@@ -165,6 +165,11 @@ export default function SpecificEvent() {
       eventDepartment: department,
     });
   };
+
+  const handleCameraForm = (id) => {
+    setCamera(true)
+    participantDetails.event = id
+  }
 
   const handleCameraFormClose = () => {
     setCamera(false);
@@ -361,9 +366,9 @@ export default function SpecificEvent() {
                         </Tooltip>
                       </TableCell>
                     )}{
-                      row.student_image === null ?
+                      row.student_image === "" ?
                         <TableCell align="center">
-                          <Button onClick={() => setCamera(true)}>
+                          <Button onClick={() => handleCameraForm(row.id)}>
                             <CameraAltIcon sx={{ color: '#e81551' }} />
                           </Button>
                         </TableCell> :
@@ -445,7 +450,7 @@ export default function SpecificEvent() {
           open={uploadTemplateForm}
           onClose={handleUploadTemplateFormClose}
         />
-        <ParticipantImage open={camera} onClose={handleCameraFormClose} />
+        <ParticipantImage open={camera} onClose={handleCameraFormClose} participant={participantDetails} />
         <BackdropSpinner open={openSpinner} />
         <AlertSnackbar
           open={openSnack}

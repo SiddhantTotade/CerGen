@@ -180,6 +180,20 @@ class UploadEachParticipant(APIView):
         return JsonResponse("Failed to update participant", safe=False)
 
 
+# Upload participant image
+class UploadParticipantImage(APIView):
+    def put(self, request, pk):
+        participant_img_json = request.data['participant_image']
+        participant_id = Participant.objects.get(pk=pk)
+        participant_serialzied_data = ParticipantImageSerializer(
+            participant_id, data=participant_img_json)
+
+        if participant_serialzied_data.is_valid():
+            participant_serialzied_data.save()
+            return JsonResponse("Image uploaded successfully", safe=False)
+        return JsonResponse("Failed to upload image", safe=False)
+
+
 # Filtering Events by slug
 @ permission_classes((IsAuthenticated,))
 class FilteredEvent(APIView):
@@ -205,6 +219,7 @@ class FilteredEvent(APIView):
         return JsonResponse("Event deleted successfully", safe=False)
 
 
+# Uploading completion templates
 class UploadCompletionTemplate(APIView):
     def get(self, request):
         image_file = CompletionCertificateTemplate.objects.filter(
@@ -232,6 +247,7 @@ class UploadCompletionTemplate(APIView):
         return JsonResponse("Completion template uploaded successfully", safe=False)
 
 
+# Uploading mrit templates
 class UploadMeritTemplate(APIView):
     def get(self, request):
         image_file = MeritCertificateTemplate.objects.filter(
@@ -258,6 +274,7 @@ class UploadMeritTemplate(APIView):
         return JsonResponse("Merit template uploaded successfully", safe=False)
 
 
+# Upload contribute completion templates
 class ContributeCompletion(APIView):
     def get(self, request):
         contribute_img = ContributedCompletionCertificates.objects.all()
@@ -269,6 +286,7 @@ class ContributeCompletion(APIView):
         return JsonResponse("Failed to get images", safe=False)
 
 
+# Upload contribute merit certificate
 class ContributeMerit(APIView):
     def get(self, request):
         contribute_img = ContributedMeritCertificates.objects.all()

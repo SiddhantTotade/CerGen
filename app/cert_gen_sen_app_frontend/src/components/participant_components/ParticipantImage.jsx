@@ -5,6 +5,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Button } from "@mui/material";
 import Webcam from 'react-webcam'
+import axios from "axios";
 
 const videoConstraints = {
     width: 1280,
@@ -22,6 +23,16 @@ export default function ParticipantImage(props) {
         },
         [webCamRef, setImgSrc]
     );
+
+    function handleImageUpload(e) {
+        e.preventDefault()
+        const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
+
+        const formData = new FormData()
+        formData.append('participant_image', imgSrc)
+
+        axios.put(url, formData, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => console.log(res.data))
+    }
 
     return (
         <Dialog {...props} maxWidth='lg' >
@@ -47,7 +58,7 @@ export default function ParticipantImage(props) {
                 </div>
                 <div className="flex gap-3 mr-1 mb-2">
                     <Button onClick={props.onClose} variant='contained'>Cancel</Button>
-                    <Button onClick={capture} variant='contained' >Upload Photo</Button>
+                    <Button onClick={handleImageUpload} variant='contained' >Upload Photo</Button>
                 </div>
             </DialogActions>
         </Dialog>

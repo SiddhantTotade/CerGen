@@ -66,6 +66,18 @@ class ParticipantSerializer(serializers.ModelSerializer):
         return event
 
 
+class ParticipantImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Participant
+        fields = ['student_image']
+
+    def update(self, validated_data):
+        participant_img = Participant.objects.update(
+            student_image=validated_data['participant_image'])
+        participant_img.save()
+        return participant_img
+
+
 class CompletionCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CompletionCertificateTemplate
