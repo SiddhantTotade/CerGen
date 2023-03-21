@@ -27,6 +27,7 @@ import Silver from "../medals_images/silver-medal.png";
 import Bronze from "../medals_images/bronze-medal.png";
 import BackdropSpinner from "../components/base_components/Backdrop";
 import AlertSnackbar from "../components/base_components/AlertSnackbar";
+import ParticipantImage from "../components/participant_components/ParticipantImage";
 
 const createBtns = {
   marginBottom: "10px",
@@ -155,6 +156,8 @@ export default function SpecificEvent() {
   const [updateForm, setUpdateForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
 
+  const [camera, setCamera] = useState(false)
+
   const handleResponse = (participant, date, department) => {
     setEventsData(participant);
     setEventDetail({
@@ -163,6 +166,9 @@ export default function SpecificEvent() {
     });
   };
 
+  const handleCameraFormClose = () => {
+    setCamera(false);
+  };
   const handleUploadTemplateForm = () => {
     setUploadTemplateForm(true);
   };
@@ -357,12 +363,12 @@ export default function SpecificEvent() {
                     )}{
                       row.student_image === null ?
                         <TableCell align="center">
-                          <Button>
-                            <CameraAltIcon />
+                          <Button onClick={() => setCamera(true)}>
+                            <CameraAltIcon sx={{ color: '#e81551' }} />
                           </Button>
                         </TableCell> :
                         <TableCell align="center">
-                          <Button>
+                          <Button onClick={() => setCamera(true)}>
                             <InsertPhotoIcon />
                           </Button>
                         </TableCell>
@@ -439,6 +445,7 @@ export default function SpecificEvent() {
           open={uploadTemplateForm}
           onClose={handleUploadTemplateFormClose}
         />
+        <ParticipantImage open={camera} onClose={handleCameraFormClose} />
         <BackdropSpinner open={openSpinner} />
         <AlertSnackbar
           open={openSnack}
