@@ -42,10 +42,10 @@ export default function ParticipantImage(props) {
                 </div>
             </DialogContent>
             <DialogActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div>
+                <div className="mb-2 ml-1">
                     <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
                 </div>
-                <div className="flex gap-3">
+                <div className="flex gap-3 mr-1 mb-2">
                     <Button onClick={props.onClose} variant='contained'>Cancel</Button>
                     <Button onClick={capture} variant='contained' >Upload Photo</Button>
                 </div>
