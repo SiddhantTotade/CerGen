@@ -45,7 +45,6 @@ export default function ParticipantImage(props) {
         setValue(newValue);
     };
 
-
     return (
         <Dialog {...props} maxWidth='lg' >
             <DialogTitle>Photo</DialogTitle>
@@ -61,10 +60,10 @@ export default function ParticipantImage(props) {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Camera />
+                    <Camera participant={props.participant} onClose={props.onClose} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <UploadParticipantImage />
+                    <UploadParticipantImage onClose={props.onClose} />
                 </TabPanel>
             </Box>
         </Dialog>

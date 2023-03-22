@@ -10,7 +10,7 @@ import {
 import { useState } from "react";
 import axios from "axios";
 
-export const UploadParticipantImage = () => {
+export const UploadParticipantImage = (props) => {
     const [previewFile, setPreviewFile] = useState();
     const [selectedFile, setSelectedFile] = useState();
 
@@ -114,7 +114,7 @@ export const UploadParticipantImage = () => {
                     </Grid>
                 </Grid>
                 <DialogActions sx={{ marginTop: "20px" }}>
-                    <Button variant="contained">Cancel</Button>
+                    <Button variant="contained" onClick={props.onClose}>Cancel</Button>
                     <Button variant="contained" onClick={handleUploadTemplate}>
                         Upload
                     </Button>

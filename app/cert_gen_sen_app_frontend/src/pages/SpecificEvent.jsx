@@ -44,7 +44,7 @@ export default function SpecificEvent() {
   let meritImagePath = localStorage.getItem("MeritCertificatePath");
 
   const [eventsData, setEventsData] = useState([]);
-  const [participantDetails] = useState({
+  const [participantDetails, setParticipantsDetails] = useState({
     event: "",
     student_name: "",
     student_id: "",
@@ -171,8 +171,16 @@ export default function SpecificEvent() {
     participantDetails.event = id
   }
 
+  const handleImageForm = (id, img) => {
+    setCamera(true)
+    setParticipantsDetails({ student_img: img, event: id })
+  }
+
+  console.log(participantDetails.student_img);
+
   const handleCameraFormClose = () => {
     setCamera(false);
+    setParticipantsDetails("")
   };
   const handleUploadTemplateForm = () => {
     setUploadTemplateForm(true);
@@ -373,7 +381,7 @@ export default function SpecificEvent() {
                           </Button>
                         </TableCell> :
                         <TableCell align="center">
-                          <Button onClick={() => setCamera(true)}>
+                          <Button onClick={() => handleImageForm(row.id, row.student_image)}>
                             <InsertPhotoIcon sx={{ color: '#1f0abf' }} />
                           </Button>
                         </TableCell>

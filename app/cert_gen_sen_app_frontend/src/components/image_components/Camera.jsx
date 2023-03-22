@@ -30,19 +30,22 @@ export const Camera = (props) => {
         axios.patch(url, formData, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => console.log(res.data))
     }
 
-
     return (
         <div>
             <div className='flex w-full gap-5'>
                 <div className='w-2/4'>
-                    <Webcam
-                        audio={false}
-                        height={720}
-                        ref={webCamRef}
-                        screenshotFormat="image/jpeg"
-                        width={1280}
-                        videoConstraints={videoConstraints}
-                    />
+                    {props.participant.student_img === "" ?
+                        <Webcam
+                            audio={false}
+                            height={720}
+                            ref={webCamRef}
+                            screenshotFormat="image/jpeg"
+                            width={1280}
+                            mirrored={true}
+                            videoConstraints={videoConstraints}
+                        /> :
+                        <img src={props.participant.student_img} alt='Preview' />
+                    }
                 </div>
                 <div className='w-2/4'>
                     <Paper elevation={12}
