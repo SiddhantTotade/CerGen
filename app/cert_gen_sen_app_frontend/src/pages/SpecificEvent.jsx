@@ -166,17 +166,15 @@ export default function SpecificEvent() {
     });
   };
 
-  const handleCameraForm = (id) => {
+  const handleCameraForm = (id, img) => {
     setCamera(true)
-    participantDetails.event = id
+    setParticipantsDetails({ student_img: img, event: id })
   }
 
   const handleImageForm = (id, img) => {
     setCamera(true)
     setParticipantsDetails({ student_img: img, event: id })
   }
-
-  console.log(participantDetails.student_img);
 
   const handleCameraFormClose = () => {
     setCamera(false);
@@ -376,7 +374,7 @@ export default function SpecificEvent() {
                     )}{
                       row.student_image === "" ?
                         <TableCell align="center">
-                          <Button onClick={() => handleCameraForm(row.id)}>
+                          <Button onClick={() => handleCameraForm(row.id, row.student_image)}>
                             <CameraAltIcon sx={{ color: '#e81551' }} />
                           </Button>
                         </TableCell> :
