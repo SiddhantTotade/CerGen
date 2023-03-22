@@ -11,15 +11,6 @@ import { useState } from "react";
 import axios from "axios";
 
 export const UploadParticipantImage = () => {
-    const [file_focus, file_setFocused] = React.useState(false);
-    const [file_hasValue, file_setHasValue] = React.useState(false);
-    const file_onFocus = () => file_setFocused(true);
-    const file_onBlur = () => file_setFocused(false);
-
-    const [eventFileData, setEventFileData] = React.useState({
-        participant_image: "",
-    });
-
     const [previewFile, setPreviewFile] = useState();
     const [selectedFile, setSelectedFile] = useState();
 
@@ -43,15 +34,10 @@ export const UploadParticipantImage = () => {
         setSelectedFile(e.target.files[0])
     }
 
-    function handleFileChange(event) {
-        setEventFileData(event.target.files[0]);
-    }
-
     const handleUploadTemplate = () => {
         const url = ""
 
         let formData = new FormData();
-        formData.append("participant_image", eventFileData);
 
         let config = {
             headers: {
@@ -76,7 +62,7 @@ export const UploadParticipantImage = () => {
                 <Grid
                     container
                     spacing={2}
-                    sx={{ display: "flex", justifyContent: "center", gap: "100px" }}
+                    sx={{ display: "flex", justifyContent: 'space-between' }}
                 >
                     <Grid
                         item
@@ -92,10 +78,8 @@ export const UploadParticipantImage = () => {
                         >
                             <FormControl>
                                 <TextField
-                                    onFocus={file_onFocus}
-                                    onBlur={file_onBlur}
                                     onChange={onSelectFile}
-                                    type={file_hasValue || file_focus ? "file" : "file"}
+                                    type="file"
                                     autoFocus
                                     margin="dense"
                                     id="upload_file"
@@ -123,7 +107,7 @@ export const UploadParticipantImage = () => {
                                 <img
                                     src={previewFile}
                                     alt="Preview"
-                                    width={270}
+                                    width={230}
                                 />
                             }
                         </Paper>

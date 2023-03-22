@@ -57,11 +57,11 @@ export const Camera = (props) => {
                     </Paper>
                 </div>
             </div>
-            <DialogActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                <div className="mb-2 -ml-2">
+            <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                <div className="">
                     <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
                 </div>
-                <div className="flex gap-3 -mr-2">
+                <div className="flex gap-3">
                     <Button onClick={props.onClose} variant='contained'>Cancel</Button>
                     <Button onClick={handleImageUpload} variant='contained' >Upload Photo</Button>
                 </div>
