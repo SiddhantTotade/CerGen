@@ -1,5 +1,7 @@
 import React from 'react'
 import Webcam from 'react-webcam'
+import { DialogActions, Button, Paper } from '@mui/material';
+import axios from 'axios';
 
 const videoConstraints = {
     width: 1280,
@@ -7,7 +9,7 @@ const videoConstraints = {
     facingMode: "environment"
 };
 
-export const Camera = () => {
+export const Camera = (props) => {
     const webCamRef = React.useRef(null)
     const [imgSrc, setImgSrc] = React.useState(null)
     const capture = React.useCallback(
@@ -18,14 +20,52 @@ export const Camera = () => {
         [webCamRef, setImgSrc]
     );
 
+    function handleImageUpload(e) {
+        e.preventDefault()
+        const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
+
+        const formData = new FormData()
+        formData.append('participant_image', imgSrc)
+
+        axios.patch(url, formData, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => console.log(res.data))
+    }
+
+
     return (
-        <Webcam
-            audio={false}
-            height={720}
-            ref={webCamRef}
-            screenshotFormat="image/jpeg"
-            width={1280}
-            videoConstraints={videoConstraints}
-        />
+        <div>
+            <div className='flex w-full gap-5'>
+                <div className='w-2/4'>
+                    <Webcam
+                        audio={false}
+                        height={720}
+                        ref={webCamRef}
+                        screenshotFormat="image/jpeg"
+                        width={1280}
+                        videoConstraints={videoConstraints}
+                    />
+                </div>
+                <div className='w-2/4'>
+                    <Paper elevation={12}
+                        style={{
+                            width: "100%",
+                            height: "100%",
+                            display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center'
+                        }}>
+                        <img src={imgSrc} alt="" />
+                    </Paper>
+                </div>
+            </div>
+            <DialogActions sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <div className="mb-2 -ml-2">
+                    <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
+                </div>
+                <div className="flex gap-3 -mr-2">
+                    <Button onClick={props.onClose} variant='contained'>Cancel</Button>
+                    <Button onClick={handleImageUpload} variant='contained' >Upload Photo</Button>
+                </div>
+            </DialogActions>
+        </div>
     )
 }

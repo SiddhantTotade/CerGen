@@ -16,10 +16,8 @@ from itertools import islice
 from collections import OrderedDict
 from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
-from itertools import chain
 import openpyxl
 import random
-import json
 # Create your views here.
 
 
