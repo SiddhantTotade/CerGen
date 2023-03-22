@@ -325,29 +325,57 @@ export default function SpecificEvent() {
                         align="center"
                         sx={{ display: "flex", justifyContent: "center" }}
                       >
-                        <img src={Gold} className="w-10" alt="gold medal png" />
+                        <Tooltip
+                          className="cursor-pointer"
+                          title={
+                            row.certificate_sent_status === true
+                              ? `Certificate sended to ${row.student_name}`
+                              : `${row.student_name} is eligible for certificate`
+                          }
+                        >
+
+                          <img src={Gold} className="w-10" alt="gold medal png" />
+                        </Tooltip>
                       </TableCell>
                     ) : row.certificate_status === "2" ? (
                       <TableCell
                         align="center"
                         sx={{ display: "flex", justifyContent: "center" }}
                       >
-                        <img
-                          src={Silver}
-                          className="w-10"
-                          alt="silver medal png"
-                        />
+                        <Tooltip
+                          className="cursor-pointer"
+                          title={
+                            row.certificate_sent_status === true
+                              ? `Certificate sended to ${row.student_name}`
+                              : `${row.student_name} is eligible for certificate`
+                          }
+                        >
+                          <img
+                            src={Silver}
+                            className="w-10"
+                            alt="silver medal png"
+                          />
+                        </Tooltip>
                       </TableCell>
                     ) : row.certificate_status === "3" ? (
                       <TableCell
                         align="center"
                         sx={{ display: "flex", justifyContent: "center" }}
                       >
-                        <img
-                          src={Bronze}
-                          className="w-10"
-                          alt="bronze medal png"
-                        />
+                        <Tooltip
+                          className="cursor-pointer"
+                          title={
+                            row.certificate_sent_status === true
+                              ? `Certificate sended to ${row.student_name}`
+                              : `${row.student_name} is eligible for certificate`
+                          }
+                        >
+                          <img
+                            src={Bronze}
+                            className="w-10"
+                            alt="bronze medal png"
+                          />
+                        </Tooltip>
                       </TableCell>
                     ) : row.certificate_status === "T" ? (
                       <TableCell align="center">
