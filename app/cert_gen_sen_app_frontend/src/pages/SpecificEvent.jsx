@@ -374,7 +374,7 @@ export default function SpecificEvent() {
                         </TableCell> :
                         <TableCell align="center">
                           <Button onClick={() => setCamera(true)}>
-                            <InsertPhotoIcon />
+                            <InsertPhotoIcon sx={{ color: '#1f0abf' }} />
                           </Button>
                         </TableCell>
                     }

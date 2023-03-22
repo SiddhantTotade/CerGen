@@ -182,16 +182,11 @@ class UploadEachParticipant(APIView):
 
 # Upload participant image
 class UploadParticipantImage(APIView):
-    def put(self, request, pk):
-        participant_img_json = request.data['participant_image']
-        participant_id = Participant.objects.get(pk=pk)
-        participant_serialzied_data = ParticipantImageSerializer(
-            participant_id, data=participant_img_json)
+    def patch(self, request, pk):
+        participant_img = request.data['participant_image']
+        Participant.objects.filter(id=pk).update(student_image=participant_img)
 
-        if participant_serialzied_data.is_valid():
-            participant_serialzied_data.save()
-            return JsonResponse("Image uploaded successfully", safe=False)
-        return JsonResponse("Failed to upload image", safe=False)
+        return JsonResponse("Image uploaded successfully", safe=False)
 
 
 # Filtering Events by slug

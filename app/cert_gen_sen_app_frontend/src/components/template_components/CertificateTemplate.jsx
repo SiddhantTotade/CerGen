@@ -59,6 +59,8 @@ export default function CertificateTemplate(props) {
     certificate_status: "",
   });
 
+  const [value, setValue] = React.useState(0);
+
   const [eventsData, setEventsData] = useState([]);
   const event_url = window.location.href;
 
@@ -146,8 +148,6 @@ export default function CertificateTemplate(props) {
 
     return certificateId;
   }
-
-  const [value, setValue] = React.useState(0);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
