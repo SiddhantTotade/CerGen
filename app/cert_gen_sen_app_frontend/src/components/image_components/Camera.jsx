@@ -44,7 +44,16 @@ export const Camera = (props) => {
                             mirrored={true}
                             videoConstraints={videoConstraints}
                         /> :
-                        <img src={props.participant.student_img} alt='Preview' />
+                        <Paper elevation={12}
+                            style={{
+                                width: "100%",
+                                height: "100%",
+                                display: 'flex',
+                                justifyContent: 'center',
+                                alignItems: 'center'
+                            }}>
+                            <img src={props.participant.student_img} alt='Preview' />
+                        </Paper>
                     }
                 </div>
                 <div className='w-2/4'>
@@ -61,14 +70,19 @@ export const Camera = (props) => {
                 </div>
             </div>
             <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                <div className="">
-                    <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
-                </div>
+                {props.participant.student_img === "" ?
+                    < div >
+                        <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
+                    </div> :
+                    < div >
+                        <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >ReClick</Button>
+                    </div>
+                }
                 <div className="flex gap-3">
                     <Button onClick={props.onClose} variant='contained'>Cancel</Button>
                     <Button onClick={handleImageUpload} variant='contained' >Upload Photo</Button>
                 </div>
-            </DialogActions>
-        </div>
+            </DialogActions >
+        </div >
     )
 }
