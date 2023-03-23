@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import Webcam from 'react-webcam'
 import { DialogActions, Button, Paper } from '@mui/material';
 import axios from 'axios';
@@ -10,6 +10,7 @@ const videoConstraints = {
 };
 
 export const Camera = (props) => {
+    const [reClick, setReClick] = useState(false)
     const webCamRef = React.useRef(null)
     const [imgSrc, setImgSrc] = React.useState(null)
     const capture = React.useCallback(
@@ -19,6 +20,46 @@ export const Camera = (props) => {
         },
         [webCamRef, setImgSrc]
     );
+
+    const Webcamera = <div className='flex w-full gap-5 justify-center'>
+        <div className='w-2/4'>
+            <Webcam
+                audio={false}
+                height={720}
+                ref={webCamRef}
+                screenshotFormat="image/jpeg"
+                width={1280}
+                mirrored={true}
+                videoConstraints={videoConstraints}
+            />
+        </div>
+        <div className='w-2/4'>
+            <Paper elevation={12}
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                <img src={imgSrc} alt="" />
+            </Paper>
+        </div>
+    </div>
+
+    const UploadedImage =
+        <div className='flex justify-center w-2/4'>
+            <Paper elevation={12}
+                style={{
+                    width: "100%",
+                    height: "100%",
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center'
+                }}>
+                <img src={props.participant.student_img} alt='Preview' />
+            </Paper>
+        </div>
 
     function handleImageUpload(e) {
         e.preventDefault()
@@ -30,52 +71,22 @@ export const Camera = (props) => {
         axios.patch(url, formData, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => console.log(res.data))
     }
 
+    function handleImage() {
+        reClick === true ? setReClick(false) : setReClick(true)
+    }
+
     return (
         <div>
-            <div className='flex w-full gap-5'>
-                <div className='w-2/4'>
-                    {props.participant.student_img === "" ?
-                        <Webcam
-                            audio={false}
-                            height={720}
-                            ref={webCamRef}
-                            screenshotFormat="image/jpeg"
-                            width={1280}
-                            mirrored={true}
-                            videoConstraints={videoConstraints}
-                        /> :
-                        <Paper elevation={12}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}>
-                            <img src={props.participant.student_img} alt='Preview' />
-                        </Paper>
-                    }
-                </div>
-                <div className='w-2/4'>
-                    <Paper elevation={12}
-                        style={{
-                            width: "100%",
-                            height: "100%",
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center'
-                        }}>
-                        <img src={imgSrc} alt="" />
-                    </Paper>
-                </div>
-            </div>
+            {props.participant.student_img === "" ? Webcamera : reClick === true ? Webcamera : UploadedImage}
             <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                {props.participant.student_img === "" ?
-                    < div >
+                {reClick === true ? <div>
+                    <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
+                </div> : props.participant.student_img === "" ?
+                    <div>
                         <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
                     </div> :
-                    < div >
-                        <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >ReClick</Button>
+                    <div>
+                        <Button onClick={handleImage} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >ReClick</Button>
                     </div>
                 }
                 <div className="flex gap-3">
