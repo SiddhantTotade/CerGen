@@ -61,8 +61,15 @@ export const Camera = (props) => {
             </Paper>
         </div>
 
+    const ClickPhoto = <div>
+        <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
+    </div>
+
     function handleImageUpload(e) {
         e.preventDefault()
+        if (imgSrc === null) {
+            return "Please click an image before upload"
+        }
         const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
 
         const formData = new FormData()
@@ -79,12 +86,8 @@ export const Camera = (props) => {
         <div>
             {props.participant.student_img === "" ? Webcamera : reClick === true ? Webcamera : UploadedImage}
             <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                {reClick === true ? <div>
-                    <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
-                </div> : props.participant.student_img === "" ?
-                    <div>
-                        <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
-                    </div> :
+                {reClick === true ? ClickPhoto : props.participant.student_img === "" ?
+                    ClickPhoto :
                     <div>
                         <Button onClick={handleImage} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >ReClick</Button>
                     </div>
