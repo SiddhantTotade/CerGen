@@ -48,17 +48,19 @@ export const Camera = (props) => {
     </div>
 
     const UploadedImage =
-        <div className='flex justify-center w-2/4'>
-            <Paper elevation={12}
-                style={{
-                    width: "100%",
-                    height: "100%",
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center'
-                }}>
-                <img src={props.participant.student_img} alt='Preview' width={500} />
-            </Paper>
+        <div className="flex justify-center">
+            <div className='flex justify-center w-2/4'>
+                <Paper elevation={12}
+                    style={{
+                        width: "100%",
+                        height: "100%",
+                        display: 'flex',
+                        justifyContent: 'center',
+                        alignItems: 'center'
+                    }}>
+                    <img src={props.participant.student_img} alt='Preview' />
+                </Paper>
+            </div>
         </div>
 
     const ClickPhoto = <div>
