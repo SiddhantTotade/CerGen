@@ -58,7 +58,7 @@ export const Camera = (props) => {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                    <img src={props.participant.student_img} alt='Preview' />
+                    <img src={props.participant.student_img} alt='Preview' width={700} />
                 </Paper>
             </div>
         </div>
