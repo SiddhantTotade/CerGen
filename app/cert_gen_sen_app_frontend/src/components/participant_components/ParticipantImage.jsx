@@ -63,7 +63,7 @@ export default function ParticipantImage(props) {
                     <Camera participant={props.participant} onClose={props.onClose} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <UploadParticipantImage onClose={props.onClose} />
+                    <UploadParticipantImage participant={props.participant} onClose={props.onClose} />
                 </TabPanel>
             </Box>
         </Dialog>

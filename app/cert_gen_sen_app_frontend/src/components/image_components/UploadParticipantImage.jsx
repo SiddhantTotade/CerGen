@@ -34,10 +34,26 @@ export const UploadParticipantImage = (props) => {
         setSelectedFile(e.target.files[0])
     }
 
-    const handleUploadTemplate = () => {
-        const url = ""
+    const convertBase64 = (selectedFile) => {
+        return new Promise((resolve, reject) => {
+            let reader = new FileReader()
+            reader.readAsDataURL(selectedFile)
+            reader.onload = () => {
+                resolve(reader.result)
+            }
+            reader.onerror = (error) => {
+                reject(error)
+            }
+        })
+    }
+
+    const handleUploadTemplate = async () => {
+        const base64Image = await convertBase64(selectedFile)
+
+        const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
 
         let formData = new FormData();
+        formData.append('participant_image', base64Image)
 
         let config = {
             headers: {
@@ -46,7 +62,7 @@ export const UploadParticipantImage = (props) => {
             },
         };
 
-        axios.post(url, formData, config).then((res) => console.log(res));
+        axios.patch(url, formData, config).then((res) => console.log(res));
     };
 
     return (
