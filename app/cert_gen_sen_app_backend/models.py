@@ -174,3 +174,9 @@ class ContributedMeritCertificates(models.Model):
 
     def __str__(self):
         return str(self.id)
+
+
+class ParticipantAlbum(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, default=None)
+    image_album = models.ImageField(
+        upload_to='image-album/', null=True, blank=True)
