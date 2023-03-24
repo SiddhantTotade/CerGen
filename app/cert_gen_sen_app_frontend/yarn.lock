@@ -7966,6 +7966,11 @@
   "resolved" "https://registry.npmjs.org/react-is/-/react-is-18.2.0.tgz"
   "version" "18.2.0"
 
+"react-photo-album@^2.0.3":
+  "integrity" "sha512-LI3Ttg6BF/MtMVeaSAGaSxFJ6ihN+vxPHF1yb8Y/5y785Fpz1akzsG5Ti9/r9oYnL5XRNOuWC/OKGMZzLociGg=="
+  "resolved" "https://registry.npmjs.org/react-photo-album/-/react-photo-album-2.0.3.tgz"
+  "version" "2.0.3"
+
 "react-redux@^8.0.5":
   "integrity" "sha512-Q2f6fCKxPFpkXt1qNRZdEDLlScsDWyrgSj0mliK59qU6W5gvBiKkdMEG2lJzhd1rCctf0hb6EtePPLZ2e0m1uw=="
   "resolved" "https://registry.npmjs.org/react-redux/-/react-redux-8.0.5.tgz"
