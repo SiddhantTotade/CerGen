@@ -28,6 +28,7 @@ import Bronze from "../medals_images/bronze-medal.png";
 import BackdropSpinner from "../components/base_components/Backdrop";
 import AlertSnackbar from "../components/base_components/AlertSnackbar";
 import ParticipantImage from "../components/participant_components/ParticipantImage";
+import AlbumForm from "../components/image_components/AlbumForm";
 
 const createBtns = {
   marginBottom: "10px",
@@ -155,6 +156,7 @@ export default function SpecificEvent() {
   const [uploadTemplateForm, setUploadTemplateForm] = React.useState(false);
   const [updateForm, setUpdateForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
+  const [albumForm, setAlbumForm] = useState(false)
 
   const [camera, setCamera] = useState(false)
 
@@ -165,6 +167,14 @@ export default function SpecificEvent() {
       eventDepartment: department,
     });
   };
+
+  const handleAlbumForm = () => {
+    setAlbumForm(true)
+  }
+
+  const handleAlbumFormClose = () => {
+    setAlbumForm(false)
+  }
 
   const handleCameraForm = (id, img) => {
     setCamera(true)
@@ -284,6 +294,13 @@ export default function SpecificEvent() {
             onClick={handleUploadTemplateForm}
           >
             Templates
+          </Button>
+          <Button
+            variant="contained"
+            sx={createBtns}
+            onClick={handleAlbumForm}
+          >
+            View Album
           </Button>
         </div>
         <TableContainer component={Paper}>
@@ -485,6 +502,7 @@ export default function SpecificEvent() {
           onClose={handleUploadTemplateFormClose}
         />
         <ParticipantImage open={camera} onClose={handleCameraFormClose} participant={participantDetails} />
+        <AlbumForm open={albumForm} onClose={handleAlbumFormClose} />
         <BackdropSpinner open={openSpinner} />
         <AlertSnackbar
           open={openSnack}
