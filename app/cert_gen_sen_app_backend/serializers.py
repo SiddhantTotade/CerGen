@@ -100,3 +100,9 @@ class ContributeMeritCertificateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContributedMeritCertificates
         fields = ['template_img']
+
+
+class ImageAlbumSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ParticipantAlbum
+        fields = '__all__'

@@ -289,3 +289,12 @@ class ContributeMerit(APIView):
                 contribute_img, many=True)
             return JsonResponse(contribute_img_serializers.data, safe=False)
         return JsonResponse("Failed to get images", safe=False)
+
+
+# Upload and get participant image album
+class ParticipantImageAlbum(APIView):
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        image = request.data['image']
