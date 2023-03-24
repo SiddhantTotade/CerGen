@@ -3,7 +3,7 @@ import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
-import { Camera } from "../image_components/Camera";
+import { Album } from "./Album";
 import { UploadParticipantImage } from "../image_components/UploadParticipantImage";
 
 function TabPanel(props) {
@@ -60,7 +60,7 @@ export default function AlbumForm(props) {
                     </Tabs>
                 </Box>
                 <TabPanel value={value} index={0}>
-                    <Camera participant={props.participant} onClose={props.onClose} />
+                    <Album participant={props.participant} onClose={props.onClose} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
                     <UploadParticipantImage onClose={props.onClose} />
