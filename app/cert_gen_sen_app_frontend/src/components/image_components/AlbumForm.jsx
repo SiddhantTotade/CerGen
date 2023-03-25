@@ -4,7 +4,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Tab, Tabs } from "@mui/material";
 import PropTypes from "prop-types";
 import { Album } from "./Album";
-import { UploadParticipantImage } from "../image_components/UploadParticipantImage";
+import { UploadEventAlbum } from "./UploadEventAlbum";
+import '../../index.css'
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -63,7 +64,7 @@ export default function AlbumForm(props) {
                     <Album participant={props.participant} onClose={props.onClose} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <UploadParticipantImage onClose={props.onClose} />
+                    <UploadEventAlbum onClose={props.onClose} />
                 </TabPanel>
             </Box>
         </Dialog>
