@@ -55,7 +55,7 @@ export default function AlbumForm(props) {
                         onChange={handleChange}
                         aria-label="basic tabs example"
                     >
-                        <Tab label="Capture Photo" {...a11yProps(0)} />
+                        <Tab label="Event Album" {...a11yProps(0)} />
                         <Tab label="Upload Photo" {...a11yProps(1)} />
                     </Tabs>
                 </Box>
