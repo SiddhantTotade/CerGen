@@ -297,4 +297,9 @@ class ParticipantImageAlbum(APIView):
         pass
 
     def post(self, request):
-        image = request.data['image']
+        image_data = ImageAlbumSerializer(data=request.data)
+
+        if image_data.is_valid():
+            image_data.save()
+            return JsonResponse("Image uploaded successfully", safe=False)
+        return JsonResponse("Image uploaded successfully", safe=False)

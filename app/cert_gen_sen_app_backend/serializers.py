@@ -106,3 +106,9 @@ class ImageAlbumSerializer(serializers.ModelSerializer):
     class Meta:
         model = ParticipantAlbum
         fields = '__all__'
+
+    def create(self, validated_data):
+        album_image = ParticipantAlbum.objects.create(
+            event=validated_data['event'], image_album=validated_data['image'])
+        album_image.save()
+        return album_image
