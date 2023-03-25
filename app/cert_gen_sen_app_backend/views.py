@@ -302,4 +302,4 @@ class ParticipantImageAlbum(APIView):
         if image_data.is_valid():
             image_data.save()
             return JsonResponse("Image uploaded successfully", safe=False)
-        return JsonResponse("Image uploaded successfully", safe=False)
+        return JsonResponse("Failed to upload image", safe=False)
