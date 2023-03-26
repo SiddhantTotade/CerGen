@@ -64,7 +64,7 @@ export default function AlbumForm(props) {
                     <Album participant={props.participant} onClose={props.onClose} />
                 </TabPanel>
                 <TabPanel value={value} index={1}>
-                    <UploadEventAlbum onClose={props.onClose} />
+                    <UploadEventAlbum onClose={props.onClose} event_slug={props.event_slug} />
                 </TabPanel>
             </Box>
         </Dialog>

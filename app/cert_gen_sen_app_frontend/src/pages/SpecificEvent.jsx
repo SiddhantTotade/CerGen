@@ -502,7 +502,7 @@ export default function SpecificEvent() {
           onClose={handleUploadTemplateFormClose}
         />
         <ParticipantImage open={camera} onClose={handleCameraFormClose} participant={participantDetails} />
-        <AlbumForm open={album} onClose={handleAlbumFormClose} participant={participantDetails} />
+        <AlbumForm open={album} onClose={handleAlbumFormClose} participant={participantDetails} event_slug={event_slug} />
         <BackdropSpinner open={openSpinner} />
         <AlertSnackbar
           open={openSnack}

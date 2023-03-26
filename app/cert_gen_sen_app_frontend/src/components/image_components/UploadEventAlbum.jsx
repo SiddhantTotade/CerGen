@@ -56,23 +56,23 @@ export const UploadEventAlbum = (props) => {
         })
     }
 
-    // const handleUploadTemplate = async () => {
-    //     const base64Image = await convertBase64(selectedFile)
+    const handleUploadTemplate = async () => {
+        // const base64Image = await convertBase64(selectedFile)
 
-    //     const url = 'http://127.0.0.1:8000/api/upload-event-album/' + props.participant.event
+        const url = 'http://127.0.0.1:8000/api/upload-event-album/' + props.event_slug
 
-    //     let formData = new FormData();
-    //     formData.append('participant_image', base64Image)
+        let formData = new FormData();
+        formData.append('participant_image', previewFile)
 
-    //     let config = {
-    //         headers: {
-    //             "content-type": "multipart/form-data",
-    //             Authorization: "Token " + localStorage.getItem("token"),
-    //         },
-    //     };
+        let config = {
+            headers: {
+                "content-type": "multipart/form-data",
+                Authorization: "Token " + localStorage.getItem("token"),
+            },
+        };
 
-    //     axios.patch(url, formData, config).then((res) => console.log(res));
-    // };
+        axios.post(url, formData, config).then((res) => console.log(res));
+    };
 
     return (
         <>
@@ -147,9 +147,9 @@ export const UploadEventAlbum = (props) => {
                 </Grid>
                 <DialogActions sx={{ marginTop: "20px" }}>
                     <Button variant="contained" onClick={props.onClose}>Cancel</Button>
-                    {/* <Button variant="contained" onClick={handleUploadTemplate}>
+                    <Button variant="contained" onClick={handleUploadTemplate}>
                         Upload
-                    </Button> */}
+                    </Button>
                 </DialogActions>
             </Grid>
         </>

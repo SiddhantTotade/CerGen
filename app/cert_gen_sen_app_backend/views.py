@@ -296,10 +296,16 @@ class ParticipantImageAlbum(APIView):
     def get(self, request):
         pass
 
-    def post(self, request):
-        image_data = ImageAlbumSerializer(data=request.data)
+    def post(self, request, slug):
+        event = Event.objects.get(slug=slug)
+        album_image = request.data['participant_image']
 
-        if image_data.is_valid():
-            image_data.save()
+        for img in album_image:
+            ParticipantAlbum.objects.create(event=event, image_album=img).save()
+
+            # image_data = ImageAlbumSerializer(data=request.data)
+
+            # if image_data.is_valid():
+            #     image_data.save()
             return JsonResponse("Image uploaded successfully", safe=False)
         return JsonResponse("Failed to upload image", safe=False)
