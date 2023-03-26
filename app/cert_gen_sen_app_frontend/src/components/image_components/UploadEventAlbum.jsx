@@ -17,6 +17,7 @@ export const UploadEventAlbum = (props) => {
 
     let fileObj = []
     let fileArray = []
+    const [images, setImages] = useState([])
 
     // useEffect(() => {
     //     if (!selectedFile) {
@@ -31,9 +32,9 @@ export const UploadEventAlbum = (props) => {
     // }, [selectedFile])
 
     const onSelectFile = (e) => {
-        // if (!e.target.files || e.target.files.length === 0) {
-        //     setSelectedFile(undefined)
-        // }
+        if (!e.target.files || e.target.files.length === 0) {
+            setPreviewFile(undefined)
+        }
 
         fileObj.push(e.target.files)
         for (let i = 0; i < fileObj[0].length; i++) {
@@ -41,28 +42,16 @@ export const UploadEventAlbum = (props) => {
         }
 
         setPreviewFile(fileArray)
+        setImages(fileObj)
     }
 
-    const convertBase64 = (selectedFile) => {
-        return new Promise((resolve, reject) => {
-            let reader = new FileReader()
-            reader.readAsDataURL(selectedFile)
-            reader.onload = () => {
-                resolve(reader.result)
-            }
-            reader.onerror = (error) => {
-                reject(error)
-            }
-        })
-    }
 
     const handleUploadTemplate = async () => {
-        // const base64Image = await convertBase64(selectedFile)
 
         const url = 'http://127.0.0.1:8000/api/upload-event-album/' + props.event_slug
 
         let formData = new FormData();
-        formData.append('participant_image', previewFile)
+        formData.append('participant_image', images)
 
         let config = {
             headers: {
@@ -131,7 +120,7 @@ export const UploadEventAlbum = (props) => {
                                 alignItems: 'center'
                             }}
                         >
-                            <Carousel className="w-full" swipeable={false} showArrows={true} showThumbs={false} dynamicHeight={true} showIndicators={false} showStatus={false} interval={2000} transitionTime={500} autoPlay={true} infiniteLoop={true} emulateTouch={true} stopOnHover={true} >
+                            <Carousel className="w-full" swipeable={true} showArrows={true} showThumbs={false} dynamicHeight={true} showIndicators={false} showStatus={false} emulateTouch={true} stopOnHover={true} >
                                 {(previewFile || []).map((url, id) => (
                                     <div key={id}>
                                         <img

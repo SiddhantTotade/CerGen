@@ -8,12 +8,15 @@ from rest_framework import permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
+from rest_framework.decorators import api_view
 from .models import *
 from .serializers import *
 from .resources import *
 from .serializers import UserSerializer, RegisterSerializer
 from itertools import islice
 from collections import OrderedDict
+from .helpers import *
 from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
 import openpyxl
@@ -240,7 +243,7 @@ class UploadCompletionTemplate(APIView):
         return JsonResponse("Completion template uploaded successfully", safe=False)
 
 
-# Uploading mrit templates
+# Uploading merit templates
 class UploadMeritTemplate(APIView):
     def get(self, request):
         image_file = MeritCertificateTemplate.objects.filter(
@@ -296,16 +299,15 @@ class ParticipantImageAlbum(APIView):
     def get(self, request):
         pass
 
-    def post(self, request, slug):
-        event = Event.objects.get(slug=slug)
-        album_image = request.data['participant_image']
-
-        for img in album_image:
-            ParticipantAlbum.objects.create(event=event, image_album=img).save()
-
-            # image_data = ImageAlbumSerializer(data=request.data)
-
-            # if image_data.is_valid():
-            #     image_data.save()
-            return JsonResponse("Image uploaded successfully", safe=False)
+    def post(self, request, slug, format=None):
+        img = request.data['participant_image']
+        print(type(img))
         return JsonResponse("Failed to upload image", safe=False)
+
+
+@api_view(['POST'])
+def upload_event_album(request, slug):
+    if request.method == 'POST':
+        img = request.FILES['participant_image']
+        print(img)
+    return JsonResponse("Failed to upload image", safe=False)
