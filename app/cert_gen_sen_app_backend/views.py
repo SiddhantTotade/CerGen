@@ -308,6 +308,6 @@ class ParticipantImageAlbum(APIView):
 @api_view(['POST'])
 def upload_event_album(request, slug):
     if request.method == 'POST':
-        img = request.FILES['participant_image']
+        img = request.FILES.getlist('participant_image')
         print(img)
     return JsonResponse("Failed to upload image", safe=False)
