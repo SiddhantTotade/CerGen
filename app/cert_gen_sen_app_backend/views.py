@@ -296,8 +296,15 @@ class ContributeMerit(APIView):
 
 # Upload and get participant image album
 class ParticipantImageAlbum(APIView):
-    def get(self, request):
-        pass
+    def get(self, request, slug):
+        image_album_slug = Event.objects.get(slug=slug)
+        album_images = ParticipantAlbum.objects.filter(event=image_album_slug)
+
+        if album_images:
+            album_image_serializer = ImageAlbumSerializer(
+                album_images, many=True)
+            return JsonResponse(album_image_serializer.data, safe=False)
+        return JsonResponse("Failed to get images", safe=False)
 
     def post(self, request, slug):
         album_images = request.FILES.getlist('album_images')
