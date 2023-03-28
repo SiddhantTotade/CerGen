@@ -42,7 +42,7 @@ export const UploadEventAlbum = (props) => {
         }
 
         setPreviewFile(fileArray)
-        setImages(fileObj)
+        setImages([...images, ...e.target.files])
     }
 
 
@@ -51,7 +51,8 @@ export const UploadEventAlbum = (props) => {
         const url = 'http://127.0.0.1:8000/api/upload-event-album/' + props.event_slug
 
         let formData = new FormData();
-        formData.append('participant_image', images)
+        formData.append('event', props.event_slug)
+        images.forEach((img) => formData.append('album_images', img))
 
         let config = {
             headers: {
@@ -60,7 +61,7 @@ export const UploadEventAlbum = (props) => {
             },
         };
 
-        axios.post(url, formData, config).then((res) => console.log(res));
+        await axios.post(url, formData, config).then((res) => console.log(res));
     };
 
     return (

@@ -299,15 +299,13 @@ class ParticipantImageAlbum(APIView):
     def get(self, request):
         pass
 
-    def post(self, request, slug, format=None):
-        img = request.data['participant_image']
-        print(type(img))
+    def post(self, request, slug):
+        album_images = request.FILES.getlist('album_images')
+        event = Event.objects.get(slug=slug)
+
+        for img in album_images:
+            ParticipantAlbum.objects.create(
+                event=event, image_album=img)
+
+            return JsonResponse("Image uploaded successfully", safe=False)
         return JsonResponse("Failed to upload image", safe=False)
-
-
-@api_view(['POST'])
-def upload_event_album(request, slug):
-    if request.method == 'POST':
-        img = request.FILES.getlist('participant_image')
-        print(img)
-    return JsonResponse("Failed to upload image", safe=False)

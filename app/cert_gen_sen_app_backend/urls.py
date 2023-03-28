@@ -23,7 +23,7 @@ urlpatterns = [
     path("upload-participant-image/<int:pk>",
          UploadParticipantImage.as_view()),
     path("upload-event-album/<slug:slug>",
-         upload_event_album),
+         ParticipantImageAlbum.as_view()),
     path("generate-certificate/<slug:slug>", GenerateCertificate.as_view()),
     path("generate-certificate/<slug:slug>/<int:pk>", generate_certificate_by_id),
     path("preview-certificate/", Ppt2Image.as_view()),
