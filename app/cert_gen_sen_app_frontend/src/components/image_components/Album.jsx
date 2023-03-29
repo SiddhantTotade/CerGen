@@ -26,15 +26,6 @@ export const Album = (props) => {
     }, [props.event_slug]);
 
     return (
-        // <div className='gallery'>
-        //     <div className='gallery__column'>
-        //         <figure className='gallery__thumb flex gap-4'>
-        //             {albumImages.map((img, id) => {
-        //                 return <img key={id} src={'http://127.0.0.1:8000' + img.image_album} alt="" className='gallery__image h-full object-contain' />
-        //             })}
-        //         </figure>
-        //     </div>
-        // </div>
         <>
             <div className={model ? 'model open' : 'model'}>
                 <img src={'http://127.0.0.1:8000' + tempImg} alt="" />
