@@ -1,12 +1,19 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import axios from 'axios';
-import '../../index.scss'
-import PhotoAlbum from 'react-photo-album'
+import '../../album.css'
+import CloseIcon from '@mui/icons-material/Close';
 
 export const Album = (props) => {
 
     const [albumImages, setAlbumImages] = useState([])
+
+    const [model, setModel] = useState(false)
+    const [tempImg, setTempImg] = useState("")
+    const getImg = (imgSrc) => {
+        setTempImg(imgSrc)
+        setModel(true)
+    }
 
     useEffect(() => {
 
@@ -28,12 +35,18 @@ export const Album = (props) => {
         //         </figure>
         //     </div>
         // </div>
-        <div className='flex items-center'>
-            {
-                albumImages.map((img, id) => {
-                    return <PhotoAlbum padding={4} layout='masonry' key={id} photos={[{ src: 'http://127.0.0.1:8000' + img.image_album, width: 0, height: 0 }]} />
-                })
-            }
-        </div>
+        <>
+            <div className={model ? 'model open' : 'model'}>
+                <img src={'http://127.0.0.1:8000' + tempImg} alt="" />
+                <CloseIcon onClick={() => setModel(false)} />
+            </div>
+            <div className='gallery'>
+                {albumImages.map((item, index) => {
+                    return <div className='pics' key={index} onClick={() => getImg(item.image_album)}>
+                        <img src={'http://127.0.0.1:8000' + item.image_album} alt="" style={{ width: "100%", borderRadius: '5px', border: '2px solid gray' }} />
+                    </div>
+                })}
+            </div>
+        </>
     )
 }
