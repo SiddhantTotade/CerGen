@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
     TextField,
     Button,
@@ -19,18 +19,6 @@ export const UploadEventAlbum = (props) => {
     let fileArray = []
     const [images, setImages] = useState([])
 
-    // useEffect(() => {
-    //     if (!selectedFile) {
-    //         setPreviewFile(undefined)
-    //         return
-    //     }
-
-    //     const objectUrl = URL.createObjectURL(selectedFile)
-    //     setPreviewFile(objectUrl)
-
-    //     return () => URL.revokeObjectURL(objectUrl)
-    // }, [selectedFile])
-
     const onSelectFile = (e) => {
         if (!e.target.files || e.target.files.length === 0) {
             setPreviewFile(undefined)
@@ -45,9 +33,7 @@ export const UploadEventAlbum = (props) => {
         setImages([...images, ...e.target.files])
     }
 
-
     const handleUploadTemplate = async () => {
-
         const url = 'http://127.0.0.1:8000/api/upload-event-album/' + props.event_slug
 
         let formData = new FormData();

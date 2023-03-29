@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
 import { useEffect } from 'react';
 import axios from 'axios';
-import '../../index.css'
+import '../../index.scss'
+import PhotoAlbum from 'react-photo-album'
 
 export const Album = (props) => {
 
@@ -18,15 +19,21 @@ export const Album = (props) => {
     }, [props.event_slug]);
 
     return (
-        <div className='gallery'>
-            <div className='gallery__column'>
-                <figure className='gallery__thumb flex gap-2'>
-                    {albumImages.map((img, id) => {
-                        return <img key={id} src={'http://127.0.0.1:8000' + img.image_album} alt="" className='gallery__image w-full' />
-                    })}
-                    <figcaption className='gallery__caption'></figcaption>
-                </figure>
-            </div>
+        // <div className='gallery'>
+        //     <div className='gallery__column'>
+        //         <figure className='gallery__thumb flex gap-4'>
+        //             {albumImages.map((img, id) => {
+        //                 return <img key={id} src={'http://127.0.0.1:8000' + img.image_album} alt="" className='gallery__image h-full object-contain' />
+        //             })}
+        //         </figure>
+        //     </div>
+        // </div>
+        <div>
+            {
+                albumImages.map((img, id) => {
+                    return <PhotoAlbum layout='rows' key={id} photos={[{ href: 'http://127.0.0.1:8000' + img.image_album }]} />
+                })
+            }
         </div>
     )
 }
