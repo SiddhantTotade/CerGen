@@ -15,6 +15,8 @@ import os
 from decouple import config
 from datetime import timedelta
 
+SMS_BACKEND = 'sms.backends.dummy.SmsBackend'
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 

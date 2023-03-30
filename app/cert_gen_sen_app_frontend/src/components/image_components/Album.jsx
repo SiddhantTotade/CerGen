@@ -25,8 +25,6 @@ export const Album = (props) => {
             }).then(res => setAlbumImages(res.data)).catch(err => console.log(err))
     }, [props.event_slug]);
 
-    console.log(albumImages === 'Failed to get images');
-
     return (
         <>
             {
