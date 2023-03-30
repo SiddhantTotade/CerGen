@@ -27,6 +27,7 @@ export default function UpdateParticipant(props) {
     student_name: "",
     student_id: "",
     email: "",
+    phone: "",
     certificate_status: "",
     certificate_id: "",
   });
@@ -36,6 +37,7 @@ export default function UpdateParticipant(props) {
     student_name: "",
     student_id: "",
     email: "",
+    phone: "",
     certificate_status: "",
     certificate_id: "",
   });
@@ -90,6 +92,10 @@ export default function UpdateParticipant(props) {
             updateParticipantData.email === ""
               ? participantData.email
               : updateParticipantData.email,
+          phone:
+            updateParticipantData.phone === ""
+              ? participantData.phone
+              : updateParticipantData.phone,
           certificate_status:
             updateParticipantData.certificate_status === ""
               ? participantData.certificate_status
@@ -190,6 +196,17 @@ export default function UpdateParticipant(props) {
             id="email"
             label="Participant Email"
             type="email"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            onChange={(e) => handleEventData(e)}
+            defaultValue={props.participant.phone}
+            autoFocus
+            margin="dense"
+            id="phone"
+            label="Participant Phone"
+            type="phone"
             fullWidth
             variant="standard"
           />

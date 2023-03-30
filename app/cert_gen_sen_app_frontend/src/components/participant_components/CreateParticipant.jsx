@@ -21,6 +21,7 @@ export default function CreateParticipant(props) {
     student_name: "",
     student_id: "",
     email: "",
+    phone: "",
     certificate_status: "",
   });
 
@@ -68,6 +69,7 @@ export default function CreateParticipant(props) {
           student_name: participantData.student_name,
           student_id: participantData.student_id,
           email: participantData.email,
+          phone: participantData.phone,
           certificate_status: participantData.certificate_status,
           certificate_id: certificateId,
         },
@@ -147,6 +149,17 @@ export default function CreateParticipant(props) {
             id="email"
             label="Participant Email"
             type="email"
+            fullWidth
+            variant="standard"
+          />
+          <TextField
+            onChange={(e) => handleEventData(e)}
+            value={participantData.phone}
+            autoFocus
+            margin="dense"
+            id="phone"
+            label="Participant Phone"
+            type="phone"
             fullWidth
             variant="standard"
           />
