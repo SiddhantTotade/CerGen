@@ -15,10 +15,24 @@ from pptx import Presentation
 from PIL import Image
 import smtplib
 import ssl
+from twilio.rest import Client
+from decouple import config
 from email import encoders
 from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+
+
+def send_message(student_name, phone):
+    account_sid = config("TWILIO_SID")
+    auth_token = config("TWILIO_AUTH_TOKEN")
+    client = Client(account_sid, auth_token)
+    client.messages.create(
+        body="Thankyou for participating in the Event/Contest. Your certificate will delivered to you via e-mail. Check your email.",
+        from_="+15855951968",
+        to=f"+91{phone}"
+    )
+    return JsonResponse("Message sent successfully", safe=False)
 
 
 def send_mail(subject, body, email_to, certificate_file):
