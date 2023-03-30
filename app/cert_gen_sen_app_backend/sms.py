@@ -9,8 +9,8 @@ class SendMessage(APIView):
         account_sid = config("TWILIO_SID")
         auth_token = config("TWILIO_AUTH_TOKEN")
         client = Client(account_sid, auth_token)
-        message = client.messages.create(
-            body="Hello from Twilio",
+        client.messages.create(
+            body="Thankyou for participating in the Event/Contest. Your certificate will delivered to you via e-mail. Check your email.",
             from_="+15855951968",
             to="+917000417412"
         )
