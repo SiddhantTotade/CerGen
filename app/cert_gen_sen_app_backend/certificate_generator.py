@@ -28,11 +28,11 @@ def send_message(student_name, phone):
     auth_token = config("TWILIO_AUTH_TOKEN")
     client = Client(account_sid, auth_token)
     client.messages.create(
-        body="Thankyou for participating in the Event/Contest. Your certificate will delivered to you via e-mail. Check your email.",
+        body=f"Dear {student_name}, thankyou for participating in the Event/Contest. Your certificate will be delivered to you via e-mail. Check your email.",
         from_="+15855951968",
         to=f"+91{phone}"
     )
-    return JsonResponse("Message sent successfully", safe=False)
+    return "SENT"
 
 
 def send_mail(subject, body, email_to, certificate_file):
@@ -311,6 +311,7 @@ def generate_certificate_by_id(request, slug, pk):
         stu_data['student_name'] = stu.student_name
         stu_data['student_id'] = stu.student_id
         stu_data['email'] = stu.email
+        stu_data['phone'] = stu.phone
         stu_data['certificate_status'] = stu.certificate_status
         stu_data['certificate_id'] = stu.certificate_id
 
@@ -329,6 +330,7 @@ def generate_certificate_by_id(request, slug, pk):
             stu_data["student_name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
         certificate_path = generate_participant_certificate(
             stu_data["student_name"], stu_data["certificate_id"], qrcode_path)
+        phone_message = send_message(stu_data["name"], stu_data["phone"])
         send_certificate = send_mail("Certificate of Participation",
                                      "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
 

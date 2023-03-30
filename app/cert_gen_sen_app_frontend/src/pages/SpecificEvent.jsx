@@ -331,6 +331,9 @@ export default function SpecificEvent() {
                   <b>Participant Email</b>
                 </TableCell>
                 <TableCell align="center">
+                  <b>Participant Phone</b>
+                </TableCell>
+                <TableCell align="center">
                   <b>Eligible</b>
                 </TableCell>
                 <TableCell align="center">
@@ -351,6 +354,7 @@ export default function SpecificEvent() {
                     <TableCell align="center">{row.student_name}</TableCell>
                     <TableCell align="center">{row.student_id}</TableCell>
                     <TableCell align="center">{row.email}</TableCell>
+                    <TableCell align="center">{row.phone}</TableCell>
                     {row.certificate_status === "1" ? (
                       <TableCell
                         align="center"

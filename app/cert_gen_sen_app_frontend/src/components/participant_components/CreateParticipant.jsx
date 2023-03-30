@@ -61,6 +61,7 @@ export default function CreateParticipant(props) {
       setOpenSpinner(false);
     }, 5000);
     const url = "http://127.0.0.1:8000/api/create-participant/";
+    let phone = participantData.phone.includes("+91") ? participantData.phone : "+91" + participantData.phone
     axios
       .post(
         url,
@@ -69,7 +70,7 @@ export default function CreateParticipant(props) {
           student_name: participantData.student_name,
           student_id: participantData.student_id,
           email: participantData.email,
-          phone: participantData.phone,
+          phone: phone,
           certificate_status: participantData.certificate_status,
           certificate_id: certificateId,
         },
