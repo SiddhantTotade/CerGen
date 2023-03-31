@@ -36,6 +36,4 @@ urlpatterns = [
          ContributeMerit.as_view()),
     path("contribute-completion-template/",
          ContributeCompletion.as_view()),
-    path("send-message/",
-         SendMessage.as_view()),
 ]

@@ -1,12 +1,10 @@
 import glob
 import os
-import cv2
 from .models import *
 from django.http import JsonResponse
 from django.core.mail import EmailMessage
 from rest_framework.views import APIView
 from django.conf import settings
-import random
 from collections import OrderedDict
 from python_pptx_text_replacer import TextReplacer
 import tqdm
@@ -95,50 +93,6 @@ def cleanUp():
         os.remove(f)
 
 
-def meritCertificateGenerate(name, stu_id, rank, event, department, from_date, to_date, year, template, signature):
-    x_offset = 664
-    y_offset = 1090
-
-    y1, y2 = y_offset, y_offset + signature.shape[0]
-    x1, x2 = x_offset, x_offset + signature.shape[1]
-
-    alpha_s = signature[:, :, 3] / 255.0
-    alpha_l = 1.0 - alpha_s
-
-    for c in range(0, 3):
-        template[y1:y2, x1:x2, c] = (
-            alpha_s * signature[:, :, c] + alpha_l * template[y1:y2, x1:x2, c])
-
-    random_num = random.randint(1000, 9999)
-    certificate_id = str(stu_id)+str(department)+str(random_num) + \
-        str(year)+str(from_date.replace("-", ""))
-
-    cv2.putText(template, name, (676, 632),
-                cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 4, (255, 0, 30), 3, cv2.LINE_AA)
-    cv2.putText(template, rank, (1048, 748),
-                cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
-    cv2.putText(template, event, (812, 838),
-                cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
-    cv2.putText(template, certificate_id, (28, 1380),
-                cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (10, 10, 10), 1, cv2.LINE_AA)
-    cv2.putText(template, str(year), (1210, 1034),
-                cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 2, (255, 0, 30), 2, cv2.LINE_AA)
-    if from_date == to_date:
-        cv2.putText(template, from_date, (872, 938),
-                    cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
-    else:
-        cv2.putText(template, from_date, (866, 938),
-                    cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
-        cv2.putText(template, "to", (1148, 938),
-                    cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
-        cv2.putText(template, to_date, (1238, 938),
-                    cv2.FONT_HERSHEY_SCRIPT_COMPLEX, 1, (255, 0, 30), 2, cv2.LINE_AA)
-    cv2.imwrite(
-        f'./cert_gen_sen_app_backend/certificate_data/merit-certificates/{str(certificate_id)+" "+name}.jpg', template)
-
-    return certificate_id
-
-
 # Placing QR code in PPT
 def place_qrcode(pptx_path, qrcode_path, replace_str):
     pptx_file = Presentation(pptx_path)
@@ -149,7 +103,6 @@ def place_qrcode(pptx_path, qrcode_path, replace_str):
                 if shape.text.find(replace_str) != -1:
                     slide.shapes.add_picture(
                         qrcode_path, shape.left, shape.top)
-
     pptx_file.save(pptx_path)
 
 
