@@ -5,7 +5,6 @@ from .views import RegisterAPI
 from knox import views as knox_views
 from .views import LoginAPI
 from .ppt_2_image_preview import *
-from .sms import *
 
 urlpatterns = [
     path('register/', RegisterAPI.as_view(), name='register'),
