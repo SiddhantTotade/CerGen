@@ -330,7 +330,7 @@ def generate_certificate_by_id(request, slug, pk):
             stu_data["student_name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
         certificate_path = generate_participant_certificate(
             stu_data["student_name"], stu_data["certificate_id"], qrcode_path)
-        phone_message = send_message(stu_data["name"], stu_data["phone"])
+        send_message(stu_data["name"], stu_data["phone"])
         send_certificate = send_mail("Certificate of Participation",
                                      "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
 
