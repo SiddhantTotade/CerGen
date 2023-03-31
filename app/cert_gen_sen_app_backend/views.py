@@ -8,8 +8,6 @@ from rest_framework import permissions
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
-from rest_framework.parsers import MultiPartParser, FormParser, FileUploadParser
-from rest_framework.decorators import api_view
 from .models import *
 from .serializers import *
 from .resources import *
