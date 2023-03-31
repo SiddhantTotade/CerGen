@@ -244,13 +244,6 @@ export default function SpecificEvent() {
     setOpenSnack(false);
   }
 
-  const handleSms = () => {
-    const url = 'http://127.0.0.1:8000/api/send-message/'
-    axios.get(url, {
-      headers: { Authorization: "Token " + localStorage.getItem("token") },
-    })
-  }
-
   return (
     <div className="flex justify-center items-center">
       <Sidebar />
@@ -308,13 +301,6 @@ export default function SpecificEvent() {
             onClick={handleAlbumForm}
           >
             View Album
-          </Button>
-          <Button
-            variant="contained"
-            sx={createBtns}
-            onClick={handleSms}
-          >
-            Send Message
           </Button>
         </div>
         <TableContainer component={Paper}>
