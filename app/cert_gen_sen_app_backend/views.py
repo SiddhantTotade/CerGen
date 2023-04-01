@@ -1,13 +1,9 @@
-from django.contrib.auth import login
 from django.http import JsonResponse
 from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
-from rest_framework import generics, permissions
 from rest_framework.response import Response
-from rest_framework import permissions
 from rest_framework import status
-from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -19,10 +15,7 @@ from .resources import *
 from .helpers import *
 from itertools import islice
 from collections import OrderedDict
-from knox.models import AuthToken
-from knox.views import LoginView as KnoxLoginView
 import openpyxl
-import random
 
 
 # Create your views here.
@@ -116,7 +109,7 @@ class UserPasswordResetView(APIView):
         return Response({'msg': 'Password reset successfully'}, status=status.HTTP_200_OK)
 
 
-## Getting single events by slug
+# Getting single events by slug
 @permission_classes((IsAuthenticated,))
 def get_event_by_slug(request, slug):
     event = Event.objects.filter(slug=slug)

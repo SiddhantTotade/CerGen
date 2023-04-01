@@ -1,9 +1,6 @@
 from .views import *
 from django.urls import path
 from .certificate_generator import *
-# from .views import RegisterAPI
-from knox import views as knox_views
-# from .views import LoginAPI
 from .ppt_2_image_preview import *
 
 urlpatterns = [

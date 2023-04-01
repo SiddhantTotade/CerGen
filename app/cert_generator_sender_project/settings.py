@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'import_export',
-    'knox',
     'rest_framework_simplejwt',
 ]
 
@@ -83,15 +82,6 @@ TEMPLATES = [
         },
     },
 ]
-
-# REST_KNOX = {
-#     'SECURE_HASH_ALGORITHM': 'cryptography.hazmat.primitives.hashes.SHA512',
-#     'AUTH_TOKEN_CHARACTER_LENGTH': 64,
-#     'TOKEN_TTL': timedelta(days=1),
-#     'USER_SERIALIZER': 'knox.serializers.UserSerializer',
-#     'TOKEN_LIMIT_PER_USER': None,
-#     'AUTO_REFRESH': False,
-# }
 
 WSGI_APPLICATION = 'cert_generator_sender_project.wsgi.application'
 
@@ -151,14 +141,6 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "certificate-data/")
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         # 'rest_framework.authentication.BasicAuthentication',
-#         # 'rest_framework.authentication.SessionAuthentication',
-#         'knox.auth.TokenAuthentication',
-#     ]
-# }
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
