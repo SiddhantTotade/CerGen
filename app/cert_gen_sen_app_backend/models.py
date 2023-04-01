@@ -4,9 +4,8 @@ from django.utils.text import slugify
 from django.utils.translation import gettext as _
 import os
 
+
 # Create your models here.
-
-
 def convert_to_img(file_name):
     pptx_file_name = str(file_name).replace(
         'completion_certificate_templates/', "")
@@ -49,37 +48,37 @@ class UserManager(BaseUserManager):
         return user
 
 
-# class User(AbstractBaseUser):
-#     email = models.EmailField(
-#         verbose_name="Email Address",
-#         max_length=255,
-#         unique=True
-#     )
+class User(AbstractBaseUser):
+    email = models.EmailField(
+        verbose_name="Email Address",
+        max_length=255,
+        unique=True
+    )
 
-#     name = models.CharField(max_length=200)
-#     tc = models.BooleanField()
-#     is_active = models.BooleanField(default=True)
-#     is_admin = models.BooleanField(default=False)
-#     created_at = models.DateTimeField(auto_now_add=True)
-#     updated_at = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=200)
+    tc = models.BooleanField()
+    is_active = models.BooleanField(default=True)
+    is_admin = models.BooleanField(default=False)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
-#     object = UserManager()
+    object = UserManager()
 
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = ['name', 'tc']
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['name', 'tc']
 
-#     def __str__(self):
-#         return self.email
+    def __str__(self):
+        return self.email
 
-#     def has_perm(self, perm, obj=None):
-#         return self.is_admin
+    def has_perm(self, perm, obj=None):
+        return self.is_admin
 
-#     def has_module_perm(self, app_label):
-#         return True
+    def has_module_perm(self, app_label):
+        return True
 
-#     @property
-#     def is_staff(self):
-#         return self.is_admin
+    @property
+    def is_staff(self):
+        return self.is_admin
 
 
 class Event(models.Model):
