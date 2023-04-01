@@ -1,17 +1,21 @@
 from django.contrib.auth import login
 from django.http import JsonResponse
+from django.contrib.auth import authenticate
 from rest_framework.views import APIView
 from rest_framework.parsers import JSONParser
 from rest_framework import generics, permissions
 from rest_framework.response import Response
 from rest_framework import permissions
+from rest_framework import status
 from rest_framework.authtoken.serializers import AuthTokenSerializer
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+from rest_framework.permissions import IsAuthenticated
+from rest_framework_simplejwt.tokens import RefreshToken
 from .models import *
 from .serializers import *
 from .resources import *
-from .serializers import UserSerializer, RegisterSerializer
+# from .serializers import UserSerializer, RegisterSerializer
 from .helpers import *
 from itertools import islice
 from collections import OrderedDict
@@ -19,10 +23,100 @@ from knox.models import AuthToken
 from knox.views import LoginView as KnoxLoginView
 import openpyxl
 import random
+
+
 # Create your views here.
 
+# Authentication
+def get_tokens_for_user(user):
+    refresh = RefreshToken.for_user(user)
 
-# Getting single events by slug
+    return {
+        'refresh': str(refresh),
+        'access': str(refresh.access_token)
+    }
+
+
+# User registration view
+class UserRegistrationView(APIView):
+    renderer_classes = [UserRenderer]
+
+    def post(self, request, format=None):
+        serializer = UserRegistrationSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        token = get_tokens_for_user(user)
+        return Response({'token': token, 'msg': 'Admin registered successfully'}, status=status.HTTP_201_CREATED)
+
+
+# User login view
+class UserLoginView(APIView):
+    renderer_classes = [UserRenderer]
+
+    def post(self, request, format=None):
+        serializer = UserLoginSerializer(data=request.data)
+
+        serializer.is_valid(raise_exception=True)
+        email = serializer.data.get('email')
+        password = serializer.data.get('password')
+
+        user = authenticate(email=email, password=password)
+
+        if user is not None:
+            token = get_tokens_for_user(user)
+            return Response({'token': token, 'msg': 'Login success'}, status=status.HTTP_200_OK)
+        else:
+            return Response({'errors': {'non_fields_errors': ['Email or Password is not valid']}}, status=status.HTTP_404_NOT_FOUND)
+
+
+# User profile view
+class UserProfileView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, format=None):
+        serializer = UserProfileSerializer(request.user)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+# User change password view
+class UserChangePasswordView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, format=None):
+        serializer = UserChangePasswordSerializer(
+            data=request.data, context={'user': request.user})
+
+        serializer.is_valid(raise_exception=True)
+        return Response({'msg': 'Password changed successfully'}, status=status.HTTP_200_OK)
+
+
+# User send password-reset link view
+class SendPasswordResetEmailView(APIView):
+    renderer_classes = [UserRenderer]
+
+    def post(self, reuqest, format=None):
+        serializer = UserSendPasswordResetEmailSerializer(data=reuqest.data)
+
+        serializer.is_valid(raise_exception=True)
+        return Response({'msg': 'Password reset link has been sent on your e-mail'}, status=status.HTTP_200_OK)
+
+
+# User password-reset view
+class UserPasswordResetView(APIView):
+    renderer_classes = [UserRenderer]
+
+    def post(self, request, uid, token, format=None):
+        serializer = UserPasswordResetSerializer(
+            data=request.data, context={'uid': uid, 'token': token})
+
+        serializer.is_valid(raise_exception=True)
+        return Response({'msg': 'Password reset successfully'}, status=status.HTTP_200_OK)
+
+
+## Getting single events by slug
 @permission_classes((IsAuthenticated,))
 def get_event_by_slug(request, slug):
     event = Event.objects.filter(slug=slug)
@@ -33,49 +127,49 @@ def get_event_by_slug(request, slug):
 
 
 # Generating UID
-def generate_uid(stu_id, eve_name, eve_dept, eve_date):
-    random_num = random.randint(1000, 9999)
-    certificate_id = str(stu_id)+str(eve_name)+str(eve_dept) + \
-        str(eve_date).replace("-", "")+str(random_num)
-    return certificate_id
+# def generate_uid(stu_id, eve_name, eve_dept, eve_date):
+#     random_num = random.randint(1000, 9999)
+#     certificate_id = str(stu_id)+str(eve_name)+str(eve_dept) + \
+#         str(eve_date).replace("-", "")+str(random_num)
+#     return certificate_id
 
 
 # ManageUser API
-class ManageUserAPI(generics.RetrieveUpdateAPIView):
-    serializer_class = UserSerializer
-    permission_classes = (permissions.IsAuthenticated,)
+# class ManageUserAPI(generics.RetrieveUpdateAPIView):
+#     serializer_class = UserSerializer
+#     permission_classes = (permissions.IsAuthenticated,)
 
-    def get_object(self):
-        return self.request.user
+#     def get_object(self):
+#         return self.request.user
 
 
 # Login API
-class LoginAPI(KnoxLoginView):
-    permission_classes = (permissions.AllowAny,)
+# class LoginAPI(KnoxLoginView):
+#     permission_classes = (permissions.AllowAny,)
 
-    def post(self, request, format=None):
-        serializer = AuthTokenSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        login(request, user)
-        return super(LoginAPI, self).post(request, format=None)
+#     def post(self, request, format=None):
+#         serializer = AuthTokenSerializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.validated_data['user']
+#         login(request, user)
+#         return super(LoginAPI, self).post(request, format=None)
 
 
 # Register API
-class RegisterAPI(generics.GenericAPIView):
-    serializer_class = RegisterSerializer
+# class RegisterAPI(generics.GenericAPIView):
+#     serializer_class = RegisterSerializer
 
-    def post(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user = serializer.save()
-        return Response({
-            "user": UserSerializer(user, context=self.get_serializer_context()).data,
-            "token": AuthToken.objects.create(user)[1]
-        })
+#     def post(self, request, *args, **kwargs):
+#         serializer = self.get_serializer(data=request.data)
+#         serializer.is_valid(raise_exception=True)
+#         user = serializer.save()
+#         return Response({
+#             "user": UserSerializer(user, context=self.get_serializer_context()).data,
+#             "token": AuthToken.objects.create(user)[1]
+#         })
 
 
-# Getting all events
+# Getting all events view
 @permission_classes((IsAuthenticated,))
 class EventsOperations(APIView):
     def get(self, request):

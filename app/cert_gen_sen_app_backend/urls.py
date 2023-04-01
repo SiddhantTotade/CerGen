@@ -1,17 +1,27 @@
 from .views import *
 from django.urls import path
 from .certificate_generator import *
-from .views import RegisterAPI
+# from .views import RegisterAPI
 from knox import views as knox_views
-from .views import LoginAPI
+# from .views import LoginAPI
 from .ppt_2_image_preview import *
 
 urlpatterns = [
-    path('register/', RegisterAPI.as_view(), name='register'),
-    path('login/', LoginAPI.as_view(), name='login'),
-    path('profile/', ManageUserAPI.as_view(), name='manage_user'),
-    path('logout/', knox_views.LogoutView.as_view(), name='logout'),
-    path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutal'),
+    #     path('register/', RegisterAPI.as_view(), name='register'),
+    #     path('login/', LoginAPI.as_view(), name='login'),
+    #     path('profile/', ManageUserAPI.as_view(), name='manage_user'),
+    #     path('logout/', knox_views.LogoutView.as_view(), name='logout'),
+    #     path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutal'),
+
+    path('register/', UserRegistrationView.as_view(), name='register'),
+    path('login/', UserLoginView.as_view(), name='login'),
+    path('profile/', UserProfileView.as_view(), name='profile'),
+    path('change-password/', UserChangePasswordView.as_view(),
+         name='change_password'),
+    path('reset-password/', SendPasswordResetEmailView.as_view(),
+         name='send_reset_email_password'),
+    path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(),
+         name='reset_password'),
 
     path("all-events/", EventsOperations.as_view()),
     path("event/<slug:slug>", FilteredEvent.as_view()),
