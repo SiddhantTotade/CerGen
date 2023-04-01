@@ -49,10 +49,10 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
 
         if password != password2:
             raise serializers.ValidationError("Password is not matching")
-        return super().validate(attrs)
+        return attrs
 
     def create(self, validated_data):
-        return User.object.create_user(**validated_data)
+        return User.objects.create_user(**validated_data)
 
 
 # User login serializer

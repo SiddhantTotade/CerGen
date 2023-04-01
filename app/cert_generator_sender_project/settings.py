@@ -106,6 +106,8 @@ DATABASES = {
     }
 }
 
+AUTH_USER_MODEL = 'cert_gen_sen_app_backend.User'
+
 # Password validation
 # https://docs.djangoproject.com/en/4.1/ref/settings/#auth-password-validators
 

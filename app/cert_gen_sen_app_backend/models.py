@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import BaseUserManager, AbstractBaseUser, User
+from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 import os
@@ -34,7 +34,7 @@ class UserManager(BaseUserManager):
 
         return user
 
-    def create_super_user(self, email, name, tc, password=None):
+    def create_superuser(self, email, name, tc, password=None):
         user = self.create_user(
             email,
             password=password,
@@ -60,7 +60,7 @@ class User(AbstractBaseUser):
     is_active = models.BooleanField(default=True)
     is_admin = models.BooleanField(default=False)
     created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     object = UserManager()
 
