@@ -1,27 +1,47 @@
-import React, { useState } from 'react';
-import { Container, TextField, Typography, Button, Grid, Link } from '@mui/material';
-import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
-import BackdropSpinner from '../../components/base_components/Backdrop';
+import React, { useState, useEffect } from 'react';
+import { Container, TextField, Typography, Button, Grid, Link, CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom'
+import { useLoginUserMutation } from '../../services/userAuthAPI';
+import { getToken, storeToken } from '../../services/LocalStorageService';
+import { useDispatch } from 'react-redux';
+import { setUserToken } from '../../features/authSlice';
 
 const LoginPage = () => {
 
-    const [openSpinner, setOpenSpinner] = useState(false)
+    const [error, setError] = useState({})
 
-    const [username, setUsername] = useState('');
-    const [password, setPassword] = useState('');
+    const dispatch = useDispatch()
+
     const navigate = useNavigate()
 
-    const handleLogin = (e) => {
-        e.preventDefault();
-        setOpenSpinner(true)
-        setTimeout(() => { setOpenSpinner(false) }, 3000)
-        const url = "http://127.0.0.1:8000/api/login/"
-        axios.post(url, {
-            "username": username,
-            "password": password,
-        }).then(res => localStorage.setItem("token", res.data.token)).then(localStorage.setItem('username', username)).then(setTimeout(() => navigate("/"), 3000)).catch(err => console.log(err))
+    const [loginUser, { isLoading }] = useLoginUserMutation()
+
+    const handleLogin = async (e) => {
+        e.preventDefault()
+        const data = new FormData(e.currentTarget)
+        const actualData = {
+            email: data.get('email'),
+            password: data.get('password')
+        }
+
+        const res = await loginUser(actualData)
+
+        if (res.error) {
+            setError(res.error.data.errors)
+        }
+        if (res.data) {
+            storeToken(res.data.token)
+            let { access_token } = getToken()
+            dispatch(setUserToken({ access_token: access_token }))
+            navigate('/')
+        }
     }
+
+    let { access_token } = getToken()
+
+    useEffect(() => {
+        dispatch(setUserToken({ access_token: access_token }))
+    }, [access_token, dispatch])
 
     return (
         <>
@@ -34,9 +54,8 @@ const LoginPage = () => {
                         required
                         margin="normal"
                         variant="outlined"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
                     />
+                    {error.email ? <Typography>{error.email[0]}</Typography> : ""}
                     <TextField
                         label="Password"
                         fullWidth
@@ -44,25 +63,26 @@ const LoginPage = () => {
                         margin="normal"
                         variant="outlined"
                         type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
                     />
+                    {error.password ? <Typography>{error.password[0]}</Typography> : ""}
                     <Grid container justify="space-between">
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            onClick={handleLogin}
-                            sx={{ marginBottom: "10px" }}
-                        >Login
-                        </Button>
+                        {
+                            isLoading ? <CircularProgress /> :
+                                <Button
+                                    type="submit"
+                                    variant="contained"
+                                    color="primary"
+                                    onClick={handleLogin}
+                                    sx={{ marginBottom: "10px" }}
+                                >Login
+                                </Button>
+                        }
                     </Grid>
                 </form>
                 <Link href="/api/register" >
                     Don't have an account? Register
                 </Link>
             </Container>
-            <BackdropSpinner open={openSpinner} />
         </>
     );
 };
