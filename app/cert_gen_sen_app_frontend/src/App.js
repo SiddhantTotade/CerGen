@@ -17,10 +17,10 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route
+          {/* <Route
             index
             element={!access_token ? <LoginPage /> : <Navigate to="/home" />}
-          />
+          /> */}
           <Route path="/api/login" element={<LoginPage />} />
           <Route path="/api/register" element={<RegisterPage />} />
         </Route>

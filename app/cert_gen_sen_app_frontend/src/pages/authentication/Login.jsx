@@ -44,48 +44,46 @@ const LoginPage = () => {
     }, [access_token, dispatch])
 
     return (
-        <>
-            <Box component='form' id='login-form' noValidate onSubmit={handleLogin}>
-                <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)" }}>
-                    <Typography variant="h4" align="center" gutterBottom>Login</Typography>
-                    <TextField
-                        label="Username"
-                        fullWidth
-                        required
-                        margin="normal"
-                        variant="outlined"
-                    />
-                    {error.email ? <Typography>{error.email[0]}</Typography> : ""}
-                    <TextField
-                        label="Password"
-                        fullWidth
-                        required
-                        margin="normal"
-                        variant="outlined"
-                        type="password"
-                    />
-                    {error.password ? <Typography>{error.password[0]}</Typography> : ""}
-                    <Grid container justify="space-between">
-                        {
-                            isLoading ? <CircularProgress /> :
-                                <Button
-                                    type="submit"
-                                    variant="contained"
-                                    color="primary"
-                                    sx={{ marginBottom: "10px" }}
-                                >Login
-                                </Button>
-                        }
-                    </Grid>
-                    <NavLink to='/reset-password-email' >Forgot Password</NavLink>
-                    <Typography> Don't have an account?
-                        <Link href="/api/register" >
-                            Register
-                        </Link>
-                    </Typography >
-                </Container>
-            </Box>
-        </>
+        <Box component='form' id='login-form' noValidate onSubmit={handleLogin}>
+            <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)" }}>
+                <Typography variant="h4" align="center" gutterBottom>Login</Typography>
+                <TextField
+                    label="Username"
+                    fullWidth
+                    required
+                    margin="normal"
+                    variant="outlined"
+                />
+                {error.email ? <Typography>{error.email[0]}</Typography> : ""}
+                <TextField
+                    label="Password"
+                    fullWidth
+                    required
+                    margin="normal"
+                    variant="outlined"
+                    type="password"
+                />
+                {error.password ? <Typography>{error.password[0]}</Typography> : ""}
+                <Grid container justify="space-between">
+                    {
+                        isLoading ? <CircularProgress /> :
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                sx={{ marginBottom: "10px" }}
+                            >Login
+                            </Button>
+                    }
+                </Grid>
+                <NavLink to='/reset-password-email' >Forgot Password</NavLink>
+                <Typography> Don't have an account?
+                    <Link href="/api/register" >
+                        Register
+                    </Link>
+                </Typography >
+            </Container>
+        </Box>
     );
 };
 
