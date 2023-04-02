@@ -19,7 +19,7 @@
     "react-photo-album": "^2.0.3",
     "react-redux": "^8.0.5",
     "react-responsive-carousel": "^3.2.23",
-    "react-router-dom": "^6.4.3",
+    "react-router-dom": "^6.10.0",
     "react-scripts": "^5.0.1",
     "react-webcam": "^7.0.1",
     "sass": "^1.60.0",

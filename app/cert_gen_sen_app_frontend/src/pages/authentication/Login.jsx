@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, TextField, Typography, Button, Grid, Link, CircularProgress } from '@mui/material';
-import { useNavigate } from 'react-router-dom'
+import { Container, TextField, Typography, Box, Button, Grid, Link, CircularProgress } from '@mui/material';
+import { NavLink, useNavigate } from 'react-router-dom'
 import { useLoginUserMutation } from '../../services/userAuthAPI';
 import { getToken, storeToken } from '../../services/LocalStorageService';
 import { useDispatch } from 'react-redux';
@@ -10,11 +10,13 @@ const LoginPage = () => {
 
     const [error, setError] = useState({})
 
-    const dispatch = useDispatch()
-
     const navigate = useNavigate()
 
+    const dispatch = useDispatch()
+
     const [loginUser, { isLoading }] = useLoginUserMutation()
+
+    let { access_token } = getToken()
 
     const handleLogin = async (e) => {
         e.preventDefault()
@@ -33,11 +35,9 @@ const LoginPage = () => {
             storeToken(res.data.token)
             let { access_token } = getToken()
             dispatch(setUserToken({ access_token: access_token }))
-            navigate('/')
+            navigate('/home')
         }
     }
-
-    let { access_token } = getToken()
 
     useEffect(() => {
         dispatch(setUserToken({ access_token: access_token }))
@@ -45,9 +45,9 @@ const LoginPage = () => {
 
     return (
         <>
-            <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)" }}>
-                <Typography variant="h4" align="center" gutterBottom>Login</Typography>
-                <form>
+            <Box component='form' id='login-form' noValidate onSubmit={handleLogin}>
+                <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)" }}>
+                    <Typography variant="h4" align="center" gutterBottom>Login</Typography>
                     <TextField
                         label="Username"
                         fullWidth
@@ -72,17 +72,19 @@ const LoginPage = () => {
                                     type="submit"
                                     variant="contained"
                                     color="primary"
-                                    onClick={handleLogin}
                                     sx={{ marginBottom: "10px" }}
                                 >Login
                                 </Button>
                         }
                     </Grid>
-                </form>
-                <Link href="/api/register" >
-                    Don't have an account? Register
-                </Link>
-            </Container>
+                    <NavLink to='/reset-password-email' >Forgot Password</NavLink>
+                    <Typography> Don't have an account?
+                        <Link href="/api/register" >
+                            Register
+                        </Link>
+                    </Typography >
+                </Container>
+            </Box>
         </>
     );
 };
