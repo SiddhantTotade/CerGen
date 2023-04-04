@@ -37,7 +37,7 @@ const RegisterPage = () => {
             name: data.get('name'),
             email: data.get('email'),
             password: data.get('password'),
-            passwoord2: data.get('password2'),
+            password2: data.get('password2'),
             tc: data.get('tc')
         }
 
@@ -95,7 +95,7 @@ const RegisterPage = () => {
                     id='password2'
                 />
                 {error.password ? <Typography>{error.password[0]}</Typography> : ""}
-                <FormControlLabel sx={{ marginTop: '13px', marginLeft: '0' }} label="I agree to terms and conditions" control={<CheckBox color='primary' name='tc' id='tc' />}></FormControlLabel>
+                <FormControlLabel sx={{ marginTop: '13px', marginLeft: '0' }} label="I agree to terms and conditions" control={<CheckBox value={true} color='primary' name='tc' id='tc' />}></FormControlLabel>
                 <Grid container justify="space-between" marginTop={5} >
                     {
                         isLoading ? <CircularProgress /> :
