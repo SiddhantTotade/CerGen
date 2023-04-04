@@ -43,7 +43,7 @@ const RegisterPage = () => {
         const res = await registerUser(actualData)
 
         if (res.error) {
-            setError(res.data.token)
+            setError(res.error.data.errors)
         }
         if (res.data) {
             storeToken(res.data.token)
@@ -60,6 +60,7 @@ const RegisterPage = () => {
                     fullWidth
                     margin="normal"
                     variant="outlined"
+                    type='name'
                     name='name'
                     id='name'
                 />
@@ -94,7 +95,7 @@ const RegisterPage = () => {
                     id='password2'
                 />
                 {error.password ? <Typography>{error.password[0]}</Typography> : ""}
-                <FormControlLabel sx={{ marginTop: '13px', marginLeft: '0' }} label="I agree to terms and conditions" control={<Checkbox value={true} color='primary' name='tc' id='tc' />}></FormControlLabel>
+                <FormControlLabel sx={{ marginTop: '13px' }} label="I agree to terms and conditions" control={<Checkbox value={true} color='primary' name='tc' id='tc' />}></FormControlLabel>
                 <Grid container justify="space-between" marginTop={5} >
                     {
                         isLoading ? <CircularProgress /> :
