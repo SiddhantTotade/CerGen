@@ -20,7 +20,7 @@ import openpyxl
 
 # Create your views here.
 
-# Authentication
+# Generate access and refresh tokens for users
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
 
@@ -36,8 +36,6 @@ class UserRegistrationView(APIView):
 
     def post(self, request, format=None):
         serializer = UserRegistrationSerializer(data=request.data)
-
-        print(serializer)
 
         serializer.is_valid(raise_exception=True)
         user = serializer.save()

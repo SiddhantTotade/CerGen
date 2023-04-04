@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
-import { Container, TextField, Typography, Button, Grid, Link, FormControlLabel, CircularProgress } from '@mui/material';
+import { Container, TextField, Typography, Checkbox, Button, Grid, FormControlLabel, CircularProgress } from '@mui/material';
 // import axios from 'axios';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { storeToken } from '../../services/LocalStorageService';
 import { useRegisterUserMutation } from '../../services/userAuthAPI';
 import { Box } from '@mui/system';
-import { CheckBox } from '@mui/icons-material';
 
 const RegisterPage = () => {
     // const [username, setUsername] = useState('');
@@ -95,7 +94,7 @@ const RegisterPage = () => {
                     id='password2'
                 />
                 {error.password ? <Typography>{error.password[0]}</Typography> : ""}
-                <FormControlLabel sx={{ marginTop: '13px', marginLeft: '0' }} label="I agree to terms and conditions" control={<CheckBox value={true} color='primary' name='tc' id='tc' />}></FormControlLabel>
+                <FormControlLabel sx={{ marginTop: '13px', marginLeft: '0' }} label="I agree to terms and conditions" control={<Checkbox value={true} color='primary' name='tc' id='tc' />}></FormControlLabel>
                 <Grid container justify="space-between" marginTop={5} >
                     {
                         isLoading ? <CircularProgress /> :
