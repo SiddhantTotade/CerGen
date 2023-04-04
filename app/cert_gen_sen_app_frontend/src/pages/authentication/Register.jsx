@@ -53,8 +53,8 @@ const RegisterPage = () => {
     }
 
     return (
-        <Box noValidate id='registration-form' onSubmit={handleRegister} component='form'>
-            <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)" }}>
+        <Box noValidate id='registration-form' onSubmit={handleRegister} component='form' >
+            <Container maxWidth="sm" sx={{ transform: "translate(0%,35%)", boxShadow: '5px 5px 25px 5px gray', borderRadius: '5px' }}>
                 <Typography variant="h4" align="center" gutterBottom>Register</Typography>
                 <TextField
                     label="Name"
@@ -95,23 +95,20 @@ const RegisterPage = () => {
                     id='password2'
                 />
                 {error.password ? <Typography>{error.password[0]}</Typography> : ""}
-                <FormControlLabel label="I agree to terms and conditions" control={<CheckBox value={true} name='tc' id='tc' />}></FormControlLabel>
-                <Grid container justify="space-between">
+                <FormControlLabel sx={{ marginTop: '13px', marginLeft: '0' }} label="I agree to terms and conditions" control={<CheckBox color='primary' name='tc' id='tc' />}></FormControlLabel>
+                <Grid container justify="space-between" marginTop={5}>
                     {
                         isLoading ? <CircularProgress /> :
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary"
-                                sx={{ marginBottom: "10px" }}
+                                sx={{ marginBottom: "10px", width: '100%' }}
                             >
                                 Register
                             </Button>
                     }
                 </Grid>
-                <Link href="/api/login">
-                    Already have an account? Login
-                </Link>
             </Container>
         </Box>
     );

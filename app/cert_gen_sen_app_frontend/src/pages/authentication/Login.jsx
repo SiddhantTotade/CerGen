@@ -76,12 +76,7 @@ const LoginPage = () => {
                             </Button>
                     }
                 </Grid>
-                <NavLink to='/reset-password-email' >Forgot Password</NavLink>
-                <Typography> Don't have an account?
-                    <Link href="/api/register" >
-                        Register
-                    </Link>
-                </Typography >
+                <Link href='/reset-password-email/' >Forgot Password ?</Link>
             </Container>
         </Box>
     );

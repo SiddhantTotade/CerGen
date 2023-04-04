@@ -79,8 +79,8 @@ export const userAuthAPI = createApi({
 });
 
 export const {
-  useLoginUserMutation,
   useRegisterUserMutation,
+  useLoginUserMutation,
   useGetLoggedInUserQuery,
   useChangeUserPasswordMutation,
   useSendPasswordResetEmailMutation,

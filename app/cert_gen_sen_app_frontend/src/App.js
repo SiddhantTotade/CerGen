@@ -5,9 +5,10 @@ import SpecificEvent from "./pages/SpecificEvent";
 import LoginPage from "./pages/authentication/Login";
 import RegisterPage from "./pages/authentication/Register";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import PrivateRoutes from "./PrivateRoutes";
+// import PrivateRoutes from "./PrivateRoutes";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import Layout from "./pages/Layout";
 
 function App() {
   const { access_token } = useSelector((state) => state.auth);
@@ -15,13 +16,13 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/">
-          <Route
-            index
-            element={!access_token ? <LoginPage /> : <Navigate to="/home" />}
-          />
+        <Route path="/" element={<Layout />}>
           <Route path="/api/login" element={<LoginPage />} />
           <Route path="/api/register" element={<RegisterPage />} />
+          {/* <Route
+            index
+            element={!access_token ? <LoginPage /> : <Navigate to="/home" />}
+          /> */}
         </Route>
 
         <Route
