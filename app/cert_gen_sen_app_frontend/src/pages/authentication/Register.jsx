@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Container, TextField, Typography, Checkbox, Button, Grid, FormControlLabel, CircularProgress } from '@mui/material';
+import { Container, TextField, Typography, Checkbox, Button, Grid, FormControlLabel, CircularProgress, Alert } from '@mui/material';
 // import axios from 'axios';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { storeToken } from '../../services/LocalStorageService';
@@ -109,6 +109,9 @@ const RegisterPage = () => {
                             </Button>
                     }
                 </Grid>
+                {
+                    error.non_field_errors ? <Alert severity='error'>{error.non_field_errors[0]}</Alert> : ""
+                }
             </Container>
         </Box>
     );
