@@ -54,8 +54,8 @@ const RegisterPage = () => {
 
     return (
         <Box noValidate id='registration-form' onSubmit={handleRegister} component='form' >
-            <Container maxWidth="sm" sx={{ transform: "translate(0%,35%)", boxShadow: '0px 0px 30px gray', borderRadius: '5px' }}>
-                <Typography variant="h4" align="center" gutterBottom paddingTop={2} >Register</Typography>
+            <Container maxWidth="sm" sx={{ transform: "translate(0%,35%)", boxShadow: '0px 0px 30px gray', borderRadius: '5px', padding: 2 }}>
+                <Typography variant="h4" align="center" gutterBottom >Register</Typography>
                 <TextField
                     label="Name"
                     fullWidth
@@ -96,7 +96,7 @@ const RegisterPage = () => {
                 />
                 {error.password ? <Typography>{error.password[0]}</Typography> : ""}
                 <FormControlLabel sx={{ marginTop: '13px', marginLeft: '0' }} label="I agree to terms and conditions" control={<CheckBox color='primary' name='tc' id='tc' />}></FormControlLabel>
-                <Grid container justify="space-between" marginTop={5} paddingBottom={2}>
+                <Grid container justify="space-between" marginTop={5} >
                     {
                         isLoading ? <CircularProgress /> :
                             <Button

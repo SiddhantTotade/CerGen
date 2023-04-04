@@ -45,7 +45,7 @@ const LoginPage = () => {
 
     return (
         <Box component='form' id='login-form' noValidate onSubmit={handleLogin}>
-            <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)" }}>
+            <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)", boxShadow: '0px 0px 30px gray', borderRadius: '5px', padding: 2 }}>
                 <Typography variant="h4" align="center" gutterBottom>Login</Typography>
                 <TextField
                     label="Username"
@@ -64,14 +64,14 @@ const LoginPage = () => {
                     type="password"
                 />
                 {error.password ? <Typography>{error.password[0]}</Typography> : ""}
-                <Grid container justify="space-between">
+                <Grid container justify="space-between" marginTop={5} paddingBottom={1}>
                     {
                         isLoading ? <CircularProgress /> :
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary"
-                                sx={{ marginBottom: "10px" }}
+                                sx={{ marginBottom: "10px", width: '100%' }}
                             >Login
                             </Button>
                     }
