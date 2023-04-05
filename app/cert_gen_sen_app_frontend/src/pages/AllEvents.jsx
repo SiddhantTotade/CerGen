@@ -10,6 +10,9 @@ import { useState, useEffect } from 'react';
 import axios from 'axios'
 import BackdropSpinner from '../components/base_components/Backdrop';
 import AlertSnackbar from '../components/base_components/AlertSnackbar';
+import { useGetAllEventsQuery } from '../services/eventsAPI';
+import { useDispatch, useSelector } from 'react-redux';
+import { getToken } from '../services/LocalStorageService';
 
 const card_sx = {
     maxWidth: 400,
@@ -30,22 +33,29 @@ export const AllEvents = () => {
     const [alertType, setAlertType] = useState("")
     const [openSpinner, setOpenSpinner] = useState(false)
 
+    const dispatch = useDispatch()
+    const { access_token } = getToken()
+    const { data, isSuccess } = useGetAllEventsQuery(access_token)
+
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     useEffect(() => {
-        const url = 'http://127.0.0.1:8000/api/all-events/'
-
-        const fetchData = async () => {
-            try {
-                const response = await axios.get(url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } })
-                setEventsData(response.data)
-            }
-            catch (error) {
-                console.log(error);
-            }
+        if (data && isSuccess) {
+            dispatch()
         }
-        fetchData()
-    }, [])
+        // const url = 'http://127.0.0.1:8000/api/all-events/'
+
+        // const fetchData = async () => {
+        //     try {
+        //         const response = await axios.get(url, { headers: { "authorization": "Bearer " + localStorage.getItem("access_token") } })
+        //         setEventsData(response.data)
+        //     }
+        //     catch (error) {
+        //         console.log(error);
+        //     }
+        // }
+        // fetchData()
+    }, [data, isSuccess, dispatch])
 
     function handleDelete(event_slug) {
         setOpenSpinner(true)

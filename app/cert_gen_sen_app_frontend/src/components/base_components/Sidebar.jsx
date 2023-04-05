@@ -25,12 +25,16 @@ import EventForm from "../event_components/EventForm";
 import FileForm from "../event_components/FileForm";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
 import BackdropSpinner from "./Backdrop";
-import axios from "axios";
 import { useState } from "react";
 import Footer from "./Footer";
 import { Home } from "../../pages/Home";
 import "../../pages/styles/home.css";
 import { useLocation } from "react-router-dom";
+import { useGetLoggedInUserQuery } from "../../services/userAuthAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { getToken, removeToken } from "../../services/LocalStorageService";
+import { unsetUserInfo, setUserInfo } from "../../features/userSlice";
+import { unsetUserToken } from "../../features/authSlice";
 
 const drawerWidth = 240;
 
@@ -110,11 +114,18 @@ export default function MiniDrawer() {
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
 
-  const navigate = useNavigate();
-
   const [openSpinner, setOpenSpinner] = useState(false);
 
-  const username = localStorage.getItem("username");
+  const navigate = useNavigate()
+
+  const dispatch = useDispatch()
+
+  const myData = useSelector(state => state.user)
+
+  const { access_token } = getToken()
+
+  const { data, isSuccess } = useGetLoggedInUserQuery(access_token)
+
 
   const listItemButton_sx = {
     minHeight: 48,
@@ -152,134 +163,133 @@ export default function MiniDrawer() {
     setCsvForm(false);
   };
 
-  const handleLogout = (e) => {
-    e.preventDefault();
-    setOpenSpinner(true);
-    setTimeout(() => {
-      setOpenSpinner(false);
-    }, 3000);
-    const url = "http://127.0.0.1:8000/api/logout/";
-    axios
-      .post(url, {
-        headers: { Authorization: "Token " + localStorage.getItem("token") },
-      })
-      .then(localStorage.clear())
-      .then(setTimeout(() => navigate("/api/login"), 3000))
-      .catch((err) => console.log(err));
+  const handleLogout = () => {
+    dispatch(unsetUserToken({ access_token: null }))
+    dispatch(unsetUserInfo({ name: "", email: "" }))
+    removeToken()
+    navigate('/api/login')
   };
+
+  React.useEffect(() => {
+    if (data && isSuccess) {
+      dispatch(setUserInfo({ email: data.email, name: data.name }))
+    }
+  }, [data, isSuccess, dispatch])
 
   return (
     <>
-      {location.pathname === "/" ? <div className="wave-container"></div> : ""}
-      <div>
-        <Box sx={{ display: "flex" }}>
-          <CssBaseline />
-          <AppBar position="fixed" open={open}>
-            <Toolbar>
-              <IconButton
-                color="inherit"
-                aria-label="open drawer"
-                onClick={handleDrawerOpen}
-                edge="start"
-                sx={{
-                  marginRight: 5,
-                  ...(open && { display: "none" }),
-                }}
-              >
-                <MenuIcon />
-              </IconButton>
-              <Typography variant="h6" noWrap component="div">
-                CerGen
-              </Typography>
-            </Toolbar>
-            <div className=" flex absolute right-2 hover:cursor-pointer rounded-md text-white top-20 gap-3 border-2 border-white p-4">
-              <PersonIcon />
-              <p>{username}</p>
-            </div>
-          </AppBar>
-          <Drawer variant="permanent" open={open}>
-            <DrawerHeader>
-              <IconButton onClick={handleDrawerClose}>
-                {theme.direction === "rtl" ? (
-                  <ChevronRightIcon />
-                ) : (
-                  <ChevronLeftIcon />
-                )}
-              </IconButton>
-            </DrawerHeader>
-            <Divider />
-            <List>
-              <Link to="/api/all-events">
-                <ListItem disablePadding sx={listitem_sx} key="all_events">
-                  <ListItemButton sx={listItemButton_sx}>
-                    <ListItemIcon sx={listItemIcon_sx}>
-                      <EventIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="All Events"
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-            </List>
-            <List>
-              <div onClick={handleForm}>
-                <ListItem disablePadding sx={listitem_sx} key="create_events">
-                  <ListItemButton sx={listItemButton_sx}>
-                    <ListItemIcon sx={listItemIcon_sx}>
-                      <AddCircleOutlineIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Create Event"
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </ListItemButton>
-                </ListItem>
+      <>
+        {location.pathname === "/" ? <div className="wave-container"></div> : ""}
+        <div>
+          <Box sx={{ display: "flex" }}>
+            <CssBaseline />
+            <AppBar position="fixed" open={open}>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{
+                    marginRight: 5,
+                    ...(open && { display: "none" }),
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" noWrap component="div">
+                  CerGen
+                </Typography>
+              </Toolbar>
+              <div className=" flex absolute right-2 hover:cursor-pointer rounded-md text-black top-20 gap-3 border-2 border-white p-4">
+                <PersonIcon />
+                <p>{myData.name}</p>
               </div>
-            </List>
-            <List>
-              <div onClick={handleCsvForm}>
-                <ListItem disablePadding sx={listitem_sx} key="upload_csv">
-                  <ListItemButton sx={listItemButton_sx}>
-                    <ListItemIcon sx={listItemIcon_sx}>
-                      <FileUploadIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Upload Participants"
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              </div>
-            </List>
-            <Divider />
-            <List>
-              <Link to="/api/logout" onClick={handleLogout}>
-                <ListItem disablePadding sx={listitem_sx} key="logout">
-                  <ListItemButton sx={listItemButton_sx}>
-                    <ListItemIcon sx={listItemIcon_sx}>
-                      <LogoutIcon />
-                    </ListItemIcon>
-                    <ListItemText
-                      primary="Logout"
-                      sx={{ opacity: open ? 1 : 0 }}
-                    />
-                  </ListItemButton>
-                </ListItem>
-              </Link>
-            </List>
-          </Drawer>
-          {location.pathname === "/" ? <Home /> : ""}
-          <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-            <DrawerHeader />
+            </AppBar>
+            <Drawer variant="permanent" open={open}>
+              <DrawerHeader>
+                <IconButton onClick={handleDrawerClose}>
+                  {theme.direction === "rtl" ? (
+                    <ChevronRightIcon />
+                  ) : (
+                    <ChevronLeftIcon />
+                  )}
+                </IconButton>
+              </DrawerHeader>
+              <Divider />
+              <List>
+                <Link to="/api/all-events">
+                  <ListItem disablePadding sx={listitem_sx} key="all_events">
+                    <ListItemButton sx={listItemButton_sx}>
+                      <ListItemIcon sx={listItemIcon_sx}>
+                        <EventIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="All Events"
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              </List>
+              <List>
+                <div onClick={handleForm}>
+                  <ListItem disablePadding sx={listitem_sx} key="create_events">
+                    <ListItemButton sx={listItemButton_sx}>
+                      <ListItemIcon sx={listItemIcon_sx}>
+                        <AddCircleOutlineIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Create Event"
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </div>
+              </List>
+              <List>
+                <div onClick={handleCsvForm}>
+                  <ListItem disablePadding sx={listitem_sx} key="upload_csv">
+                    <ListItemButton sx={listItemButton_sx}>
+                      <ListItemIcon sx={listItemIcon_sx}>
+                        <FileUploadIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Upload Participants"
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </div>
+              </List>
+              <Divider />
+              <List>
+                <Link to="/api/logout" onClick={handleLogout}>
+                  <ListItem disablePadding sx={listitem_sx} key="logout">
+                    <ListItemButton sx={listItemButton_sx}>
+                      <ListItemIcon sx={listItemIcon_sx}>
+                        <LogoutIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Logout"
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              </List>
+            </Drawer>
+            {location.pathname === "/" ? <Home /> : ""}
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+              <DrawerHeader />
+            </Box>
+            <EventForm open={form} onClose={handleFormClose} />
+            <FileForm open={csv_form} onClose={handleCsvFormClose} />
           </Box>
-          <EventForm open={form} onClose={handleFormClose} />
-          <FileForm open={csv_form} onClose={handleCsvFormClose} />
-        </Box>
-        <BackdropSpinner open={openSpinner} />
-      </div>
-      {/* <Footer /> */}
+          <BackdropSpinner open={openSpinner} />
+        </div>
+      </>
+      <Footer />
     </>
   );
 }

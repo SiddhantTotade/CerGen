@@ -8,6 +8,7 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.authentication import *
 from .models import *
 from .serializers import *
 from .resources import *
@@ -163,8 +164,10 @@ def get_event_by_slug(request, slug):
 
 
 # Getting all events view
-@permission_classes((IsAuthenticated,))
 class EventsOperations(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+
     def get(self, request):
         all_events = reversed(Event.objects.all())
 

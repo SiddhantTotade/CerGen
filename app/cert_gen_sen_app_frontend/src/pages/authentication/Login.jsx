@@ -35,7 +35,7 @@ const LoginPage = () => {
             storeToken(res.data.token)
             let { access_token } = getToken()
             dispatch(setUserToken({ access_token: access_token }))
-            navigate('/home')
+            navigate('/api/home')
         }
     }
 

@@ -16,18 +16,31 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Layout />}>
-          <Route index path="/api/login" element={<LoginPage />} />
+        <Route element={<Layout />}>
+          <Route path="/api/login" element={<LoginPage />} />
+          <Route index path="/api/home" element={<Home />} />
           <Route path="/api/register" element={<RegisterPage />} />
-          {/* <Route
+          <Route
             index
-            element={!access_token ? <LoginPage /> : <Navigate to="/home" />}
-          /> */}
+            element={
+              !access_token ? (
+                <Navigate to="/api/login" />
+              ) : (
+                <Navigate to="/api/home" />
+              )
+            }
+          />
         </Route>
 
         <Route
           path="/api/home"
-          element={access_token ? <Home /> : <Navigate to="/api/login" />}
+          element={
+            access_token ? (
+              <Navigate to="/api/home" />
+            ) : (
+              <Navigate to="/api/login" />
+            )
+          }
         />
 
         <Route path="/api/all-events" element={<AllEvents />} />
