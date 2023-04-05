@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Container, TextField, Typography, Box, Button, Grid, Link, CircularProgress } from '@mui/material';
-import { NavLink, useNavigate } from 'react-router-dom'
+import { Container, TextField, Alert, Typography, Box, Button, Grid, Link, CircularProgress } from '@mui/material';
+import { useNavigate } from 'react-router-dom'
 import { useLoginUserMutation } from '../../services/userAuthAPI';
 import { getToken, storeToken } from '../../services/LocalStorageService';
 import { useDispatch } from 'react-redux';
@@ -45,7 +45,7 @@ const LoginPage = () => {
 
     return (
         <Box component='form' id='login-form' noValidate onSubmit={handleLogin}>
-            <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)", boxShadow: '0px 0px 30px gray', borderRadius: '5px', padding: 2 }}>
+            <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)", boxShadow: '10px 12px 20px gray', borderRadius: '5px', padding: 2 }}>
                 <Typography variant="h4" align="center" gutterBottom>Login</Typography>
                 <TextField
                     label="Email"
@@ -67,9 +67,9 @@ const LoginPage = () => {
                     name='password'
                 />
                 {error.password ? <Typography>{error.password[0]}</Typography> : ""}
-                <Grid container justify="space-between" marginTop={5} paddingBottom={1}>
+                <Grid container sx={{ display: 'flex', justifyContent: 'center' }} marginTop={5} paddingBottom={1}>
                     {
-                        isLoading ? <CircularProgress /> :
+                        isLoading ? <CircularProgress sx={{ display: 'flex', justifyContent: 'center' }} /> :
                             <Button
                                 type="submit"
                                 variant="contained"
@@ -80,6 +80,11 @@ const LoginPage = () => {
                     }
                 </Grid>
                 <Link href='/reset-password-email/' >Forgot Password ?</Link>
+                <Box marginTop={2}>
+                    {
+                        error.non_fields_errors ? <Alert severity='error'>{error.non_fields_errors}</Alert> : ""
+                    }
+                </Box>
             </Container>
         </Box>
     );

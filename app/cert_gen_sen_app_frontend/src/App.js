@@ -17,7 +17,7 @@ function App() {
     <Router>
       <Routes>
         <Route path="/" element={<Layout />}>
-          <Route path="/api/login" element={<LoginPage />} />
+          <Route index path="/api/login" element={<LoginPage />} />
           <Route path="/api/register" element={<RegisterPage />} />
           {/* <Route
             index

@@ -27,7 +27,7 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         password2 = attrs.get('password2')
 
         if password != password2:
-            raise serializers.ValidationError("Password is not matching")
+            raise serializers.ValidationError("Password and Confirm Password is not matching")
         return attrs
 
     def create(self, validated_data):

@@ -1,27 +1,11 @@
 import React, { useState } from 'react';
 import { Container, TextField, Typography, Checkbox, Button, Grid, FormControlLabel, CircularProgress, Alert } from '@mui/material';
-// import axios from 'axios';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { storeToken } from '../../services/LocalStorageService';
 import { useRegisterUserMutation } from '../../services/userAuthAPI';
 import { Box } from '@mui/system';
 
 const RegisterPage = () => {
-    // const [username, setUsername] = useState('');
-    // const [password, setPassword] = useState('');
-    // const [email, setEmail] = useState('');
-    // const [isRegister, setIsRegister] = useState(false);
-    // const navigate = useNavigate()
-
-    // const handleRegister = (e) => {
-    //     e.preventDefault();
-    //     const url = "http://127.0.0.1:8000/api/register/"
-    //     axios.post(url, {
-    //         "username": username,
-    //         "email": email,
-    //         "password": password,
-    //     }).then(res => localStorage.setItem("token", res.data.token)).then(setTimeout(() => navigate("/"), 3000)).catch(err => console.log(err))
-    // }
 
     const [error, setError] = useState({})
 
@@ -53,7 +37,7 @@ const RegisterPage = () => {
 
     return (
         <Box noValidate id='registration-form' onSubmit={handleRegister} component='form' >
-            <Container maxWidth="sm" sx={{ transform: "translate(0%,35%)", boxShadow: '0px 0px 30px gray', borderRadius: '5px', padding: 2 }}>
+            <Container maxWidth="sm" sx={{ transform: "translate(0%,35%)", boxShadow: '10px 12px 20px gray', borderRadius: '5px', padding: 2 }}>
                 <Typography variant="h4" align="center" gutterBottom >Register</Typography>
                 <TextField
                     label="Name"
@@ -109,9 +93,11 @@ const RegisterPage = () => {
                             </Button>
                     }
                 </Grid>
-                {
-                    error.non_field_errors ? <Alert severity='error'>{error.non_field_errors[0]}</Alert> : ""
-                }
+                <Box marginTop={1}>
+                    {
+                        error.non_field_errors ? <Alert severity='error'>{error.non_field_errors[0]}</Alert> : ""
+                    }
+                </Box>
             </Container>
         </Box>
     );
