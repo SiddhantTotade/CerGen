@@ -15,6 +15,9 @@ import BackdropSpinner from '../base_components/Backdrop';
 import { useCreateEventMutation } from '../../services/eventsAPI';
 import { getToken } from '../../services/LocalStorageService';
 import { useGetLoggedInUserQuery } from '../../services/userAuthAPI';
+import { useDispatch } from 'react-redux';
+import { setUserInfo } from '../../features/userSlice';
+import { useSelector } from 'react-redux';
 
 export default function EventForm(props) {
     const [openSnack, setOpenSnack] = useState(false)
@@ -34,10 +37,20 @@ export default function EventForm(props) {
 
     const { access_token } = getToken()
 
-    const data = useGetLoggedInUserQuery(access_token)
+    const myData = useSelector(state => state.user)
+
+    const { data, isSuccess } = useGetLoggedInUserQuery(access_token)
+
+    const dispatch = useDispatch()
+
+    React.useEffect(() => {
+        if (data && isSuccess) {
+            dispatch(setUserInfo({ email: data.email, name: data.name }))
+        }
+    }, [data, isSuccess, dispatch])
 
     const [eventData, setEventData] = useState({
-        user: data,
+        user: 1,
         event_name: "",
         subject: "",
         event_department: "",
@@ -45,7 +58,6 @@ export default function EventForm(props) {
         to_date: "",
         event_year: "",
     })
-
 
     const [createEvent, responseCreateEvent] = useCreateEventMutation()
 
