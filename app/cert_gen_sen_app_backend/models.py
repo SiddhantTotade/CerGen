@@ -63,10 +63,10 @@ class User(AbstractBaseUser):
     objects = UserManager()
 
     USERNAME_FIELD = 'email'
-    REQUIRED_FIELDS = ['name', 'tc']
+    REQUIRED_FIELDS = ['id', 'name', 'tc']
 
     def __str__(self):
-        return self.email
+        return str(self.id)
 
     def has_perm(self, perm, obj=None):
         return self.is_admin
