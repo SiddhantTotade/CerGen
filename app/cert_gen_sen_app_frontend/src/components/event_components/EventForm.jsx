@@ -8,11 +8,13 @@ import DialogTitle from '@mui/material/DialogTitle';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
-import axios from 'axios';
 import { useState } from 'react';
 import { Select } from '@mui/material';
 import AlertSnackbar from '../base_components/AlertSnackbar';
 import BackdropSpinner from '../base_components/Backdrop';
+import { useCreateEventMutation } from '../../services/eventsAPI';
+import { getToken } from '../../services/LocalStorageService';
+import { useGetLoggedInUserQuery } from '../../services/userAuthAPI';
 
 export default function EventForm(props) {
     const [openSnack, setOpenSnack] = useState(false)
@@ -30,7 +32,12 @@ export default function EventForm(props) {
     const to_onFocus = () => to_setFocused(true)
     const to_onBlur = () => to_setFocused(false)
 
+    const { access_token } = getToken()
+
+    const data = useGetLoggedInUserQuery(access_token)
+
     const [eventData, setEventData] = useState({
+        user: data,
         event_name: "",
         subject: "",
         event_department: "",
@@ -39,23 +46,26 @@ export default function EventForm(props) {
         event_year: "",
     })
 
+
+    const [createEvent, responseCreateEvent] = useCreateEventMutation()
+
     const [eventYear, setEventYear] = useState("")
 
     function handleSubmit(e) {
 
-        e.preventDefault();
-        setOpenSpinner(true)
-        setTimeout(() => { setOpenSpinner(false) }, 5000)
-        const url = 'http://127.0.0.1:8000/api/all-events/'
-        axios.post(url, {
-            'user': 1,
-            'event_name': eventData.event_name,
-            'subject': eventData.subject,
-            'event_department': eventData.event_department,
-            'from_date': eventData.from_date,
-            'to_date': eventData.to_date,
-            'event_year': eventData.event_year,
-        }, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
+        // e.preventDefault();
+        // setOpenSpinner(true)
+        // setTimeout(() => { setOpenSpinner(false) }, 5000)
+        // const url = 'http://127.0.0.1:8000/api/all-events/'
+        // axios.post(url, {
+        //     'user': 1,
+        //     'event_name': eventData.event_name,
+        //     'subject': eventData.subject,
+        //     'event_department': eventData.event_department,
+        //     'from_date': eventData.from_date,
+        //     'to_date': eventData.to_date,
+        //     'event_year': eventData.event_year,
+        // }, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
     }
 
     function handleEventData(event) {
@@ -105,7 +115,7 @@ export default function EventForm(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
-                    <Button onClick={handleSubmit} >Create Event</Button>
+                    <Button onClick={() => createEvent(eventData, access_token)} >Create Event</Button>
                 </DialogActions>
             </Dialog>
             <BackdropSpinner open={openSpinner} />

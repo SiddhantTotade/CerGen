@@ -32,4 +32,4 @@ export const eventsAPI = createApi({
   }),
 });
 
-export const { useGetAllEventsQuery } = eventsAPI;
+export const { useGetAllEventsQuery, useCreateEventMutation } = eventsAPI;

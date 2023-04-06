@@ -126,7 +126,6 @@ export default function MiniDrawer() {
 
   const { data, isSuccess } = useGetLoggedInUserQuery(access_token)
 
-
   const listItemButton_sx = {
     minHeight: 48,
     justifyContent: open ? "initial" : "center",

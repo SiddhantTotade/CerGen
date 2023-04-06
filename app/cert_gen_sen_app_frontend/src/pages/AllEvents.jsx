@@ -31,8 +31,6 @@ export const AllEvents = () => {
 
     const { data = [], isLoading } = useGetAllEventsQuery(access_token)
 
-    console.log(data);
-
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     // function handleDelete(event_slug) {
