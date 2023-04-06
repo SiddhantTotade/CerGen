@@ -10,7 +10,7 @@ import { useState } from 'react';
 import axios from 'axios'
 import BackdropSpinner from '../components/base_components/Backdrop';
 import AlertSnackbar from '../components/base_components/AlertSnackbar';
-import { useGetAllEventsQuery } from '../services/eventsAPI';
+import { useGetAllEventsQuery, useDeleteEventMutation } from '../services/eventsAPI';
 import { getToken } from '../services/LocalStorageService';
 import WaveSkeleton from '../components/base_components/Skeleton';
 
@@ -30,6 +30,7 @@ export const AllEvents = () => {
     const { access_token } = getToken()
 
     const { data = [], isLoading } = useGetAllEventsQuery(access_token)
+    const [deleteEvent, responseDeleteEvent] = useDeleteEventMutation()
 
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
@@ -43,6 +44,8 @@ export const AllEvents = () => {
     // function handleCloseSnackbar() {
     //     setOpenSnack(false)
     // }
+
+    // console.log(data);
 
     return (
         <>
@@ -74,7 +77,7 @@ export const AllEvents = () => {
                                 </CardContent>
                                 <CardActions>
                                     <Button size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
-                                    {/* <Button size="small" onClick={() => handleDelete(event.slug)} >Delete</Button> */}
+                                    <Button size="small" onClick={() => deleteEvent({ access_token: access_token, slug: event.slug })} >Delete</Button>
                                 </CardActions>
                             </Card>
                         }) : <h2>No Data Available</h2>}

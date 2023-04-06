@@ -127,7 +127,7 @@ export default function EventForm(props) {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={props.onClose}>Cancel</Button>
-                    <Button onClick={() => createEvent(eventData, access_token)} >Create Event</Button>
+                    <Button onClick={() => createEvent({ access_token: access_token, eventData: eventData })} >Create Event</Button>
                 </DialogActions>
             </Dialog>
             <BackdropSpinner open={openSpinner} />

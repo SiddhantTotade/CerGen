@@ -16,7 +16,7 @@ export const eventsAPI = createApi({
       },
     }),
     createEvent: builder.mutation({
-      query: (data, access_token) => ({
+      query: (access_token, data) => ({
         url: "all-events/",
         method: "POST",
         body: data,
@@ -26,7 +26,22 @@ export const eventsAPI = createApi({
         },
       }),
     }),
+    deleteEvent: builder.mutation({
+      query: (data) => {
+        return {
+          url: `event/${data.slug}`,
+          method: "DELETE",
+          headers: {
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
-export const { useGetAllEventsQuery, useCreateEventMutation } = eventsAPI;
+export const {
+  useGetAllEventsQuery,
+  useCreateEventMutation,
+  useDeleteEventMutation,
+} = eventsAPI;
