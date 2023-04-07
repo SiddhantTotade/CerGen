@@ -17,6 +17,7 @@ from .helpers import *
 from itertools import islice
 from collections import OrderedDict
 import openpyxl
+import random
 
 
 # Create your views here.
@@ -121,11 +122,11 @@ def get_event_by_slug(request, slug):
 
 
 # Generating UID
-# def generate_uid(stu_id, eve_name, eve_dept, eve_date):
-#     random_num = random.randint(1000, 9999)
-#     certificate_id = str(stu_id)+str(eve_name)+str(eve_dept) + \
-#         str(eve_date).replace("-", "")+str(random_num)
-#     return certificate_id
+def generate_uid(stu_id, eve_name, eve_dept, eve_date):
+    random_num = random.randint(1000, 9999)
+    certificate_id = str(stu_id)+str(eve_name)+str(eve_dept) + \
+        str(eve_date).replace("-", "")+str(random_num)
+    return certificate_id
 
 
 # ManageUser API
@@ -197,8 +198,8 @@ class UploadParticipant(APIView):
         return JsonResponse("No participant data", safe=False)
 
     def post(self, request):
-        event_id = request.data['eventId']
-        participant_file = request.data['xlsx_file']
+        event_id = request.data['event_id']
+        participant_file = request.data['participants_file']
 
         wb = openpyxl.load_workbook(participant_file)
         work_sheet = wb['Form Responses 1']

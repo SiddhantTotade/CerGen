@@ -16,13 +16,13 @@ export const eventsAPI = createApi({
       },
     }),
     createEvent: builder.mutation({
-      query: (access_token, data) => ({
+      query: (data) => ({
         url: "all-events/",
         method: "POST",
-        body: data,
+        body: data.eventData,
         headers: {
           "Content-type": "application/json; charset=UTF-8",
-          authorization: `Bearer ${access_token}`,
+          authorization: `Bearer ${data.access_token}`,
         },
       }),
     }),

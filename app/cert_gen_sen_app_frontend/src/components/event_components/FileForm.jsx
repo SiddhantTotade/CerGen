@@ -8,87 +8,31 @@ import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import MenuItem from "@mui/material/MenuItem";
 import FormControl from "@mui/material/FormControl";
-import { useState, useEffect } from "react";
-import axios from "axios";
+import { useState } from "react";
 import BackdropSpinner from "../base_components/Backdrop";
 import AlertSnackbar from "../base_components/AlertSnackbar";
+import { useUploadParticipantsMutation } from "../../services/participantsAPI";
+import { useGetAllEventsQuery } from "../../services/eventsAPI";
+import { getToken } from "../../services/LocalStorageService";
 
 export default function FileForm(props) {
-  const [eventsData, setEventsData] = useState([]);
+  // const [eventsData, setEventsData] = useState([]);
   const [openSpinner, setOpenSpinner] = useState(false);
   const [openSnack, setOpenSnack] = useState(false);
   const [message, setMessage] = useState("");
   const [alertType, setAlertType] = useState("");
 
-  useEffect(() => {
-    const url = "http://127.0.0.1:8000/api/all-events/";
+  const { access_token } = getToken()
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(url, {
-          headers: { Authorization: "Token " + localStorage.getItem("token") },
-        });
-        setEventsData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, []);
-
-  const [file_focus, file_setFocused] = React.useState(false);
-  const [file_hasValue, file_setHasValue] = React.useState(false);
-  const file_onFocus = () => file_setFocused(true);
-  const file_onBlur = () => file_setFocused(false);
+  const [participantData, responseUploadParticipants] = useUploadParticipantsMutation()
+  const { data = [], isLoading } = useGetAllEventsQuery(access_token)
 
   const [events, setEvents] = React.useState("");
-  const [eventId, setEventId] = React.useState("");
-  const [eventFileData, setEventFileData] = React.useState({
-    eventID: "",
-    eventFile: null,
+
+  const [participantsFileData, setParticipantsFileData] = React.useState({
+    event_id: "",
+    participants_file: null,
   });
-
-  const handleChange = (event) => {
-    setEvents(event.target.value);
-    setEventId(event.target.value);
-  };
-
-  function handleFileChange(event) {
-    setEventFileData(event.target.files[0]);
-  }
-
-  function handleFileSubmit(event) {
-    event.preventDefault();
-    setOpenSpinner(true);
-    setTimeout(() => {
-      setOpenSpinner(false);
-    }, 5000);
-    const formData = new FormData();
-    formData.append("xlsx_file", eventFileData);
-    formData.append("eventId", eventId);
-    const url = "http://127.0.0.1:8000/api/upload-participants/";
-    const config = {
-      headers: {
-        "content-type": "multipart/form-data",
-        Authorization: "Token " + localStorage.getItem("token"),
-      },
-    };
-    axios
-      .post(url, formData, config)
-      .then(
-        setTimeout(() => {
-          setOpenSnack(true);
-        }, 5000)
-      )
-      .then((res) => setMessage(res.data))
-      .then(
-        message === "Participants uploaded successfully"
-          ? setAlertType("error")
-          : setAlertType("success")
-      )
-      .catch((err) => console.log(err))
-      .finally(props.onClose);
-  }
 
   function handleCloseSnackbar() {
     setOpenSnack(false);
@@ -98,18 +42,20 @@ export default function FileForm(props) {
     <div className="w-full">
       <Dialog {...props}>
         <DialogTitle>Upload File</DialogTitle>
-        <FormControl sx={{ minWidth: 400, margin: 2 }}>
+        <FormControl sx={{ minWidth: 400, margin: 2, gap: 2 }}>
           <InputLabel id="events">Choose Event</InputLabel>
           <Select
             labelId="events"
-            id="event_dropdown"
+            id='event_id'
+            name="event_id"
             value={events}
             variant="standard"
+            type="text"
             label="Events"
-            onChange={handleChange}
+            onChange={(e) => { setParticipantsFileData({ ...participantsFileData, event_id: e.target.value }) }}
           >
-            {eventsData !== undefined ? (
-              Object.values(eventsData).map((events) => {
+            {data !== undefined ? (
+              Object.values(data).map((events) => {
                 return (
                   <MenuItem value={events.id} key={events.id}>
                     {events.event_name}
@@ -123,25 +69,19 @@ export default function FileForm(props) {
             )}
           </Select>
           <TextField
-            onFocus={file_onFocus}
-            onBlur={file_onBlur}
-            onChange={(e) => {
-              handleFileChange(e);
-              if (e.target.value) file_setHasValue(true);
-              else file_setHasValue(false);
-            }}
-            type={file_hasValue || file_focus ? "file" : "file"}
+            inputProps={{ accept: ".xlsx, .xls" }}
+            onChange={(e) => { setParticipantsFileData({ ...participantsFileData, participants_file: e.target.files[0] }) }}
             autoFocus
             margin="dense"
-            id="xlsx_file"
-            label="File"
+            id="participants_file"
+            type='file'
             fullWidth
             variant="standard"
           />
         </FormControl>
         <DialogActions>
           <Button onClick={props.onClose}>Cancel</Button>
-          <Button onClick={handleFileSubmit}>Upload File</Button>
+          <Button onClick={() => participantData({ access_token: access_token, participantsFileData: participantsFileData })}>Upload File</Button>
         </DialogActions>
       </Dialog>
       <BackdropSpinner open={openSpinner} />

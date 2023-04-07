@@ -63,25 +63,7 @@ export default function EventForm(props) {
 
     const [eventYear, setEventYear] = useState("")
 
-    function handleSubmit(e) {
-
-        // e.preventDefault();
-        // setOpenSpinner(true)
-        // setTimeout(() => { setOpenSpinner(false) }, 5000)
-        // const url = 'http://127.0.0.1:8000/api/all-events/'
-        // axios.post(url, {
-        //     'user': 1,
-        //     'event_name': eventData.event_name,
-        //     'subject': eventData.subject,
-        //     'event_department': eventData.event_department,
-        //     'from_date': eventData.from_date,
-        //     'to_date': eventData.to_date,
-        //     'event_year': eventData.event_year,
-        // }, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 5000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err)).finally(props.onClose)
-    }
-
     function handleEventData(event) {
-
         const newData = { ...eventData }
         newData[event.target.id] = event.target.value
         setEventData(newData)
