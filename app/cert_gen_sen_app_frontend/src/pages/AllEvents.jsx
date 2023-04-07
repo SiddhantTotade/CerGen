@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import Sidebar from "../components/base_components/Sidebar";
 import { useGetAllEventsQuery, useDeleteEventMutation } from '../services/eventsAPI';
 import { getToken } from '../services/LocalStorageService';
+import LoaderSkeleton from '../components/base_components/LoaderSkeleton';
 
 const card_sx = {
     maxWidth: 400,
@@ -20,11 +21,36 @@ const card_sx = {
     }
 }
 
+const CardSkeleton =
+    <div className='grid gap-5 justify-center col-auto grid-cols-3 w-3/6' >
+        <Card >
+            <CardContent>
+                <div>
+                    <Typography gutterBottom variant="h5" component="div">
+                        <LoaderSkeleton />
+                    </Typography>
+                    <div className='flex flex-col'>
+                        <div>
+                            <LoaderSkeleton />
+                            <LoaderSkeleton />
+                        </div>
+                        <LoaderSkeleton />
+                    </div>
+                    <br />
+                </div>
+                <LoaderSkeleton barPadding={5} />
+            </CardContent>
+        </Card>
+    </div>
+
 export const AllEvents = () => {
+
+    const card = 6
 
     const { access_token } = getToken()
 
     const { data = [], isLoading } = useGetAllEventsQuery(access_token)
+
     const [deleteEvent, responseDeleteEvent] = useDeleteEventMutation()
 
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
@@ -34,7 +60,15 @@ export const AllEvents = () => {
             <Sidebar />
             <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray", width: "55%", margin: "auto" }}>All Events</Typography>
             {
-                isLoading ? "" :
+                isLoading ?
+                    [...Array(card)].map((e, i) =>
+                        <div key={i} className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto'>
+                            {
+                                CardSkeleton
+                            }
+                        </div>
+                    )
+                    :
                     <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                         {data !== 'No event data' ? data.map((event) => {
                             let event_url = '/api/event/' + event.slug
