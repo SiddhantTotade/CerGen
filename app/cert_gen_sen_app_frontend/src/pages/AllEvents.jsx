@@ -51,12 +51,14 @@ export const AllEvents = () => {
                                             <div className='flex flex-col'>
                                                 <div>
                                                     <LoaderSkeleton />
-                                                    <LoaderSkeleton />
+                                                    <LoaderSkeleton barWidth={100} />
                                                 </div>
                                             </div>
                                             <br />
                                         </div>
-                                        <LoaderSkeleton barPadding={5} />
+                                        <Typography variant='h1'>
+                                            <LoaderSkeleton />
+                                        </Typography>
                                     </CardContent>
                                 </Card>
                             )
