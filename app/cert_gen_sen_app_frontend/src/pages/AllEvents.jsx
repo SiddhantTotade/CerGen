@@ -21,28 +21,6 @@ const card_sx = {
     }
 }
 
-const CardSkeleton =
-    <div className='grid gap-5 justify-center col-auto grid-cols-3 w-3/6' >
-        <Card >
-            <CardContent>
-                <div>
-                    <Typography gutterBottom variant="h5" component="div">
-                        <LoaderSkeleton />
-                    </Typography>
-                    <div className='flex flex-col'>
-                        <div>
-                            <LoaderSkeleton />
-                            <LoaderSkeleton />
-                        </div>
-                        <LoaderSkeleton />
-                    </div>
-                    <br />
-                </div>
-                <LoaderSkeleton barPadding={5} />
-            </CardContent>
-        </Card>
-    </div>
-
 export const AllEvents = () => {
 
     const card = 6
@@ -61,13 +39,29 @@ export const AllEvents = () => {
             <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray", width: "55%", margin: "auto" }}>All Events</Typography>
             {
                 isLoading ?
-                    [...Array(card)].map((e, i) =>
-                        <div key={i} className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto'>
-                            {
-                                CardSkeleton
-                            }
-                        </div>
-                    )
+                    <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto'>
+                        {
+                            [...Array(card)].map((e, i) =>
+                                <Card key={i} >
+                                    <CardContent>
+                                        <div>
+                                            <Typography gutterBottom variant="h5" component="div">
+                                                <LoaderSkeleton />
+                                            </Typography>
+                                            <div className='flex flex-col'>
+                                                <div>
+                                                    <LoaderSkeleton />
+                                                    <LoaderSkeleton />
+                                                </div>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <LoaderSkeleton barPadding={5} />
+                                    </CardContent>
+                                </Card>
+                            )
+                        }
+                    </div>
                     :
                     <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                         {data !== 'No event data' ? data.map((event) => {
