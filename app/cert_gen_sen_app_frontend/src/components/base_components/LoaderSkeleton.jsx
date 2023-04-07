@@ -2,7 +2,7 @@ import * as React from 'react';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 
-export default function BarSkeleton(props) {
+export default function LoaderSkeleton(props) {
 
     const width = props.barWidth
 

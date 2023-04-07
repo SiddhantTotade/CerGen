@@ -6,13 +6,8 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import Sidebar from "../components/base_components/Sidebar";
-import { useState } from 'react';
-import axios from 'axios'
-import BackdropSpinner from '../components/base_components/Backdrop';
-import AlertSnackbar from '../components/base_components/AlertSnackbar';
 import { useGetAllEventsQuery, useDeleteEventMutation } from '../services/eventsAPI';
 import { getToken } from '../services/LocalStorageService';
-import CardSkeleton from '../components/base_components/CardSkeleton';
 
 const card_sx = {
     maxWidth: 400,
@@ -34,25 +29,12 @@ export const AllEvents = () => {
 
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    // function handleDelete(event_slug) {
-    //     setOpenSpinner(true)
-    //     setTimeout(() => { setOpenSpinner(false) }, 2000)
-    //     const url = 'http://127.0.0.1:8000/api/event/' + event_slug
-    //     axios.delete(url, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(setTimeout(() => { setOpenSnack(true) }, 2000)).then(res => setMessage(res.data)).then(message === "Event added successfully" ? setAlertType("error") : setAlertType("success")).catch(err => console.log(err))
-    // }
-
-    // function handleCloseSnackbar() {
-    //     setOpenSnack(false)
-    // }
-
-    // console.log(data);
-
     return (
         <>
             <Sidebar />
             <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray", width: "55%", margin: "auto" }}>All Events</Typography>
             {
-                isLoading ? <CardSkeleton /> :
+                isLoading ? "" :
                     <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                         {data !== 'No event data' ? data.map((event) => {
                             let event_url = '/api/event/' + event.slug
