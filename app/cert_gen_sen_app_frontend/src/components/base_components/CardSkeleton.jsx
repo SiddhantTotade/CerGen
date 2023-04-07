@@ -86,7 +86,7 @@ Media.propTypes = {
     loading: PropTypes.bool,
 };
 
-export default function WaveSkeleton() {
+export default function CardSkeleton() {
     return (
         <div>
             <Media loading />

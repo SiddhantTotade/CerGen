@@ -14,6 +14,7 @@ import AlertSnackbar from "../base_components/AlertSnackbar";
 import { useUploadParticipantsMutation } from "../../services/participantsAPI";
 import { useGetAllEventsQuery } from "../../services/eventsAPI";
 import { getToken } from "../../services/LocalStorageService";
+import BarSkeleton from "../base_components/BarSkeleton";
 
 export default function FileForm(props) {
   const [snackAndSpinner, setSnackAndSpinner] = useState({
@@ -68,8 +69,10 @@ export default function FileForm(props) {
                   {data !== undefined ? (
                     Object.values(data).map((events) => {
                       return (
-                        <MenuItem value={events.id} key={events.id}>
-                          {events.event_name}
+                        <MenuItem value={events.id} key={events.id} >
+                          {
+                            isLoading ? <BarSkeleton barWidth={"10px"} /> : events.event_name
+                          }
                         </MenuItem>
                       );
                     })

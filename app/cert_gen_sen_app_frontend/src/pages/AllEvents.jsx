@@ -12,7 +12,7 @@ import BackdropSpinner from '../components/base_components/Backdrop';
 import AlertSnackbar from '../components/base_components/AlertSnackbar';
 import { useGetAllEventsQuery, useDeleteEventMutation } from '../services/eventsAPI';
 import { getToken } from '../services/LocalStorageService';
-import WaveSkeleton from '../components/base_components/Skeleton';
+import CardSkeleton from '../components/base_components/CardSkeleton';
 
 const card_sx = {
     maxWidth: 400,
@@ -52,7 +52,7 @@ export const AllEvents = () => {
             <Sidebar />
             <Typography sx={{ display: "flex", justifyContent: "center", fontSize: "30px", borderBottom: "1px solid gray", width: "55%", margin: "auto" }}>All Events</Typography>
             {
-                isLoading ? <WaveSkeleton /> :
+                isLoading ? <CardSkeleton /> :
                     <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                         {data !== 'No event data' ? data.map((event) => {
                             let event_url = '/api/event/' + event.slug
