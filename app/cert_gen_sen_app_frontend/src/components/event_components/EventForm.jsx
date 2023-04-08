@@ -71,10 +71,6 @@ export default function EventForm(props) {
     }, [data, isSuccess, dispatch])
 
     React.useEffect(() => {
-        setEventData({ ...eventData, user: data.id })
-    }, [data.id])
-
-    React.useEffect(() => {
         if (!props.open) {
             setEventData("")
         }
@@ -107,7 +103,7 @@ export default function EventForm(props) {
                                 <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" fullWidth variant="standard" />
                                 <FormControl variant="standard" sx={{ width: "100%" }}  >
                                     <InputLabel id="demo-simple-select-label" variant='standard' >Choose Event Year</InputLabel>
-                                    <Select labelId="demo-simple-select-label" id="event_year" variant="standard" onChange={(e) => setEventData({ ...eventData, event_year: e.target.value })} value={eventData.event_year}>
+                                    <Select defaultValue='' labelId="demo-simple-select-label" id="event_year" variant="standard" onChange={(e) => setEventData({ ...eventData, event_year: e.target.value })} value={eventData.event_year}>
                                         <MenuItem value="" key="" >
                                             <em>None</em>
                                         </MenuItem>
@@ -117,12 +113,16 @@ export default function EventForm(props) {
                             </DialogContent>
                             <DialogActions>
                                 <Button variant='contained' onClick={props.onClose}>Cancel</Button>
-                                <Button variant='contained' onClick={() => { createEvent({ access_token: access_token, eventData: eventData }); setEventData("") }} >Create</Button>
+                                <Button variant='contained' onClick={() => { setEventData({ ...eventData, user: data.id }); createEvent({ access_token: access_token, eventData: eventData }); setEventData("") }} >Create</Button>
                             </DialogActions>
                         </Dialog>
                         {
                             responseCreateEvent.data ?
-                                <AlertSnackbar open={snackAndSpinner.openSnack} message={responseCreateEvent.data} severity={snackAndSpinner.alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} /> : ""
+                                <>
+                                    {
+                                        props.onClose
+                                    }
+                                    <AlertSnackbar open={snackAndSpinner.openSnack} message={responseCreateEvent.data} severity={snackAndSpinner.alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} /></> : ""
                         }
                     </div>}
         </>

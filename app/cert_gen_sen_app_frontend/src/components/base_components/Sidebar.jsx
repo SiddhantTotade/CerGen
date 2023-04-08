@@ -109,7 +109,7 @@ export default function MiniDrawer() {
   const location = useLocation();
 
   const [form, setForm] = React.useState(false);
-  const [csv_form, setCsvForm] = React.useState(false);
+  const [file_form, setCsvForm] = React.useState(false);
 
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -154,11 +154,11 @@ export default function MiniDrawer() {
     setForm(false);
   };
 
-  const handleCsvForm = () => {
+  const handleFileForm = () => {
     setCsvForm(true);
   };
 
-  const handleCsvFormClose = () => {
+  const handleFileFormClose = () => {
     setCsvForm(false);
   };
 
@@ -247,7 +247,7 @@ export default function MiniDrawer() {
                 </div>
               </List>
               <List>
-                <div onClick={handleCsvForm}>
+                <div onClick={handleFileForm}>
                   <ListItem disablePadding sx={listitem_sx} key="upload_csv">
                     <ListItemButton sx={listItemButton_sx}>
                       <ListItemIcon sx={listItemIcon_sx}>
@@ -283,7 +283,7 @@ export default function MiniDrawer() {
               <DrawerHeader />
             </Box>
             <EventForm open={form} onClose={handleFormClose} />
-            <FileForm open={csv_form} onClose={handleCsvFormClose} />
+            <FileForm open={file_form} onClose={handleFileFormClose} />
           </Box>
           <BackdropSpinner open={openSpinner} />
         </div>
