@@ -106,12 +106,15 @@ const Drawer = styled(MuiDrawer, {
 const listitem_sx = { display: "block" };
 
 export default function MiniDrawer() {
+
   const location = useLocation();
 
   const [form, setForm] = React.useState(false);
+  
   const [file_form, setCsvForm] = React.useState(false);
 
   const theme = useTheme();
+  
   const [open, setOpen] = React.useState(false);
 
   const [openSpinner, setOpenSpinner] = useState(false);
