@@ -15,9 +15,9 @@ const card_sx = {
     transition: 'all 0.25s ease-in-out',
     display: "grid",
     '&:hover': {
-        background: "#fcfcfa",
-        transform: 'scale(1.1)',
-        transition: 'all 0.25s ease-in-out'
+        background: "#f3f3f3",
+        // transform: 'scale(1.1)',
+        // transition: 'all 0.25s ease-in-out'
     }
 }
 
@@ -88,8 +88,8 @@ export const AllEvents = () => {
                                     </Typography>
                                 </CardContent>
                                 <CardActions>
-                                    <Button size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
-                                    <Button size="small" onClick={() => deleteEvent({ access_token: access_token, slug: event.slug })} >Delete</Button>
+                                    <Button variant='contained' size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
+                                    <Button variant='contained' size="small" onClick={() => deleteEvent({ access_token: access_token, slug: event.slug })} >Delete</Button>
                                 </CardActions>
                             </Card>
                         }) : <h2>No Data Available</h2>}
