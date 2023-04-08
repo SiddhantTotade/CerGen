@@ -16,8 +16,6 @@ const card_sx = {
     display: "grid",
     '&:hover': {
         background: "#f3f3f3",
-        // transform: 'scale(1.1)',
-        // transition: 'all 0.25s ease-in-out'
     }
 }
 
