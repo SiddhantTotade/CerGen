@@ -22,6 +22,8 @@ export default function EventForm(props) {
 
     const { access_token } = getToken()
 
+    const { data = [], isSuccess } = useGetLoggedInUserQuery(access_token)
+
     const [snackAndSpinner, setSnackAndSpinner] = useState({
         openSpinner: true,
         openSnack: true,
@@ -29,12 +31,8 @@ export default function EventForm(props) {
         alertType: "success"
     })
 
-    const { data = [], isSuccess } = useGetLoggedInUserQuery(access_token)
-
-    const [createEvent, responseCreateEvent] = useCreateEventMutation()
-
     const [eventData, setEventData] = useState({
-        user: data.id,
+        user: "",
         event_name: "",
         subject: "",
         event_department: "",
@@ -42,6 +40,8 @@ export default function EventForm(props) {
         to_date: "",
         event_year: "",
     })
+
+    const [createEvent, responseCreateEvent] = useCreateEventMutation()
 
     const [from_focus, from_setFocused] = React.useState(false)
     const [from_hasValue, from_setHasValue] = React.useState(false)
@@ -53,17 +53,7 @@ export default function EventForm(props) {
     const to_onFocus = () => to_setFocused(true)
     const to_onBlur = () => to_setFocused(false)
 
-    const dispatch = useDispatch()
-
-    React.useEffect(() => {
-        if (data && isSuccess) {
-            dispatch(setUserInfo({ email: data.email, name: data.name }))
-        }
-    }, [data, isSuccess, dispatch])
-
-    const [eventYear, setEventYear] = useState("")
-
-    let maxOffset = 20;
+    let maxOffset = 10;
     let thisYear = (new Date()).getFullYear();
     let allYears = [];
     for (let x = 0; x <= maxOffset; x++) {
@@ -72,15 +62,28 @@ export default function EventForm(props) {
 
     const yearList = allYears.map((x) => { return <MenuItem value={x} key={x}>{x}</MenuItem> });
 
+    const dispatch = useDispatch()
+
+    React.useEffect(() => {
+        if (data && isSuccess) {
+            dispatch(setUserInfo({ email: data.email, name: data.name }))
+        }
+    }, [data, isSuccess, dispatch])
+
+    React.useEffect(() => {
+        setEventData({ ...eventData, user: data.id })
+    }, [data.id])
+
+    React.useEffect(() => {
+        if (!props.open) {
+            setEventData("")
+        }
+    }, [props.open])
+
     function handleEventData(event) {
         const newData = { ...eventData }
         newData[event.target.id] = event.target.value
         setEventData(newData)
-    }
-
-    const handleEventYear = (event) => {
-        setEventYear(event.target.value)
-        setEventData({ event_year: event.target.value })
     }
 
     function handleCloseSnackbar() {
@@ -96,6 +99,7 @@ export default function EventForm(props) {
                         <Dialog {...props} >
                             <DialogTitle>Create Event</DialogTitle>
                             <DialogContent>
+                                <TextField sx={{ display: 'none' }} value={data.id} autoFocus margin="dense" id="user" label="User" type="text" fullWidth variant="standard" />
                                 <TextField onChange={(e) => handleEventData(e)} value={eventData.event_name} autoFocus margin="dense" id="event_name" label="Event Name" type="text" fullWidth variant="standard" />
                                 <TextField onChange={(e) => handleEventData(e)} value={eventData.subject} autoFocus margin="dense" id="subject" label="Event Subject" type="text" fullWidth variant="standard" />
                                 <TextField onChange={(e) => handleEventData(e)} value={eventData.event_department} autoFocus margin="dense" id="event_department" label="Event Department" type="text" fullWidth variant="standard" />
@@ -103,7 +107,7 @@ export default function EventForm(props) {
                                 <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" fullWidth variant="standard" />
                                 <FormControl variant="standard" sx={{ width: "100%" }}  >
                                     <InputLabel id="demo-simple-select-label" variant='standard' >Choose Event Year</InputLabel>
-                                    <Select labelId="demo-simple-select-label" id="demo-simple-select" variant="standard" onChange={handleEventYear} value={eventYear}>
+                                    <Select labelId="demo-simple-select-label" id="event_year" variant="standard" onChange={(e) => setEventData({ ...eventData, event_year: e.target.value })} value={eventData.event_year}>
                                         <MenuItem value="" key="" >
                                             <em>None</em>
                                         </MenuItem>
@@ -113,12 +117,12 @@ export default function EventForm(props) {
                             </DialogContent>
                             <DialogActions>
                                 <Button variant='contained' onClick={props.onClose}>Cancel</Button>
-                                <Button variant='contained' onClick={() => createEvent({ access_token: access_token, eventData: eventData })} >Create</Button>
+                                <Button variant='contained' onClick={() => { createEvent({ access_token: access_token, eventData: eventData }); setEventData("") }} >Create</Button>
                             </DialogActions>
                         </Dialog>
                         {
                             responseCreateEvent.data ?
-                                <AlertSnackbar open={snackAndSpinner.openSnack} message={snackAndSpinner.message} severity={snackAndSpinner.alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} /> : ""
+                                <AlertSnackbar open={snackAndSpinner.openSnack} message={responseCreateEvent.data} severity={snackAndSpinner.alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} /> : ""
                         }
                     </div>}
         </>
