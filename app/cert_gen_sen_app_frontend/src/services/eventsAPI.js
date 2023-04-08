@@ -16,15 +16,18 @@ export const eventsAPI = createApi({
       },
     }),
     createEvent: builder.mutation({
-      query: (data) => ({
-        url: "all-events/",
-        method: "POST",
-        body: data.eventData,
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          authorization: `Bearer ${data.access_token}`,
-        },
-      }),
+      query: (data) => {
+        console.log(data.eventData);
+        return {
+          url: "all-events/",
+          method: "POST",
+          body: data.eventData,
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
     }),
     deleteEvent: builder.mutation({
       query: (data) => {

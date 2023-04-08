@@ -96,7 +96,7 @@ export default function FileForm(props) {
               </FormControl>
               <DialogActions>
                 <Button variant='contained' onClick={props.onClose}>Cancel</Button>
-                <Button variant='contained' onClick={() => { participantData({ access_token: access_token, participantsFileData: participantsFileData }); setParticipantsFileData({ event_id: "", participants_file: null }) }}>Upload</Button>
+                <Button variant='contained' onClick={() => { participantData({ access_token: access_token, participantsFileData: participantsFileData }); setParticipantsFileData({ event_id: "", participants_file: null }); props.onClose() }}>Upload</Button>
               </DialogActions>
             </Dialog>
             {
