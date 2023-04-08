@@ -201,7 +201,7 @@ export default function MiniDrawer() {
                 </Typography>
               </Toolbar>
               <div className="flex absolute items-center top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-5 bg-blue-500 shadow-lg shadow-sky-900 p-4">
-                <PersonIcon sx={{ borderRadius: '20px', boxShadow: '2px 3px 8px #02104f', background: '#0426c9', fontSize: '40px', padding: '5px' }} />
+                <PersonIcon sx={{ borderRadius: '20px', boxShadow: '2px 2px 5px #02104f', background: '#0426c9', fontSize: '30px', padding: '5px' }} />
                 <p>{myData.name}</p>
               </div>
             </AppBar>
