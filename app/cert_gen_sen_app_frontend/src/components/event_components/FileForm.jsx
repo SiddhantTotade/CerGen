@@ -17,7 +17,7 @@ import { getToken } from "../../services/LocalStorageService";
 import LoaderSkeleton from "../base_components/LoaderSkeleton";
 
 export default function FileForm(props) {
-  
+
   const [snackAndSpinner, setSnackAndSpinner] = useState({
     openSpinner: true,
     openSnack: true,
@@ -56,7 +56,7 @@ export default function FileForm(props) {
             <Dialog {...props}>
               <DialogTitle>Upload File</DialogTitle>
               <FormControl sx={{ minWidth: 400, margin: 2, gap: 2 }}>
-                <InputLabel id="events">Choose Event</InputLabel>
+                <InputLabel sx={{ marginLeft: -1.5 }} id="events">Choose Event</InputLabel>
                 <Select
                   labelId="events"
                   id='event_id'
@@ -95,8 +95,8 @@ export default function FileForm(props) {
                 />
               </FormControl>
               <DialogActions>
-                <Button onClick={props.onClose}>Cancel</Button>
-                <Button onClick={() => { participantData({ access_token: access_token, participantsFileData: participantsFileData }); setParticipantsFileData({ event_id: "", participants_file: null }) }}>Upload File</Button>
+                <Button variant='contained' onClick={props.onClose}>Cancel</Button>
+                <Button variant='contained' onClick={() => { participantData({ access_token: access_token, participantsFileData: participantsFileData }); setParticipantsFileData({ event_id: "", participants_file: null }) }}>Upload</Button>
               </DialogActions>
             </Dialog>
             {

@@ -37,8 +37,6 @@ export default function EventForm(props) {
 
     const { access_token } = getToken()
 
-    const myData = useSelector(state => state.user)
-
     const { data = [], isSuccess } = useGetLoggedInUserQuery(access_token)
 
     const dispatch = useDispatch()
@@ -90,7 +88,7 @@ export default function EventForm(props) {
     return (
         <div className='w-full'>
             <Dialog {...props} >
-                <DialogTitle>Add Event</DialogTitle>
+                <DialogTitle>Create Event</DialogTitle>
                 <DialogContent>
                     <TextField onChange={(e) => handleEventData(e)} value={eventData.event_name} autoFocus margin="dense" id="event_name" label="Event Name" type="text" fullWidth variant="standard" />
                     <TextField onChange={(e) => handleEventData(e)} value={eventData.subject} autoFocus margin="dense" id="subject" label="Event Subject" type="text" fullWidth variant="standard" />
@@ -108,8 +106,8 @@ export default function EventForm(props) {
                     </FormControl>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={props.onClose}>Cancel</Button>
-                    <Button onClick={() => createEvent({ access_token: access_token, eventData: eventData })} >Create Event</Button>
+                    <Button variant='contained' onClick={props.onClose}>Cancel</Button>
+                    <Button variant='contained' onClick={() => createEvent({ access_token: access_token, eventData: eventData })} >Create</Button>
                 </DialogActions>
             </Dialog>
             <BackdropSpinner open={openSpinner} />
