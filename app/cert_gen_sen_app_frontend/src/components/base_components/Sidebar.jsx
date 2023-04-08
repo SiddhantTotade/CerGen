@@ -200,8 +200,8 @@ export default function MiniDrawer() {
                   CerGen
                 </Typography>
               </Toolbar>
-              <div className="flex absolute top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-3 bg-blue-500 shadow-lg shadow-sky-900 p-4">
-                <PersonIcon />
+              <div className="flex absolute items-center top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-5 bg-blue-500 shadow-lg shadow-sky-900 p-4">
+                <PersonIcon sx={{ borderRadius: '20px', boxShadow: '4px 4px 12px #02104f', background: '#0426c9', fontSize: '40px', padding: '5px' }} />
                 <p>{myData.name}</p>
               </div>
             </AppBar>
