@@ -60,6 +60,7 @@ export const participantsAPI = createApi({
 
 export const {
   useUploadParticipantsMutation,
-  useCreateEventMutation,
-  useDeleteEventMutation,
+  useCreateParticipantMutation,
+  useUpdateParticipantMutation,
+  useDeleteParticipantMutation,
 } = participantsAPI;

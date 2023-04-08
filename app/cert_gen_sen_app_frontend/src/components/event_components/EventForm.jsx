@@ -39,7 +39,7 @@ export default function EventForm(props) {
 
     const myData = useSelector(state => state.user)
 
-    const { data, isSuccess } = useGetLoggedInUserQuery(access_token)
+    const { data = [], isSuccess } = useGetLoggedInUserQuery(access_token)
 
     const dispatch = useDispatch()
 
@@ -50,7 +50,7 @@ export default function EventForm(props) {
     }, [data, isSuccess, dispatch])
 
     const [eventData, setEventData] = useState({
-        user: 1,
+        user: data.id,
         event_name: "",
         subject: "",
         event_department: "",

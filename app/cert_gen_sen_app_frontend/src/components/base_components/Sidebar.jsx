@@ -200,7 +200,7 @@ export default function MiniDrawer() {
                   CerGen
                 </Typography>
               </Toolbar>
-              <div className="flex absolute top-20 right-2 hover:cursor-pointer rounded-md text-white gap-3 bg-blue-500 shadow-lg shadow-sky-900 p-4">
+              <div className="flex absolute top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-3 bg-blue-500 shadow-lg shadow-sky-900 p-4">
                 <PersonIcon />
                 <p>{myData.name}</p>
               </div>
