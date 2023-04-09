@@ -4,6 +4,17 @@ export const participantsAPI = createApi({
   reducerPath: "participantsAPI",
   baseQuery: fetchBaseQuery({ baseUrl: "http://127.0.0.1:8000/api/" }),
   endpoints: (builder) => ({
+    getParticipants: builder.query({
+      query: (data) => {
+        return {
+          url: `event/${data.event_slug}`,
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
+    }),
     uploadParticipants: builder.mutation({
       query: (data) => {
         const formData = new FormData();
@@ -59,6 +70,7 @@ export const participantsAPI = createApi({
 });
 
 export const {
+  useGetParticipantsQuery,
   useUploadParticipantsMutation,
   useCreateParticipantMutation,
   useUpdateParticipantMutation,

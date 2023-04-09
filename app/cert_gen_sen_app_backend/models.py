@@ -3,9 +3,17 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 import os
+import string
+import random
 
 
 # Create your models here.
+
+def generate_random_string():
+    str = "".join(random.choices(string.ascii_lowercase, k=10))
+    return str
+
+
 def convert_to_img(file_name):
     pptx_file_name = str(file_name).replace(
         'completion_certificate_templates/', "")
@@ -91,7 +99,7 @@ class Event(models.Model):
     slug = models.SlugField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.slug = slugify(self.event_name)
+        self.slug = slugify(self.event_name) + generate_random_string()
         return super().save(*args, **kwargs)
 
     def __str__(self):

@@ -17,7 +17,6 @@ export const eventsAPI = createApi({
     }),
     createEvent: builder.mutation({
       query: (data) => {
-        console.log(data.eventData);
         return {
           url: "all-events/",
           method: "POST",

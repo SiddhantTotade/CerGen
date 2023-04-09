@@ -29,6 +29,8 @@ import BackdropSpinner from "../components/base_components/Backdrop";
 import AlertSnackbar from "../components/base_components/AlertSnackbar";
 import ParticipantImage from "../components/participant_components/ParticipantImage";
 import AlbumForm from "../components/image_components/AlbumForm";
+import { getToken } from "../services/LocalStorageService";
+import { useGetParticipantsQuery } from "../services/participantsAPI";
 
 const createBtns = {
   marginBottom: "10px",
@@ -36,10 +38,33 @@ const createBtns = {
 };
 
 export default function SpecificEvent() {
-  const [openSnack, setOpenSnack] = useState(false);
-  const [message, setMessage] = useState("");
-  const [alertType, setAlertType] = useState("");
-  const [openSpinner, setOpenSpinner] = useState(false);
+
+  const event_url = window.location.href;
+  let event_slug = "";
+
+  for (let i = event_url.length - 1; i > 0; i--) {
+    event_slug += event_url[i];
+    if (event_url[i] === "/") {
+      break;
+    }
+  }
+
+  const ReverseString = (event_slug) => [...event_slug].reverse().join("");
+  event_slug = ReverseString(event_slug.replace("/", ""));
+
+  const { access_token } = getToken()
+
+  const { data = [], isLoading } = useGetParticipantsQuery({ access_token: access_token, event_slug: event_slug })
+
+  console.log(data);
+
+  const [snackAndSpinner, setSnackAndSpinner] = useState({
+    openSpinner: true,
+    openSnack: true,
+    message: "",
+    alertType: "success"
+  })
+
 
   let completionImagePath = localStorage.getItem("CompletionCertificatePath")
   let meritImagePath = localStorage.getItem("MeritCertificatePath");
@@ -61,7 +86,6 @@ export default function SpecificEvent() {
     eventDepartment: "",
   });
 
-  const event_url = window.location.href;
   let attendance = 0;
 
   useEffect(() => {
@@ -80,75 +104,63 @@ export default function SpecificEvent() {
       );
   }, []);
 
-  let event_slug = "";
-
-  for (let i = event_url.length - 1; i > 0; i--) {
-    event_slug += event_url[i];
-    if (event_url[i] === "/") {
-      break;
-    }
-  }
-
-  const ReverseString = (event_slug) => [...event_slug].reverse().join("");
-  event_slug = ReverseString(event_slug.replace("/", ""));
-
   function generateCertificate() {
-    if (completionImagePath === "null" || meritImagePath === "null") {
-      return console.log("Please select a template to generate certificate");
-    }
+    // if (completionImagePath === "null" || meritImagePath === "null") {
+    //   return console.log("Please select a template to generate certificate");
+    // }
 
-    setOpenSpinner(true);
-    setTimeout(() => {
-      setOpenSpinner(false);
-    }, 5000);
+    // setOpenSpinner(true);
+    // setTimeout(() => {
+    //   setOpenSpinner(false);
+    // }, 5000);
 
-    const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
+    // const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
 
-    const formData = new FormData();
-    formData.append("completion", completionImagePath.replace('jpg', 'pptx'));
-    formData.append("merit", meritImagePath.replace('jpg', 'pptx'));
+    // const formData = new FormData();
+    // formData.append("completion", completionImagePath.replace('jpg', 'pptx'));
+    // formData.append("merit", meritImagePath.replace('jpg', 'pptx'));
 
-    axios
-      .post(url, formData, {
-        headers: { Authorization: "Token " + localStorage.getItem("token") },
-      })
-      .then(
-        setTimeout(() => {
-          setOpenSnack(true);
-        }, 10000)
-      )
-      .then((res) => setMessage(res.data))
-      .then(
-        message === "Certificate generated and sended successfully"
-          ? setAlertType("error")
-          : setAlertType("success")
-      )
-      .catch((err) => console.log(err));
+    // axios
+    //   .post(url, formData, {
+    //     headers: { Authorization: "Token " + localStorage.getItem("token") },
+    //   })
+    //   .then(
+    //     setTimeout(() => {
+    //       setOpenSnack(true);
+    //     }, 10000)
+    //   )
+    //   .then((res) => setMessage(res.data))
+    //   .then(
+    //     message === "Certificate generated and sended successfully"
+    //       ? setAlertType("error")
+    //       : setAlertType("success")
+    //   )
+    //   .catch((err) => console.log(err));
   }
 
   function generateCertificateById(id) {
-    setOpenSpinner(true);
-    setTimeout(() => {
-      setOpenSpinner(false);
-    }, 5000);
-    const url =
-      "http://127.0.0.1:8000/api/generate-certificate/" + event_slug + "/" + id;
-    axios
-      .get(url, {
-        headers: { Authorization: "Token " + localStorage.getItem("token") },
-      })
-      .then(
-        setTimeout(() => {
-          setOpenSnack(true);
-        }, 10000)
-      )
-      .then((res) => setMessage(res.data))
-      .then(
-        message === "Certificate generated and sended successfully"
-          ? setAlertType("error")
-          : setAlertType("success")
-      )
-      .catch((err) => console.log(err));
+    // setOpenSpinner(true);
+    // setTimeout(() => {
+    //   setOpenSpinner(false);
+    // }, 5000);
+    // const url =
+    //   "http://127.0.0.1:8000/api/generate-certificate/" + event_slug + "/" + id;
+    // axios
+    //   .get(url, {
+    //     headers: { Authorization: "Token " + localStorage.getItem("token") },
+    //   })
+    //   .then(
+    //     setTimeout(() => {
+    //       setOpenSnack(true);
+    //     }, 10000)
+    //   )
+    //   .then((res) => setMessage(res.data))
+    //   .then(
+    //     message === "Certificate generated and sended successfully"
+    //       ? setAlertType("error")
+    //       : setAlertType("success")
+    //   )
+    //   .catch((err) => console.log(err));
   }
 
   const [createParticiapantForm, setCreateParticiapantForm] =
@@ -241,13 +253,13 @@ export default function SpecificEvent() {
   };
 
   function handleCloseSnackbar() {
-    setOpenSnack(false);
+    // setOpenSnack(false);
   }
 
   return (
-    <div className="flex justify-center items-center">
+    <div className="flex relative justify-center items-center">
       <Sidebar />
-      <div className="w-3/5 mt-24">
+      <div className="w-3/2 mt-24">
         <Typography
           sx={{
             display: "flex",
@@ -258,7 +270,7 @@ export default function SpecificEvent() {
         >
           {event_slug.toUpperCase()}
         </Typography>
-        {eventsData.forEach((event) => {
+        {data.forEach((event) => {
           return event.certificate_status === "T" ||
             event.certificate_status === "1" ||
             event.certificate_status === "2" ||
@@ -331,8 +343,8 @@ export default function SpecificEvent() {
               </TableRow>
             </TableHead>
             <TableBody>
-              {eventsData !== "0" ? (
-                Object.values(eventsData).map((row) => (
+              {data !== "0" ? (
+                Object.values(data).map((row) => (
                   <TableRow
                     key={row.id}
                     sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -354,7 +366,6 @@ export default function SpecificEvent() {
                               : `${row.student_name} is eligible for certificate`
                           }
                         >
-
                           <img src={Gold} className="w-10" alt="gold medal png" />
                         </Tooltip>
                       </TableCell>
@@ -507,14 +518,14 @@ export default function SpecificEvent() {
         />
         <ParticipantImage open={camera} onClose={handleCameraFormClose} participant={participantDetails} />
         <AlbumForm open={album} onClose={handleAlbumFormClose} participant={participantDetails} event_slug={event_slug} />
-        <BackdropSpinner open={openSpinner} />
+        {/* <BackdropSpinner open={openSpinner} />
         <AlertSnackbar
           open={openSnack}
           message={message}
           severity={alertType}
           onClose={handleCloseSnackbar}
           autoHideDuration={6000}
-        />
+        /> */}
       </div>
     </div>
   );
