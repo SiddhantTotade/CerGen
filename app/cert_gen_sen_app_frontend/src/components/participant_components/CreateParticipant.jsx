@@ -26,12 +26,11 @@ export default function CreateParticipant(props) {
 
   const [participantData, setParticipantData] = useState({
     event: "",
-    student_name: "",
-    student_id: "",
+    participant_name: "",
+    participant_id: "",
     email: "",
     phone: "",
     certificate_status: "",
-    certificate_id: ""
   });
 
   const [createParticipant, responseCreateParticipant] = useCreateParticipantMutation()
@@ -39,7 +38,7 @@ export default function CreateParticipant(props) {
   const { data = [], isLoading } = useSpecificEventDetailQuery({ access_token: access_token, event_slug: props.event_slug.toLowerCase() })
 
   function generateCertificateId(
-    student_id,
+    participant_id,
     event_name,
     event_department,
     event_date
@@ -47,18 +46,10 @@ export default function CreateParticipant(props) {
     let event_name_char = event_name.match(/\b(\w)/g).join("");
     let random_num = Math.floor(1000 + Math.random() * 9000);
     let certificateId =
-      student_id + event_name_char + event_department + event_date + random_num;
+      participant_id + event_name_char + event_department + event_date + random_num;
 
-    setParticipantData({ ...participantData, certificate_id: certificateId })
-
-    // return certificateId;
+    return certificateId.replace(/-/g, "");
   }
-
-  // if (!isLoading) {
-  //   const generateId = generateCertificateId(participantData.student_id, data[0].event_name, data[0].event_department, data[0].from_date)
-  //   // setParticipantData(generateId ? { ...participantData, certificate_id: generateId } : "")
-  // }
-
 
   // const [eventsData = [], responseSpecificEvent] = useSpecificEventDetailQuery({ access_token: access_token })
 
@@ -145,10 +136,10 @@ export default function CreateParticipant(props) {
               <DialogContent>
                 <TextField
                   onChange={(e) => handleEventData(e)}
-                  value={participantData.student_name}
+                  value={participantData.participant_name}
                   autoFocus
                   margin="dense"
-                  id="student_name"
+                  id="participant_name"
                   label="Participant Name"
                   type="text"
                   fullWidth
@@ -156,10 +147,10 @@ export default function CreateParticipant(props) {
                 />
                 <TextField
                   onChange={(e) => handleEventData(e)}
-                  value={participantData.student_id}
+                  value={participantData.participant_id}
                   autoFocus
                   margin="dense"
-                  id="student_id"
+                  id="participant_id"
                   label="Participant Id"
                   type="text"
                   fullWidth
@@ -201,7 +192,7 @@ export default function CreateParticipant(props) {
               </DialogContent>
               <DialogActions>
                 <Button variant="contained" onClick={props.onClose}>Cancel</Button>
-                <Button variant="contained" onClick={() => { generateCertificateId(participantData.student_id, data[0].event_name, data[0].event_department, data[0].from_date); createParticipant({ access_token: access_token, participant_data: participantData }); setTimeout(() => { setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" }); }, 1000); props.onClose() }}>Create</Button>
+                <Button variant="contained" onClick={() => { createParticipant({ access_token: access_token, participant_data: participantData, event: data[0].id, certificate_id: generateCertificateId(participantData.participant_id, data[0].event_name, data[0].event_department, data[0].from_date) }); setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" }); props.onClose() }}>Create</Button>
               </DialogActions>
             </Dialog>
             {

@@ -366,8 +366,8 @@ export default function SpecificEvent() {
                         key={row.id}
                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                       >
-                        <TableCell align="center">{row.student_name}</TableCell>
-                        <TableCell align="center">{row.student_id}</TableCell>
+                        <TableCell align="center">{row.participant_name}</TableCell>
+                        <TableCell align="center">{row.participant_id}</TableCell>
                         <TableCell align="center">{row.email}</TableCell>
                         <TableCell align="center">{row.phone}</TableCell>
                         {row.certificate_status === "1" ? (

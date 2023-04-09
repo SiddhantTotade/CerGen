@@ -251,6 +251,7 @@ class UploadParticipant(APIView):
 # Uploading each participant from xlsx file
 class UploadEachParticipant(APIView):
     def post(self, request):
+        print(request.data)
         participant_serialized_data = ParticipantSerializer(data=request.data)
 
         if participant_serialized_data.is_valid():
