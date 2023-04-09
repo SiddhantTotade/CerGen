@@ -330,7 +330,7 @@ export default function SpecificEvent() {
             View Album
           </Button>
         </div>
-        <TableContainer sx={{ height: '65vh', position: 'relative', overflow: 'hidden', ':hover': { 'overflow': 'auto' }, '::-webkit-scrollbar-thumb': { 'background': '#1976d2', borderRadius: '50px' }, '::-webkit-scrollbar-track': { background: '#f1f1f1' }, '::-webkit-scrollbar': { width: '3px', background: 'transparent' } }} component={Paper}>
+        <TableContainer sx={{ height: '65vh', position: 'relative', overflow: 'auto', '::-webkit-scrollbar-thumb': { 'background': '#1976d2', borderRadius: '50px' }, '::-webkit-scrollbar-track': { background: '#f1f1f1' }, '::-webkit-scrollbar': { width: '3px', background: 'transparent' } }} component={Paper}>
           <Table stickyHeader sx={{ minWidth: 450, position: 'sticky' }} aria-label="simple table">
             <TableHead>
               <TableRow>
