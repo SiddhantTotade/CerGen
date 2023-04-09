@@ -39,6 +39,17 @@ export const eventsAPI = createApi({
         };
       },
     }),
+    specificEventDetail: builder.query({
+      query: (data) => {
+        return {
+          url: `event-details/${data.event_slug}`,
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -46,4 +57,5 @@ export const {
   useGetAllEventsQuery,
   useCreateEventMutation,
   useDeleteEventMutation,
+  useSpecificEventDetailQuery,
 } = eventsAPI;

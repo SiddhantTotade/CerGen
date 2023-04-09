@@ -34,26 +34,31 @@ export const participantsAPI = createApi({
       },
     }),
     createParticipant: builder.mutation({
-      query: (data) => ({
-        url: "create-participant/",
-        method: "POST",
-        body: data.eventData,
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          authorization: `Bearer ${data.access_token}`,
-        },
-      }),
+      query: (data) => {
+        console.log(data);
+        return {
+          url: "create-participant/",
+          method: "POST",
+          body: data.eventData,
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
     }),
     updateParticipant: builder.mutation({
-      query: (data) => ({
-        url: `update-participant/${data.id}`,
-        method: "PATCH",
-        body: "",
-        headers: {
-          "Content-type": "application/json; charset=UTF-8",
-          authorization: `Bearer ${data.access_token}`,
-        },
-      }),
+      query: (data) => {
+        return {
+          url: `update-participant/${data.id}`,
+          method: "PATCH",
+          body: "",
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
     }),
     deleteParticipant: builder.mutation({
       query: (data) => {

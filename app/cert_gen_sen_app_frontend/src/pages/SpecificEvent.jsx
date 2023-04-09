@@ -32,6 +32,7 @@ import AlbumForm from "../components/image_components/AlbumForm";
 import { getToken } from "../services/LocalStorageService";
 import { useGetParticipantsQuery } from "../services/participantsAPI";
 import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
+import { useSpecificEventDetailQuery } from "../services/eventsAPI";
 
 const createBtns = {
   marginBottom: "10px",
@@ -56,6 +57,13 @@ const tableSkeleton = [...Array(tableRow)].map((e, i) =>
 
 export default function SpecificEvent() {
 
+  const [snackAndSpinner, setSnackAndSpinner] = useState({
+    openSpinner: true,
+    openSnack: true,
+    message: "",
+    alertType: "success"
+  })
+
   const event_url = window.location.href;
   let event_slug = "";
 
@@ -72,14 +80,6 @@ export default function SpecificEvent() {
   const { access_token } = getToken()
 
   const { data = [], isLoading } = useGetParticipantsQuery({ access_token: access_token, event_slug: event_slug })
-
-  const [snackAndSpinner, setSnackAndSpinner] = useState({
-    openSpinner: true,
-    openSnack: true,
-    message: "",
-    alertType: "success"
-  })
-
 
   let completionImagePath = localStorage.getItem("CompletionCertificatePath")
   let meritImagePath = localStorage.getItem("MeritCertificatePath");
@@ -268,7 +268,7 @@ export default function SpecificEvent() {
   };
 
   function handleCloseSnackbar() {
-    // setOpenSnack(false);
+    setSnackAndSpinner({ openSnack: false });
   }
 
   return (
