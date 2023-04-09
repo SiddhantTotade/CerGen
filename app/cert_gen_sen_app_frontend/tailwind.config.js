@@ -6,10 +6,6 @@ module.exports = {
     fontFamily: {
       title: ["Lobster", "cursive"],
     },
-    // colors: {
-    //   footer: "#1976d2",
-    //   text: "white",
-    // },
   },
   plugins: [],
 };
