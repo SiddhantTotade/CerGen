@@ -180,120 +180,118 @@ export default function MiniDrawer() {
 
   return (
     <>
-      <div className="flex flex-col gap-3">
-        <>
-          {location.pathname === "/" ? <div className="wave-container"></div> : ""}
-          <div>
-            <Box sx={{ display: "flex" }}>
-              <CssBaseline />
-              <AppBar position="fixed" open={open}>
-                <Toolbar>
-                  <IconButton
-                    color="inherit"
-                    aria-label="open drawer"
-                    onClick={handleDrawerOpen}
-                    edge="start"
-                    sx={{
-                      marginRight: 5,
-                      ...(open && { display: "none" }),
-                    }}
-                  >
-                    <MenuIcon />
-                  </IconButton>
-                  <Typography variant="h6" noWrap component="div">
-                    CerGen
-                  </Typography>
-                </Toolbar>
-                <div className="flex absolute items-center top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-5 bg-blue-500 shadow-lg shadow-sky-900 p-4">
-                  <PersonIcon sx={{ borderRadius: '20px', boxShadow: '2px 2px 5px #02104f', background: '#0426c9', fontSize: '30px', padding: '5px' }} />
-                  <p>{myData.name}</p>
+      <>
+        {location.pathname === "/" ? <div className="wave-container"></div> : ""}
+        <div>
+          <Box sx={{ display: "flex" }}>
+            <CssBaseline />
+            <AppBar position="fixed" open={open}>
+              <Toolbar>
+                <IconButton
+                  color="inherit"
+                  aria-label="open drawer"
+                  onClick={handleDrawerOpen}
+                  edge="start"
+                  sx={{
+                    marginRight: 5,
+                    ...(open && { display: "none" }),
+                  }}
+                >
+                  <MenuIcon />
+                </IconButton>
+                <Typography variant="h6" noWrap component="div">
+                  CerGen
+                </Typography>
+              </Toolbar>
+              <div className="flex absolute items-center top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-5 bg-blue-500 shadow-lg shadow-sky-900 p-4">
+                <PersonIcon sx={{ borderRadius: '20px', boxShadow: '2px 2px 5px #02104f', background: '#0426c9', fontSize: '30px', padding: '5px' }} />
+                <p>{myData.name}</p>
+              </div>
+            </AppBar>
+            <Drawer variant="permanent" open={open}>
+              <DrawerHeader>
+                <IconButton onClick={handleDrawerClose}>
+                  {theme.direction === "rtl" ? (
+                    <ChevronRightIcon />
+                  ) : (
+                    <ChevronLeftIcon />
+                  )}
+                </IconButton>
+              </DrawerHeader>
+              <Divider />
+              <List>
+                <Link to="/api/all-events">
+                  <ListItem disablePadding sx={listitem_sx} key="all_events">
+                    <ListItemButton sx={listItemButton_sx}>
+                      <ListItemIcon sx={listItemIcon_sx}>
+                        <EventIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="All Events"
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              </List>
+              <List>
+                <div onClick={handleForm}>
+                  <ListItem disablePadding sx={listitem_sx} key="create_events">
+                    <ListItemButton sx={listItemButton_sx}>
+                      <ListItemIcon sx={listItemIcon_sx}>
+                        <AddCircleOutlineIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Create Event"
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
                 </div>
-              </AppBar>
-              <Drawer variant="permanent" open={open}>
-                <DrawerHeader>
-                  <IconButton onClick={handleDrawerClose}>
-                    {theme.direction === "rtl" ? (
-                      <ChevronRightIcon />
-                    ) : (
-                      <ChevronLeftIcon />
-                    )}
-                  </IconButton>
-                </DrawerHeader>
-                <Divider />
-                <List>
-                  <Link to="/api/all-events">
-                    <ListItem disablePadding sx={listitem_sx} key="all_events">
-                      <ListItemButton sx={listItemButton_sx}>
-                        <ListItemIcon sx={listItemIcon_sx}>
-                          <EventIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="All Events"
-                          sx={{ opacity: open ? 1 : 0 }}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                </List>
-                <List>
-                  <div onClick={handleForm}>
-                    <ListItem disablePadding sx={listitem_sx} key="create_events">
-                      <ListItemButton sx={listItemButton_sx}>
-                        <ListItemIcon sx={listItemIcon_sx}>
-                          <AddCircleOutlineIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="Create Event"
-                          sx={{ opacity: open ? 1 : 0 }}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  </div>
-                </List>
-                <List>
-                  <div onClick={handleFileForm}>
-                    <ListItem disablePadding sx={listitem_sx} key="upload_csv">
-                      <ListItemButton sx={listItemButton_sx}>
-                        <ListItemIcon sx={listItemIcon_sx}>
-                          <FileUploadIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="Upload Participants"
-                          sx={{ opacity: open ? 1 : 0 }}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  </div>
-                </List>
-                <Divider />
-                <List>
-                  <Link to="/api/logout" onClick={handleLogout}>
-                    <ListItem disablePadding sx={listitem_sx} key="logout">
-                      <ListItemButton sx={listItemButton_sx}>
-                        <ListItemIcon sx={listItemIcon_sx}>
-                          <LogoutIcon />
-                        </ListItemIcon>
-                        <ListItemText
-                          primary="Logout"
-                          sx={{ opacity: open ? 1 : 0 }}
-                        />
-                      </ListItemButton>
-                    </ListItem>
-                  </Link>
-                </List>
-              </Drawer>
-              {location.pathname === "/" ? <Home /> : ""}
-              <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
-                <DrawerHeader />
-              </Box>
-              <EventForm open={form} onClose={handleFormClose} />
-              <FileForm open={file_form} onClose={handleFileFormClose} />
+              </List>
+              <List>
+                <div onClick={handleFileForm}>
+                  <ListItem disablePadding sx={listitem_sx} key="upload_file">
+                    <ListItemButton sx={listItemButton_sx}>
+                      <ListItemIcon sx={listItemIcon_sx}>
+                        <FileUploadIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Upload Participants"
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </div>
+              </List>
+              <Divider />
+              <List>
+                <Link to="/api/logout" onClick={handleLogout}>
+                  <ListItem disablePadding sx={listitem_sx} key="logout">
+                    <ListItemButton sx={listItemButton_sx}>
+                      <ListItemIcon sx={listItemIcon_sx}>
+                        <LogoutIcon />
+                      </ListItemIcon>
+                      <ListItemText
+                        primary="Logout"
+                        sx={{ opacity: open ? 1 : 0 }}
+                      />
+                    </ListItemButton>
+                  </ListItem>
+                </Link>
+              </List>
+            </Drawer>
+            {location.pathname === "/" ? <Home /> : ""}
+            <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
+              <DrawerHeader />
             </Box>
-            <BackdropSpinner open={openSpinner} />
-          </div>
-        </>
-      </div>
-      {/* <Footer /> */}
+            <EventForm open={form} onClose={handleFormClose} />
+            <FileForm open={file_form} onClose={handleFileFormClose} />
+          </Box>
+          <BackdropSpinner open={openSpinner} />
+        </div>
+        <Footer />
+      </>
     </>
   );
 }

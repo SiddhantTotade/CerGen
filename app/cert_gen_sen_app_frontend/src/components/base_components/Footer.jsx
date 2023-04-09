@@ -2,14 +2,8 @@ import React from "react";
 
 const Footer = () => {
     return (
-        <footer className="w-full bottom-0 border-2 left-0 border-gray-200 p-6 absolute z-10 flex justify-center">
-            <div className="">
-                <div className="">
-                    <div className="">
-                        <p>Copyright © 2023 : CerGen - All rights reserved by Siddhant Totade</p>
-                    </div>
-                </div>
-            </div>
+        <footer className="w-full bg-blue-500/100 bottom-0 left-0 text-white p-4 fixed flex justify-center">
+            <p>Copyright © 2023 : CerGen - All rights reserved by Siddhant Totade</p>
         </footer>
     );
 };

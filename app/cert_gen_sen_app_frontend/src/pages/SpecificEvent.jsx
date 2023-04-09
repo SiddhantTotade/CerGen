@@ -31,11 +31,28 @@ import ParticipantImage from "../components/participant_components/ParticipantIm
 import AlbumForm from "../components/image_components/AlbumForm";
 import { getToken } from "../services/LocalStorageService";
 import { useGetParticipantsQuery } from "../services/participantsAPI";
+import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
 
 const createBtns = {
   marginBottom: "10px",
   marginRight: "10px",
 };
+
+const tableRow = 6
+
+const tableSkeleton = [...Array(tableRow)].map((e, i) =>
+  <TableBody key={i}>
+    <TableRow>
+      <TableCell><LoaderSkeleton barWidth={150} barPadding={2} /></TableCell>
+      <TableCell><LoaderSkeleton barWidth={150} barPadding={2} /></TableCell>
+      <TableCell><LoaderSkeleton barWidth={150} barPadding={2} /></TableCell>
+      <TableCell><LoaderSkeleton barWidth={150} barPadding={2} /></TableCell>
+      <TableCell><LoaderSkeleton barWidth={50} barPadding={2} /></TableCell>
+      <TableCell><LoaderSkeleton barWidth={50} barPadding={2} /></TableCell>
+      <TableCell><LoaderSkeleton barWidth={70} barPadding={2} /></TableCell>
+    </TableRow>
+  </TableBody>
+)
 
 export default function SpecificEvent() {
 
@@ -55,8 +72,6 @@ export default function SpecificEvent() {
   const { access_token } = getToken()
 
   const { data = [], isLoading } = useGetParticipantsQuery({ access_token: access_token, event_slug: event_slug })
-
-  console.log(data);
 
   const [snackAndSpinner, setSnackAndSpinner] = useState({
     openSpinner: true,
@@ -257,7 +272,7 @@ export default function SpecificEvent() {
   }
 
   return (
-    <div className="flex relative justify-center items-center">
+    <div className="flex justify-center items-center">
       <Sidebar />
       <div className="w-3/2 mt-24">
         <Typography
@@ -315,8 +330,8 @@ export default function SpecificEvent() {
             View Album
           </Button>
         </div>
-        <TableContainer component={Paper}>
-          <Table sx={{ minWidth: 450 }} aria-label="simple table">
+        <TableContainer sx={{ height: '65vh', position: 'relative', overflow: 'hidden', ':hover': { 'overflow': 'auto' }, '::-webkit-scrollbar-thumb': { 'background': '#1976d2', borderRadius: '50px' }, '::-webkit-scrollbar-track': { background: '#f1f1f1' }, '::-webkit-scrollbar': { width: '3px', background: 'transparent' } }} component={Paper}>
+          <Table stickyHeader sx={{ minWidth: 450, position: 'sticky' }} aria-label="simple table">
             <TableHead>
               <TableRow>
                 <TableCell align="center">
@@ -342,155 +357,158 @@ export default function SpecificEvent() {
                 </TableCell>
               </TableRow>
             </TableHead>
-            <TableBody>
-              {data !== "0" ? (
-                Object.values(data).map((row) => (
-                  <TableRow
-                    key={row.id}
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                  >
-                    <TableCell align="center">{row.student_name}</TableCell>
-                    <TableCell align="center">{row.student_id}</TableCell>
-                    <TableCell align="center">{row.email}</TableCell>
-                    <TableCell align="center">{row.phone}</TableCell>
-                    {row.certificate_status === "1" ? (
-                      <TableCell
-                        align="center"
-                        sx={{ display: "flex", justifyContent: "center" }}
+            {
+              isLoading ? tableSkeleton :
+                <TableBody>
+                  {data !== "0" ? (
+                    Object.values(data).map((row) => (
+                      <TableRow
+                        key={row.id}
+                        sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
                       >
-                        <Tooltip
-                          className="cursor-pointer"
-                          title={
-                            row.certificate_sent_status === true
-                              ? `Certificate sended to ${row.student_name}`
-                              : `${row.student_name} is eligible for certificate`
-                          }
-                        >
-                          <img src={Gold} className="w-10" alt="gold medal png" />
-                        </Tooltip>
-                      </TableCell>
-                    ) : row.certificate_status === "2" ? (
-                      <TableCell
-                        align="center"
-                        sx={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <Tooltip
-                          className="cursor-pointer"
-                          title={
-                            row.certificate_sent_status === true
-                              ? `Certificate sended to ${row.student_name}`
-                              : `${row.student_name} is eligible for certificate`
-                          }
-                        >
-                          <img
-                            src={Silver}
-                            className="w-10"
-                            alt="silver medal png"
-                          />
-                        </Tooltip>
-                      </TableCell>
-                    ) : row.certificate_status === "3" ? (
-                      <TableCell
-                        align="center"
-                        sx={{ display: "flex", justifyContent: "center" }}
-                      >
-                        <Tooltip
-                          className="cursor-pointer"
-                          title={
-                            row.certificate_sent_status === true
-                              ? `Certificate sended to ${row.student_name}`
-                              : `${row.student_name} is eligible for certificate`
-                          }
-                        >
-                          <img
-                            src={Bronze}
-                            className="w-10"
-                            alt="bronze medal png"
-                          />
-                        </Tooltip>
-                      </TableCell>
-                    ) : row.certificate_status === "T" ? (
-                      <TableCell align="center">
-                        <Tooltip
-                          className="cursor-pointer"
-                          title={
-                            row.certificate_sent_status === true
-                              ? `Certificate sended to ${row.student_name}`
-                              : `${row.student_name} is eligible for certificate`
-                          }
-                        >
-                          <DoneIcon sx={{ color: "green" }} />
-                        </Tooltip>
-                      </TableCell>
-                    ) : (
-                      <TableCell align="center">
-                        <Tooltip
-                          className="cursor-pointer"
-                          title={`${row.student_name} is not eligible for certificate`}
-                        >
-                          <CloseIcon sx={{ color: "red" }} />
-                        </Tooltip>
-                      </TableCell>
-                    )}{
-                      row.student_image === "" ?
-                        <TableCell align="center">
-                          <Button onClick={() => handleCameraForm(row.id, row.student_image)}>
-                            <CameraAltIcon sx={{ color: '#e81551' }} />
-                          </Button>
-                        </TableCell> :
-                        <TableCell align="center">
-                          <Button onClick={() => handleImageForm(row.id, row.student_image)}>
-                            <InsertPhotoIcon sx={{ color: '#1f0abf' }} />
-                          </Button>
-                        </TableCell>
-                    }
-                    {row.certificate_sent_status === false ? (
-                      <TableCell align="center">
-                        <Tooltip title={`Edit : ${row.student_name}`}>
-                          <Button
-                            onClick={() =>
-                              handleUpdateForm(
-                                row.id,
-                                row.student_name,
-                                row.student_id,
-                                row.email,
-                                row.certificate_status,
-                                row.certificate_id,
-                                row.certificate_sent_status,
-                                row.student_img
-                              )
-                            }
-                            key={row.id}
+                        <TableCell align="center">{row.student_name}</TableCell>
+                        <TableCell align="center">{row.student_id}</TableCell>
+                        <TableCell align="center">{row.email}</TableCell>
+                        <TableCell align="center">{row.phone}</TableCell>
+                        {row.certificate_status === "1" ? (
+                          <TableCell
+                            align="center"
+                            sx={{ display: "flex", justifyContent: "center" }}
                           >
-                            <EditIcon sx={{ color: "blue" }} />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title={`Delete : ${row.student_name}`}>
-                          <Button onClick={() => handleDeleteForm(row.id)}>
-                            <DeleteIcon sx={{ color: "red" }} />
-                          </Button>
-                        </Tooltip>
-                        <Tooltip title={`Send Certificate : ${row.email}`}>
-                          <Button
-                            onClick={() => generateCertificateById(row.id)}
+                            <Tooltip
+                              className="cursor-pointer"
+                              title={
+                                row.certificate_sent_status === true
+                                  ? `Certificate sended to ${row.student_name}`
+                                  : `${row.student_name} is eligible for certificate`
+                              }
+                            >
+                              <img src={Gold} className="w-10" alt="gold medal png" />
+                            </Tooltip>
+                          </TableCell>
+                        ) : row.certificate_status === "2" ? (
+                          <TableCell
+                            align="center"
+                            sx={{ display: "flex", justifyContent: "center" }}
                           >
-                            <SendIcon sx={{ color: "grey" }} />
-                          </Button>
-                        </Tooltip>
-                      </TableCell>
-                    ) : (
-                      <TableCell align="center"></TableCell>
-                    )}
-                  </TableRow>
-                ))
-              ) : (
-                <TableRow
-                  sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
-                >
-                  <TableCell align="center">No Data</TableCell>
-                </TableRow>
-              )}
-            </TableBody>
+                            <Tooltip
+                              className="cursor-pointer"
+                              title={
+                                row.certificate_sent_status === true
+                                  ? `Certificate sended to ${row.student_name}`
+                                  : `${row.student_name} is eligible for certificate`
+                              }
+                            >
+                              <img
+                                src={Silver}
+                                className="w-10"
+                                alt="silver medal png"
+                              />
+                            </Tooltip>
+                          </TableCell>
+                        ) : row.certificate_status === "3" ? (
+                          <TableCell
+                            align="center"
+                            sx={{ display: "flex", justifyContent: "center" }}
+                          >
+                            <Tooltip
+                              className="cursor-pointer"
+                              title={
+                                row.certificate_sent_status === true
+                                  ? `Certificate sended to ${row.student_name}`
+                                  : `${row.student_name} is eligible for certificate`
+                              }
+                            >
+                              <img
+                                src={Bronze}
+                                className="w-10"
+                                alt="bronze medal png"
+                              />
+                            </Tooltip>
+                          </TableCell>
+                        ) : row.certificate_status === "T" ? (
+                          <TableCell align="center">
+                            <Tooltip
+                              className="cursor-pointer"
+                              title={
+                                row.certificate_sent_status === true
+                                  ? `Certificate sended to ${row.student_name}`
+                                  : `${row.student_name} is eligible for certificate`
+                              }
+                            >
+                              <DoneIcon sx={{ color: "green" }} />
+                            </Tooltip>
+                          </TableCell>
+                        ) : (
+                          <TableCell align="center">
+                            <Tooltip
+                              className="cursor-pointer"
+                              title={`${row.student_name} is not eligible for certificate`}
+                            >
+                              <CloseIcon sx={{ color: "red" }} />
+                            </Tooltip>
+                          </TableCell>
+                        )}{
+                          row.student_image === "" ?
+                            <TableCell align="center">
+                              <Button onClick={() => handleCameraForm(row.id, row.student_image)}>
+                                <CameraAltIcon sx={{ color: '#e81551' }} />
+                              </Button>
+                            </TableCell> :
+                            <TableCell align="center">
+                              <Button onClick={() => handleImageForm(row.id, row.student_image)}>
+                                <InsertPhotoIcon sx={{ color: '#1f0abf' }} />
+                              </Button>
+                            </TableCell>
+                        }
+                        {row.certificate_sent_status === false ? (
+                          <TableCell align="center">
+                            <Tooltip title={`Edit : ${row.student_name}`}>
+                              <Button
+                                onClick={() =>
+                                  handleUpdateForm(
+                                    row.id,
+                                    row.student_name,
+                                    row.student_id,
+                                    row.email,
+                                    row.certificate_status,
+                                    row.certificate_id,
+                                    row.certificate_sent_status,
+                                    row.student_img
+                                  )
+                                }
+                                key={row.id}
+                              >
+                                <EditIcon sx={{ color: "blue" }} />
+                              </Button>
+                            </Tooltip>
+                            <Tooltip title={`Delete : ${row.student_name}`}>
+                              <Button onClick={() => handleDeleteForm(row.id)}>
+                                <DeleteIcon sx={{ color: "red" }} />
+                              </Button>
+                            </Tooltip>
+                            <Tooltip title={`Send Certificate : ${row.email}`}>
+                              <Button
+                                onClick={() => generateCertificateById(row.id)}
+                              >
+                                <SendIcon sx={{ color: "grey" }} />
+                              </Button>
+                            </Tooltip>
+                          </TableCell>
+                        ) : (
+                          <TableCell align="center"></TableCell>
+                        )}
+                      </TableRow>
+                    ))
+                  ) : (
+                    <TableRow
+                      sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+                    >
+                      <TableCell align="center">No Data</TableCell>
+                    </TableRow>
+                  )}
+                </TableBody>
+            }
           </Table>
         </TableContainer>
         <CreateParticipant
