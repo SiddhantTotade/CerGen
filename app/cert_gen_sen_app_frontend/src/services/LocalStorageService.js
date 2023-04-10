@@ -27,10 +27,10 @@ const setCertificatePath = (value) => {
 };
 
 const getCertificatePath = () => {
-  let completion = localStorage.getItem("CompletionCertificatePath");
-  let merit = localStorage.getItem("MeritCertificatePath");
+  let completionCertificate = localStorage.getItem("CompletionCertificatePath");
+  let meritCertificate = localStorage.getItem("MeritCertificatePath");
 
-  return { completion, merit };
+  return { completionCertificate, meritCertificate };
 };
 
 export {

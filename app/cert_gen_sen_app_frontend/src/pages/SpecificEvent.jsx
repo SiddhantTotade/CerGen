@@ -7,8 +7,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import Sidebar from "../components/base_components/Sidebar";
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import DoneIcon from "@mui/icons-material/Done";
 import CloseIcon from "@mui/icons-material/Close";
 import EditIcon from "@mui/icons-material/Edit";
@@ -54,13 +53,6 @@ const tableSkeleton = [...Array(tableRow)].map((e, i) =>
 )
 
 export default function SpecificEvent() {
-
-  const [snackAndSpinner, setSnackAndSpinner] = useState({
-    openSpinner: true,
-    openSnack: true,
-    message: "",
-    alertType: "success"
-  })
 
   const event_url = window.location.href;
   let event_slug = "";
@@ -257,10 +249,6 @@ export default function SpecificEvent() {
   const handleDeleteFormClose = () => {
     setDeleteForm(false);
   };
-
-  function handleCloseSnackbar() {
-    setSnackAndSpinner({ openSnack: false });
-  }
 
   return (
     <div className="flex justify-center items-center">
@@ -530,14 +518,6 @@ export default function SpecificEvent() {
         />
         <ParticipantImage open={camera} onClose={handleCameraFormClose} participant={participantDetails} />
         <AlbumForm open={album} onClose={handleAlbumFormClose} participant={participantDetails} event_slug={event_slug} />
-        {/* <BackdropSpinner open={openSpinner} />
-        <AlertSnackbar
-          open={openSnack}
-          message={message}
-          severity={alertType}
-          onClose={handleCloseSnackbar}
-          autoHideDuration={6000}
-        /> */}
       </div>
     </div>
   );
