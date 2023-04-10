@@ -9,12 +9,15 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import AlertSnackbar from "../base_components/AlertSnackbar";
 import BackdropSpinner from "../base_components/Backdrop";
+import { getToken } from "../../services/LocalStorageService";
 
 export default function UpdateParticipant(props) {
-  const [openSnack, setOpenSnack] = useState(false);
-  const [message, setMessage] = useState("");
-  const [alertType, setAlertType] = useState("");
-  const [openSpinner, setOpenSpinner] = useState(false);
+  const [snackAndSpinner, setSnackAndSpinner] = useState({
+    openSpinner: true,
+    openSnack: true,
+    message: "",
+    alertType: "success"
+  })
 
   let [eventsData, setEventsData] = useState([]);
 
@@ -60,63 +63,63 @@ export default function UpdateParticipant(props) {
   }, []);
 
   function handleSubmit(e) {
-    e.preventDefault();
-    const certificateId = generateCertificateId(
-      updateParticipantData.student_id === ""
-        ? participantData.student_id
-        : updateParticipantData.student_id,
-      props.event_slug,
-      props.event_detail.eventDepartment,
-      props.event_detail.eventDate
-    );
-    setOpenSpinner(true);
-    setTimeout(() => {
-      setOpenSpinner(false);
-    }, 2000);
-    const url =
-      "http://127.0.0.1:8000/api/update-participant/" + props.participant.event;
-    axios
-      .put(
-        url,
-        {
-          event: eventsData,
-          student_name:
-            updateParticipantData.student_name === ""
-              ? participantData.student_name
-              : updateParticipantData.student_name,
-          student_id:
-            updateParticipantData.student_id === ""
-              ? participantData.student_id
-              : updateParticipantData.student_id,
-          email:
-            updateParticipantData.email === ""
-              ? participantData.email
-              : updateParticipantData.email,
-          phone:
-            updateParticipantData.phone === ""
-              ? participantData.phone
-              : updateParticipantData.phone,
-          certificate_status:
-            updateParticipantData.certificate_status === ""
-              ? participantData.certificate_status
-              : updateParticipantData.certificate_status,
-          certificate_id: certificateId,
-        },
-        { headers: { Authorization: "Token " + localStorage.getItem("token") } }
-      )
-      .then(
-        setTimeout(() => {
-          setOpenSnack(true);
-        }, 2000)
-      )
-      .then((res) => setMessage(res.data))
-      .then(
-        message === "Participant updated successfully"
-          ? setAlertType("error")
-          : setAlertType("success")
-      )
-      .catch((err) => console.log(err))
-      .finally(props.onClose);
+    // e.preventDefault();
+    // const certificateId = generateCertificateId(
+    //   updateParticipantData.student_id === ""
+    //     ? participantData.student_id
+    //     : updateParticipantData.student_id,
+    //   props.event_slug,
+    //   props.event_detail.eventDepartment,
+    //   props.event_detail.eventDate
+    // );
+    // setOpenSpinner(true);
+    // setTimeout(() => {
+    //   setOpenSpinner(false);
+    // }, 2000);
+    // const url =
+    //   "http://127.0.0.1:8000/api/update-participant/" + props.participant.event;
+    // axios
+    //   .put(
+    //     url,
+    //     {
+    //       event: eventsData,
+    //       student_name:
+    //         updateParticipantData.student_name === ""
+    //           ? participantData.student_name
+    //           : updateParticipantData.student_name,
+    //       student_id:
+    //         updateParticipantData.student_id === ""
+    //           ? participantData.student_id
+    //           : updateParticipantData.student_id,
+    //       email:
+    //         updateParticipantData.email === ""
+    //           ? participantData.email
+    //           : updateParticipantData.email,
+    //       phone:
+    //         updateParticipantData.phone === ""
+    //           ? participantData.phone
+    //           : updateParticipantData.phone,
+    //       certificate_status:
+    //         updateParticipantData.certificate_status === ""
+    //           ? participantData.certificate_status
+    //           : updateParticipantData.certificate_status,
+    //       certificate_id: certificateId,
+    //     },
+    //     { headers: { Authorization: "Token " + localStorage.getItem("token") } }
+    //   )
+    //   .then(
+    //     setTimeout(() => {
+    //       setOpenSnack(true);
+    //     }, 2000)
+    //   )
+    //   .then((res) => setMessage(res.data))
+    //   .then(
+    //     message === "Participant updated successfully"
+    //       ? setAlertType("error")
+    //       : setAlertType("success")
+    //   )
+    //   .catch((err) => console.log(err))
+    //   .finally(props.onClose);
   }
 
   function handleEventData(event) {
@@ -130,7 +133,7 @@ export default function UpdateParticipant(props) {
   }
 
   function handleCloseSnackbar() {
-    setOpenSnack(false);
+    // setOpenSnack(false);
   }
 
   function generateCertificateId(
@@ -227,14 +230,14 @@ export default function UpdateParticipant(props) {
           <Button onClick={handleSubmit}>Update Participant</Button>
         </DialogActions>
       </Dialog>
-      <BackdropSpinner open={openSpinner} />
+      {/* <BackdropSpinner open={openSpinner} />
       <AlertSnackbar
         open={openSnack}
         message={message}
         severity={alertType}
         onClose={handleCloseSnackbar}
         autoHideDuration={6000}
-      />
+      /> */}
     </div>
   );
 }

@@ -81,6 +81,7 @@ export default function SpecificEvent() {
     }
   }, [eventData.data, eventData.isLoading])
 
+
   let completionImagePath = localStorage.getItem("CompletionCertificatePath")
   let meritImagePath = localStorage.getItem("MeritCertificatePath");
 
@@ -93,11 +94,6 @@ export default function SpecificEvent() {
     certificate_id: "",
     certificate_sent_status: "",
     student_img: "",
-  });
-
-  const [eventDetail, setEventDetail] = useState({
-    eventDate: "",
-    eventDepartment: "",
   });
 
   let attendance = 0;
@@ -167,16 +163,7 @@ export default function SpecificEvent() {
   const [updateForm, setUpdateForm] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
   const [album, setAlbum] = useState(false)
-
   const [camera, setCamera] = useState(false)
-
-  const handleResponse = (participant, date, department) => {
-    // setEventsData(participant);
-    setEventDetail({
-      eventDate: date.replace(/-/g, ""),
-      eventDepartment: department,
-    });
-  };
 
   const handleAlbumForm = () => {
     setAlbum(true)
@@ -498,14 +485,14 @@ export default function SpecificEvent() {
           onClose={handleFormClose}
           participant={participantDetails}
           event_slug={event_slug.toUpperCase()}
-          event_detail={eventDetail}
+          event_detail={specificEventDetails}
         />
         <UpdateParticipant
           open={updateForm}
           onClose={handleUpdateFormClose}
           participant={participantDetails}
           event_slug={event_slug.toUpperCase()}
-          event_detail={eventDetail}
+          event_detail={specificEventDetails}
         />
         <DeleteParticipant
           open={deleteForm}
