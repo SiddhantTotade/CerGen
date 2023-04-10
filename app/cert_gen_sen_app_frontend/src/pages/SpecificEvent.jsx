@@ -81,10 +81,20 @@ export default function SpecificEvent() {
 
   const { data = [], isLoading } = useGetParticipantsQuery({ access_token: access_token, event_slug: event_slug })
 
+  const eventData = useSpecificEventDetailQuery({ access_token: access_token, event_slug: event_slug })
+
+  const [eventName, setEventName] = useState("")
+
+  React.useEffect(() => {
+    if (!eventData.isLoading) {
+      setEventName(eventData.data[0]['event_name'])
+    }
+  }, [eventData.data, eventData.isLoading])
+
   let completionImagePath = localStorage.getItem("CompletionCertificatePath")
   let meritImagePath = localStorage.getItem("MeritCertificatePath");
 
-  const [eventsData, setEventsData] = useState([]);
+  // const [eventsData, setEventsData] = useState([]);
   const [participantDetails, setParticipantsDetails] = useState({
     event: "",
     student_name: "",
@@ -102,22 +112,6 @@ export default function SpecificEvent() {
   });
 
   let attendance = 0;
-
-  useEffect(() => {
-    const event_url = window.location.href;
-    const new_event_url = event_url.replace("3000", "8000");
-    axios
-      .get(new_event_url, {
-        headers: { Authorization: "Token " + localStorage.getItem("token") },
-      })
-      .then((res) =>
-        handleResponse(
-          res.data.participants_data,
-          res.data.event_date,
-          res.data.event_department
-        )
-      );
-  }, []);
 
   function generateCertificate() {
     // if (completionImagePath === "null" || meritImagePath === "null") {
@@ -188,7 +182,7 @@ export default function SpecificEvent() {
   const [camera, setCamera] = useState(false)
 
   const handleResponse = (participant, date, department) => {
-    setEventsData(participant);
+    // setEventsData(participant);
     setEventDetail({
       eventDate: date.replace(/-/g, ""),
       eventDepartment: department,
@@ -282,8 +276,7 @@ export default function SpecificEvent() {
             fontSize: "30px",
             borderBottom: "1px solid gray",
           }}
-        >
-          {event_slug.toUpperCase()}
+        >{eventName.toUpperCase()}
         </Typography>
         {data.forEach((event) => {
           return event.certificate_status === "T" ||
@@ -295,13 +288,13 @@ export default function SpecificEvent() {
         })}
         <div className="flex justify-between mt-3">
           <small className="text-blue-600">
-            Total Participants : {eventsData.length}
+            {/* Total Participants : {eventsData.length} */}
           </small>
           <small className="text-green-600">
             Attended Participants : {attendance}
           </small>
           <small className="text-red-600">
-            Absent Participants : {eventsData.length - attendance}
+            {/* Absent Participants : {eventsData.length - attendance} */}
           </small>
         </div>
         <div className="gap-10 mt-5">

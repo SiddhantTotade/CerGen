@@ -14,6 +14,8 @@ import { useSpecificEventDetailQuery } from "../../services/eventsAPI";
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useForm } from 'react-hook-form'
+import { CircularProgress } from "@mui/material";
+import { Box } from "@mui/system";
 
 const schema = yup.object().shape({
   participant_name: yup.string().required("Name is required"),
@@ -71,70 +73,11 @@ export default function CreateParticipant(props) {
     }
   }, [props.open])
 
-  // const [eventsData = [], responseSpecificEvent] = useSpecificEventDetailQuery({ access_token: access_token })
-
-  // eventsData.map((event) => {
-  //   return (participantData.event = event.id);
-  // });
-
-  // useEffect(() => {
-  //   const new_event_url = event_url
-  //     .replace("3000", "8000")
-  //     .replace("event", "event-details");
-
-  //   const fetchData = async () => {
-  //     try {
-  //       const response = await axios.get(new_event_url);
-  //       setEventsData(response.data);
-  //     } catch (error) {
-  //       console.log(error);
-  //     }
-  //   };
-  //   fetchData();
-  // }, [event_url]);
-
-  // function handleSubmit(e) {
-  // e.preventDefault();
-  // const certificateId = generateCertificateId(
-  //   participantData.student_id,
-  //   props.event_slug,
-  //   props.event_detail.eventDepartment,
-  //   props.event_detail.eventDate
-  // );
-  // setOpenSpinner(true);
-  // setTimeout(() => {
-  //   setOpenSpinner(false);
-  // }, 5000);
-  // const url = "http://127.0.0.1:8000/api/create-participant/";
-  // let phone = participantData.phone.includes("+91") ? participantData.phone : "+91" + participantData.phone
-  // axios
-  //   .post(
-  //     url,
-  //     {
-  //       event: participantData.event,
-  //       student_name: participantData.student_name,
-  //       student_id: participantData.student_id,
-  //       email: participantData.email,
-  //       phone: phone,
-  //       certificate_status: participantData.certificate_status,
-  //       certificate_id: certificateId,
-  //     },
-  //     { headers: { Authorization: "Token " + localStorage.getItem("token") } }
-  //   )
-  //   .then(
-  //     setTimeout(() => {
-  //       setOpenSnack(true);
-  //     }, 5000)
-  //   )
-  //   .then((res) => setMessage(res.data))
-  //   .then(
-  //     message === "Participant added successfully"
-  //       ? setAlertType("error")
-  //       : setAlertType("success")
-  //   )
-  //   .catch((err) => console.log(err))
-  //   .finally(props.onClose);
-  // }
+  const onSubmit = () => {
+    createParticipant({ access_token: access_token, participant_data: participantData, event: data[0].id, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, data[0].event_name, data[0].event_department, data[0].from_date) })
+    setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })
+    props.onClose()
+  }
 
   function handleEventData(event) {
     const newData = { ...participantData };
@@ -151,19 +94,20 @@ export default function CreateParticipant(props) {
     setSnackAndSpinner({ openSnack: false })
   }
 
-  const onSubmit = () => {
-    createParticipant({ access_token: access_token, participant_data: participantData, event: data[0].id, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, data[0].event_name, data[0].event_department, data[0].from_date) })
-    setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })
-    props.onClose()
-  }
-
   return (
     <>
       {
         responseCreateParticipant.isLoading ? <BackdropSpinner open={snackAndSpinner.openSpinner} /> :
           <div className="w-full">
             <Dialog {...props}>
-              <DialogTitle>Add Participant</DialogTitle>
+              <DialogTitle sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                Add Participant
+                <Box>
+                  {
+                    isLoading ? <CircularProgress size={25} /> : ""
+                  }
+                </Box>
+              </DialogTitle>
               <form onSubmit={handleSubmit(onSubmit)} >
                 <DialogContent>
                   <TextField
@@ -240,7 +184,6 @@ export default function CreateParticipant(props) {
                 <DialogActions>
                   <Button variant="contained" onClick={props.onClose}>Cancel</Button>
                   <Button variant="contained" type="submit" >Create</Button>
-                  {/* <Button variant="contained" onClick={() => { createParticipant({ access_token: access_token, participant_data: participantData, event: data[0].id, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, data[0].event_name, data[0].event_department, data[0].from_date) }); setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" }); props.onClose() }}>Create</Button> */}
                 </DialogActions>
               </form>
             </Dialog>
