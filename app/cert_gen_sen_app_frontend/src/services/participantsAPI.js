@@ -43,7 +43,7 @@ export const participantsAPI = createApi({
             participant_name: data.participant_data.participant_name,
             participant_id: data.participant_data.participant_id,
             email: data.participant_data.email,
-            phone: data.participant_data.phone,
+            phone: data.phone,
             certificate_status: data.participant_data.certificate_status,
             certificate_id: data.certificate_id,
           },

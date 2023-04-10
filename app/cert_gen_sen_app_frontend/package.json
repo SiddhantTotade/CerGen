@@ -5,6 +5,7 @@
   "dependencies": {
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
+    "@hookform/resolvers": "^3.0.1",
     "@mui/icons-material": "^5.10.16",
     "@mui/lab": "^5.0.0-alpha.122",
     "@mui/material": "^5.10.16",
@@ -17,6 +18,7 @@
     "js-cookie": "^3.0.1",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-hook-form": "^7.43.9",
     "react-photo-album": "^2.0.3",
     "react-redux": "^8.0.5",
     "react-responsive-carousel": "^3.2.23",
@@ -24,7 +26,8 @@
     "react-scripts": "^5.0.1",
     "react-webcam": "^7.0.1",
     "sass": "^1.60.0",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "yup": "^1.0.2"
   },
   "scripts": {
     "start": "react-scripts start",
