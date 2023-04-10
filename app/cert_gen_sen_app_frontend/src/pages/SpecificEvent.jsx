@@ -16,7 +16,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import CameraAltIcon from '@mui/icons-material/CameraAlt';
 import InsertPhotoIcon from '@mui/icons-material/InsertPhoto';
 import SendIcon from "@mui/icons-material/Send";
-import { Button, Typography } from "@mui/material";
+import { Button, Typography, Box } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 import CreateParticipant from "../components/participant_components/CreateParticipant";
 import UpdateParticipant from "../components/participant_components/UpdateParticipant";
@@ -25,8 +25,6 @@ import CertificateTemplate from "../components/template_components/CertificateTe
 import Gold from "../medals_images/gold-medal.png";
 import Silver from "../medals_images/silver-medal.png";
 import Bronze from "../medals_images/bronze-medal.png";
-import BackdropSpinner from "../components/base_components/Backdrop";
-import AlertSnackbar from "../components/base_components/AlertSnackbar";
 import ParticipantImage from "../components/participant_components/ParticipantImage";
 import AlbumForm from "../components/image_components/AlbumForm";
 import { getToken } from "../services/LocalStorageService";
@@ -83,18 +81,17 @@ export default function SpecificEvent() {
 
   const eventData = useSpecificEventDetailQuery({ access_token: access_token, event_slug: event_slug })
 
-  const [eventName, setEventName] = useState("")
+  const [specificEventDetails, setSpecificEventDetails] = useState({})
 
   React.useEffect(() => {
     if (!eventData.isLoading) {
-      setEventName(eventData.data[0]['event_name'])
+      setSpecificEventDetails(eventData.data[0])
     }
   }, [eventData.data, eventData.isLoading])
 
   let completionImagePath = localStorage.getItem("CompletionCertificatePath")
   let meritImagePath = localStorage.getItem("MeritCertificatePath");
 
-  // const [eventsData, setEventsData] = useState([]);
   const [participantDetails, setParticipantsDetails] = useState({
     event: "",
     student_name: "",
@@ -268,16 +265,20 @@ export default function SpecificEvent() {
   return (
     <div className="flex justify-center items-center">
       <Sidebar />
-      <div className="w-3/2 mt-24">
-        <Typography
-          sx={{
-            display: "flex",
-            justifyContent: "center",
-            fontSize: "30px",
-            borderBottom: "1px solid gray",
-          }}
-        >{eventName.toUpperCase()}
-        </Typography>
+      <div className="w-3/4 mt-24">
+        <Box sx={{
+          display: "flex",
+          justifyContent: "space-evenly",
+          alignItems: 'center',
+          borderBottom: "1px solid gray",
+        }}>
+          {
+            eventData.isLoading ? <><LoaderSkeleton barWidth={500} barPadding={3} /><LoaderSkeleton barWidth={500} barPadding={3} /></> : <>
+              <Typography sx={{ fontSize: "40px", }}>{specificEventDetails.event_name}</Typography>
+              <Typography sx={{ fontSize: '15px' }}>{specificEventDetails.subject}</Typography>
+            </>
+          }
+        </Box>
         {data.forEach((event) => {
           return event.certificate_status === "T" ||
             event.certificate_status === "1" ||
