@@ -289,13 +289,13 @@ export default function SpecificEvent() {
         })}
         <div className="flex justify-between mt-3">
           <small className="text-blue-600">
-            {/* Total Participants : {eventsData.length} */}
+            Total Participants : {data.length}
           </small>
           <small className="text-green-600">
             Attended Participants : {attendance}
           </small>
           <small className="text-red-600">
-            {/* Absent Participants : {eventsData.length - attendance} */}
+            Absent Participants : {data.length - attendance}
           </small>
         </div>
         <div className="gap-10 mt-5">
@@ -355,7 +355,7 @@ export default function SpecificEvent() {
               isLoading ? tableSkeleton :
                 <TableBody>
                   {data !== "0" ? (
-                    Object.values(data).map((row) => (
+                    data.map((row) => (
                       <TableRow
                         key={row.id}
                         sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
@@ -373,8 +373,8 @@ export default function SpecificEvent() {
                               className="cursor-pointer"
                               title={
                                 row.certificate_sent_status === true
-                                  ? `Certificate sended to ${row.student_name}`
-                                  : `${row.student_name} is eligible for certificate`
+                                  ? `Certificate sended to ${row.participant_name}`
+                                  : `${row.participant_name} is eligible for certificate`
                               }
                             >
                               <img src={Gold} className="w-10" alt="gold medal png" />
@@ -389,8 +389,8 @@ export default function SpecificEvent() {
                               className="cursor-pointer"
                               title={
                                 row.certificate_sent_status === true
-                                  ? `Certificate sended to ${row.student_name}`
-                                  : `${row.student_name} is eligible for certificate`
+                                  ? `Certificate sended to ${row.participant_name}`
+                                  : `${row.participant_name} is eligible for certificate`
                               }
                             >
                               <img
@@ -409,8 +409,8 @@ export default function SpecificEvent() {
                               className="cursor-pointer"
                               title={
                                 row.certificate_sent_status === true
-                                  ? `Certificate sended to ${row.student_name}`
-                                  : `${row.student_name} is eligible for certificate`
+                                  ? `Certificate sended to ${row.participant_name}`
+                                  : `${row.participant_name} is eligible for certificate`
                               }
                             >
                               <img
@@ -426,8 +426,8 @@ export default function SpecificEvent() {
                               className="cursor-pointer"
                               title={
                                 row.certificate_sent_status === true
-                                  ? `Certificate sended to ${row.student_name}`
-                                  : `${row.student_name} is eligible for certificate`
+                                  ? `Certificate sended to ${row.participant_name}`
+                                  : `${row.participant_name} is eligible for certificate`
                               }
                             >
                               <DoneIcon sx={{ color: "green" }} />
@@ -437,7 +437,7 @@ export default function SpecificEvent() {
                           <TableCell align="center">
                             <Tooltip
                               className="cursor-pointer"
-                              title={`${row.student_name} is not eligible for certificate`}
+                              title={`${row.participant_name} is not eligible for certificate`}
                             >
                               <CloseIcon sx={{ color: "red" }} />
                             </Tooltip>
@@ -462,8 +462,8 @@ export default function SpecificEvent() {
                                 onClick={() =>
                                   handleUpdateForm(
                                     row.id,
-                                    row.student_name,
-                                    row.student_id,
+                                    row.participant_name,
+                                    row.participant_id,
                                     row.email,
                                     row.certificate_status,
                                     row.certificate_id,
