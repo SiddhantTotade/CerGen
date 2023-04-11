@@ -87,8 +87,8 @@ export default function SpecificEvent() {
 
   const [participantDetails, setParticipantsDetails] = useState({
     event: "",
-    student_name: "",
-    student_id: "",
+    participant_name: "",
+    participant_id: "",
     email: "",
     certificate_status: "",
     certificate_id: "",
@@ -205,8 +205,8 @@ export default function SpecificEvent() {
 
   const handleUpdateForm = (
     id,
-    student_name,
-    student_id,
+    participant_name,
+    participant_id,
     email,
     certificate_status,
     certificate_id,
@@ -215,8 +215,8 @@ export default function SpecificEvent() {
   ) => {
     setUpdateForm(true);
     participantDetails.event = id;
-    participantDetails.student_name = student_name;
-    participantDetails.student_id = student_id;
+    participantDetails.participant_name = participant_name;
+    participantDetails.participant_id = participant_id;
     participantDetails.email = email;
     participantDetails.certificate_status = certificate_status;
     participantDetails.certificate_id = certificate_id;
