@@ -53,6 +53,12 @@ export default function CreateParticipant(props) {
 
   const { data = [], isLoading } = useSpecificEventDetailQuery({ access_token: access_token, event_slug: props.event_slug.toLowerCase() })
 
+  React.useEffect(() => {
+    if (!props.open) {
+      setParticipantData({ event: "", participant_name: "", participant_id: "", email: "", phone: "", certificate_status: "" })
+    }
+  }, [props.open])
+  
   function generateCertificateId(
     participant_id,
     event_name,
@@ -67,11 +73,6 @@ export default function CreateParticipant(props) {
     return certificateId.replace(/-/g, "");
   }
 
-  React.useEffect(() => {
-    if (!props.open) {
-      setParticipantData({ event: "", participant_name: "", participant_id: "", email: "", phone: "", certificate_status: "" })
-    }
-  }, [props.open])
 
   const onSubmit = () => {
     createParticipant({ access_token: access_token, participant_data: participantData, event: data[0].id, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, data[0].event_name, data[0].event_department, data[0].from_date) })

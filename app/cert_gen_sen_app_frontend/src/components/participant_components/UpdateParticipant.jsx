@@ -5,13 +5,29 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogTitle from "@mui/material/DialogTitle";
-import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AlertSnackbar from "../base_components/AlertSnackbar";
 import BackdropSpinner from "../base_components/Backdrop";
 import { getToken } from "../../services/LocalStorageService";
+import { useUpdateParticipantMutation } from "../../services/participantsAPI";
+import * as yup from 'yup'
+import { yupResolver } from '@hookform/resolvers/yup'
+import { useForm } from 'react-hook-form'
+
+const schema = yup.object().shape({
+  participant_name: yup.string().required("Name is required"),
+  participant_id: yup.string().required("Id is required"),
+  email: yup.string().email("Invalid email").required("Email is required"),
+  phone: yup.number().required("Phone is required"),
+  certificate_status: yup.string().required("Certificate status is required ")
+})
 
 export default function UpdateParticipant(props) {
+
+  const {
+    register, handleSubmit, formState: { errors },
+  } = useForm({ resolver: yupResolver(schema) })
+
   const [snackAndSpinner, setSnackAndSpinner] = useState({
     openSpinner: true,
     openSnack: true,
@@ -19,33 +35,38 @@ export default function UpdateParticipant(props) {
     alertType: "success"
   })
 
-  let [eventsData, setEventsData] = useState([]);
+  const { access_token } = getToken()
 
-  Object.values(eventsData).map((event) => {
-    return (eventsData = event.id);
-  });
+  const [updateParticipant, responseUpdateParticipant] = useUpdateParticipantMutation()
 
-  const [participantData, setParticipantData] = useState({
-    event: "",
-    student_name: "",
-    student_id: "",
-    email: "",
-    phone: "",
-    certificate_status: "",
-    certificate_id: "",
-  });
+  // const [participantData, setParticipantData] = useState({
+  //   event: props.participant.event,
+  //   participant_name: props.participant.participant_name,
+  //   participant_id: props.participant.participant_id,
+  //   email: props.participant.email,
+  //   phone: props.participant.phone,
+  //   certificate_status: props.participant.certificate_status,
+  //   certificate_id: props.participant.certificate_id,
+  // });
 
-  const [participant, setParticipant] = useState(props.participant)
+  const [participantData, setParticipantData] = useState({})
 
-  const [updateParticipantData, setUpdateParticipantData] = useState({
-    event: "",
-    student_name: "",
-    student_id: "",
-    email: "",
-    phone: "",
-    certificate_status: "",
-    certificate_id: "",
-  });
+  // const [updateParticipantData, setUpdateParticipantData] = useState({
+  //   event: "",
+  //   student_name: "",
+  //   student_id: "",
+  //   email: "",
+  //   phone: "",
+  //   certificate_status: "",
+  //   certificate_id: "",
+  // });
+
+  React.useEffect(() => {
+    if (!props.open) {
+      setParticipantData({ event: "", participant_name: "", participant_id: "", email: "", phone: "", certificate_status: "" })
+    }
+  }, [props.open])
+
 
   // useEffect(() => {
   //   const event_url = window.location.href;
@@ -123,30 +144,6 @@ export default function UpdateParticipant(props) {
   //   .catch((err) => console.log(err))
   //   .finally(props.onClose);
   // }
-
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    onsubmit(console.log(participant))
-  }
-
-  // console.log(participant);
-
-  const handleEventData = (event) => {
-    const { name, value } = event.target
-    setParticipant((prevValues) => ({ ...prevValues, [name]: value }))
-    // const newData = { ...updateParticipantData };
-    // newData[event.target.id] = event.target.value;
-    // setUpdateParticipantData(newData);
-  }
-
-  function settingParticipantData() {
-    setParticipantData(props.participant);
-  }
-
-  function handleCloseSnackbar() {
-    // setOpenSnack(false);
-  }
-
   function generateCertificateId(
     participant_id,
     event_name,
@@ -158,104 +155,132 @@ export default function UpdateParticipant(props) {
     let certificateId =
       participant_id + event_name_char + event_department + event_date + random_num;
 
-    setUpdateParticipantData({ certificate_id: certificateId });
-
     return certificateId;
   }
 
+  const onSubmit = () => {
+    updateParticipant({ access_token: access_token, participant_data: participantData, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, props.event_detail.event_name, props.event_detail.event_department, props.event_detail.from_date) })
+    setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })
+    props.onClose()
+  }
+
+  const handleEventData = (event) => {
+    setParticipantData({ ...props.participant, [event.target.name]: event.target.value })
+  }
+
+  function handlePhone() {
+    let phone = participantData.phone.includes("+91") ? participantData.phone : "+91" + participantData.phone
+    return phone
+  }
+
+  function handleCloseSnackbar() {
+    setSnackAndSpinner({ openSnack: false })
+  }
+
   return (
-    <div className="w-full">
-      <Dialog {...props}>
-        <DialogTitle>Edit Participant</DialogTitle>
-        <form onSubmit={handleSubmit}>
-          <DialogContent>
-            <TextField
-              sx={{ display: "none" }}
-              disabled
-              defaultValue={participant.event}
-              autoFocus
-              margin="dense"
-              id="event"
-              label="Participant Id"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={(e) => handleEventData(e)}
-              defaultValue={participant.participant_name}
-              autoFocus
-              margin="dense"
-              id="participant_name"
-              name="participant_name"
-              label="Participant Name"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={(e) => handleEventData(e)}
-              defaultValue={participant.participant_id}
-              autoFocus
-              margin="dense"
-              id="participant_id"
-              name="participant_id"
-              label="Participant Id"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={(e) => handleEventData(e)}
-              defaultValue={participant.email}
-              autoFocus
-              margin="dense"
-              id="email"
-              name="email"
-              label="Participant Email"
-              type="email"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={(e) => handleEventData(e)}
-              defaultValue={participant.phone}
-              autoFocus
-              margin="dense"
-              id="phone"
-              name="phone"
-              label="Participant Phone"
-              type="phone"
-              fullWidth
-              variant="standard"
-            />
-            <TextField
-              onChange={(e) => handleEventData(e)}
-              defaultValue={participant.certificate_status}
-              autoFocus
-              margin="dense"
-              id="certificate_status"
-              name="certificate_status"
-              label="Certificate Status"
-              type="text"
-              fullWidth
-              variant="standard"
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button variant="contained" onClick={props.onClose}>Cancel</Button>
-            <Button variant="contained" type="submit">Update</Button>
-          </DialogActions>
-        </form>
-      </Dialog>
-      {/* <BackdropSpinner open={openSpinner} />
-      <AlertSnackbar
-        open={openSnack}
-        message={message}
-        severity={alertType}
-        onClose={handleCloseSnackbar}
-        autoHideDuration={6000}
-      /> */}
-    </div>
+    <>
+      {
+        responseUpdateParticipant.isLoading ? <BackdropSpinner open={snackAndSpinner.openSpinner} /> :
+          <div className="w-full">
+            <Dialog {...props}>
+              <DialogTitle>Edit Participant</DialogTitle>
+              <form onSubmit={handleSubmit(onSubmit)}>
+                <DialogContent>
+                  <TextField
+                    {...register('participant_name')}
+                    error={Boolean(errors.participant_name)}
+                    helperText={errors.participant_name?.message}
+                    onChange={(e) => handleEventData(e)}
+                    defaultValue={props.participant.participant_name || ""}
+                    autoFocus
+                    margin="dense"
+                    id="participant_name"
+                    name="participant_name"
+                    label="Participant Name"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                  />
+                  <TextField
+                    {...register('participant_id')}
+                    error={Boolean(errors.participant_id)}
+                    helperText={errors.participant_id?.message}
+                    onChange={(e) => handleEventData(e)}
+                    defaultValue={props.participant.participant_id || ""}
+                    autoFocus
+                    margin="dense"
+                    id="participant_id"
+                    name="participant_id"
+                    label="Participant Id"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                  />
+                  <TextField
+                    {...register('email')}
+                    error={Boolean(errors.email)}
+                    helperText={errors.email?.message}
+                    onChange={(e) => handleEventData(e)}
+                    defaultValue={props.participant.email || ""}
+                    autoFocus
+                    margin="dense"
+                    id="email"
+                    name="email"
+                    label="Participant Email"
+                    type="email"
+                    fullWidth
+                    variant="standard"
+                  />
+                  <TextField
+                    {...register('phone', { max: 13, min: 10, maxLength: 13 })}
+                    error={Boolean(errors.phone)}
+                    helperText={errors.phone?.message}
+                    onChange={(e) => handleEventData(e)}
+                    defaultValue={props.participant.phone || ""}
+                    autoFocus
+                    margin="dense"
+                    id="phone"
+                    name="phone"
+                    label="Participant Phone"
+                    type="phone"
+                    fullWidth
+                    variant="standard"
+                  />
+                  <TextField
+                    {...register('certificate_status')}
+                    error={Boolean(errors.certificate_status)}
+                    helperText={errors.certificate_status?.message}
+                    onChange={(e) => handleEventData(e)}
+                    defaultValue={props.participant.certificate_status || ""}
+                    autoFocus
+                    margin="dense"
+                    id="certificate_status"
+                    name="certificate_status"
+                    label="Certificate Status"
+                    type="text"
+                    fullWidth
+                    variant="standard"
+                  />
+                </DialogContent>
+                <DialogActions>
+                  <Button variant="contained" onClick={props.onClose} >Cancel</Button>
+                  <Button variant="contained" type="submit" >Update</Button>
+                </DialogActions>
+              </form>
+            </Dialog>
+            {
+              responseUpdateParticipant.data ?
+
+                <AlertSnackbar
+                  open={snackAndSpinner.openSnack}
+                  message={responseUpdateParticipant.data}
+                  severity={snackAndSpinner.alertType}
+                  onClose={handleCloseSnackbar}
+                  autoHideDuration={6000}
+                /> : ""
+            }
+          </div>
+      }
+    </>
   );
 }

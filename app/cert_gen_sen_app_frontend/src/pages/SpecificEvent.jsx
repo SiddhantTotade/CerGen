@@ -86,6 +86,7 @@ export default function SpecificEvent() {
   let meritImagePath = localStorage.getItem("MeritCertificatePath");
 
   const [participantDetails, setParticipantsDetails] = useState({
+    id: "",
     event: "",
     participant_name: "",
     participant_id: "",
@@ -205,6 +206,7 @@ export default function SpecificEvent() {
 
   const handleUpdateForm = (
     id,
+    event,
     participant_name,
     participant_id,
     email,
@@ -214,14 +216,7 @@ export default function SpecificEvent() {
     student_img
   ) => {
     setUpdateForm(true);
-    participantDetails.event = id;
-    participantDetails.participant_name = participant_name;
-    participantDetails.participant_id = participant_id;
-    participantDetails.email = email;
-    participantDetails.certificate_status = certificate_status;
-    participantDetails.certificate_id = certificate_id;
-    participantDetails.certificate_sent_status = certificate_sent_status;
-    participantDetails.student_img = student_img;
+    setParticipantsDetails({ id: id, event: event, participant_name: participant_name, participant_id: participant_id, email: email, certificate_status: certificate_status, certificate_id: certificate_id, certificate_sent_status: certificate_sent_status, student_img: student_img })
   };
 
   const handleUpdateFormClose = () => {
@@ -420,23 +415,28 @@ export default function SpecificEvent() {
                         )}{
                           row.student_image === "" ?
                             <TableCell align="center">
-                              <Button onClick={() => handleCameraForm(row.id, row.student_image)}>
-                                <CameraAltIcon sx={{ color: '#e81551' }} />
-                              </Button>
+                              <Tooltip title={`Click / Upload a photo of : ${row.participant_name}`}>
+                                <Button onClick={() => handleCameraForm(row.id, row.student_image)}>
+                                  <CameraAltIcon sx={{ color: '#e81551' }} />
+                                </Button>
+                              </Tooltip>
                             </TableCell> :
                             <TableCell align="center">
-                              <Button onClick={() => handleImageForm(row.id, row.student_image)}>
-                                <InsertPhotoIcon sx={{ color: '#1f0abf' }} />
-                              </Button>
+                              <Tooltip title={`View / Update photo of : ${row.participant_name}`}>
+                                <Button onClick={() => handleImageForm(row.id, row.student_image)}>
+                                  <InsertPhotoIcon sx={{ color: '#1f0abf' }} />
+                                </Button>
+                              </Tooltip>
                             </TableCell>
                         }
                         {row.certificate_sent_status === false ? (
                           <TableCell align="center">
-                            <Tooltip title={`Edit : ${row.student_name}`}>
+                            <Tooltip title={`Edit : ${row.participant_name}`}>
                               <Button
                                 onClick={() =>
                                   handleUpdateForm(
                                     row.id,
+                                    row.event,
                                     row.participant_name,
                                     row.participant_id,
                                     row.email,
@@ -451,7 +451,7 @@ export default function SpecificEvent() {
                                 <EditIcon sx={{ color: "blue" }} />
                               </Button>
                             </Tooltip>
-                            <Tooltip title={`Delete : ${row.student_name}`}>
+                            <Tooltip title={`Delete : ${row.participant_name}`}>
                               <Button onClick={() => handleDeleteForm(row.id)}>
                                 <DeleteIcon sx={{ color: "red" }} />
                               </Button>
