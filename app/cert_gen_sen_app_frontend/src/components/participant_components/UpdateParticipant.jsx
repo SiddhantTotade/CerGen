@@ -52,13 +52,13 @@ export default function UpdateParticipant(props) {
   const [participantData, setParticipantData] = useState(props.participant)
 
   // const [updateParticipantData, setUpdateParticipantData] = useState({
-  //   event: "",
-  //   student_name: "",
-  //   student_id: "",
-  //   email: "",
-  //   phone: "",
-  //   certificate_status: "",
-  //   certificate_id: "",
+    // event: "",
+    // student_name: "",
+    // student_id: "",
+    // email: "",
+    // phone: "",
+    // certificate_status: "",
+    // certificate_id: "",
   // });
 
   React.useEffect(() => {
@@ -66,7 +66,6 @@ export default function UpdateParticipant(props) {
       setParticipantData({ event: "", participant_name: "", participant_id: "", email: "", phone: "", certificate_status: "" })
     }
   }, [props.open])
-
 
   // useEffect(() => {
   //   const event_url = window.location.href;
@@ -186,7 +185,6 @@ export default function UpdateParticipant(props) {
     setSnackAndSpinner({ openSnack: false })
   }
 
-
   return (
     <>
       {
@@ -201,9 +199,8 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.participant_name)}
                     helperText={errors.participant_name?.message}
                     onChange={(e) => handleEventData(e)}
-                    // defaultValue={participantData.participant_name}
                     value={props.participant.participant_name}
-e                    autoFocus
+                    autoFocus
                     margin="dense"
                     id="participant_name"
                     name="participant_name"

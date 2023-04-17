@@ -188,6 +188,7 @@ export default function SpecificEvent() {
     setCamera(false);
     setParticipantsDetails("")
   };
+
   const handleUploadTemplateForm = () => {
     setUploadTemplateForm(true);
   };
@@ -231,6 +232,7 @@ export default function SpecificEvent() {
 
   const handleUpdateFormClose = () => {
     setUpdateForm(false);
+    setParticipantsDetails({ event: '', participant_name: '', participant_id: '', email: '', phone: '', certificate_status: '', certificate_id: '', certificate_sent_status: '', student_img: '' })
   };
 
   const handleDeleteForm = (id) => {
@@ -498,13 +500,15 @@ export default function SpecificEvent() {
           event_slug={event_slug.toUpperCase()}
           event_detail={specificEventDetails}
         />
-        <UpdateParticipant
-          open={updateForm}
-          onClose={handleUpdateFormClose}
-          participant={participantDetails}
-          event_slug={event_slug.toUpperCase()}
-          event_detail={specificEventDetails}
-        />
+        {updateForm ?
+          <UpdateParticipant
+            open={updateForm}
+            onClose={handleUpdateFormClose}
+            participant={participantDetails}
+            event_slug={event_slug.toUpperCase()}
+            event_detail={specificEventDetails}
+          /> : ""
+        }
         <DeleteParticipant
           open={deleteForm}
           onClose={handleDeleteFormClose}
