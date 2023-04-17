@@ -49,7 +49,7 @@ export default function UpdateParticipant(props) {
   //   certificate_id: props.participant.certificate_id,
   // });
 
-  const [participantData, setParticipantData] = useState({})
+  const [participantData, setParticipantData] = useState(props.participant)
 
   // const [updateParticipantData, setUpdateParticipantData] = useState({
   //   event: "",
@@ -159,14 +159,23 @@ export default function UpdateParticipant(props) {
   }
 
   const onSubmit = () => {
-    updateParticipant({ access_token: access_token, participant_data: participantData, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, props.event_detail.event_name, props.event_detail.event_department, props.event_detail.from_date) })
-    setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })
-    props.onClose()
+    console.log(participantData);
+    // updateParticipant({ access_token: access_token, participant_data: participantData, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, props.event_detail.event_name, props.event_detail.event_department, props.event_detail.from_date) })
+    // setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })
+    // props.onClose()
   }
 
   const handleEventData = (event) => {
-    setParticipantData({ ...props.participant, [event.target.name]: event.target.value })
+    const { name, value } = event.target
+    setParticipantData((prevValues) => ({ ...prevValues, [name]: value }))
+    // const newData = { ...updateParticipantData };
+    // newData[event.target.id] = event.target.value;
+    // setUpdateParticipantData(newData);
   }
+
+  // function settingParticipantData() {
+  //   setParticipantData(props.participant);
+  // }
 
   function handlePhone() {
     let phone = participantData.phone.includes("+91") ? participantData.phone : "+91" + participantData.phone
@@ -176,6 +185,7 @@ export default function UpdateParticipant(props) {
   function handleCloseSnackbar() {
     setSnackAndSpinner({ openSnack: false })
   }
+
 
   return (
     <>
@@ -191,8 +201,9 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.participant_name)}
                     helperText={errors.participant_name?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={props.participant.participant_name || ""}
-                    autoFocus
+                    // defaultValue={participantData.participant_name}
+                    value={props.participant.participant_name}
+e                    autoFocus
                     margin="dense"
                     id="participant_name"
                     name="participant_name"
@@ -206,7 +217,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.participant_id)}
                     helperText={errors.participant_id?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={props.participant.participant_id || ""}
+                    defaultValue={participantData.participant_id}
                     autoFocus
                     margin="dense"
                     id="participant_id"
@@ -221,7 +232,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.email)}
                     helperText={errors.email?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={props.participant.email || ""}
+                    defaultValue={participantData.email}
                     autoFocus
                     margin="dense"
                     id="email"
@@ -236,7 +247,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.phone)}
                     helperText={errors.phone?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={props.participant.phone || ""}
+                    defaultValue={participantData.phone}
                     autoFocus
                     margin="dense"
                     id="phone"
@@ -251,7 +262,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.certificate_status)}
                     helperText={errors.certificate_status?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={props.participant.certificate_status || ""}
+                    defaultValue={participantData.certificate_status}
                     autoFocus
                     margin="dense"
                     id="certificate_status"

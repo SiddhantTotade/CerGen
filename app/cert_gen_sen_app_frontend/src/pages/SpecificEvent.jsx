@@ -81,7 +81,6 @@ export default function SpecificEvent() {
     }
   }, [eventData.data, eventData.isLoading])
 
-
   let completionImagePath = localStorage.getItem("CompletionCertificatePath")
   let meritImagePath = localStorage.getItem("MeritCertificatePath");
 
@@ -91,6 +90,7 @@ export default function SpecificEvent() {
     participant_name: "",
     participant_id: "",
     email: "",
+    phone: "",
     certificate_status: "",
     certificate_id: "",
     certificate_sent_status: "",
@@ -210,13 +210,23 @@ export default function SpecificEvent() {
     participant_name,
     participant_id,
     email,
+    phone,
     certificate_status,
     certificate_id,
     certificate_sent_status,
     student_img
   ) => {
     setUpdateForm(true);
-    setParticipantsDetails({ id: id, event: event, participant_name: participant_name, participant_id: participant_id, email: email, certificate_status: certificate_status, certificate_id: certificate_id, certificate_sent_status: certificate_sent_status, student_img: student_img })
+    participantDetails.id = id;
+    participantDetails.event = event;
+    participantDetails.participant_name = participant_name;
+    participantDetails.participant_id = participant_id;
+    participantDetails.email = email;
+    participantDetails.phone = phone;
+    participantDetails.certificate_status = certificate_status;
+    participantDetails.certificate_id = certificate_id;
+    participantDetails.certificate_sent_status = certificate_sent_status;
+    participantDetails.student_img = student_img;
   };
 
   const handleUpdateFormClose = () => {
@@ -440,6 +450,7 @@ export default function SpecificEvent() {
                                     row.participant_name,
                                     row.participant_id,
                                     row.email,
+                                    row.phone,
                                     row.certificate_status,
                                     row.certificate_id,
                                     row.certificate_sent_status,
