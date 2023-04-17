@@ -47,84 +47,8 @@ export default function UpdateParticipant(props) {
     }
   }, [props.open])
 
-  console.log(responseUpdateParticipant.data);
+  console.log(responseUpdateParticipant.isLoading);
 
-  // useEffect(() => {
-  //   const event_url = window.location.href;
-  //   const new_event_url = event_url
-  //     .replace("3000", "8000")
-  //     .replace("event", "event-details");
-  //   axios
-  //     .get(new_event_url, {
-  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
-  //     })
-  //     .then((res) => setEventsData(res.data));
-  // }, []);
-
-  // useEffect(() => {
-  // settingParticipantData();
-  // eslint-disable-next-line
-  // }, []);
-
-  // function handleSubmit(e) {
-  // e.preventDefault();
-  // const certificateId = generateCertificateId(
-  //   updateParticipantData.student_id === ""
-  //     ? participantData.student_id
-  //     : updateParticipantData.student_id,
-  //   props.event_slug,
-  //   props.event_detail.eventDepartment,
-  //   props.event_detail.eventDate
-  // );
-  // setOpenSpinner(true);
-  // setTimeout(() => {
-  //   setOpenSpinner(false);
-  // }, 2000);
-  // const url =
-  //   "http://127.0.0.1:8000/api/update-participant/" + props.participant.event;
-  // axios
-  //   .put(
-  //     url,
-  //     {
-  //       event: eventsData,
-  //       student_name:
-  //         updateParticipantData.student_name === ""
-  //           ? participantData.student_name
-  //           : updateParticipantData.student_name,
-  //       student_id:
-  //         updateParticipantData.student_id === ""
-  //           ? participantData.student_id
-  //           : updateParticipantData.student_id,
-  //       email:
-  //         updateParticipantData.email === ""
-  //           ? participantData.email
-  //           : updateParticipantData.email,
-  //       phone:
-  //         updateParticipantData.phone === ""
-  //           ? participantData.phone
-  //           : updateParticipantData.phone,
-  //       certificate_status:
-  //         updateParticipantData.certificate_status === ""
-  //           ? participantData.certificate_status
-  //           : updateParticipantData.certificate_status,
-  //       certificate_id: certificateId,
-  //     },
-  //     { headers: { Authorization: "Token " + localStorage.getItem("token") } }
-  //   )
-  //   .then(
-  //     setTimeout(() => {
-  //       setOpenSnack(true);
-  //     }, 2000)
-  //   )
-  //   .then((res) => setMessage(res.data))
-  //   .then(
-  //     message === "Participant updated successfully"
-  //       ? setAlertType("error")
-  //       : setAlertType("success")
-  //   )
-  //   .catch((err) => console.log(err))
-  //   .finally(props.onClose);
-  // }
   function generateCertificateId(
     participant_id,
     event_name,
@@ -148,14 +72,7 @@ export default function UpdateParticipant(props) {
   const handleEventData = (event) => {
     const { name, value } = event.target
     setParticipantData((prevValues) => ({ ...prevValues, [name]: value }))
-    // const newData = { ...updateParticipantData };
-    // newData[event.target.id] = event.target.value;
-    // setUpdateParticipantData(newData);
   }
-
-  // function settingParticipantData() {
-  //   setParticipantData(props.participant);
-  // }
 
   function handlePhone() {
     let phone = participantData.phone.includes("+91") ? participantData.phone : "+91" + participantData.phone
@@ -259,7 +176,6 @@ export default function UpdateParticipant(props) {
             </Dialog>
             {
               responseUpdateParticipant.data ?
-
                 <AlertSnackbar
                   open={snackAndSpinner.openSnack}
                   message={responseUpdateParticipant.data}
