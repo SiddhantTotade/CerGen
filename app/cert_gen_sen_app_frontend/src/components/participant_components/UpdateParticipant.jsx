@@ -39,27 +39,7 @@ export default function UpdateParticipant(props) {
 
   const [updateParticipant, responseUpdateParticipant] = useUpdateParticipantMutation()
 
-  // const [participantData, setParticipantData] = useState({
-  //   event: props.participant.event,
-  //   participant_name: props.participant.participant_name,
-  //   participant_id: props.participant.participant_id,
-  //   email: props.participant.email,
-  //   phone: props.participant.phone,
-  //   certificate_status: props.participant.certificate_status,
-  //   certificate_id: props.participant.certificate_id,
-  // });
-
   const [participantData, setParticipantData] = useState(props.participant)
-
-  // const [updateParticipantData, setUpdateParticipantData] = useState({
-  // event: "",
-  // student_name: "",
-  // student_id: "",
-  // email: "",
-  // phone: "",
-  // certificate_status: "",
-  // certificate_id: "",
-  // });
 
   React.useEffect(() => {
     if (!props.open) {
