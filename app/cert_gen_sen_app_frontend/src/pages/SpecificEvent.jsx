@@ -232,7 +232,7 @@ export default function SpecificEvent() {
 
   const handleUpdateFormClose = () => {
     setUpdateForm(false);
-    setParticipantsDetails({ event: '', participant_name: '', participant_id: '', email: '', phone: '', certificate_status: '', certificate_id: '', certificate_sent_status: '', student_img: '' })
+    // setParticipantsDetails({ event: '', participant_name: '', participant_id: '', email: '', phone: '', certificate_status: '', certificate_id: '', certificate_sent_status: '', student_img: '' })
   };
 
   const handleDeleteForm = (id) => {

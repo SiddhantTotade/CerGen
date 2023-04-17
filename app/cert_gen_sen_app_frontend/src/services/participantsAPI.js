@@ -56,23 +56,22 @@ export const participantsAPI = createApi({
     }),
     updateParticipant: builder.mutation({
       query: (data) => {
-        console.log(data.certificate_id);
         return {
-          // url: `update-participant/${data.id}`,
-          // method: "PATCH",
-          // body: {
-          //   // event: data.event,
-          //   // participant_name: data.participant_data.participant_name,
-          //   // participant_id: data.participant_data.participant_id,
-          //   // email: data.participant_data.email,
-          //   // phone: data.phone,
-          //   // certificate_status: data.participant_data.certificate_status,
-          //   // certificate_id: data.certificate_id,
-          // },
-          // headers: {
-          //   "Content-type": "application/json; charset=UTF-8",
-          //   authorization: `Bearer ${data.access_token}`,
-          // },
+          url: `update-participant/${data.participant_data.id}`,
+          method: "PUT",
+          body: {
+            event: data.event,
+            participant_name: data.participant_data.participant_name,
+            participant_id: data.participant_data.participant_id,
+            email: data.participant_data.email,
+            phone: data.phone,
+            certificate_status: data.participant_data.certificate_status,
+            certificate_id: data.certificate_id,
+          },
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: `Bearer ${data.access_token}`,
+          },
         };
       },
     }),

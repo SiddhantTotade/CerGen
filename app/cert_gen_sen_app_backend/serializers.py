@@ -156,12 +156,6 @@ class ParticipantSerializer(serializers.ModelSerializer):
         model = Participant
         fields = '__all__'
 
-    def create(self, validated_data):
-        event = Participant.objects.create(event=validated_data['event'], participant_name=validated_data['participant_name'],
-                                           participant_id=validated_data['participant_id'], email=validated_data['email'], phone=validated_data['phone'], certificate_status=validated_data['certificate_status'], certificate_id=validated_data['certificate_id'])
-        event.save()
-        return event
-
 
 # Participant image serializer
 class ParticipantImageSerializer(serializers.ModelSerializer):

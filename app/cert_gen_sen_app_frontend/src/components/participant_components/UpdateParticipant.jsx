@@ -52,13 +52,13 @@ export default function UpdateParticipant(props) {
   const [participantData, setParticipantData] = useState(props.participant)
 
   // const [updateParticipantData, setUpdateParticipantData] = useState({
-    // event: "",
-    // student_name: "",
-    // student_id: "",
-    // email: "",
-    // phone: "",
-    // certificate_status: "",
-    // certificate_id: "",
+  // event: "",
+  // student_name: "",
+  // student_id: "",
+  // email: "",
+  // phone: "",
+  // certificate_status: "",
+  // certificate_id: "",
   // });
 
   React.useEffect(() => {
@@ -66,6 +66,8 @@ export default function UpdateParticipant(props) {
       setParticipantData({ event: "", participant_name: "", participant_id: "", email: "", phone: "", certificate_status: "" })
     }
   }, [props.open])
+
+  console.log(responseUpdateParticipant.data);
 
   // useEffect(() => {
   //   const event_url = window.location.href;
@@ -154,14 +156,13 @@ export default function UpdateParticipant(props) {
     let certificateId =
       participant_id + event_name_char + event_department + event_date + random_num;
 
-    return certificateId;
+    return certificateId.replace(/-/g, "");
   }
 
   const onSubmit = () => {
-    console.log(participantData);
-    // updateParticipant({ access_token: access_token, participant_data: participantData, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, props.event_detail.event_name, props.event_detail.event_department, props.event_detail.from_date) })
-    // setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })
-    // props.onClose()
+    updateParticipant({ access_token: access_token, participant_data: participantData, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, props.event_detail.event_name, props.event_detail.event_department, props.event_detail.from_date) })
+    setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })
+    props.onClose()
   }
 
   const handleEventData = (event) => {
@@ -199,7 +200,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.participant_name)}
                     helperText={errors.participant_name?.message}
                     onChange={(e) => handleEventData(e)}
-                    value={props.participant.participant_name}
+                    value={participantData.participant_name}
                     autoFocus
                     margin="dense"
                     id="participant_name"
