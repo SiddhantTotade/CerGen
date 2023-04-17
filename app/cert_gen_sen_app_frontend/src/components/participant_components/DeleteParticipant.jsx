@@ -29,10 +29,10 @@ export default function DeleteParticipant(props) {
     return (
         <div className='w-full'>
             <Dialog {...props} >
-                <DialogTitle>Delete Participant : {props.participant.event}</DialogTitle>
+                <DialogTitle>Delete Participant : {props.participant.participant_name}</DialogTitle>
                 <DialogActions>
-                    <Button onClick={props.onClose} >Cancel</Button>
-                    <Button onClick={() => handleDelete(props.participant.event)} >Yes</Button>
+                    <Button variant='contained' onClick={props.onClose} >Cancel</Button>
+                    <Button variant='contained' onClick={() => handleDelete(props.participant.event)} >Yes</Button>
                 </DialogActions>
             </Dialog>
             <BackdropSpinner open={openSpinner} />

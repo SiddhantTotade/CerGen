@@ -47,7 +47,7 @@ export default function UpdateParticipant(props) {
     }
   }, [props.open])
 
-  console.log(responseUpdateParticipant.isLoading);
+  console.log(responseUpdateParticipant.data);
 
   function generateCertificateId(
     participant_id,
