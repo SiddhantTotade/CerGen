@@ -499,15 +499,13 @@ export default function SpecificEvent() {
           event_slug={event_slug.toUpperCase()}
           event_detail={specificEventDetails}
         />
-        {updateForm ?
-          <UpdateParticipant
-            open={updateForm}
-            onClose={handleUpdateFormClose}
-            participant={participantDetails}
-            event_slug={event_slug.toUpperCase()}
-            event_detail={specificEventDetails}
-          /> : ""
-        }
+        <UpdateParticipant
+          open={updateForm}
+          onClose={handleUpdateFormClose}
+          participant={participantDetails}
+          event_slug={event_slug.toUpperCase()}
+          event_detail={specificEventDetails}
+        />
         <DeleteParticipant
           open={deleteForm}
           onClose={handleDeleteFormClose}

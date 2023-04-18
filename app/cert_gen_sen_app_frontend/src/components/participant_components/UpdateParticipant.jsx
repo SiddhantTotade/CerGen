@@ -43,11 +43,9 @@ export default function UpdateParticipant(props) {
 
   React.useEffect(() => {
     if (!props.open) {
-      setParticipantData({ event: "", participant_name: "", participant_id: "", email: "", phone: "", certificate_status: "" })
+      setParticipantData("")
     }
   }, [props.open])
-
-  console.log(responseUpdateParticipant.data);
 
   function generateCertificateId(
     participant_id,
