@@ -300,7 +300,7 @@ class FilteredEvent(APIView):
 class UploadCompletionTemplate(APIView):
     def get(self, request):
         image_file = CompletionCertificateTemplate.objects.filter(
-            user=request.user.id)
+            user=request.user)
 
         if image_file:
             image_serializer = CompletionCertificateSerializer(
@@ -328,7 +328,7 @@ class UploadCompletionTemplate(APIView):
 class UploadMeritTemplate(APIView):
     def get(self, request):
         image_file = MeritCertificateTemplate.objects.filter(
-            user=request.user.id)
+            user=request.user)
 
         if image_file:
             image_serializer = MeritCertificateSerializer(

@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
-import { useEffect } from "react";
-import axios from "axios";
+import { setCertificatePath } from "../../services/LocalStorageService";
+import { getToken } from "../../services/LocalStorageService";
+import { useGetCompletionCertificateQuery } from "../../services/certificateGeneratorAPI";
+import { useGetContributeCompletionCertificateQuery } from "../../services/certificateGeneratorAPI";
 
 export const ChooseCompletionTemplate = () => {
   const [selectedImage, setSelectedImage] = useState({
@@ -9,28 +11,39 @@ export const ChooseCompletionTemplate = () => {
     id: "",
   });
 
-  const [images, setImages] = useState("");
-  const [contributeImage, setContributeImages] = useState("")
+  const { access_token } = getToken()
 
-  useEffect(() => {
-    const url = "http://127.0.0.1:8000/api/upload-completion-template/";
+  // const [images, setImages] = useState("");
 
-    axios
-      .get(url, {
-        headers: { Authorization: "Token " + localStorage.getItem("token") },
-      })
-      .then((res) => setImages(res.data));
-  }, []);
+  // const [contributeImage, setContributeImages] = useState("")
 
-  useEffect(() => {
-    const url = "http://127.0.0.1:8000/api/contribute-completion-template/";
+  const [completionCertificate, responseCompletionCertificate] = useGetCompletionCertificateQuery(access_token)
 
-    axios
-      .get(url, {
-        headers: { Authorization: "Token " + localStorage.getItem("token") },
-      })
-      .then((res) => setContributeImages(res.data));
-  }, []);
+  console.log(responseCompletionCertificate);
+
+  // const [contributedCompletionCertificate, responseContributeCompletionCertificate] = useGetContributeCompletionCertificateQuery({ access_token: access_token })
+
+  // console.log(contributedCompletionCertificate);
+
+  // useEffect(() => {
+  //   const url = "http://127.0.0.1:8000/api/upload-completion-template/";
+
+  //   axios
+  //     .get(url, {
+  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
+  //     })
+  //     .then((res) => setImages(res.data));
+  // }, []);
+
+  // useEffect(() => {
+  //   const url = "http://127.0.0.1:8000/api/contribute-completion-template/";
+
+  //   axios
+  //     .get(url, {
+  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
+  //     })
+  //     .then((res) => setContributeImages(res.data));
+  // }, []);
 
   return (
     <>
@@ -48,9 +61,9 @@ export const ChooseCompletionTemplate = () => {
           sx={{ display: "flex", justifyContent: "center", gap: "100px" }}
         >
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
-            <Grid container spacing={2}>
-              {(images !== "Failed to get images" || contributeImage !== "Failed to get images") ? (
-                Object.values(images !== "Failed to get images" ? contributeImage.concat(images) : contributeImage).map((imageUrl, index) => (
+            {/* <Grid container spacing={2}>
+              {(completionCertificate !== "Failed to get images" || contributedCompletionCertificate !== "Failed to get images") ? (
+                Object.values(completionCertificate !== "Failed to get images" ? contributedCompletionCertificate.concat(completionCertificate) : contributedCompletionCertificate).map((imageUrl, index) => (
                   <Grid item key={index}>
                     <Paper
                       onClick={() =>
@@ -74,7 +87,7 @@ export const ChooseCompletionTemplate = () => {
               ) : (
                 <Typography>No template</Typography>
               )}
-            </Grid>
+            </Grid> */}
           </Grid>
           <Grid item xs={6}>
             <Paper
@@ -102,10 +115,7 @@ export const ChooseCompletionTemplate = () => {
           <Button variant="contained">Cancel</Button>
           <Button
             variant="contained"
-            onClick={localStorage.setItem(
-              "CompletionCertificatePath",
-              selectedImage.url
-            )}
+            onClick={setCertificatePath(selectedImage.url)}
           >
             Use this template
           </Button>

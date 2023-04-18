@@ -38,8 +38,8 @@ urlpatterns = [
          UploadCompletionTemplate.as_view()),
     path("upload-merit-template/",
          UploadMeritTemplate.as_view()),
-    path("contribute-merit-template/",
-         ContributeMerit.as_view()),
     path("contribute-completion-template/",
          ContributeCompletion.as_view()),
+    path("contribute-merit-template/",
+         ContributeMerit.as_view()),
 ]
