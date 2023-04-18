@@ -68,21 +68,21 @@ export default function CertificateTemplate(props) {
     return (participantData.event = event.id);
   });
 
-  useEffect(() => {
-    const new_event_url = event_url
-      .replace("3000", "8000")
-      .replace("event", "event-details");
+  // useEffect(() => {
+  //   const new_event_url = event_url
+  //     .replace("3000", "8000")
+  //     .replace("event", "event-details");
 
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(new_event_url);
-        setEventsData(response.data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
-  }, [event_url]);
+  //   const fetchData = async () => {
+  //     try {
+  //       const response = await axios.get(new_event_url);
+  //       setEventsData(response.data);
+  //     } catch (error) {
+  //       console.log(error);
+  //     }
+  //   };
+  //   fetchData();
+  // }, [event_url]);
 
   function handleSubmit(e) {
     e.preventDefault();

@@ -21,7 +21,8 @@ export const store = configureStore({
     getDefaultMiddleware().concat(
       userAuthAPI.middleware,
       eventsAPI.middleware,
-      participantsAPI.middleware
+      participantsAPI.middleware,
+      certificateGeneratorAPI.middleware
     ),
 });
 

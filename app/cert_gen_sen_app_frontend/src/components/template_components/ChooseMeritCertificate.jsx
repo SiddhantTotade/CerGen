@@ -1,36 +1,44 @@
 import React, { useState } from "react";
 import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
-import { useEffect } from "react";
-import axios from "axios";
+import { getToken } from "../../services/LocalStorageService";
+import { useGetMeritCertificateQuery } from "../../services/certificateGeneratorAPI";
+import { useGetContributeMeritCertificateQuery } from "../../services/certificateGeneratorAPI";
 
 export const ChooseMeritTemplate = () => {
+
+  const { access_token } = getToken()
+
   const [selectedImage, setSelectedImage] = useState({
     url: null,
     id: "",
   });
 
-  const [images, setImages] = useState("");
-  const [contributeImage, setContributeImages] = useState("")
+  // const [images, setImages] = useState("");
+  // const [contributeImage, setContributeImages] = useState("")
 
-  useEffect(() => {
-    const url = "http://127.0.0.1:8000/api/upload-merit-template/";
+  const [meritCertificate, responseMeritcertificate] = useGetMeritCertificateQuery(access_token)
 
-    axios
-      .get(url, {
-        headers: { Authorization: "Token " + localStorage.getItem("token") },
-      })
-      .then((res) => setImages(res.data));
-  }, []);
+  const [contributedMeritCertificate, responseContributeMeritCertificate] = useGetContributeMeritCertificateQuery(access_token)
 
-  useEffect(() => {
-    const url = "http://127.0.0.1:8000/api/contribute-completion-template/";
+  // useEffect(() => {
+  //   const url = "http://127.0.0.1:8000/api/upload-merit-template/";
 
-    axios
-      .get(url, {
-        headers: { Authorization: "Token " + localStorage.getItem("token") },
-      })
-      .then((res) => setContributeImages(res.data));
-  }, []);
+  //   axios
+  //     .get(url, {
+  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
+  //     })
+  //     .then((res) => setImages(res.data));
+  // }, []);
+
+  // useEffect(() => {
+  //   const url = "http://127.0.0.1:8000/api/contribute-completion-template/";
+
+  //   axios
+  //     .get(url, {
+  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
+  //     })
+  //     .then((res) => setContributeImages(res.data));
+  // }, []);
 
   return (
     <>
@@ -49,8 +57,8 @@ export const ChooseMeritTemplate = () => {
         >
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
             <Grid container spacing={2}>
-              {images !== "Failed to get images" ? (
-                Object.values(images.concat(contributeImage)).map((imageUrl, index) => (
+              {meritCertificate !== "Failed to get images" ? (
+                (meritCertificate.concat(contributedMeritCertificate)).map((imageUrl, index) => (
                   <Grid item key={index}>
                     <Paper
                       onClick={() =>

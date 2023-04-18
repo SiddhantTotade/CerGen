@@ -30,6 +30,7 @@ import { getToken } from "../services/LocalStorageService";
 import { useGetParticipantsQuery } from "../services/participantsAPI";
 import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
 import { useSpecificEventDetailQuery } from "../services/eventsAPI";
+import { useGetCompletionCertificateQuery } from "../services/certificateGeneratorAPI";
 
 const createBtns = {
   marginBottom: "10px",

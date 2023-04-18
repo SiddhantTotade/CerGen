@@ -6,7 +6,6 @@ export const certificateGeneratorAPI = createApi({
   endpoints: (builder) => ({
     getCompletionCertificate: builder.query({
       query: (access_token) => {
-        console.log(access_token);
         return {
           url: "upload-completion-template",
           method: "GET",
@@ -20,6 +19,28 @@ export const certificateGeneratorAPI = createApi({
       query: (access_token) => {
         return {
           url: "contribute-completion-template",
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        };
+      },
+    }),
+    getMeritCertificate: builder.query({
+      query: (access_token) => {
+        return {
+          url: "upload-merit-template",
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        };
+      },
+    }),
+    getContributeMeritCertificate: builder.query({
+      query: (access_token) => {
+        return {
+          url: "contribute-merit-template",
           method: "GET",
           headers: {
             authorization: `Bearer ${access_token}`,
@@ -55,6 +76,8 @@ export const certificateGeneratorAPI = createApi({
 export const {
   useGetCompletionCertificateQuery,
   useGetContributeCompletionCertificateQuery,
+  useGetMeritCertificateQuery,
+  useGetContributeMeritCertificateQuery,
   useGenerateCertificateByIdQuery,
   useGenerateCertificateQuery,
 } = certificateGeneratorAPI;

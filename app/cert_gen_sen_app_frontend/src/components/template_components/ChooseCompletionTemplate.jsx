@@ -6,6 +6,7 @@ import { useGetCompletionCertificateQuery } from "../../services/certificateGene
 import { useGetContributeCompletionCertificateQuery } from "../../services/certificateGeneratorAPI";
 
 export const ChooseCompletionTemplate = () => {
+
   const [selectedImage, setSelectedImage] = useState({
     url: null,
     id: "",
@@ -13,15 +14,17 @@ export const ChooseCompletionTemplate = () => {
 
   const { access_token } = getToken()
 
+  const { data = [], isLoading } = useGetCompletionCertificateQuery(access_token)
+
+  const contributedCertificates = useGetContributeCompletionCertificateQuery(access_token)
+
+  const completionAndContributed = data.concat(contributedCertificates)
+
   // const [images, setImages] = useState("");
 
   // const [contributeImage, setContributeImages] = useState("")
 
-  const [completionCertificate, responseCompletionCertificate] = useGetCompletionCertificateQuery(access_token)
-
-  console.log(responseCompletionCertificate);
-
-  // const [contributedCompletionCertificate, responseContributeCompletionCertificate] = useGetContributeCompletionCertificateQuery({ access_token: access_token })
+  // console.log(responseCompletionCertificate);
 
   // console.log(contributedCompletionCertificate);
 
@@ -61,9 +64,9 @@ export const ChooseCompletionTemplate = () => {
           sx={{ display: "flex", justifyContent: "center", gap: "100px" }}
         >
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
-            {/* <Grid container spacing={2}>
-              {(completionCertificate !== "Failed to get images" || contributedCompletionCertificate !== "Failed to get images") ? (
-                Object.values(completionCertificate !== "Failed to get images" ? contributedCompletionCertificate.concat(completionCertificate) : contributedCompletionCertificate).map((imageUrl, index) => (
+            <Grid container spacing={2}>
+              {(data !== "Failed to get images" || contributedCertificates !== "Failed to get images") ? (
+                (data !== "Failed to get images" ? data.concat(contributedCertificates) : contributedCertificates).map((imageUrl, index) => (
                   <Grid item key={index}>
                     <Paper
                       onClick={() =>
@@ -87,7 +90,7 @@ export const ChooseCompletionTemplate = () => {
               ) : (
                 <Typography>No template</Typography>
               )}
-            </Grid> */}
+            </Grid>
           </Grid>
           <Grid item xs={6}>
             <Paper
