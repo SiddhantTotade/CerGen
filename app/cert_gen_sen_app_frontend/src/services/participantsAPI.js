@@ -78,7 +78,7 @@ export const participantsAPI = createApi({
     deleteParticipant: builder.mutation({
       query: (data) => {
         return {
-          url: `delete-participant/${data.id}`,
+          url: `delete-participant/${data.participant_data.id}`,
           method: "DELETE",
           headers: {
             authorization: `Bearer ${data.access_token}`,

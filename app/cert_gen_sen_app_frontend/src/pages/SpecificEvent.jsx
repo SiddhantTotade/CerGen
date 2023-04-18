@@ -30,6 +30,7 @@ import { getToken } from "../services/LocalStorageService";
 import { useGetParticipantsQuery } from "../services/participantsAPI";
 import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
 import { useSpecificEventDetailQuery } from "../services/eventsAPI";
+import { setCertificatePath } from "../services/LocalStorageService";
 
 const createBtns = {
   marginBottom: "10px",
@@ -234,9 +235,10 @@ export default function SpecificEvent() {
     setUpdateForm(false);
   };
 
-  const handleDeleteForm = (id) => {
+  const handleDeleteForm = (id, participant_name) => {
     setDeleteForm(true);
-    participantDetails.event = id;
+    participantDetails.id = id;
+    participantDetails.participant_name = participant_name
   };
 
   const handleDeleteFormClose = () => {
@@ -464,7 +466,7 @@ export default function SpecificEvent() {
                               </Button>
                             </Tooltip>
                             <Tooltip title={`Delete : ${row.participant_name}`}>
-                              <Button onClick={() => handleDeleteForm(row.id)}>
+                              <Button onClick={() => handleDeleteForm(row.id, row.participant_name)}>
                                 <DeleteIcon sx={{ color: "red" }} />
                               </Button>
                             </Tooltip>
@@ -499,13 +501,15 @@ export default function SpecificEvent() {
           event_slug={event_slug.toUpperCase()}
           event_detail={specificEventDetails}
         />
-        <UpdateParticipant
-          open={updateForm}
-          onClose={handleUpdateFormClose}
-          participant={participantDetails}
-          event_slug={event_slug.toUpperCase()}
-          event_detail={specificEventDetails}
-        />
+        {updateForm ?
+          <UpdateParticipant
+            open={updateForm}
+            onClose={handleUpdateFormClose}
+            participant={participantDetails}
+            event_slug={event_slug.toUpperCase()}
+            event_detail={specificEventDetails}
+          /> : ""
+        }
         <DeleteParticipant
           open={deleteForm}
           onClose={handleDeleteFormClose}
