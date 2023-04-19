@@ -18,8 +18,6 @@ export const ChooseCompletionTemplate = () => {
 
   const contributedCertificates = useGetContributeCompletionCertificateQuery(access_token)
 
-  const completionAndContributed = data.concat(contributedCertificates)
-
   // const [images, setImages] = useState("");
 
   // const [contributeImage, setContributeImages] = useState("")
@@ -65,31 +63,32 @@ export const ChooseCompletionTemplate = () => {
         >
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
             <Grid container spacing={2}>
-              {(data !== "Failed to get images" || contributedCertificates !== "Failed to get images") ? (
-                (data !== "Failed to get images" ? data.concat(contributedCertificates) : contributedCertificates).map((imageUrl, index) => (
-                  <Grid item key={index}>
-                    <Paper
-                      onClick={() =>
-                        setSelectedImage({
-                          url: imageUrl.template_img,
-                          id: index,
-                        })
-                      }
-                      style={{
-                        width: 150,
-                        height: 100,
-                        background: `url(${"http://127.0.0.1:8000" + imageUrl.template_img
-                          }) no-repeat center center / cover`,
-                        cursor: "pointer",
-                        border:
-                          selectedImage.id === index ? "2px solid blue" : "2px solid gainsboro",
-                      }}
-                    />
-                  </Grid>
-                ))
-              ) : (
-                <Typography>No template</Typography>
-              )}
+              {(data === "Failed to get images" || data.length === 0 || contributedCertificates === undefined) ?
+                (
+                  <Typography>No template</Typography>
+                ) : (
+                  (data.length !== 0 ? data.concat(contributedCertificates.data) : contributedCertificates.data).map((imageUrl, index) => (
+                    <Grid item key={index}>
+                      <Paper
+                        onClick={() =>
+                          setSelectedImage({
+                            url: imageUrl.template_img,
+                            id: index,
+                          })
+                        }
+                        style={{
+                          width: 150,
+                          height: 100,
+                          background: `url(${"http://127.0.0.1:8000" + imageUrl.template_img
+                            }) no-repeat center center / cover`,
+                          cursor: "pointer",
+                          border:
+                            selectedImage.id === index ? "2px solid blue" : "2px solid gainsboro",
+                        }}
+                      />
+                    </Grid>
+                  ))
+                )}
             </Grid>
           </Grid>
           <Grid item xs={6}>

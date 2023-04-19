@@ -13,12 +13,9 @@ export const ChooseMeritTemplate = () => {
     id: "",
   });
 
-  // const [images, setImages] = useState("");
-  // const [contributeImage, setContributeImages] = useState("")
+  const { data = [], isLoading } = useGetMeritCertificateQuery(access_token)
 
-  const [meritCertificate, responseMeritcertificate] = useGetMeritCertificateQuery(access_token)
-
-  const [contributedMeritCertificate, responseContributeMeritCertificate] = useGetContributeMeritCertificateQuery(access_token)
+  const contributedCertificates = useGetContributeMeritCertificateQuery(access_token)
 
   // useEffect(() => {
   //   const url = "http://127.0.0.1:8000/api/upload-merit-template/";
@@ -57,31 +54,32 @@ export const ChooseMeritTemplate = () => {
         >
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
             <Grid container spacing={2}>
-              {meritCertificate !== "Failed to get images" ? (
-                (meritCertificate.concat(contributedMeritCertificate)).map((imageUrl, index) => (
-                  <Grid item key={index}>
-                    <Paper
-                      onClick={() =>
-                        setSelectedImage({
-                          url: imageUrl.template_img,
-                          id: index,
-                        })
-                      }
-                      style={{
-                        width: 150,
-                        height: 100,
-                        background: `url(${"http://127.0.0.1:8000" + imageUrl.template_img
-                          }) no-repeat center center / cover`,
-                        cursor: "pointer",
-                        border:
-                          selectedImage.id === index ? "2px solid blue" : "2px solid gainsboro",
-                      }}
-                    />
-                  </Grid>
-                ))
-              ) : (
-                <Typography>No template</Typography>
-              )}
+              {(data === "Failed to get images" || data.length === 0 || contributedCertificates === undefined) ?
+                (
+                  <Typography>No template</Typography>
+                ) : (
+                  (data.length !== 0 ? data.concat(contributedCertificates.data) : contributedCertificates.data).map((imageUrl, index) => (
+                    <Grid item key={index}>
+                      <Paper
+                        onClick={() =>
+                          setSelectedImage({
+                            url: imageUrl.template_img,
+                            id: index,
+                          })
+                        }
+                        style={{
+                          width: 150,
+                          height: 100,
+                          background: `url(${"http://127.0.0.1:8000" + imageUrl.template_img
+                            }) no-repeat center center / cover`,
+                          cursor: "pointer",
+                          border:
+                            selectedImage.id === index ? "2px solid blue" : "2px solid gainsboro",
+                        }}
+                      />
+                    </Grid>
+                  ))
+                )}
             </Grid>
           </Grid>
           <Grid item xs={6}>
