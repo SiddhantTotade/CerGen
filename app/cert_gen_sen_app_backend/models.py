@@ -135,7 +135,7 @@ class CompletionCertificateTemplate(models.Model):
         return super().save(*args, **kwargs)
 
     def __str__(self):
-        return str(self.template)
+        return str(self.id)
 
 
 class MeritCertificateTemplate(models.Model):

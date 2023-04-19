@@ -4,6 +4,8 @@ import { setCertificatePath } from "../../services/LocalStorageService";
 import { getToken } from "../../services/LocalStorageService";
 import { useGetCompletionCertificateQuery } from "../../services/certificateGeneratorAPI";
 import { useGetContributeCompletionCertificateQuery } from "../../services/certificateGeneratorAPI";
+import AlertBar from "../base_components/AlertBar";
+import LoaderSkeleton from "../base_components/LoaderSkeleton";
 
 export const ChooseCompletionTemplate = () => {
 
@@ -11,40 +13,15 @@ export const ChooseCompletionTemplate = () => {
     url: null,
     id: "",
   });
-
   const { access_token } = getToken()
+
+  const [alert, setAlert] = useState(false)
 
   const { data = [], isLoading } = useGetCompletionCertificateQuery(access_token)
 
   const contributedCertificates = useGetContributeCompletionCertificateQuery(access_token)
 
-  // const [images, setImages] = useState("");
-
-  // const [contributeImage, setContributeImages] = useState("")
-
-  // console.log(responseCompletionCertificate);
-
-  // console.log(contributedCompletionCertificate);
-
-  // useEffect(() => {
-  //   const url = "http://127.0.0.1:8000/api/upload-completion-template/";
-
-  //   axios
-  //     .get(url, {
-  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
-  //     })
-  //     .then((res) => setImages(res.data));
-  // }, []);
-
-  // useEffect(() => {
-  //   const url = "http://127.0.0.1:8000/api/contribute-completion-template/";
-
-  //   axios
-  //     .get(url, {
-  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
-  //     })
-  //     .then((res) => setContributeImages(res.data));
-  // }, []);
+  console.log(data === "Failed to get images" ? contributedCertificates.data : data.concat(contributedCertificates.data === undefined ? contributedCertificates.data : []));
 
   return (
     <>
@@ -63,11 +40,12 @@ export const ChooseCompletionTemplate = () => {
         >
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
             <Grid container spacing={2}>
-              {(data === "Failed to get images" || data.length === 0 || contributedCertificates === undefined) ?
-                (
-                  <Typography>No template</Typography>
-                ) : (
-                  (data.length !== 0 ? data.concat(contributedCertificates.data) : contributedCertificates.data).map((imageUrl, index) => (
+              {
+                isLoading ? <LoaderSkeleton barPadding={10} /> : (data === "Failed to get images" && contributedCertificates.data === undefined) ?
+                  (
+                    <Typography>No Template Found</Typography>
+                  ) :
+                  (data === "Failed to get images" ? contributedCertificates.data : data.concat(contributedCertificates.data === undefined ? contributedCertificates.data : [])).map((imageUrl, index) => (
                     <Grid item key={index}>
                       <Paper
                         onClick={() =>
@@ -88,16 +66,16 @@ export const ChooseCompletionTemplate = () => {
                       />
                     </Grid>
                   ))
-                )}
+              }
             </Grid>
           </Grid>
-          <Grid item xs={6}>
+          <Grid item xs={6} sx={{ display: 'grid', gap: '10px' }}>
             <Paper
               elevation={12}
               style={{
                 width: "100%",
                 height: "100%",
-                display: "flex",
+                display: "grid",
                 justifyContent: "center",
                 alignItems: "center",
               }}
@@ -112,12 +90,16 @@ export const ChooseCompletionTemplate = () => {
               />
             </Paper>
           </Grid>
+          {
+            alert ?
+              <AlertBar message="Done" barWidth={100} /> : ""
+          }
         </Grid>
         <DialogActions sx={{ marginTop: "20px" }}>
           <Button variant="contained">Cancel</Button>
           <Button
             variant="contained"
-            onClick={setCertificatePath(selectedImage.url)}
+            onClick={() => { setAlert(true); setTimeout(() => { setAlert(false) }, 2000) }}
           >
             Use this template
           </Button>

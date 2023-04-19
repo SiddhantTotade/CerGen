@@ -17,26 +17,6 @@ export const ChooseMeritTemplate = () => {
 
   const contributedCertificates = useGetContributeMeritCertificateQuery(access_token)
 
-  // useEffect(() => {
-  //   const url = "http://127.0.0.1:8000/api/upload-merit-template/";
-
-  //   axios
-  //     .get(url, {
-  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
-  //     })
-  //     .then((res) => setImages(res.data));
-  // }, []);
-
-  // useEffect(() => {
-  //   const url = "http://127.0.0.1:8000/api/contribute-completion-template/";
-
-  //   axios
-  //     .get(url, {
-  //       headers: { Authorization: "Token " + localStorage.getItem("token") },
-  //     })
-  //     .then((res) => setContributeImages(res.data));
-  // }, []);
-
   return (
     <>
       <Grid

@@ -2,7 +2,7 @@ import * as React from "react";
 import Dialog from "@mui/material/Dialog";
 import DialogTitle from "@mui/material/DialogTitle";
 import axios from "axios";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import AlertSnackbar from "../base_components/AlertSnackbar";
 import BackdropSpinner from "../base_components/Backdrop";
 import { Box, Tab } from "@mui/material";
