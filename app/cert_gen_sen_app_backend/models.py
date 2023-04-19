@@ -16,9 +16,11 @@ def generate_random_string():
 
 def convert_to_img(file_name):
     pptx_file_name = str(file_name).replace(
-        'completion_certificate_templates/', "")
+        'completion-certificate-templates/', "")
 
-    ppt_to_image_command = f'unoconv -f jpg certificate-data/{pptx_file_name}'
+    print(file_name)
+
+    ppt_to_image_command = f'unoconv -f jpg certificate-data/completion-certificate-templates/{file_name}'
     os.system(ppt_to_image_command)
 
     img_file_name = os.path.splitext(str(pptx_file_name))[0]
@@ -132,7 +134,8 @@ class CompletionCertificateTemplate(models.Model):
         upload_to='completion-certificate-template-images/', null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        self.template_img = convert_to_img(self.template)
+        self.template_img = convert_to_img(
+            os.path.basename(self.template.name))
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -157,8 +160,7 @@ class MeritCertificateTemplate(models.Model):
 class ContributedCompletionCertificates(models.Model):
     template = models.FileField(
         upload_to='contributed-completion-certificate-templates/')
-    template_img = models.ImageField(
-        upload_to='contributed-completion-certificate-template-images/', null=True, blank=True)
+    template_img = models.ImageField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.template_img = convert_to_img(self.template)
