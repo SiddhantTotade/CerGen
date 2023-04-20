@@ -46,7 +46,7 @@ export default function GenerateCertificate(props) {
 
     React.useEffect(() => {
         if (!props.open) {
-            setSubmit({ message: "", confirm: "" })
+            setSubmit({ confirm: "", message: "" })
         }
     }, [props.open])
 
@@ -99,7 +99,7 @@ export default function GenerateCertificate(props) {
                                     </Typography>
                                 }
                             </DialogTitle>
-                            <form onSubmit={handleSubmit(onSubmit)} >
+                            <form id="confirm" onSubmit={handleSubmit(onSubmit)} >
                                 <DialogContent>
                                     <TextField
                                         {...register('confirm')}
@@ -110,7 +110,7 @@ export default function GenerateCertificate(props) {
                                         margin="dense"
                                         id="confirm"
                                         name="confirm"
-                                        defaultValue=""
+                                        value={submit.confirm}
                                         label="Confirm"
                                         type="text"
                                         fullWidth
