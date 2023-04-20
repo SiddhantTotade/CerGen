@@ -3,13 +3,14 @@ import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { useGetMeritCertificateQuery } from "../../services/certificateGeneratorAPI";
 import { useGetContributeMeritCertificateQuery } from "../../services/certificateGeneratorAPI";
+import { setCertificatePath } from "../../services/LocalStorageService";
 import AlertBar from "../base_components/AlertBar";
 import LoaderSkeleton from "../base_components/LoaderSkeleton";
 
 const card = 4
 
 const templateCard = [...Array(card)].map((e, i) =>
-  <LoaderSkeleton barPadding={9.1} barWidth="40%" />
+  <LoaderSkeleton barPadding={9.1} barWidth="40%" key={i} />
 )
 
 export const ChooseMeritTemplate = () => {
@@ -104,7 +105,7 @@ export const ChooseMeritTemplate = () => {
           <Button variant="contained">Cancel</Button>
           <Button
             variant="contained"
-            onClick={() => { setAlert(true); setTimeout(() => { setAlert(false) }, 2000) }}
+            onClick={() => { setAlert(true); setCertificatePath({ merit: selectedImage.url }); setTimeout(() => { setAlert(false) }, 2000) }}
           >
             Use this template
           </Button>

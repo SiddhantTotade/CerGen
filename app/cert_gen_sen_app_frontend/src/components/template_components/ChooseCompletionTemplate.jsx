@@ -10,7 +10,7 @@ import LoaderSkeleton from "../base_components/LoaderSkeleton";
 const card = 4
 
 const templateCard = [...Array(card)].map((e, i) =>
-  <LoaderSkeleton barPadding={9.1} barWidth="40%" />
+  <LoaderSkeleton barPadding={9.1} barWidth="40%" key={i} />
 )
 
 export const ChooseCompletionTemplate = () => {
@@ -104,7 +104,7 @@ export const ChooseCompletionTemplate = () => {
           <Button variant="contained">Cancel</Button>
           <Button
             variant="contained"
-            onClick={() => { setAlert(true); setTimeout(() => { setAlert(false) }, 2000) }}
+            onClick={() => { setAlert(true); setCertificatePath({ completion: selectedImage.url }); setTimeout(() => { setAlert(false) }, 2000) }}
           >
             Use this template
           </Button>
