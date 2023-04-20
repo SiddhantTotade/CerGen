@@ -7,21 +7,26 @@ import { useGetContributeCompletionCertificateQuery } from "../../services/certi
 import AlertBar from "../base_components/AlertBar";
 import LoaderSkeleton from "../base_components/LoaderSkeleton";
 
+const card = 4
+
+const templateCard = [...Array(card)].map((e, i) =>
+  <LoaderSkeleton barPadding={9.1} barWidth="40%" />
+)
+
 export const ChooseCompletionTemplate = () => {
+
+  const { access_token } = getToken()
 
   const [selectedImage, setSelectedImage] = useState({
     url: null,
     id: "",
   });
-  const { access_token } = getToken()
 
   const [alert, setAlert] = useState(false)
 
   const { data = [], isLoading } = useGetCompletionCertificateQuery(access_token)
 
   const contributedCertificates = useGetContributeCompletionCertificateQuery(access_token)
-
-  console.log(data === "Failed to get images" ? contributedCertificates.data : data.concat(contributedCertificates.data === undefined ? contributedCertificates.data : []));
 
   return (
     <>
@@ -41,11 +46,11 @@ export const ChooseCompletionTemplate = () => {
           <Grid item xs={4} height={350} sx={{ overflow: "auto" }}>
             <Grid container spacing={2}>
               {
-                isLoading ? <LoaderSkeleton barPadding={10} /> : (data === "Failed to get images" && contributedCertificates.data === undefined) ?
+                isLoading ? templateCard : ((data === "Failed to get images" || data.length === 0) && (contributedCertificates.data === "Failed to get images" || contributedCertificates.data === undefined)) ?
                   (
                     <Typography>No Template Found</Typography>
                   ) :
-                  (data === "Failed to get images" ? contributedCertificates.data : data.concat(contributedCertificates.data === undefined ? contributedCertificates.data : [])).map((imageUrl, index) => (
+                  (contributedCertificates.data === undefined || contributedCertificates.data === "Failed to get images" ? data : data === "Failed to get images" || data.length === 0 ? contributedCertificates.data : data.concat(contributedCertificates.data)).map((imageUrl, index) => (
                     <Grid item key={index}>
                       <Paper
                         onClick={() =>
@@ -89,11 +94,11 @@ export const ChooseCompletionTemplate = () => {
                 alt="Preview"
               />
             </Paper>
+            {
+              alert ?
+                <AlertBar message="Done" barWidth='100%' /> : ""
+            }
           </Grid>
-          {
-            alert ?
-              <AlertBar message="Done" barWidth={100} /> : ""
-          }
         </Grid>
         <DialogActions sx={{ marginTop: "20px" }}>
           <Button variant="contained">Cancel</Button>
