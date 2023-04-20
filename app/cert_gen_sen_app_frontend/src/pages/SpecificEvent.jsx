@@ -21,16 +21,19 @@ import CreateParticipant from "../components/participant_components/CreatePartic
 import UpdateParticipant from "../components/participant_components/UpdateParticipant";
 import DeleteParticipant from "../components/participant_components/DeleteParticipant";
 import CertificateTemplate from "../components/template_components/CertificateTemplate";
+import GenerateCertificate from "../components/certficate_components/GenerateCertificate";
 import Gold from "../medals_images/gold-medal.png";
 import Silver from "../medals_images/silver-medal.png";
 import Bronze from "../medals_images/bronze-medal.png";
 import ParticipantImage from "../components/participant_components/ParticipantImage";
 import AlbumForm from "../components/image_components/AlbumForm";
+import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
 import { getToken } from "../services/LocalStorageService";
 import { useGetParticipantsQuery } from "../services/participantsAPI";
-import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
 import { useSpecificEventDetailQuery } from "../services/eventsAPI";
-import { useGetCompletionCertificateQuery } from "../services/certificateGeneratorAPI";
+import { getCertificatePath } from "../services/LocalStorageService";
+import { useGenerateCertificateByIdMutation } from "../services/certificateGeneratorAPI";
+import { useGenerateCertificateMutation } from "../services/certificateGeneratorAPI";
 
 const createBtns = {
   marginBottom: "10px",
@@ -76,15 +79,6 @@ export default function SpecificEvent() {
 
   const [specificEventDetails, setSpecificEventDetails] = useState({})
 
-  React.useEffect(() => {
-    if (!eventData.isLoading) {
-      setSpecificEventDetails(eventData.data[0])
-    }
-  }, [eventData.data, eventData.isLoading])
-
-  let completionImagePath = localStorage.getItem("CompletionCertificatePath")
-  let meritImagePath = localStorage.getItem("MeritCertificatePath");
-
   const [participantDetails, setParticipantsDetails] = useState({
     id: "",
     event: "",
@@ -100,64 +94,70 @@ export default function SpecificEvent() {
 
   let attendance = 0;
 
-  function generateCertificate() {
-    // if (completionImagePath === "null" || meritImagePath === "null") {
-    //   return console.log("Please select a template to generate certificate");
-    // }
+  React.useEffect(() => {
+    if (!eventData.isLoading) {
+      setSpecificEventDetails(eventData.data[0])
+    }
+  }, [eventData.data, eventData.isLoading])
 
-    // setOpenSpinner(true);
-    // setTimeout(() => {
-    //   setOpenSpinner(false);
-    // }, 5000);
+  // function generateCertificate() {
+  // if (completionImagePath === "null" || meritImagePath === "null") {
+  //   return console.log("Please select a template to generate certificate");
+  // }
 
-    // const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
+  // setOpenSpinner(true);
+  // setTimeout(() => {
+  //   setOpenSpinner(false);
+  // }, 5000);
 
-    // const formData = new FormData();
-    // formData.append("completion", completionImagePath.replace('jpg', 'pptx'));
-    // formData.append("merit", meritImagePath.replace('jpg', 'pptx'));
+  // const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
 
-    // axios
-    //   .post(url, formData, {
-    //     headers: { Authorization: "Token " + localStorage.getItem("token") },
-    //   })
-    //   .then(
-    //     setTimeout(() => {
-    //       setOpenSnack(true);
-    //     }, 10000)
-    //   )
-    //   .then((res) => setMessage(res.data))
-    //   .then(
-    //     message === "Certificate generated and sended successfully"
-    //       ? setAlertType("error")
-    //       : setAlertType("success")
-    //   )
-    //   .catch((err) => console.log(err));
-  }
+  // const formData = new FormData();
+  // formData.append("completion", completionImagePath.replace('jpg', 'pptx'));
+  // formData.append("merit", meritImagePath.replace('jpg', 'pptx'));
 
-  function generateCertificateById(id) {
-    // setOpenSpinner(true);
-    // setTimeout(() => {
-    //   setOpenSpinner(false);
-    // }, 5000);
-    // const url =
-    //   "http://127.0.0.1:8000/api/generate-certificate/" + event_slug + "/" + id;
-    // axios
-    //   .get(url, {
-    //     headers: { Authorization: "Token " + localStorage.getItem("token") },
-    //   })
-    //   .then(
-    //     setTimeout(() => {
-    //       setOpenSnack(true);
-    //     }, 10000)
-    //   )
-    //   .then((res) => setMessage(res.data))
-    //   .then(
-    //     message === "Certificate generated and sended successfully"
-    //       ? setAlertType("error")
-    //       : setAlertType("success")
-    //   )
-    //   .catch((err) => console.log(err));
-  }
+  // axios
+  //   .post(url, formData, {
+  //     headers: { Authorization: "Token " + localStorage.getItem("token") },
+  //   })
+  //   .then(
+  //     setTimeout(() => {
+  //       setOpenSnack(true);
+  //     }, 10000)
+  //   )
+  //   .then((res) => setMessage(res.data))
+  //   .then(
+  //     message === "Certificate generated and sended successfully"
+  //       ? setAlertType("error")
+  //       : setAlertType("success")
+  //   )
+  //   .catch((err) => console.log(err));
+  // }
+
+  // function generateCertificateById(id) {
+  // setOpenSpinner(true);
+  // setTimeout(() => {
+  //   setOpenSpinner(false);
+  // }, 5000);
+  // const url =
+  //   "http://127.0.0.1:8000/api/generate-certificate/" + event_slug + "/" + id;
+  // axios
+  //   .get(url, {
+  //     headers: { Authorization: "Token " + localStorage.getItem("token") },
+  //   })
+  //   .then(
+  //     setTimeout(() => {
+  //       setOpenSnack(true);
+  //     }, 10000)
+  //   )
+  //   .then((res) => setMessage(res.data))
+  //   .then(
+  //     message === "Certificate generated and sended successfully"
+  //       ? setAlertType("error")
+  //       : setAlertType("success")
+  //   )
+  //   .catch((err) => console.log(err));
+  // }
 
   const [createParticiapantForm, setCreateParticiapantForm] =
     React.useState(false);
@@ -166,6 +166,25 @@ export default function SpecificEvent() {
   const [deleteForm, setDeleteForm] = useState(false);
   const [album, setAlbum] = useState(false)
   const [camera, setCamera] = useState(false)
+  const [generateCertificateForm, setGenerateCertificateForm] = useState(false)
+  const [generateCertificateByIdForm, setGenerateCertificateByIdForm] = useState(false)
+
+
+  const handleGenerateCertificateForm = () => {
+    setGenerateCertificateForm(true)
+  }
+
+  const handleGenerateCertificateFormClose = () => {
+    setGenerateCertificateForm(false)
+  }
+
+  const handleGenerateCertificateByIdForm = () => {
+    setGenerateCertificateByIdForm(true)
+  }
+
+  const handleGenerateCertificateFormByIdClose = () => {
+    setGenerateCertificateByIdForm(false)
+  }
 
   const handleAlbumForm = () => {
     setAlbum(true)
@@ -288,7 +307,7 @@ export default function SpecificEvent() {
           <Button
             variant="contained"
             sx={createBtns}
-            onClick={generateCertificate}
+            onClick={handleGenerateCertificateForm}
           >
             Issue and Send Certificate
           </Button>
@@ -472,7 +491,7 @@ export default function SpecificEvent() {
                             </Tooltip>
                             <Tooltip title={`Send Certificate : ${row.email}`}>
                               <Button
-                                onClick={() => generateCertificateById(row.id)}
+                                onClick={() => handleGenerateCertificateByIdForm(row.id)}
                               >
                                 <SendIcon sx={{ color: "grey" }} />
                               </Button>
@@ -519,6 +538,7 @@ export default function SpecificEvent() {
           open={uploadTemplateForm}
           onClose={handleUploadTemplateFormClose}
         />
+        <GenerateCertificate open={generateCertificateForm} onClose={handleGenerateCertificateFormClose} event={eventData.data} />
         <ParticipantImage open={camera} onClose={handleCameraFormClose} participant={participantDetails} />
         <AlbumForm open={album} onClose={handleAlbumFormClose} participant={participantDetails} event_slug={event_slug} />
       </div>

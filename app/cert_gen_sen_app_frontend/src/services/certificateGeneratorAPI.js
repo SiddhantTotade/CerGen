@@ -48,18 +48,22 @@ export const certificateGeneratorAPI = createApi({
         };
       },
     }),
-    generateCertificate: builder.query({
+    generateCertificate: builder.mutation({
       query: (data) => {
         return {
           url: `generate-certificate/${data.event_slug}`,
           method: "POST",
+          body: {
+            completion: data.completion.replace("jpg", "pptx"),
+            merit: data.merit.replace("jpg", "pptx"),
+          },
           headers: {
             authorization: `Bearer ${data.access_token}`,
           },
         };
       },
     }),
-    generateCertificateById: builder.query({
+    generateCertificateById: builder.mutation({
       query: (data) => {
         return {
           url: `generate-certificate/${data.event_slug}/${data.id}`,
@@ -78,6 +82,6 @@ export const {
   useGetContributeCompletionCertificateQuery,
   useGetMeritCertificateQuery,
   useGetContributeMeritCertificateQuery,
-  useGenerateCertificateByIdQuery,
-  useGenerateCertificateQuery,
+  useGenerateCertificateMutation,
+  useGenerateCertificateByIdMutation,
 } = certificateGeneratorAPI;

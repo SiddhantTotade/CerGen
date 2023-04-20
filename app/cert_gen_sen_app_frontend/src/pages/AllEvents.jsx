@@ -100,7 +100,7 @@ export const AllEvents = () => {
                                                     <br />
                                                 </div>
                                                 <Typography variant="body2" color="text.secondary" sx={{ height: "5vh" }}>
-                                                    {event.subject}
+                                                    {event.subject.length > 100 ? event.subject.substring(0, 85) + "....." : event.subject}
                                                 </Typography>
                                             </CardContent>
                                             <CardActions>

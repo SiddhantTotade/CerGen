@@ -21,14 +21,14 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-def send_message(student_name, phone):
+def send_message(participant_name, phone):
     account_sid = config("TWILIO_SID")
     auth_token = config("TWILIO_AUTH_TOKEN")
     client = Client(account_sid, auth_token)
     client.messages.create(
-        body=f"Dear {student_name}, thankyou for participating in the Event/Contest. Your certificate will be delivered to you via e-mail. Check your email.",
+        body=f"Dear {participant_name}, thankyou for participating in the event/contest. Your certificate will be delivered to you via e-mail. Check your email.",
         from_="+15855951968",
-        to=f"+91{phone}"
+        to=phone
     )
     return "SENT"
 
@@ -216,7 +216,7 @@ class GenerateCertificate(APIView):
         for stu in participants:
             if stu.certificate_sent_status == False:
                 if stu.certificate_status == 'T' or stu.certificate_status == '1' or stu.certificate_status == '2' or stu.certificate_status == '3':
-                    stu_data.append(dict(id=stu.id, student_name=stu.student_name, student_id=stu.student_id, email=stu.email,
+                    stu_data.append(dict(id=stu.id, participant_name=stu.participant_name, participant_id=stu.participant_id, email=stu.email, phone=stu.phone,
                                          certificate_status=stu.certificate_status, certificate_id=stu.certificate_id))
 
         for eve in event:
@@ -227,9 +227,9 @@ class GenerateCertificate(APIView):
         for stu in stu_data:
             if stu['certificate_status'] == "1" or stu['certificate_status'] == "2" or stu['certificate_status'] == "3":
                 qrcode_path = generate_qrcode(
-                    stu["student_name"], stu["student_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+                    stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                 certificate_path = generate_merit_certificate(
-                    stu['student_name'], stu['certificate_id'], stu['certificate_status'], qrcode_path, merit_certificate_path)
+                    stu['participant_name'], stu['certificate_id'], stu['certificate_status'], qrcode_path, merit_certificate_path)
                 send_certificate = send_mail("Certificate of Participation",
                                              "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
 
@@ -238,10 +238,10 @@ class GenerateCertificate(APIView):
                         id=stu['id']).update(certificate_sent_status=True)
             else:
                 qrcode_path = generate_qrcode(
-                    stu["student_name"], stu["student_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+                    stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                 certificate_path = generate_participant_certificate(
-                    stu["student_name"], stu["certificate_id"], qrcode_path, completion_certificate_path)
-                send_message(stu_data["name"], stu_data["phone"])
+                    stu["participant_name"], stu["certificate_id"], qrcode_path, completion_certificate_path)
+                send_message(stu["participant_name"], stu["phone"])
                 send_certificate = send_mail("Certificate of Participation",
                                              "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
 
@@ -262,8 +262,8 @@ def generate_certificate_by_id(request, slug, pk):
     eve_data = OrderedDict()
 
     for stu in participant:
-        stu_data['student_name'] = stu.student_name
-        stu_data['student_id'] = stu.student_id
+        stu_data['participant_name'] = stu.participant_name
+        stu_data['participant_id'] = stu.participant_id
         stu_data['email'] = stu.email
         stu_data['phone'] = stu.phone
         stu_data['certificate_status'] = stu.certificate_status
@@ -281,9 +281,9 @@ def generate_certificate_by_id(request, slug, pk):
             stu_data["name"], stu_data["certificate_id"], stu_data["certificate_status"])
     else:
         qrcode_path = generate_qrcode(
-            stu_data["student_name"], stu_data["student_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+            stu_data["participant_name"], stu_data["participant_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
         certificate_path = generate_participant_certificate(
-            stu_data["student_name"], stu_data["certificate_id"], qrcode_path)
+            stu_data["participant_name"], stu_data["certificate_id"], qrcode_path)
         send_message(stu_data["name"], stu_data["phone"])
         send_certificate = send_mail("Certificate of Participation",
                                      "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
