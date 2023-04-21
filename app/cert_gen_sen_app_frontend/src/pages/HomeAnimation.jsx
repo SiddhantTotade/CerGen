@@ -1,11 +1,11 @@
 import React from "react";
 import "./styles/home.css";
 
-export const Home = () => {
+export default function HomeAnimation() {
   return (
     <>
       <div>
-        <div className=" w-96 absolute top-1/4 left-2/4 -translate-x-2/4 -translate-y-2/4">
+        <div className="w-96 absolute top-1/4 left-2/4 -translate-x-2/4 -translate-y-2/4">
           <svg
             width="390.1"
             height="200.9"

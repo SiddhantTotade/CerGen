@@ -27,8 +27,9 @@ import FileUploadIcon from "@mui/icons-material/FileUpload";
 import BackdropSpinner from "./Backdrop";
 import { useState } from "react";
 import Footer from "./Footer";
-import { Home } from "../../pages/Home";
+import HomeAnimation from "../../pages/HomeAnimation";
 import "../../pages/styles/home.css";
+import '../../pages/styles/home.css'
 import { useLocation } from "react-router-dom";
 import { useGetLoggedInUserQuery } from "../../services/userAuthAPI";
 import { useDispatch, useSelector } from "react-redux";
@@ -181,7 +182,7 @@ export default function MiniDrawer() {
   return (
     <>
       <>
-        {location.pathname === "/" ? <div className="wave-container"></div> : ""}
+        {location.pathname === "/api/home" ? <div className="wave-container"></div> : ""}
         <div>
           <Box sx={{ display: "flex" }}>
             <CssBaseline />
@@ -281,7 +282,7 @@ export default function MiniDrawer() {
                 </Link>
               </List>
             </Drawer>
-            {location.pathname === "/" ? <Home /> : ""}
+            {location.pathname === "/api/home" ? <HomeAnimation /> : ""}
             <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
               <DrawerHeader />
             </Box>
