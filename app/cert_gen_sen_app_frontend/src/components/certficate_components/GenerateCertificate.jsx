@@ -111,7 +111,7 @@ export default function GenerateCertificate(props) {
                                         id="confirm"
                                         name="confirm"
                                         value={submit.confirm}
-                                        label="Confirm"
+                                        label="Ready to generate"
                                         type="text"
                                         fullWidth
                                         variant="standard"

@@ -82,6 +82,7 @@ export const AllEvents = () => {
                         {
                             responseDeleteEvent.isLoading ? <BackdropSpinner open={snackAndSpinner.openSpinner} /> :
                                 <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
+                                    {/* {data !== "No event data" ? <h2>No Event Found</h2> : ""} */}
                                     {data !== 'No event data' ? data.map((event) => {
                                         let event_url = '/api/event/' + event.slug
                                         return <Card sx={card_sx} key={event.id} >
