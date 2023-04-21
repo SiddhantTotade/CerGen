@@ -1,7 +1,10 @@
 import React, { useState } from 'react'
 import Webcam from 'react-webcam'
 import { DialogActions, Button, Paper } from '@mui/material';
-import axios from 'axios';
+import { useUploadParticipantImageMutation } from '../../services/participantsImagesAPI';
+import { getToken } from '../../services/LocalStorageService';
+import AlertBar from '../base_components/AlertBar';
+import { CircularProgress } from '@mui/material';
 
 const videoConstraints = {
     width: 1280,
@@ -10,9 +13,19 @@ const videoConstraints = {
 };
 
 export const Camera = (props) => {
+
+    const { access_token } = getToken()
+
+    const [uploadParticipantImage, responsePaticipantImage] = useUploadParticipantImageMutation()
+
     const [reClick, setReClick] = useState(false)
+    
     const webCamRef = React.useRef(null)
+    
     const [imgSrc, setImgSrc] = React.useState(null)
+    
+    const [imageValidation, setImageValidation] = useState(false)
+    
     const capture = React.useCallback(
         () => {
             const imageSrc = webCamRef.current.getScreenshot({ width: 1920, height: 1080 });
@@ -63,21 +76,30 @@ export const Camera = (props) => {
             </div>
         </div>
 
-    const ClickPhoto = <div>
+    const ClickPhoto = <div className='flex gap-4'>
         <Button onClick={capture} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >Click Photo</Button>
+        {
+            imageValidation === true ? <AlertBar message="Please click an image before upload" severity="error" /> : ""
+        }
     </div>
 
     function handleImageUpload(e) {
         e.preventDefault()
         if (imgSrc === null) {
-            return "Please click an image before upload"
+            setImageValidation(true)
+            setTimeout(() => {
+                setImageValidation(false)
+            }, 2000)
         }
-        const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
+        else {
+            uploadParticipantImage({ access_token: access_token, imgSrc: imgSrc, event: props.participant.event })
+        }
+        // const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
 
-        const formData = new FormData()
-        formData.append('participant_image', imgSrc)
+        // const formData = new FormData()
+        // formData.append('participant_image', imgSrc)
 
-        axios.patch(url, formData, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => console.log(res.data))
+        // axios.patch(url, formData, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => console.log(res.data))
     }
 
     function handleImage() {
@@ -87,18 +109,21 @@ export const Camera = (props) => {
     return (
         <div>
             {props.participant.student_img === "" ? Webcamera : reClick === true ? Webcamera : UploadedImage}
-            <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                {reClick === true ? ClickPhoto : props.participant.student_img === "" ?
-                    ClickPhoto :
-                    <div>
-                        <Button onClick={handleImage} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >ReClick</Button>
-                    </div>
-                }
-                <div className="flex gap-3">
-                    <Button onClick={props.onClose} variant='contained'>Cancel</Button>
-                    <Button onClick={handleImageUpload} variant='contained' >Upload Photo</Button>
-                </div>
-            </DialogActions >
+            {
+                responsePaticipantImage.isLoading ? <CircularProgress /> :
+                    <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
+                        {reClick === true ? ClickPhoto : props.participant.student_img === "" ?
+                            ClickPhoto :
+                            <div>
+                                <Button onClick={handleImage} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >ReClick</Button>
+                            </div>
+                        }
+                        <div className="flex gap-3">
+                            <Button onClick={props.onClose} variant='contained'>Cancel</Button>
+                            <Button onClick={handleImageUpload} variant='contained' >Upload Photo</Button>
+                        </div>
+                    </DialogActions >
+            }
         </div >
     )
 }

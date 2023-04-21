@@ -6,6 +6,7 @@ import userSlice from "../features/userSlice";
 import { eventsAPI } from "../services/eventsAPI";
 import { participantsAPI } from "../services/participantsAPI";
 import { certificateGeneratorAPI } from "../services/certificateGeneratorAPI";
+import { participantsImagesAPI } from "../services/participantsImagesAPI";
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     [eventsAPI.reducerPath]: eventsAPI.reducer,
     [participantsAPI.reducerPath]: participantsAPI.reducer,
     [certificateGeneratorAPI.reducerPath]: certificateGeneratorAPI.reducer,
+    [participantsImagesAPI.reducerPath]: participantsImagesAPI.reducer,
     auth: authSlice,
     user: userSlice,
   },
@@ -22,7 +24,8 @@ export const store = configureStore({
       userAuthAPI.middleware,
       eventsAPI.middleware,
       participantsAPI.middleware,
-      certificateGeneratorAPI.middleware
+      certificateGeneratorAPI.middleware,
+      participantsImagesAPI.middleware
     ),
 });
 
