@@ -15,6 +15,7 @@ class Ppt2Image(APIView):
         os.system(clear_command)
 
     def post(self, request):
+        self.clear_preview()
         letters_and_digits = string.ascii_letters + string.digits
         file_name_str = "".join(random.choice(
             letters_and_digits)for i in range(15))
