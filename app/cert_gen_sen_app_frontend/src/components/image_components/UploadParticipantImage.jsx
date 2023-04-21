@@ -1,18 +1,29 @@
 import React, { useEffect } from "react";
-import {
-    TextField,
-    Button,
-    DialogActions,
-    Grid,
-    Paper,
-    FormControl,
-} from "@mui/material";
+import { TextField, Button, DialogActions, Grid, Paper, FormControl, Typography } from "@mui/material";
 import { useState } from "react";
-import axios from "axios";
+import { useUploadParticipantImageMutation } from "../../services/participantsImagesAPI";
+import { getToken } from "../../services/LocalStorageService";
+import BackdropSpinner from "../base_components/Backdrop";
+import AlertSnackbar from "../base_components/AlertSnackbar";
 
 export const UploadParticipantImage = (props) => {
-    const [previewFile, setPreviewFile] = useState();
-    const [selectedFile, setSelectedFile] = useState();
+
+    const [snackAndSpinner, setSnackAndSpinner] = useState({
+        openSpinner: true,
+        openSnack: true,
+        message: "",
+        alertType: "success"
+    })
+
+    const { access_token } = getToken()
+
+    const [uploadParticipantImage, responseParticipantImage] = useUploadParticipantImageMutation()
+
+    const [previewFile, setPreviewFile] = useState(null);
+
+    const [selectedFile, setSelectedFile] = useState(null);
+
+    const [imageValidation, setImageValidation] = useState(false)
 
     useEffect(() => {
         if (!selectedFile) {
@@ -48,94 +59,123 @@ export const UploadParticipantImage = (props) => {
     }
 
     const handleUploadTemplate = async () => {
-        const base64Image = await convertBase64(selectedFile)
+        if (selectedFile === null) {
+            setImageValidation(true)
+            setTimeout(() => {
+                setImageValidation(false)
+            }, 2000)
+        }
+        else {
+            const base64Image = await convertBase64(selectedFile)
+            uploadParticipantImage({ access_token: access_token, imgSrc: base64Image, event: props.participant.event })
+            props.onClose()
+        }
 
-        const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
+        // const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
 
-        let formData = new FormData();
-        formData.append('participant_image', base64Image)
+        // let formData = new FormData();
+        // formData.append('participant_image', base64Image)
 
-        let config = {
-            headers: {
-                "content-type": "multipart/form-data",
-                Authorization: "Token " + localStorage.getItem("token"),
-            },
-        };
+        // let config = {
+        //     headers: {
+        //         "content-type": "multipart/form-data",
+        //         Authorization: "Token " + localStorage.getItem("token"),
+        //     },
+        // };
 
-        axios.patch(url, formData, config).then((res) => console.log(res));
+        // axios.patch(url, formData, config).then((res) => console.log(res));
     };
+
+    function handleCloseSnackbar() {
+        setSnackAndSpinner({ openSnack: false })
+    }
 
     return (
         <>
-            <Grid
-                sx={{
-                    marginTop: "20px",
-                    display: "flex",
-                    justifyContent: "center",
-                    flexDirection: "column",
-                }}
-            >
-                <Grid
-                    container
-                    spacing={2}
-                    sx={{ display: "flex", justifyContent: 'space-between' }}
+            {
+                responseParticipantImage.isLoading ? <BackdropSpinner open={snackAndSpinner.openSpinner} /> : <Grid
+                    sx={{
+                        marginTop: "20px",
+                        display: "flex",
+                        justifyContent: "center",
+                        flexDirection: "column",
+                    }}
                 >
                     <Grid
-                        item
-                        xs={4}
-                        height={290}
-                        width={900}
-                        sx={{ overflow: "auto", display: "flex" }}
+                        container
+                        spacing={2}
+                        sx={{ display: "flex", justifyContent: 'space-between' }}
                     >
                         <Grid
-                            container
-                            spacing={1}
-                            sx={{ display: "flex", alignItems: "center" }}
+                            item
+                            xs={4}
+                            height={290}
+                            width={900}
+                            sx={{ overflow: "auto", display: "flex" }}
                         >
-                            <FormControl>
-                                <TextField
-                                    onChange={onSelectFile}
-                                    type="file"
-                                    autoFocus
-                                    margin="dense"
-                                    id="upload_file"
-                                    inputProps={{ accept: "application/vnd.ms-powerpoint" }}
-                                    label="Upload File"
-                                    className="upload"
-                                    fullWidth
-                                    variant="standard"
-                                />
-                            </FormControl>
+                            <Grid
+                                container
+                                spacing={1}
+                                sx={{ display: "flex", alignItems: "center" }}
+                            >
+                                <FormControl>
+                                    <TextField
+                                        onChange={onSelectFile}
+                                        type="file"
+                                        autoFocus
+                                        margin="dense"
+                                        id="upload_file"
+                                        inputProps={{ accept: "application/vnd.ms-powerpoint" }}
+                                        label="Upload File"
+                                        className="upload"
+                                        fullWidth
+                                        variant="standard"
+                                    />
+                                    {
+                                        imageValidation ? <Typography fontSize={13} sx={{ color: 'red' }}>This field is required</Typography> : ""
+                                    }
+                                </FormControl>
+                            </Grid>
+                        </Grid>
+                        <Grid item xs={6}>
+                            <Paper
+                                elevation={12}
+                                style={{
+                                    width: "100%",
+                                    height: "100%",
+                                    display: 'flex',
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                {selectedFile &&
+                                    <img
+                                        src={previewFile}
+                                        alt="Preview"
+                                        width={230}
+                                    />
+                                }
+                            </Paper>
                         </Grid>
                     </Grid>
-                    <Grid item xs={6}>
-                        <Paper
-                            elevation={12}
-                            style={{
-                                width: "100%",
-                                height: "100%",
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center'
-                            }}
-                        >
-                            {selectedFile &&
-                                <img
-                                    src={previewFile}
-                                    alt="Preview"
-                                    width={230}
-                                />
-                            }
-                        </Paper>
-                    </Grid>
+                    <DialogActions sx={{ marginTop: "20px" }}>
+                        <Button variant="contained" onClick={props.onClose}>Cancel</Button>
+                        <Button variant="contained" onClick={handleUploadTemplate}>
+                            Upload
+                        </Button>
+                    </DialogActions>
+                    {
+                        responseParticipantImage.data ?
+                            <AlertSnackbar
+                                open={snackAndSpinner.openSnack}
+                                message={responseParticipantImage.data}
+                                severity={snackAndSpinner.alertType}
+                                onClose={handleCloseSnackbar}
+                                autoHideDuration={6000}
+                            /> : ""
+                    }
                 </Grid>
-                <DialogActions sx={{ marginTop: "20px" }}>
-                    <Button variant="contained" onClick={props.onClose}>Cancel</Button>
-                    <Button variant="contained" onClick={handleUploadTemplate}>
-                        Upload
-                    </Button>
-                </DialogActions>
-            </Grid>
+            }
         </>
     );
 };

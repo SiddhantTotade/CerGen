@@ -8,6 +8,7 @@ import { UploadEventAlbum } from "./UploadEventAlbum";
 import '../../index.css'
 
 function TabPanel(props) {
+
     const { children, value, index, ...other } = props;
 
     return (
@@ -41,7 +42,9 @@ function a11yProps(index) {
 }
 
 export default function AlbumForm(props) {
+
     const [value, setValue] = React.useState(0);
+
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };

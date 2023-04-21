@@ -62,7 +62,6 @@ export const UploadTemplate = (props) => {
 
   //   axios.post(url, formData, config).then((res) => console.log(res));
   // };
-  console.log(props);
 
   React.useEffect(() => {
     if (!props.props.open) {

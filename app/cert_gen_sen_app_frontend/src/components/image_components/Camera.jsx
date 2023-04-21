@@ -19,13 +19,13 @@ export const Camera = (props) => {
     const [uploadParticipantImage, responsePaticipantImage] = useUploadParticipantImageMutation()
 
     const [reClick, setReClick] = useState(false)
-    
+
     const webCamRef = React.useRef(null)
-    
+
     const [imgSrc, setImgSrc] = React.useState(null)
-    
+
     const [imageValidation, setImageValidation] = useState(false)
-    
+
     const capture = React.useCallback(
         () => {
             const imageSrc = webCamRef.current.getScreenshot({ width: 1920, height: 1080 });
@@ -94,12 +94,6 @@ export const Camera = (props) => {
         else {
             uploadParticipantImage({ access_token: access_token, imgSrc: imgSrc, event: props.participant.event })
         }
-        // const url = 'http://127.0.0.1:8000/api/upload-participant-image/' + props.participant.event
-
-        // const formData = new FormData()
-        // formData.append('participant_image', imgSrc)
-
-        // axios.patch(url, formData, { headers: { "Authorization": "Token " + localStorage.getItem("token") } }).then(res => console.log(res.data))
     }
 
     function handleImage() {

@@ -44,12 +44,16 @@ export const participantsImagesAPI = createApi({
     }),
     UploadAlbumImages: builder.mutation({
       query: (data) => {
+        const formData = new FormData();
+        formData.append("event", data.event_slug);
+        data.album.forEach((img) => {
+          formData.append("album_images", img);
+        });
         return {
-          url: `update-participant/${data.participant_data.id}`,
+          url: `upload-event-album/${data.event_slug}`,
           method: "POST",
-          body: "",
+          body: formData,
           headers: {
-            "Content-type": "application/json; charset=UTF-8",
             authorization: `Bearer ${data.access_token}`,
           },
         };
