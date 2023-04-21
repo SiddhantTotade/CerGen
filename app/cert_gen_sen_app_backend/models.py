@@ -143,9 +143,7 @@ class MeritCertificateTemplate(models.Model):
     template_img = models.ImageField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # super(MeritCertificateTemplate, self).save(*args, **kwargs)
         self.template_img = convert_to_img(self.template)
-        # super(MeritCertificateTemplate, self).save(*args, **kwargs)
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -158,9 +156,7 @@ class ContributedCompletionCertificates(models.Model):
     template_img = models.ImageField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # super(ContributedCompletionCertificates, self).save(*args, **kwargs)
         self.template_img = convert_to_img(self.template)
-        # super(ContributedCompletionCertificates, self).save(*args, **kwargs)
         return super().save(*args, **kwargs)
 
     def __str__(self):
@@ -173,9 +169,7 @@ class ContributedMeritCertificates(models.Model):
     template_img = models.ImageField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
-        # super(ContributedMeritCertificates, self).save(*args, **kwargs)
         self.template_img = convert_to_img(self.template)
-        # super(ContributedMeritCertificates, self).save(*args, **kwargs)
         return super().save(*args, **kwargs)
 
     def __str__(self):
