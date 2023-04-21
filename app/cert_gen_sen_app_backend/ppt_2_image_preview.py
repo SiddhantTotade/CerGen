@@ -1,5 +1,6 @@
 from rest_framework.views import APIView
 from django.http import HttpResponse
+from rest_framework.response import Response
 from django.conf import settings
 from .models import *
 import os
@@ -36,10 +37,10 @@ class Ppt2Image(APIView):
         with open(f'./cert_gen_sen_app_backend/certificate_data/preview-template-ppts/{img_file_name}.jpg', 'rb') as img:
             str = base64.b64encode(img.read())
 
-        response = HttpResponse(
-            str, content_type='image/jpg')
-        response['Content-Disposition'] = f'attachment; filename={file_name}'
+        # response = HttpResponse(
+        #     str, content_type='image/jpg')
+        # response['Content-Disposition'] = f'attachment; filename={file_name}'
 
-        self.clear_preview()
+        # self.clear_preview()
 
-        return response
+        return Response(str)

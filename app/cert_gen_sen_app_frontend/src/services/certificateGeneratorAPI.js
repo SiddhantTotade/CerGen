@@ -48,6 +48,42 @@ export const certificateGeneratorAPI = createApi({
         };
       },
     }),
+    previewTemplate: builder.mutation({
+      query: (data) => {
+        const formData = new FormData();
+        formData.append("pptx_file", data.previewFile);
+        return {
+          url: "preview-certificate/",
+          method: "POST",
+          body: formData,
+          headers: {
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
+    }),
+    uploadCompletionTemplate: builder.mutation({
+      query: (access_token) => {
+        return {
+          url: "upload-completion-template",
+          method: "POST",
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        };
+      },
+    }),
+    uploadMeritTemplate: builder.mutation({
+      query: (access_token) => {
+        return {
+          url: "upload-merit-template",
+          method: "POST",
+          headers: {
+            authorization: `Bearer ${access_token}`,
+          },
+        };
+      },
+    }),
     generateCertificate: builder.mutation({
       query: (data) => {
         return {
@@ -86,6 +122,9 @@ export const {
   useGetContributeCompletionCertificateQuery,
   useGetMeritCertificateQuery,
   useGetContributeMeritCertificateQuery,
+  usePreviewTemplateMutation,
+  useUploadCompletionTemplateMutation,
+  useUploadMeritTemplateMutation,
   useGenerateCertificateMutation,
   useGenerateCertificateByIdMutation,
 } = certificateGeneratorAPI;
