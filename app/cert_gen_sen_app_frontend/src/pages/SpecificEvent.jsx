@@ -22,6 +22,7 @@ import UpdateParticipant from "../components/participant_components/UpdatePartic
 import DeleteParticipant from "../components/participant_components/DeleteParticipant";
 import CertificateTemplate from "../components/template_components/CertificateTemplate";
 import GenerateCertificate from "../components/certficate_components/GenerateCertificate";
+import GenerateCertificateById from "../components/certficate_components/GenerateCertificateById";
 import Gold from "../medals_images/gold-medal.png";
 import Silver from "../medals_images/silver-medal.png";
 import Bronze from "../medals_images/bronze-medal.png";
@@ -31,9 +32,6 @@ import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
 import { getToken } from "../services/LocalStorageService";
 import { useGetParticipantsQuery } from "../services/participantsAPI";
 import { useSpecificEventDetailQuery } from "../services/eventsAPI";
-import { getCertificatePath } from "../services/LocalStorageService";
-import { useGenerateCertificateByIdMutation } from "../services/certificateGeneratorAPI";
-import { useGenerateCertificateMutation } from "../services/certificateGeneratorAPI";
 
 const createBtns = {
   marginBottom: "10px",
@@ -178,7 +176,8 @@ export default function SpecificEvent() {
     setGenerateCertificateForm(false)
   }
 
-  const handleGenerateCertificateByIdForm = () => {
+  const handleGenerateCertificateByIdForm = (id) => {
+    setParticipantsDetails({ id: id })
     setGenerateCertificateByIdForm(true)
   }
 
@@ -539,6 +538,7 @@ export default function SpecificEvent() {
           onClose={handleUploadTemplateFormClose}
         />
         <GenerateCertificate open={generateCertificateForm} onClose={handleGenerateCertificateFormClose} event={eventData.data} />
+        <GenerateCertificateById open={generateCertificateByIdForm} onClose={handleGenerateCertificateFormByIdClose} event={eventData.data} participant={participantDetails} />
         <ParticipantImage open={camera} onClose={handleCameraFormClose} participant={participantDetails} />
         <AlbumForm open={album} onClose={handleAlbumFormClose} participant={participantDetails} event_slug={event_slug} />
       </div>

@@ -3,6 +3,8 @@ import os
 from .models import *
 from django.http import JsonResponse
 from django.core.mail import EmailMessage
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import permission_classes
 from rest_framework.views import APIView
 from django.conf import settings
 from collections import OrderedDict
@@ -254,43 +256,45 @@ class GenerateCertificate(APIView):
 
 
 # Generate certificates for specific participant
+@permission_classes((IsAuthenticated,))
 def generate_certificate_by_id(request, slug, pk):
-    participant = Participant.objects.filter(id=pk)
-    event = Event.objects.filter(slug=slug)
+    if request.method == 'POST' and request.user.is_authenticated:
+        participant = Participant.objects.filter(id=pk)
+        event = Event.objects.filter(slug=slug)
 
-    stu_data = OrderedDict()
-    eve_data = OrderedDict()
+        stu_data = OrderedDict()
+        eve_data = OrderedDict()
 
-    for stu in participant:
-        stu_data['participant_name'] = stu.participant_name
-        stu_data['participant_id'] = stu.participant_id
-        stu_data['email'] = stu.email
-        stu_data['phone'] = stu.phone
-        stu_data['certificate_status'] = stu.certificate_status
-        stu_data['certificate_id'] = stu.certificate_id
+        for stu in participant:
+            stu_data['participant_name'] = stu.participant_name
+            stu_data['participant_id'] = stu.participant_id
+            stu_data['email'] = stu.email
+            stu_data['phone'] = stu.phone
+            stu_data['certificate_status'] = stu.certificate_status
+            stu_data['certificate_id'] = stu.certificate_id
 
-    for eve in event:
-        eve_data['event_name'] = eve.event_name
-        eve_data['event_department'] = eve.event_department
-        eve_data['from_date'] = eve.from_date.strftime('%d-%m-%Y')
+        for eve in event:
+            eve_data['event_name'] = eve.event_name
+            eve_data['event_department'] = eve.event_department
+            eve_data['from_date'] = eve.from_date.strftime('%d-%m-%Y')
 
-    if stu_data["certificate_status"] == 'F' or stu_data["certificate_status"] == None:
-        return JsonResponse("This participant is not eligible for certificate", safe=False)
-    elif stu_data["certificate_status"] == '1' or stu_data["certificate_status"] == '2' or stu_data["certificate_status"] == '3':
-        generate_merit_certificate(
-            stu_data["name"], stu_data["certificate_id"], stu_data["certificate_status"])
-    else:
-        qrcode_path = generate_qrcode(
-            stu_data["participant_name"], stu_data["participant_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
-        certificate_path = generate_participant_certificate(
-            stu_data["participant_name"], stu_data["certificate_id"], qrcode_path)
-        send_message(stu_data["name"], stu_data["phone"])
-        send_certificate = send_mail("Certificate of Participation",
-                                     "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
+        if stu_data["certificate_status"] == 'F' or stu_data["certificate_status"] == None:
+            return JsonResponse("This participant is not eligible for certificate", safe=False)
+        elif stu_data["certificate_status"] == '1' or stu_data["certificate_status"] == '2' or stu_data["certificate_status"] == '3':
+            generate_merit_certificate(
+                stu_data["name"], stu_data["certificate_id"], stu_data["certificate_status"])
+        else:
+            qrcode_path = generate_qrcode(
+                stu_data["participant_name"], stu_data["participant_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+            certificate_path = generate_participant_certificate(
+                stu_data["participant_name"], stu_data["certificate_id"], qrcode_path)
+            send_message(stu_data["name"], stu_data["phone"])
+            send_certificate = send_mail("Certificate of Participation",
+                                         "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
 
-        if send_certificate == "SENT":
-            Participant.objects.filter(
-                id=pk).update(certificate_sent_status=True)
-            return JsonResponse("Certificate generated and sended successfully", safe=False)
+            if send_certificate == "SENT":
+                Participant.objects.filter(
+                    id=pk).update(certificate_sent_status=True)
+                return JsonResponse("Certificate generated and sended successfully", safe=False)
 
-    return JsonResponse("Some problem occured while sending", safe=False)
+        return JsonResponse("Some problem occured while sending", safe=False)

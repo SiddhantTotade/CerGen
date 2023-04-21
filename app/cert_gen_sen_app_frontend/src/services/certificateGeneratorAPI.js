@@ -68,6 +68,10 @@ export const certificateGeneratorAPI = createApi({
         return {
           url: `generate-certificate/${data.event_slug}/${data.id}`,
           method: "POST",
+          body: {
+            completion: data.completion.replace("jpg", "pptx"),
+            merit: data.merit.replace("jpg", "pptx"),
+          },
           headers: {
             authorization: `Bearer ${data.access_token}`,
           },
