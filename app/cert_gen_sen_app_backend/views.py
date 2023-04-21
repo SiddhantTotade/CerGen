@@ -317,6 +317,7 @@ class UploadCompletionTemplate(APIView):
         else:
             user = request.user.id
             user_id = User.objects.get(id=user)
+            print(user_id)
             CompletionCertificateTemplate.objects.create(
                 user=user_id, template=file).save()
 

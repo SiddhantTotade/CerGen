@@ -183,7 +183,7 @@ export default function CertificateTemplate(props) {
             <ChooseMeritTemplate />
           </TabPanel>
           <TabPanel value={value} index={2}>
-            <UploadTemplate />
+            <UploadTemplate props={props} />
           </TabPanel>
         </Box>
       </Dialog>

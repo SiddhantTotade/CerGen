@@ -6,19 +6,18 @@ import { getToken } from "../../services/LocalStorageService";
 import { usePreviewTemplateMutation } from "../../services/certificateGeneratorAPI";
 import { useUploadCompletionTemplateMutation } from "../../services/certificateGeneratorAPI";
 import { useUploadMeritTemplateMutation } from "../../services/certificateGeneratorAPI";
-import * as yup from 'yup'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { useForm } from 'react-hook-form'
+import { CircularProgress } from "@mui/material";
+import AlertSnackbar from "../base_components/AlertSnackbar";
+import BackdropSpinner from "../base_components/Backdrop";
 
-const schema = yup.object().shape({
-  pptx_file: yup.object().required("File is required"),
-})
+export const UploadTemplate = (props) => {
 
-export const UploadTemplate = () => {
-
-  const {
-    register, handleSubmit, formState: { errors },
-  } = useForm({ resolver: yupResolver(schema) })
+  const [snackAndSpinner, setSnackAndSpinner] = useState({
+    openSpinner: true,
+    openSnack: true,
+    message: "",
+    alertType: "success"
+  })
 
   const { access_token } = getToken()
 
@@ -30,33 +29,14 @@ export const UploadTemplate = () => {
 
   const [previewFile, setPreviewFile] = React.useState(null);
 
-  console.log(responsePreviewTemplate);
+  const [previewFileValidation, setPreviewFileValidation] = React.useState("");
 
-  const [certificateType, setCertificateType] = useState("");
+  const [certificateType, setCertificateType] = useState({
+    type: "",
+    errorType: ""
+  });
+
   const [contribute, setContribute] = useState(false)
-
-  // const [previewData, setPreviewData] = useState(null);
-  // localStorage.setItem("certificatePreview", previewFile);
-
-  function handleFileChange(event) {
-    setPreviewFile(event.target.files[0]);
-  }
-
-  // const previewTemplateFile = () => {
-  //   let formData = new FormData();
-  //   formData.append("pptx_file", eventFileData);
-
-  //   const url = "http://127.0.0.1:8000/api/preview-certificate/";
-
-  //   let config = {
-  //     headers: {
-  //       "content-type": "multipart/form-data",
-  //       Authorization: "Token " + localStorage.getItem("token"),
-  //     },
-  //   };
-
-  //   axios.post(url, formData, config).then((res) => setPreviewFile(res.data));
-  // };
 
   // const handleUploadTemplate = () => {
   //   let url = "";
@@ -82,24 +62,48 @@ export const UploadTemplate = () => {
 
   //   axios.post(url, formData, config).then((res) => console.log(res));
   // };
+  console.log(props);
 
-  const onSubmit = () => {
-    // createParticipant({ access_token: access_token, participant_data: participantData, event: data[0].id, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, data[0].event_name, data[0].event_department, data[0].from_date) })
-    // setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })
-    // props.onClose()
+  React.useEffect(() => {
+    if (!props.props.open) {
+      setCertificateType({ type: "", errorType: "" })
+    }
+  }, [props.props.open])
+
+  const uploadTemplate = () => {
+    if (previewFile === null) {
+      setPreviewFileValidation("This field is required")
+    }
+    else {
+      if (certificateType.type === "Participation") {
+        uploadCompletionCertificate({ access_token: access_token, pptx_file: previewFile, contribute: contribute })
+        setCertificateType({ errorType: "", type: "" })
+      }
+      else if (certificateType.type === "Merit") {
+        uploadMeritCertificate({ access_token: access_token, pptx_file: previewFile, contribute: contribute })
+        setCertificateType({ errorType: "", type: "" })
+      }
+      else {
+        setCertificateType({ ...certificateType, errorType: "Please select one of the options below" })
+      }
+    }
+  }
+
+  function handleCloseSnackbar() {
+    setSnackAndSpinner({ openSnack: false })
   }
 
   return (
     <>
-      <Grid
-        sx={{
-          marginTop: "20px",
-          display: "flex",
-          justifyContent: "center",
-          flexDirection: "column",
-        }}
-      >
-        {/* <form onSubmit={handleSubmit(onSubmit)}> */}
+      {
+        responseCompletionCretificate.isLoading || responseMeritCretificate.isLoading ? <BackdropSpinner open={snackAndSpinner.openSpinner} /> : <Grid
+          sx={{
+            marginTop: "20px",
+            display: "flex",
+            justifyContent: "center",
+            flexDirection: "column",
+          }}
+        >
           <Grid
             container
             spacing={2}
@@ -118,9 +122,6 @@ export const UploadTemplate = () => {
               >
                 <FormControl>
                   <TextField
-                    {...register('pptx_file')}
-                    error={Boolean(errors.pptx_file)}
-                    helperText={errors.pptx_file?.message}
                     onChange={(e) => setPreviewFile(e.target.files[0])}
                     type='file'
                     autoFocus
@@ -132,8 +133,16 @@ export const UploadTemplate = () => {
                     fullWidth
                     variant="standard"
                   />
+                  <Typography fontSize={13} sx={{ color: 'red' }}>
+                    {
+                      previewFileValidation
+                    }
+                  </Typography>
                   <div className="items-center mt-4">
                     <Typography>What you are uploading ?</Typography>
+                    <Typography fontSize={13} sx={{ color: 'red' }}>
+                      {certificateType.errorType}
+                    </Typography>
                     <div className="flex">
                       <FormControl>
                         <RadioGroup
@@ -150,7 +159,7 @@ export const UploadTemplate = () => {
                             control={
                               <Radio
                                 onChange={(e) =>
-                                  setCertificateType("Participation")
+                                  setCertificateType({ ...certificateType, type: "Participation" })
                                 }
                               />
                             }
@@ -165,7 +174,7 @@ export const UploadTemplate = () => {
                             }}
                             control={
                               <Radio
-                                onChange={(e) => setCertificateType("Merit")}
+                                onChange={(e) => setCertificateType({ ...certificateType, type: "Merit" })}
                               />
                             }
                             label="Merit Template"
@@ -220,14 +229,25 @@ export const UploadTemplate = () => {
           <DialogActions sx={{ marginTop: "20px" }}>
             <Button variant="contained">Cancel</Button>
             <Button variant="contained" onClick={() => previewTemplate({ access_token: access_token, previewFile: previewFile })}>
-              Preview
+              {responsePreviewTemplate.isLoading ? <CircularProgress size={25} sx={{ color: 'white' }} /> : "Preview"}
             </Button>
-            <Button variant="contained" type="submit">
+            <Button variant="contained" type="submit" onClick={uploadTemplate}>
               Upload
             </Button>
           </DialogActions>
-        {/* </form> */}
-      </Grid>
+          {
+            responseCompletionCretificate.data || responseMeritCretificate.data ?
+              <AlertSnackbar
+                open={snackAndSpinner.openSnack}
+                message={responseCompletionCretificate.data || responseMeritCretificate.data}
+                severity={snackAndSpinner.alertType}
+                onClose={handleCloseSnackbar}
+                autoHideDuration={6000}
+              /> : ""
+          }
+        </Grid>
+      }
+
     </>
   );
 };

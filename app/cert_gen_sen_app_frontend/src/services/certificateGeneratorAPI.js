@@ -63,23 +63,31 @@ export const certificateGeneratorAPI = createApi({
       },
     }),
     uploadCompletionTemplate: builder.mutation({
-      query: (access_token) => {
+      query: (data) => {
+        const formData = new FormData();
+        formData.append("pptx_file", data.pptx_file);
+        formData.append("contribute", data.contribute);
         return {
-          url: "upload-completion-template",
+          url: "upload-completion-template/",
           method: "POST",
+          body: formData,
           headers: {
-            authorization: `Bearer ${access_token}`,
+            authorization: `Bearer ${data.access_token}`,
           },
         };
       },
     }),
     uploadMeritTemplate: builder.mutation({
-      query: (access_token) => {
+      query: (data) => {
+        const formData = new FormData();
+        formData.append("pptx_file", data.pptx_file);
+        formData.append("contribute", data.contribute);
         return {
-          url: "upload-merit-template",
+          url: "upload-merit-template/",
           method: "POST",
+          body: formData,
           headers: {
-            authorization: `Bearer ${access_token}`,
+            authorization: `Bearer ${data.access_token}`,
           },
         };
       },
