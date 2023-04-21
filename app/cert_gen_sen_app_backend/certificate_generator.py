@@ -5,6 +5,7 @@ from django.http import JsonResponse
 from django.core.mail import EmailMessage
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.decorators import permission_classes
+from django.views.decorators.csrf import csrf_protect
 from rest_framework.views import APIView
 from django.conf import settings
 from collections import OrderedDict
@@ -256,14 +257,16 @@ class GenerateCertificate(APIView):
 
 
 # Generate certificates for specific participant
-@permission_classes((IsAuthenticated,))
-def generate_certificate_by_id(request, slug, pk):
-    if request.method == 'POST' and request.user.is_authenticated:
+class GenerateCertificateById(APIView):
+    def post(self, request, slug, pk):
         participant = Participant.objects.filter(id=pk)
         event = Event.objects.filter(slug=slug)
 
         stu_data = OrderedDict()
         eve_data = OrderedDict()
+
+        completion_certificate_path = request.data['completion']
+        merit_certificate_path = request.data['merit']
 
         for stu in participant:
             stu_data['participant_name'] = stu.participant_name
@@ -281,14 +284,14 @@ def generate_certificate_by_id(request, slug, pk):
         if stu_data["certificate_status"] == 'F' or stu_data["certificate_status"] == None:
             return JsonResponse("This participant is not eligible for certificate", safe=False)
         elif stu_data["certificate_status"] == '1' or stu_data["certificate_status"] == '2' or stu_data["certificate_status"] == '3':
-            generate_merit_certificate(
-                stu_data["name"], stu_data["certificate_id"], stu_data["certificate_status"])
+            certificate_path = generate_merit_certificate(
+                stu_data["name"], stu_data["certificate_id"], stu_data["certificate_status"], qrcode_path, merit_certificate_path)
         else:
             qrcode_path = generate_qrcode(
                 stu_data["participant_name"], stu_data["participant_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
             certificate_path = generate_participant_certificate(
-                stu_data["participant_name"], stu_data["certificate_id"], qrcode_path)
-            send_message(stu_data["name"], stu_data["phone"])
+                stu_data["participant_name"], stu_data["certificate_id"], qrcode_path, completion_certificate_path)
+            send_message(stu_data["participant_name"], stu_data["phone"])
             send_certificate = send_mail("Certificate of Participation",
                                          "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
 
