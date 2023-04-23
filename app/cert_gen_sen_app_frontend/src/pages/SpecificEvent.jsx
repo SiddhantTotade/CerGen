@@ -184,16 +184,17 @@ export default function SpecificEvent() {
     participant_img
   ) => {
     setUpdateForm(true);
-    participantDetails.id = id;
-    participantDetails.event = event;
-    participantDetails.participant_name = participant_name;
-    participantDetails.participant_id = participant_id;
-    participantDetails.email = email;
-    participantDetails.phone = phone;
-    participantDetails.certificate_status = certificate_status;
-    participantDetails.certificate_id = certificate_id;
-    participantDetails.certificate_sent_status = certificate_sent_status;
-    participantDetails.participant_img = participant_img;
+    setParticipantsDetails({ id: id, event: event, participant_name: participant_name, participant_id: participant_id, email: email, phone: phone, certificate_status: certificate_status, certificate_id: certificate_id, certificate_sent_status: certificate_sent_status, participant_img: participant_img })
+    // participantDetails.id = id;
+    // participantDetails.event = event;
+    // participantDetails.participant_name = participant_name;
+    // participantDetails.participant_id = participant_id;
+    // participantDetails.email = email;
+    // participantDetails.phone = phone;
+    // participantDetails.certificate_status = certificate_status;
+    // participantDetails.certificate_id = certificate_id;
+    // participantDetails.certificate_sent_status = certificate_sent_status;
+    // participantDetails.participant_img = participant_img;
   };
 
   const handleUpdateFormClose = () => {
@@ -202,8 +203,7 @@ export default function SpecificEvent() {
 
   const handleDeleteForm = (id, participant_name) => {
     setDeleteForm(true);
-    participantDetails.id = id;
-    participantDetails.participant_name = participant_name
+    setParticipantsDetails({ id: id, participant_name: participant_name })
   };
 
   const handleDeleteFormClose = () => {
@@ -466,15 +466,13 @@ export default function SpecificEvent() {
           event_slug={event_slug.toUpperCase()}
           event_detail={specificEventDetails}
         />
-        {updateForm ?
-          <UpdateParticipant
-            open={updateForm}
-            onClose={handleUpdateFormClose}
-            participant={participantDetails}
-            event_slug={event_slug.toUpperCase()}
-            event_detail={specificEventDetails}
-          /> : ""
-        }
+        <UpdateParticipant
+          open={updateForm}
+          onClose={handleUpdateFormClose}
+          participant={participantDetails}
+          event_slug={event_slug.toUpperCase()}
+          event_detail={specificEventDetails}
+        />
         <DeleteParticipant
           open={deleteForm}
           onClose={handleDeleteFormClose}
