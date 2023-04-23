@@ -32,11 +32,9 @@ export const participantsImagesAPI = createApi({
     getAlbumImages: builder.query({
       query: (data) => {
         return {
-          url: "create-participant/",
+          url: `upload-event-album/${data.event_slug}`,
           method: "GET",
-          body: "",
           headers: {
-            "Content-type": "application/json; charset=UTF-8",
             authorization: `Bearer ${data.access_token}`,
           },
         };

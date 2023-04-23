@@ -161,7 +161,7 @@ class ParticipantSerializer(serializers.ModelSerializer):
 class ParticipantImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
-        fields = ['student_image']
+        fields = ['participant_image']
 
     def update(self, validated_data):
         participant_img = Participant.objects.update(

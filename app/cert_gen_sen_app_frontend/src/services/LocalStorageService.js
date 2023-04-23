@@ -18,14 +18,6 @@ const removeToken = () => {
   localStorage.removeItem("refresh_token");
 };
 
-const setCertificatePath = (value) => {
-  if (value) {
-    const { completion, merit } = value;
-    localStorage.setItem("CompletionCertificatePath", completion);
-    localStorage.setItem("MeritCertificatePath", merit);
-  }
-};
-
 const getCertificatePath = () => {
   let completionCertificate = localStorage.getItem("CompletionCertificatePath");
   let meritCertificate = localStorage.getItem("MeritCertificatePath");
@@ -33,10 +25,25 @@ const getCertificatePath = () => {
   return { completionCertificate, meritCertificate };
 };
 
+const setCompletionPath = (value) => {
+  if (value) {
+    const { completion } = value;
+    localStorage.setItem("CompletionCertificatePath", completion);
+  }
+};
+
+const setMeritPath = (value) => {
+  if (value) {
+    const { merit } = value;
+    localStorage.setItem("MeritCertificatePath", merit);
+  }
+};
+
 export {
   storeToken,
   getToken,
   removeToken,
-  setCertificatePath,
+  setCompletionPath,
+  setMeritPath,
   getCertificatePath,
 };

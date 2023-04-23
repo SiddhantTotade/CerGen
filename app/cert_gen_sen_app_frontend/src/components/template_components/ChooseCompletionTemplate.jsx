@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
 import { setCertificatePath } from "../../services/LocalStorageService";
+import { setCompletionPath } from "../../services/LocalStorageService";
 import { getToken } from "../../services/LocalStorageService";
 import { useGetCompletionCertificateQuery } from "../../services/certificateGeneratorAPI";
 import { useGetContributeCompletionCertificateQuery } from "../../services/certificateGeneratorAPI";
@@ -104,7 +105,7 @@ export const ChooseCompletionTemplate = () => {
           <Button variant="contained">Cancel</Button>
           <Button
             variant="contained"
-            onClick={() => { setAlert(true); setCertificatePath({ completion: selectedImage.url }); setTimeout(() => { setAlert(false) }, 2000) }}
+            onClick={() => { setAlert(true); setCompletionPath({ completion: selectedImage.url }); setTimeout(() => { setAlert(false) }, 2000) }}
           >
             Use this template
           </Button>

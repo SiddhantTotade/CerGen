@@ -71,7 +71,7 @@ export const Camera = (props) => {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                    <img src={props.participant.student_img} alt='Preview' width={700} />
+                    <img src={props.participant.participant_img} alt='Preview' width={700} />
                 </Paper>
             </div>
         </div>
@@ -106,7 +106,7 @@ export const Camera = (props) => {
             {
                 responsePaticipantImage.isLoading ? <CircularProgress /> :
                     <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
-                        {reClick === true ? ClickPhoto : props.participant.student_img === "" ?
+                        {reClick === true ? ClickPhoto : props.participant.participant_img === "" ?
                             ClickPhoto :
                             <div>
                                 <Button onClick={handleImage} sx={{ background: '#e81551', color: 'white', ':hover': { background: '#c70841' } }} >ReClick</Button>

@@ -1,41 +1,39 @@
 import React, { useState } from 'react'
-import { useEffect } from 'react';
-import axios from 'axios';
 import '../../album.css'
 import CloseIcon from '@mui/icons-material/Close';
+import { getToken } from '../../services/LocalStorageService';
+import { useGetAlbumImagesQuery } from '../../services/participantsImagesAPI';
+import LoaderSkeleton from '../base_components/LoaderSkeleton';
 
 export const Album = (props) => {
 
-    const [albumImages, setAlbumImages] = useState([])
+    const { access_token } = getToken()
+
+    const { data = [], isLoading } = useGetAlbumImagesQuery({ access_token: access_token, event_slug: props.event_slug })
 
     const [model, setModel] = useState(false)
+
     const [tempImg, setTempImg] = useState("")
+
     const getImg = (imgSrc) => {
         setTempImg(imgSrc)
         setModel(true)
     }
 
-    useEffect(() => {
-
-        const url = 'http://127.0.0.1:8000/api/upload-event-album/' + props.event_slug
-
-        axios
-            .get(url, {
-                headers: { Authorization: "Token " + localStorage.getItem("token") },
-            }).then(res => setAlbumImages(res.data)).catch(err => console.log(err))
-    }, [props.event_slug]);
-
     return (
         <>
             {
-                albumImages !== "Failed to get images" ?
+                data !== "Failed to get images" ?
                     <div>
-                        <div className={model ? 'model open' : 'model'}>
-                            <img src={'http://127.0.0.1:8000' + tempImg} alt="" />
-                            <CloseIcon onClick={() => setModel(false)} />
-                        </div>
+                        {
+                            isLoading ? <LoaderSkeleton barWidth="20%" barPadding="10%" /> :
+                                <div className={model ? 'model open' : 'model'}>
+                                    <img src={'http://127.0.0.1:8000' + tempImg} alt="" />
+                                    <CloseIcon onClick={() => setModel(false)} />
+                                </div>
+                        }
                         <div className='gallery'>
-                            {albumImages.map((item, index) => {
+                            {data.map((item, index) => {
                                 return <div className='pics' key={index} onClick={() => getImg(item.image_album)}>
                                     <img src={'http://127.0.0.1:8000' + item.image_album} alt="" style={{ width: "100%", borderRadius: '5px', border: '2px solid gray' }} />
                                 </div>

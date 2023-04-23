@@ -208,9 +208,10 @@ class UploadParticipant(APIView):
             data = OrderedDict()
             data['id'] = row[0]
             data['Full_Name'] = row[1]
-            data['Student_Id'] = row[2]
+            data['Participant_Id'] = row[2]
             data['Email'] = row[3]
-            data['Certificate_Status'] = row[4]
+            data['Phone'] = row[4]
+            data['Certificate_Status'] = row[5]
             excel_data.append(data)
 
         eve_id = Event.objects.filter(id=event_id)
@@ -230,14 +231,19 @@ class UploadParticipant(APIView):
         event_name_chars_string = "".join(event_name_chars_list)
 
         for data in excel_data:
-            name = data['Full_Name']
-            student_id = data['Student_Id']
+            participant_name = data['Full_Name']
+            participant_id = data['Participant_Id']
             email = data['Email']
+            phone = data['Phone']
+            if "+91" in str(phone):
+                phone = data['Phone']
+            else:
+                phone = "+91"+str(data['Phone'])
             certificate_status = data['Certificate_Status']
-            certificate_id = generate_uid(data['Student_Id'], event_name_chars_string,
+            certificate_id = generate_uid(data['Participant_Id'], event_name_chars_string,
                                           event_dept, event_date)
             Event.id = Participant.objects.create(
-                event=event_new_id, student_name=name, student_id=student_id, email=email, certificate_status=certificate_status, certificate_id=certificate_id)
+                event=event_new_id, participant_name=participant_name, participant_id=participant_id, email=email, phone=phone, certificate_status=certificate_status, certificate_id=certificate_id)
 
         return JsonResponse("Participants uploaded successfully", safe=False)
 
@@ -271,8 +277,8 @@ class UploadEachParticipant(APIView):
 # Upload participant image
 class UploadParticipantImage(APIView):
     def patch(self, request, pk):
-        participant_img = request.data['participant_image']
-        Participant.objects.filter(id=pk).update(student_image=participant_img)
+        participant_img = request.FILES['participant_image']
+        Participant.objects.filter(id=pk).update(participant_image=participant_img)
 
         return JsonResponse("Image uploaded successfully", safe=False)
 
@@ -389,7 +395,6 @@ class ParticipantImageAlbum(APIView):
 
     def post(self, request, slug):
         album_images = request.FILES.getlist('album_images')
-        print(album_images)
         event = Event.objects.get(slug=slug)
 
         for img in album_images:

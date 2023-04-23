@@ -196,7 +196,7 @@ def generate_merit_certificate(stu_name, cert_id, rank, qrcode_path, merit_certi
 
     for f in tqdm.tqdm(files):
         command = "unoconv -f pdf \"{}\"".format(f)
-        move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/participants-certificates/"
+        move_file = "mv ./cert_gen_sen_app_backend/certificate_data/ppt-certificates/*.pdf ./cert_gen_sen_app_backend/certificate_data/merit-certificates/"
         os.system(command)
         os.system(move_file)
 

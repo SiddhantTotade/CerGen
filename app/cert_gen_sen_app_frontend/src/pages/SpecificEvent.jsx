@@ -380,7 +380,6 @@ export default function SpecificEvent() {
                               }
                             >
                               <img src={Gold} className="w-10" alt="gold medal png" />
-                              {/* <StarIcon sx={{ fontSize: "37px", color: '#ffb700' }} /> */}
                             </Tooltip>
                           </TableCell>
                         ) : row.certificate_status === "2" ? (
@@ -401,10 +400,6 @@ export default function SpecificEvent() {
                                 className="w-10"
                                 alt="silver medal png"
                               />
-                              {/* <div>
-                                <StarIcon sx={{ fontSize: "37px", color: '#8a8a8a' }} />
-                                <StarIcon sx={{ fontSize: "37px", color: '#8a8a8a' }} />
-                              </div> */}
                             </Tooltip>
                           </TableCell>
                         ) : row.certificate_status === "3" ? (
@@ -425,7 +420,6 @@ export default function SpecificEvent() {
                                 className="w-10"
                                 alt="bronze medal png"
                               />
-                              {/* <StarIcon /> */}
                             </Tooltip>
                           </TableCell>
                         ) : row.certificate_status === "T" ? (

@@ -4,6 +4,7 @@ import { getToken } from "../../services/LocalStorageService";
 import { useGetMeritCertificateQuery } from "../../services/certificateGeneratorAPI";
 import { useGetContributeMeritCertificateQuery } from "../../services/certificateGeneratorAPI";
 import { setCertificatePath } from "../../services/LocalStorageService";
+import { setMeritPath } from "../../services/LocalStorageService";
 import AlertBar from "../base_components/AlertBar";
 import LoaderSkeleton from "../base_components/LoaderSkeleton";
 
@@ -105,7 +106,7 @@ export const ChooseMeritTemplate = () => {
           <Button variant="contained">Cancel</Button>
           <Button
             variant="contained"
-            onClick={() => { setAlert(true); setCertificatePath({ merit: selectedImage.url }); setTimeout(() => { setAlert(false) }, 2000) }}
+            onClick={() => { setAlert(true); setMeritPath({ merit: selectedImage.url }); setTimeout(() => { setAlert(false) }, 2000) }}
           >
             Use this template
           </Button>
