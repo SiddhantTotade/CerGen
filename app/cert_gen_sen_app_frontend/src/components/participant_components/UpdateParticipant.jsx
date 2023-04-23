@@ -39,15 +39,28 @@ export default function UpdateParticipant(props) {
 
   const [updateParticipant, responseUpdateParticipant] = useUpdateParticipantMutation()
 
-  const [participantData, setParticipantData ] = useState(props.participant)
-
-  const participant = props.participant
+  const [participantData, setParticipantData] = useState({
+    id: "",
+    event: "",
+    participant_name: "",
+    participant_id: "",
+    email: "",
+    phone: "",
+    certificate_status: "",
+    certificate_id: "",
+    certificate_sent_status: "",
+    participant_img: "",
+  })
 
   React.useEffect(() => {
-    if (!props.open) {
-      setParticipantData("")
-    }
-  }, [props.open])
+    setParticipantData({ id: props.participant.id, participant_name: props.participant.participant_name, participant_id: props.participant.participant_id, email: props.participant.email, phone: props.participant.phone, certificate_status: props.participant.certificate_status, certificate_id: props.participant.certificate_id, certificate_sent_status: props.participant.certificate_sent_status, participant_img: props.participant.participant_img })
+  }, [props.participant])
+
+  // React.useEffect(() => {
+  //   if (!props.open) {
+  //     setParticipantData("")
+  //   }
+  // }, [props.open])
 
   function generateCertificateId(
     participant_id,
@@ -97,7 +110,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.participant_name)}
                     helperText={errors.participant_name?.message}
                     onChange={(e) => handleEventData(e)}
-                    value={participant.participant_name}
+                    value={participantData.participant_name}
                     autoFocus
                     margin="dense"
                     id="participant_name"
@@ -112,7 +125,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.participant_id)}
                     helperText={errors.participant_id?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={participant.participant_id}
+                    defaultValue={props.participant.participant_id}
                     autoFocus
                     margin="dense"
                     id="participant_id"
@@ -127,7 +140,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.email)}
                     helperText={errors.email?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={participant.email}
+                    defaultValue={props.participant.email}
                     autoFocus
                     margin="dense"
                     id="email"
@@ -142,7 +155,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.phone)}
                     helperText={errors.phone?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={participant.phone}
+                    defaultValue={props.participant.phone}
                     autoFocus
                     margin="dense"
                     id="phone"
@@ -157,7 +170,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.certificate_status)}
                     helperText={errors.certificate_status?.message}
                     onChange={(e) => handleEventData(e)}
-                    defaultValue={participant.certificate_status}
+                    defaultValue={props.participant.certificate_status}
                     autoFocus
                     margin="dense"
                     id="certificate_status"
