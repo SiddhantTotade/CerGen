@@ -284,7 +284,7 @@ class UploadParticipantImage(APIView):
         return JsonResponse("Image uploaded successfully", safe=False)
 
 
-# Filtering Events by slug
+# Filtering events by slug
 @ permission_classes((IsAuthenticated,))
 class FilteredEvent(APIView):
     def get(self, request, slug):
