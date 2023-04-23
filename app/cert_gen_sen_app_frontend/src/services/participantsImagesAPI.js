@@ -20,7 +20,7 @@ export const participantsImagesAPI = createApi({
         const formData = new FormData();
         formData.append("participant_image", data.imgSrc);
         return {
-          url: `upload-participant-image/${data.event}`,
+          url: `upload-participant-image/${data.id}`,
           method: "PATCH",
           body: formData,
           headers: {

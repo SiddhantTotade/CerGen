@@ -32,7 +32,6 @@ import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
 import { getToken } from "../services/LocalStorageService";
 import { useGetParticipantsQuery } from "../services/participantsAPI";
 import { useSpecificEventDetailQuery } from "../services/eventsAPI";
-import StarIcon from '@mui/icons-material/Star';
 
 const createBtns = {
   marginBottom: "10px",
@@ -88,86 +87,33 @@ export default function SpecificEvent() {
     certificate_status: "",
     certificate_id: "",
     certificate_sent_status: "",
-    student_img: "",
+    participant_img: "",
   });
 
   let attendance = 0;
+
+  const [createParticiapantForm, setCreateParticiapantForm] =
+    React.useState(false);
+
+  const [uploadTemplateForm, setUploadTemplateForm] = React.useState(false);
+
+  const [updateForm, setUpdateForm] = useState(false);
+
+  const [deleteForm, setDeleteForm] = useState(false);
+
+  const [album, setAlbum] = useState(false)
+
+  const [camera, setCamera] = useState(false)
+
+  const [generateCertificateForm, setGenerateCertificateForm] = useState(false)
+
+  const [generateCertificateByIdForm, setGenerateCertificateByIdForm] = useState(false)
 
   React.useEffect(() => {
     if (!eventData.isLoading) {
       setSpecificEventDetails(eventData.data[0])
     }
   }, [eventData.data, eventData.isLoading])
-
-  // function generateCertificate() {
-  // if (completionImagePath === "null" || meritImagePath === "null") {
-  //   return console.log("Please select a template to generate certificate");
-  // }
-
-  // setOpenSpinner(true);
-  // setTimeout(() => {
-  //   setOpenSpinner(false);
-  // }, 5000);
-
-  // const url = "http://127.0.0.1:8000/api/generate-certificate/" + event_slug;
-
-  // const formData = new FormData();
-  // formData.append("completion", completionImagePath.replace('jpg', 'pptx'));
-  // formData.append("merit", meritImagePath.replace('jpg', 'pptx'));
-
-  // axios
-  //   .post(url, formData, {
-  //     headers: { Authorization: "Token " + localStorage.getItem("token") },
-  //   })
-  //   .then(
-  //     setTimeout(() => {
-  //       setOpenSnack(true);
-  //     }, 10000)
-  //   )
-  //   .then((res) => setMessage(res.data))
-  //   .then(
-  //     message === "Certificate generated and sended successfully"
-  //       ? setAlertType("error")
-  //       : setAlertType("success")
-  //   )
-  //   .catch((err) => console.log(err));
-  // }
-
-  // function generateCertificateById(id) {
-  // setOpenSpinner(true);
-  // setTimeout(() => {
-  //   setOpenSpinner(false);
-  // }, 5000);
-  // const url =
-  //   "http://127.0.0.1:8000/api/generate-certificate/" + event_slug + "/" + id;
-  // axios
-  //   .get(url, {
-  //     headers: { Authorization: "Token " + localStorage.getItem("token") },
-  //   })
-  //   .then(
-  //     setTimeout(() => {
-  //       setOpenSnack(true);
-  //     }, 10000)
-  //   )
-  //   .then((res) => setMessage(res.data))
-  //   .then(
-  //     message === "Certificate generated and sended successfully"
-  //       ? setAlertType("error")
-  //       : setAlertType("success")
-  //   )
-  //   .catch((err) => console.log(err));
-  // }
-
-  const [createParticiapantForm, setCreateParticiapantForm] =
-    React.useState(false);
-  const [uploadTemplateForm, setUploadTemplateForm] = React.useState(false);
-  const [updateForm, setUpdateForm] = useState(false);
-  const [deleteForm, setDeleteForm] = useState(false);
-  const [album, setAlbum] = useState(false)
-  const [camera, setCamera] = useState(false)
-  const [generateCertificateForm, setGenerateCertificateForm] = useState(false)
-  const [generateCertificateByIdForm, setGenerateCertificateByIdForm] = useState(false)
-
 
   const handleGenerateCertificateForm = () => {
     setGenerateCertificateForm(true)
@@ -196,12 +142,12 @@ export default function SpecificEvent() {
 
   const handleCameraForm = (id, img) => {
     setCamera(true)
-    setParticipantsDetails({ student_img: img, event: id })
+    setParticipantsDetails({ participant_img: img, id: id })
   }
 
   const handleImageForm = (id, img) => {
     setCamera(true)
-    setParticipantsDetails({ student_img: img, event: id })
+    setParticipantsDetails({ participant_img: img, id: id })
   }
 
   const handleCameraFormClose = () => {
@@ -235,7 +181,7 @@ export default function SpecificEvent() {
     certificate_status,
     certificate_id,
     certificate_sent_status,
-    student_img
+    participant_img
   ) => {
     setUpdateForm(true);
     participantDetails.id = id;
@@ -247,7 +193,7 @@ export default function SpecificEvent() {
     participantDetails.certificate_status = certificate_status;
     participantDetails.certificate_id = certificate_id;
     participantDetails.certificate_sent_status = certificate_sent_status;
-    participantDetails.student_img = student_img;
+    participantDetails.participant_img = participant_img;
   };
 
   const handleUpdateFormClose = () => {
@@ -445,17 +391,17 @@ export default function SpecificEvent() {
                             </Tooltip>
                           </TableCell>
                         )}{
-                          row.student_image === "" ?
+                          row.participant_image === "" ?
                             <TableCell align="center">
                               <Tooltip title={`Click / Upload a photo of : ${row.participant_name}`}>
-                                <Button onClick={() => handleCameraForm(row.id, row.student_image)}>
+                                <Button onClick={() => handleCameraForm(row.id, row.participant_image)}>
                                   <CameraAltIcon sx={{ color: '#e81551' }} />
                                 </Button>
                               </Tooltip>
                             </TableCell> :
                             <TableCell align="center">
                               <Tooltip title={`View / Update photo of : ${row.participant_name}`}>
-                                <Button onClick={() => handleImageForm(row.id, row.student_image)}>
+                                <Button onClick={() => handleImageForm(row.id, row.participant_image)}>
                                   <InsertPhotoIcon sx={{ color: '#1f0abf' }} />
                                 </Button>
                               </Tooltip>
@@ -476,7 +422,7 @@ export default function SpecificEvent() {
                                     row.certificate_status,
                                     row.certificate_id,
                                     row.certificate_sent_status,
-                                    row.student_img
+                                    row.participant_img
                                   )
                                 }
                                 key={row.id}

@@ -278,7 +278,8 @@ class UploadEachParticipant(APIView):
 class UploadParticipantImage(APIView):
     def patch(self, request, pk):
         participant_img = request.FILES['participant_image']
-        Participant.objects.filter(id=pk).update(participant_image=participant_img)
+        Participant.objects.filter(id=pk).update(
+            participant_image=participant_img)
 
         return JsonResponse("Image uploaded successfully", safe=False)
 
@@ -323,7 +324,6 @@ class UploadCompletionTemplate(APIView):
         else:
             user = request.user.id
             user_id = User.objects.get(id=user)
-            print(user_id)
             CompletionCertificateTemplate.objects.create(
                 user=user_id, template=file).save()
 

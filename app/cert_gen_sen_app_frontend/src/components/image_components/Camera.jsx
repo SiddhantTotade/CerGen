@@ -71,7 +71,7 @@ export const Camera = (props) => {
                         justifyContent: 'center',
                         alignItems: 'center'
                     }}>
-                    <img src={props.participant.participant_img} alt='Preview' width={700} />
+                    <img src={'http://127.0.0.1:8000' + props.participant.participant_img} alt='Preview' width={700} />
                 </Paper>
             </div>
         </div>
@@ -102,7 +102,7 @@ export const Camera = (props) => {
 
     return (
         <div>
-            {props.participant.student_img === "" ? Webcamera : reClick === true ? Webcamera : UploadedImage}
+            {props.participant.participant_img === "" ? Webcamera : reClick === true ? Webcamera : UploadedImage}
             {
                 responsePaticipantImage.isLoading ? <CircularProgress /> :
                     <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>

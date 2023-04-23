@@ -66,8 +66,8 @@ export const UploadParticipantImage = (props) => {
             }, 2000)
         }
         else {
-            const base64Image = await convertBase64(selectedFile)
-            uploadParticipantImage({ access_token: access_token, imgSrc: base64Image, event: props.participant.event })
+            // const base64Image = await convertBase64(selectedFile)
+            uploadParticipantImage({ access_token: access_token, imgSrc: selectedFile, id: props.participant.id })
             props.onClose()
         }
 
