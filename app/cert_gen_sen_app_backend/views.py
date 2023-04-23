@@ -278,8 +278,9 @@ class UploadEachParticipant(APIView):
 class UploadParticipantImage(APIView):
     def patch(self, request, pk):
         participant_img = request.FILES['participant_image']
-        Participant.objects.filter(id=pk).update(
-            participant_image=participant_img)
+        image = Participant.objects.get(id=pk)
+        image.participant_image = participant_img
+        image.save()
 
         return JsonResponse("Image uploaded successfully", safe=False)
 

@@ -391,7 +391,7 @@ export default function SpecificEvent() {
                             </Tooltip>
                           </TableCell>
                         )}{
-                          row.participant_image === "" ?
+                          row.participant_image === null ?
                             <TableCell align="center">
                               <Tooltip title={`Click / Upload a photo of : ${row.participant_name}`}>
                                 <Button onClick={() => handleCameraForm(row.id, row.participant_image)}>
