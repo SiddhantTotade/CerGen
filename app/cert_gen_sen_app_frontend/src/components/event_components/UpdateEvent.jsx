@@ -12,7 +12,7 @@ import { useState } from 'react';
 import { Select } from '@mui/material';
 import AlertSnackbar from '../base_components/AlertSnackbar';
 import BackdropSpinner from '../base_components/Backdrop';
-import { useCreateEventMutation } from '../../services/eventsAPI';
+import { useUpdateEventMutation } from '../../services/eventsAPI';
 import { getToken } from '../../services/LocalStorageService';
 import { useGetLoggedInUserQuery } from '../../services/userAuthAPI';
 import { useDispatch } from 'react-redux';
@@ -41,7 +41,7 @@ export default function UpdateEvent(props) {
         event_year: "",
     })
 
-    const [createEvent, responseCreateEvent] = useCreateEventMutation()
+    const [updateEvent, responseUpdateEvent] = useUpdateEventMutation()
 
     const [from_focus, from_setFocused] = React.useState(false)
     const [from_hasValue, from_setHasValue] = React.useState(false)
@@ -70,41 +70,46 @@ export default function UpdateEvent(props) {
         }
     }, [data, isSuccess, dispatch])
 
-    React.useEffect(() => {
-        if (!props.open) {
-            setEventData({ user: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" })
-        }
-    }, [props.open])
+    // React.useEffect(() => {
+    //     if (!props.open) {
+    //         setEventData({ user: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" })
+    //     }
+    // }, [props.open])
 
     React.useEffect(() => {
         setEventData({ ...eventData, user: data.id })
     }, [data.id])
 
     function handleEventData(event) {
-        const newData = { ...eventData }
-        newData[event.target.id] = event.target.value
-        setEventData(newData)
+        const { name, value } = event.target
+        setEventData((prevValues) => ({ ...prevValues, [name]: value }))
     }
 
     function handleCloseSnackbar() {
         setSnackAndSpinner({ openSnack: false })
     }
 
+    function handleUpdate() {
+        setEventData({ event_name: eventData.event_name === "" ? props.event.event_name : "", subject: eventData.subject === "" ? props.event.subject : eventData.subject, event_department: eventData.event_department === "" ? props.event.event_department : eventData.event_department, from_date: eventData.from_date === "" ? props.event.from_date : eventData.from_date, to_date: eventData.to_date === "" ? props.event.to_date : eventData.to_date, event_year: eventData.event_year === "" ? props.event.event_year : eventData.event_year })
+
+        updateEvent({ access_token: access_token, eventData: eventData, event_id: props.event.id })
+    }
+
     return (
         <>
             {
-                responseCreateEvent.isLoading ?
+                responseUpdateEvent.isLoading ?
                     <BackdropSpinner open={snackAndSpinner.openSpinner} /> :
                     <div className='w-full'>
                         <Dialog {...props} >
                             <DialogTitle>Update Event</DialogTitle>
                             <DialogContent>
-                                <TextField onChange={(e) => handleEventData(e)} defaultValue={props.event.event_name} autoFocus margin="dense" id="event_name" label="Event Name" type="text" fullWidth variant="standard" />
-                                <TextField onChange={(e) => handleEventData(e)} defaultValue={props.event.subject} autoFocus margin="dense" id="subject" label="Event Subject" type="text" fullWidth variant="standard" />
-                                <TextField onChange={(e) => handleEventData(e)} defaultValue={props.event.event_department} autoFocus margin="dense" id="event_department" label="Event Department" type="text" fullWidth variant="standard" />
-                                <TextField onFocus={from_onFocus} onBlur={from_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) from_setHasValue(true); else from_setHasValue(false); }} type={from_hasValue || from_focus ? "date" : "text"} defaultValue={props.event.from_date} autoFocus margin="dense" id="from_date" label="Event - From Date" fullWidth variant="standard" />
-                                <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} defaultValue={props.event.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" fullWidth variant="standard" />
-                                <FormControl variant="standard" sx={{ width: "100%" }}  >
+                                <TextField onChange={(e) => handleEventData(e)} defaultValue={props.event.event_name} autoFocus margin="dense" name="event_name" id="event_name" label="Event Name" type="text" fullWidth variant="standard" />
+                                <TextField onChange={(e) => handleEventData(e)} defaultValue={props.event.subject} autoFocus margin="dense" id="subject" name="subject" label="Event Subject" type="text" fullWidth variant="standard" />
+                                <TextField onChange={(e) => handleEventData(e)} defaultValue={props.event.event_department} autoFocus margin="dense" name="event_department" id="event_department" label="Event Department" type="text" fullWidth variant="standard" />
+                                <TextField onFocus={from_onFocus} onBlur={from_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) from_setHasValue(true); else from_setHasValue(false); }} type={from_hasValue || from_focus ? "date" : "text"} defaultValue={props.event.from_date} autoFocus margin="dense" id="from_date" name="from_date" label="Event - From Date" fullWidth variant="standard" />
+                                <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} defaultValue={props.event.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" name="to_date" fullWidth variant="standard" />
+                                <FormControl name="event_year" variant="standard" sx={{ width: "100%" }}  >
                                     <InputLabel id="demo-simple-select-label" variant='standard' >Choose Event Year</InputLabel>
                                     <Select labelId="demo-simple-select-label" id="event_year" variant="standard" onChange={(e) => setEventData({ ...eventData, event_year: e.target.value })} defaultValue={props.event.event_year}>
                                         <MenuItem value="" key="" >
@@ -116,14 +121,15 @@ export default function UpdateEvent(props) {
                             </DialogContent>
                             <DialogActions>
                                 <Button variant='contained' onClick={props.onClose}>Cancel</Button>
-                                <Button variant='contained' onClick={() => { setEventData({ ...eventData, user: data.id }); createEvent({ access_token: access_token, eventData: eventData }); setEventData({ user: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" }); props.onClose() }} >Update</Button>
+                                <Button variant='contained' onClick={() => { setEventData({ ...eventData, user: data.id }); handleUpdate(); setEventData({ id: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" }); props.onClose() }} >Update</Button>
                             </DialogActions>
                         </Dialog>
                         {
-                            responseCreateEvent.data ?
-                                <AlertSnackbar open={snackAndSpinner.openSnack} message={responseCreateEvent.data} severity={snackAndSpinner.alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} /> : ""
+                            responseUpdateEvent.data ?
+                                <AlertSnackbar open={snackAndSpinner.openSnack} message={responseUpdateEvent.data} severity={snackAndSpinner.alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} /> : ""
                         }
-                    </div>}
+                    </div>
+            }
         </>
     );
 }

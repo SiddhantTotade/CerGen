@@ -28,6 +28,20 @@ export const eventsAPI = createApi({
         };
       },
     }),
+    UpdateEvent: builder.mutation({
+      query: (data) => {
+        console.log(data);
+        return {
+          // url: `all-events/${data.event_id}`,
+          // method: "PUT",
+          // body: data.eventData,
+          // headers: {
+          //   "Content-type": "application/json; charset=UTF-8",
+          //   authorization: `Bearer ${data.access_token}`,
+          // },
+        };
+      },
+    }),
     deleteEvent: builder.mutation({
       query: (data) => {
         return {
@@ -56,6 +70,7 @@ export const eventsAPI = createApi({
 export const {
   useGetAllEventsQuery,
   useCreateEventMutation,
+  useUpdateEventMutation,
   useDeleteEventMutation,
   useSpecificEventDetailQuery,
 } = eventsAPI;
