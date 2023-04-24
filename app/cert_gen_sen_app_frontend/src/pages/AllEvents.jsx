@@ -11,6 +11,7 @@ import { getToken } from '../services/LocalStorageService';
 import LoaderSkeleton from '../components/base_components/LoaderSkeleton';
 import BackdropSpinner from '../components/base_components/Backdrop';
 import AlertSnackbar from '../components/base_components/AlertSnackbar';
+import UpdateEvent from '../components/event_components/UpdateEvent';
 
 const card_sx = {
     maxWidth: 400,
@@ -54,6 +55,17 @@ export const AllEvents = () => {
         alertType: "success"
     })
 
+    const [eventData, setEventData] = useState({
+        id: "",
+        event_name: "",
+        subject: "",
+        event_department: "",
+        from_date: "",
+        to_date: "",
+        event_year: "",
+        slug: "",
+    })
+
     const { access_token } = getToken()
 
     const { data = [], isLoading } = useGetAllEventsQuery(access_token)
@@ -62,8 +74,19 @@ export const AllEvents = () => {
 
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+    const [updateForm, setUpdateForm] = useState(false);
+
     function handleCloseSnackbar() {
         setSnackAndSpinner({ openSnack: false });
+    }
+
+    const handleUpdateForm = (id, event_name, subject, event_department, from_date, to_date, event_year, slug) => {
+        setUpdateForm(true)
+        setEventData({ id: id, event_name: event_name, subject: subject, event_department: event_department, from_date: from_date, to_date: to_date, event_year: event_year, slug: slug })
+    }
+
+    const handleUpdateFormClose = () => {
+        setUpdateForm(false)
     }
 
     return (
@@ -105,6 +128,7 @@ export const AllEvents = () => {
                                             </CardContent>
                                             <CardActions>
                                                 <Button variant='contained' size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
+                                                <Button variant='contained' size="small" onClick={() => handleUpdateForm(event.id, event.event_name, event.subject, event.event_department, event.from_date, event.to_date, event.event_year, event.slug)}>Edit</Button>
                                                 <Button variant='contained' size="small" onClick={() => deleteEvent({ access_token: access_token, slug: event.slug })} >Delete</Button>
                                             </CardActions>
                                         </Card>
@@ -124,6 +148,7 @@ export const AllEvents = () => {
 
                     </>
             }
+            <UpdateEvent open={updateForm} onClose={handleUpdateFormClose} event={eventData} />
         </>
     )
 }

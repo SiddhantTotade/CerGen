@@ -184,6 +184,24 @@ class EventsOperations(APIView):
             return JsonResponse("Event added successfully", safe=False)
         return JsonResponse("Failed to add event", safe=False)
 
+    def put(self, request, pk):
+        event_id = Event.objects.get(id=pk)
+        event_serialized_data = EventSerializer(
+            instance=event_id, data=request.data, partial=True)
+
+        if event_serialized_data.is_valid():
+            event_serialized_data.save()
+            return JsonResponse("Event updated successfully", safe=False)
+        return JsonResponse("Failed to update event", safe=False)
+        # participant_by_id = Participant.objects.get(pk=pk)
+        # participant_serialized_data = ParticipantSerializer(
+        #     instance=participant_by_id, data=request.data, partial=True)
+
+        # if participant_serialized_data.is_valid():
+        #     participant_serialized_data.save()
+        #     return JsonResponse("Participant updated successfully", safe=False)
+        # return JsonResponse("Failed to update participant", safe=False)
+
 
 # Getting data from xlsx and uploading to database
 class UploadParticipant(APIView):
