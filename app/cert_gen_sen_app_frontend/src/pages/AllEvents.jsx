@@ -6,12 +6,11 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import { Link } from 'react-router-dom';
 import Sidebar from "../components/base_components/Sidebar";
-import { useGetAllEventsQuery, useDeleteEventMutation } from '../services/eventsAPI';
+import { useGetAllEventsQuery } from '../services/eventsAPI';
 import { getToken } from '../services/LocalStorageService';
 import LoaderSkeleton from '../components/base_components/LoaderSkeleton';
-import BackdropSpinner from '../components/base_components/Backdrop';
-import AlertSnackbar from '../components/base_components/AlertSnackbar';
 import UpdateEvent from '../components/event_components/UpdateEvent';
+import DeleteEvent from '../components/event_components/DeleteEvent';
 
 const card_sx = {
     maxWidth: 400,
@@ -48,13 +47,6 @@ const cardSkeleton = [...Array(card)].map((e, i) =>
 
 export const AllEvents = () => {
 
-    const [snackAndSpinner, setSnackAndSpinner] = useState({
-        openSpinner: true,
-        openSnack: true,
-        message: "",
-        alertType: "success"
-    })
-
     const [eventData, setEventData] = useState({
         id: "",
         event_name: "",
@@ -70,15 +62,11 @@ export const AllEvents = () => {
 
     const { data = [], isLoading } = useGetAllEventsQuery(access_token)
 
-    const [deleteEvent, responseDeleteEvent] = useDeleteEventMutation()
-
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     const [updateForm, setUpdateForm] = useState(false);
 
-    function handleCloseSnackbar() {
-        setSnackAndSpinner({ openSnack: false });
-    }
+    const [deleteForm, setDeleteForm] = useState(false);
 
     const handleUpdateForm = (id, event_name, subject, event_department, from_date, to_date, event_year, slug) => {
         setUpdateForm(true)
@@ -87,6 +75,15 @@ export const AllEvents = () => {
 
     const handleUpdateFormClose = () => {
         setUpdateForm(false)
+    }
+
+    const handleDeleteForm = (id, event_name, subject, event_department, from_date, to_date, event_year, slug) => {
+        setDeleteForm(true)
+        setEventData({ id: id, event_name: event_name, subject: subject, event_department: event_department, from_date: from_date, to_date: to_date, event_year: event_year, slug: slug })
+    }
+
+    const handleDeleteFormClose = () => {
+        setDeleteForm(false)
     }
 
     return (
@@ -102,53 +99,41 @@ export const AllEvents = () => {
                     </div>
                     :
                     <>
-                        {
-                            responseDeleteEvent.isLoading ? <BackdropSpinner open={snackAndSpinner.openSpinner} /> :
-                                <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
-                                    {data !== 'No event data' ? data.map((event) => {
-                                        let event_url = '/api/event/' + event.slug
-                                        return <Card sx={card_sx} key={event.id} >
-                                            <CardContent>
+                        <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
+                            {data !== 'No event data' ? data.map((event) => {
+                                let event_url = '/api/event/' + event.slug
+                                return <Card sx={card_sx} key={event.id} >
+                                    <CardContent>
+                                        <div>
+                                            <Typography gutterBottom variant="h5" component="div">
+                                                {event.event_name}
+                                            </Typography>
+                                            <div className='flex flex-col'>
                                                 <div>
-                                                    <Typography gutterBottom variant="h5" component="div">
-                                                        {event.event_name}
-                                                    </Typography>
-                                                    <div className='flex flex-col'>
-                                                        <div>
-                                                            <small>{days[new Date(event.from_date).getDay()]}</small>
-                                                            {event.from_date !== event.to_date ? <small> - {days[new Date(event.to_date).getDay()]}</small> : ""}
-                                                        </div>
-                                                        <small>{new Date(event.from_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
-                                                    </div>
-                                                    <br />
+                                                    <small>{days[new Date(event.from_date).getDay()]}</small>
+                                                    {event.from_date !== event.to_date ? <small> - {days[new Date(event.to_date).getDay()]}</small> : ""}
                                                 </div>
-                                                <Typography variant="body2" color="text.secondary" sx={{ height: "5vh" }}>
-                                                    {event.subject.length > 100 ? event.subject.substring(0, 85) + "....." : event.subject}
-                                                </Typography>
-                                            </CardContent>
-                                            <CardActions>
-                                                <Button variant='contained' size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
-                                                <Button variant='contained' size="small" onClick={() => handleUpdateForm(event.id, event.event_name, event.subject, event.event_department, event.from_date, event.to_date, event.event_year, event.slug)}>Edit</Button>
-                                                <Button variant='contained' size="small" onClick={() => deleteEvent({ access_token: access_token, slug: event.slug })} >Delete</Button>
-                                            </CardActions>
-                                        </Card>
+                                                <small>{new Date(event.from_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
+                                            </div>
+                                            <br />
+                                        </div>
+                                        <Typography variant="body2" color="text.secondary" sx={{ height: "5vh" }}>
+                                            {event.subject.length > 100 ? event.subject.substring(0, 85) + "....." : event.subject}
+                                        </Typography>
+                                    </CardContent>
+                                    <CardActions>
+                                        <Button variant='contained' size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
+                                        <Button variant='contained' size="small" onClick={() => handleUpdateForm(event.id, event.event_name, event.subject, event.event_department, event.from_date, event.to_date, event.event_year, event.slug)}>Edit</Button>
+                                        <Button variant='contained' size="small" onClick={() => handleDeleteForm(event.id, event.event_name, event.subject, event.event_department, event.from_date, event.to_date, event.event_year, event.slug)} >Delete</Button>
+                                    </CardActions>
+                                </Card>
 
-                                    }) : <h2>No Data Available</h2>}
-                                    {
-                                        responseDeleteEvent.data ? <AlertSnackbar
-                                            open={snackAndSpinner.openSnack}
-                                            message={responseDeleteEvent.data}
-                                            severity={snackAndSpinner.alertType}
-                                            onClose={handleCloseSnackbar}
-                                            autoHideDuration={6000}
-                                        /> : ""
-                                    }
-                                </div>
-                        }
-
+                            }) : <h2>No Data Available</h2>}
+                        </div>
                     </>
             }
             <UpdateEvent open={updateForm} onClose={handleUpdateFormClose} event={eventData} />
+            <DeleteEvent open={deleteForm} onClose={handleDeleteFormClose} event={eventData} />
         </>
     )
 }

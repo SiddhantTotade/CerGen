@@ -41,6 +41,10 @@ export default function UpdateEvent(props) {
         event_year: "",
     })
 
+    React.useEffect(() => {
+        setEventData({ event_name: props.event.event_name, subject: props.event.subject, event_department: props.event.event_department, from_date: props.event.from_date, to_date: props.event.to_date, event_year: props.event.event_year })
+    }, [props.event.event_name, props.event.subject, props.event.event_department, props.event.from_date, props.event.to_date, props.event.event_year])
+
     const [updateEvent, responseUpdateEvent] = useUpdateEventMutation()
 
     const [from_focus, from_setFocused] = React.useState(false)
@@ -70,11 +74,11 @@ export default function UpdateEvent(props) {
         }
     }, [data, isSuccess, dispatch])
 
-    // React.useEffect(() => {
-    //     if (!props.open) {
-    //         setEventData({ user: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" })
-    //     }
-    // }, [props.open])
+    React.useEffect(() => {
+        if (!props.open) {
+            setEventData({ user: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" })
+        }
+    }, [props.open])
 
     React.useEffect(() => {
         setEventData({ ...eventData, user: data.id })
@@ -87,12 +91,6 @@ export default function UpdateEvent(props) {
 
     function handleCloseSnackbar() {
         setSnackAndSpinner({ openSnack: false })
-    }
-
-    function handleUpdate() {
-        setEventData({ event_name: eventData.event_name === "" ? props.event.event_name : "", subject: eventData.subject === "" ? props.event.subject : eventData.subject, event_department: eventData.event_department === "" ? props.event.event_department : eventData.event_department, from_date: eventData.from_date === "" ? props.event.from_date : eventData.from_date, to_date: eventData.to_date === "" ? props.event.to_date : eventData.to_date, event_year: eventData.event_year === "" ? props.event.event_year : eventData.event_year })
-
-        updateEvent({ access_token: access_token, eventData: eventData, event_id: props.event.id })
     }
 
     return (
@@ -121,7 +119,7 @@ export default function UpdateEvent(props) {
                             </DialogContent>
                             <DialogActions>
                                 <Button variant='contained' onClick={props.onClose}>Cancel</Button>
-                                <Button variant='contained' onClick={() => { setEventData({ ...eventData, user: data.id }); handleUpdate(); setEventData({ id: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" }); props.onClose() }} >Update</Button>
+                                <Button variant='contained' onClick={() => { setEventData({ ...eventData, user: data.id }); updateEvent({ access_token: access_token, eventData: eventData, event_id: props.event.id }); setEventData({ id: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" }); props.onClose() }} >Update</Button>
                             </DialogActions>
                         </Dialog>
                         {

@@ -30,22 +30,22 @@ export const eventsAPI = createApi({
     }),
     UpdateEvent: builder.mutation({
       query: (data) => {
-        console.log(data);
         return {
-          // url: `all-events/${data.event_id}`,
-          // method: "PUT",
-          // body: data.eventData,
-          // headers: {
-          //   "Content-type": "application/json; charset=UTF-8",
-          //   authorization: `Bearer ${data.access_token}`,
-          // },
+          url: `all-events/${data.event_id}`,
+          method: "PUT",
+          body: data.eventData,
+          headers: {
+            "Content-type": "application/json; charset=UTF-8",
+            authorization: `Bearer ${data.access_token}`,
+          },
         };
       },
     }),
     deleteEvent: builder.mutation({
       query: (data) => {
+        console.log(data);
         return {
-          url: `event/${data.slug}`,
+          url: `event/${data.event_data.slug}`,
           method: "DELETE",
           headers: {
             authorization: `Bearer ${data.access_token}`,
