@@ -3,9 +3,6 @@ import os
 from .models import *
 from django.http import JsonResponse
 from django.core.mail import EmailMessage
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.decorators import permission_classes
-from django.views.decorators.csrf import csrf_protect
 from rest_framework.views import APIView
 from django.conf import settings
 from collections import OrderedDict
