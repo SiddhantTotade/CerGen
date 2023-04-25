@@ -91,8 +91,8 @@ class UserChangePasswordView(APIView):
 class SendPasswordResetEmailView(APIView):
     renderer_classes = [UserRenderer]
 
-    def post(self, reuqest, format=None):
-        serializer = UserSendPasswordResetEmailSerializer(data=reuqest.data)
+    def post(self, request, format=None):
+        serializer = UserSendPasswordResetEmailSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
         return Response({'msg': 'Password reset link has been sent on your e-mail'}, status=status.HTTP_200_OK)
@@ -128,41 +128,6 @@ def generate_uid(stu_id, eve_name, eve_dept, eve_date):
     return certificate_id
 
 
-# ManageUser API
-# class ManageUserAPI(generics.RetrieveUpdateAPIView):
-#     serializer_class = UserSerializer
-#     permission_classes = (permissions.IsAuthenticated,)
-
-#     def get_object(self):
-#         return self.request.user
-
-
-# Login API
-# class LoginAPI(KnoxLoginView):
-#     permission_classes = (permissions.AllowAny,)
-
-#     def post(self, request, format=None):
-#         serializer = AuthTokenSerializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         login(request, user)
-#         return super(LoginAPI, self).post(request, format=None)
-
-
-# Register API
-# class RegisterAPI(generics.GenericAPIView):
-#     serializer_class = RegisterSerializer
-
-#     def post(self, request, *args, **kwargs):
-#         serializer = self.get_serializer(data=request.data)
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.save()
-#         return Response({
-#             "user": UserSerializer(user, context=self.get_serializer_context()).data,
-#             "token": AuthToken.objects.create(user)[1]
-#         })
-
-
 # Getting all events view
 class EventsOperations(APIView):
     renderer_classes = [UserRenderer]
@@ -193,14 +158,6 @@ class EventsOperations(APIView):
             event_serialized_data.save()
             return JsonResponse("Event updated successfully", safe=False)
         return JsonResponse("Failed to update event", safe=False)
-        # participant_by_id = Participant.objects.get(pk=pk)
-        # participant_serialized_data = ParticipantSerializer(
-        #     instance=participant_by_id, data=request.data, partial=True)
-
-        # if participant_serialized_data.is_valid():
-        #     participant_serialized_data.save()
-        #     return JsonResponse("Participant updated successfully", safe=False)
-        # return JsonResponse("Failed to update participant", safe=False)
 
 
 # Getting data from xlsx and uploading to database

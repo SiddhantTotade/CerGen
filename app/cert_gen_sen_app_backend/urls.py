@@ -4,12 +4,6 @@ from .certificate_generator import *
 from .ppt_2_image_preview import *
 
 urlpatterns = [
-    #     path('register/', RegisterAPI.as_view(), name='register'),
-    #     path('login/', LoginAPI.as_view(), name='login'),
-    #     path('profile/', ManageUserAPI.as_view(), name='manage_user'),
-    #     path('logout/', knox_views.LogoutView.as_view(), name='logout'),
-    #     path('logoutall/', knox_views.LogoutAllView.as_view(), name='logoutal'),
-
     path('register/', UserRegistrationView.as_view(), name='register'),
     path('login/', UserLoginView.as_view(), name='login'),
     path('profile/', UserProfileView.as_view(), name='profile'),
