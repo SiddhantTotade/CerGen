@@ -2,7 +2,7 @@
 ## Getting Started
 
 #### First - Running Django Server
-+ Clone the project in your PC or Laptop. `git clone git@github.com:SiddhantTotade/certificate-generator-and-sender.git`.
++ Clone the project in your PC or Laptop. `git clone git@github.com:SiddhantTotade/cergen.git`.
 + Open the project in a terminal and type `source bin/activate`. This will enables the virual environment.
 + Change directory to 'app'. `cd app`.
 + Run the django serever. `python manage.py runserver`.
