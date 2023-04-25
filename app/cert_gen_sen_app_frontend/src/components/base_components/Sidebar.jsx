@@ -36,6 +36,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getToken, removeToken } from "../../services/LocalStorageService";
 import { unsetUserInfo, setUserInfo } from "../../features/userSlice";
 import { unsetUserToken } from "../../features/authSlice";
+import LoaderSkeleton from "./LoaderSkeleton";
 
 const drawerWidth = 240;
 
@@ -200,7 +201,7 @@ export default function MiniDrawer() {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Typography variant="h6" noWrap component="div">
+                <Typography sx={{ fontFamily: 'Bruno Ace' }} variant="h6" noWrap component="div">
                   CerGen
                 </Typography>
               </Toolbar>
