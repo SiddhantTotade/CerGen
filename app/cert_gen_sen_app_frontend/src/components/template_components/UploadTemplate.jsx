@@ -38,31 +38,6 @@ export const UploadTemplate = (props) => {
 
   const [contribute, setContribute] = useState(false)
 
-  // const handleUploadTemplate = () => {
-  //   let url = "";
-
-  //   if (certificateType === "Participation") {
-  //     url = "http://127.0.0.1:8000/api/upload-completion-template/";
-  //   } else if (certificateType === "Merit") {
-  //     url = "http://127.0.0.1:8000/api/upload-merit-template/";
-  //   } else {
-  //     return console.log("Select one of the option below");
-  //   }
-
-  //   let formData = new FormData();
-  //   formData.append("pptx_file", eventFileData);
-  //   formData.append("contribute", contribute);
-
-  //   let config = {
-  //     headers: {
-  //       "content-type": "multipart/form-data",
-  //       Authorization: "Token " + localStorage.getItem("token"),
-  //     },
-  //   };
-
-  //   axios.post(url, formData, config).then((res) => console.log(res));
-  // };
-
   React.useEffect(() => {
     if (!props.props.open) {
       setCertificateType({ type: "", errorType: "" })
