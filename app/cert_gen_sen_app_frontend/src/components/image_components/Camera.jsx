@@ -102,7 +102,7 @@ export const Camera = (props) => {
 
     return (
         <div>
-            {props.participant.participant_img === "" ? Webcamera : reClick === true ? Webcamera : UploadedImage}
+            {props.participant.participant_img === null ? Webcamera : reClick === true ? Webcamera : UploadedImage}
             {
                 responsePaticipantImage.isLoading ? <CircularProgress /> :
                     <DialogActions sx={{ display: 'flex', justifyContent: 'space-between', marginTop: '10px' }}>
