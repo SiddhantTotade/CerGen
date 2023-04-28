@@ -36,7 +36,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getToken, removeToken } from "../../services/LocalStorageService";
 import { unsetUserInfo, setUserInfo } from "../../features/userSlice";
 import { unsetUserToken } from "../../features/authSlice";
-import UserDetails from "./UserDetails";
+import UserDetails from "../user_components/UserDetails";
 
 const drawerWidth = 240;
 
@@ -302,7 +302,7 @@ export default function MiniDrawer() {
           </Box>
           <BackdropSpinner open={openSpinner} />
         </div>
-        <UserDetails open={userDetails} onClose={handleUserDetailsClose} />
+        <UserDetails user={data} open={userDetails} onClose={handleUserDetailsClose} />
         <Footer />
       </>
     </>

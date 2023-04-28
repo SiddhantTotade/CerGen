@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
-import { setCertificatePath } from "../../services/LocalStorageService";
 import { setCompletionPath } from "../../services/LocalStorageService";
 import { getToken } from "../../services/LocalStorageService";
 import { useGetCompletionCertificateQuery } from "../../services/certificateGeneratorAPI";

@@ -4,6 +4,8 @@ import DialogTitle from "@mui/material/DialogTitle";
 import { Box, Tab } from "@mui/material";
 import PropTypes from "prop-types";
 import { Tabs } from "@mui/material";
+import { UserEmailAndPassword } from "./UserEmail&Password";
+import { SenderEmailAndPassword } from "./SendersEmail&Password";
 
 function TabPanel(props) {
     const { children, value, index, ...other } = props;
@@ -50,13 +52,8 @@ export default function UserDetails(props) {
         <div>
             <Dialog
                 {...props}
-                PaperProps={{
-                    style: {
-                        minWidth: "60%",
-                    },
-                }}
             >
-                <DialogTitle>Templates</DialogTitle>
+                <DialogTitle>Credentials</DialogTitle>
                 <Box sx={{ width: "100%" }}>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
@@ -69,10 +66,10 @@ export default function UserDetails(props) {
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
-                        {/* <ChooseCompletionTemplate /> */}
+                        <UserEmailAndPassword user={props.user} />
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        {/* <ChooseMeritTemplate /> */}
+                        <SenderEmailAndPassword />
                     </TabPanel>
                 </Box>
             </Dialog>
