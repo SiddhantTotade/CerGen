@@ -36,7 +36,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getToken, removeToken } from "../../services/LocalStorageService";
 import { unsetUserInfo, setUserInfo } from "../../features/userSlice";
 import { unsetUserToken } from "../../features/authSlice";
-import LoaderSkeleton from "./LoaderSkeleton";
+import UserDetails from "./UserDetails";
 
 const drawerWidth = 240;
 
@@ -143,6 +143,16 @@ export default function MiniDrawer() {
     justifyContent: "center",
   };
 
+  const [userDetails, setUserDetails] = useState(false)
+
+  const handleUserDetails = () => {
+    setUserDetails(true)
+  }
+
+  const handleUserDetailsClose = () => {
+    setUserDetails(false)
+  }
+
   const handleDrawerOpen = () => {
     setOpen(true);
   };
@@ -205,7 +215,7 @@ export default function MiniDrawer() {
                   CerGen
                 </Typography>
               </Toolbar>
-              <div className="flex absolute items-center top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-5 bg-blue-500 shadow-lg shadow-sky-900 p-4">
+              <div className="flex absolute items-center top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-5 bg-blue-500 shadow-lg shadow-sky-900 p-4" onClick={() => handleUserDetails()}>
                 <PersonIcon sx={{ borderRadius: '20px', boxShadow: '2px 2px 5px #02104f', background: '#0426c9', fontSize: '30px', padding: '5px' }} />
                 <p>{myData.name}</p>
               </div>
@@ -292,6 +302,7 @@ export default function MiniDrawer() {
           </Box>
           <BackdropSpinner open={openSpinner} />
         </div>
+        <UserDetails open={userDetails} onClose={handleUserDetailsClose} />
         <Footer />
       </>
     </>
