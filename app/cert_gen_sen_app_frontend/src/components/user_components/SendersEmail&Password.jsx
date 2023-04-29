@@ -39,6 +39,7 @@ export const SenderEmailAndPassword = (props) => {
 
     const handleCredential = () => {
         senderCredential({ access_token: access_token, credential: credential, phone: handlePhone() })
+        props.onClose()
     }
 
     function handlePhone() {
