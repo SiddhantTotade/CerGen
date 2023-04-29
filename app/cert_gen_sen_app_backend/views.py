@@ -277,12 +277,15 @@ class UploadEachParticipant(APIView):
 # Upload participant image
 class UploadParticipantImage(APIView):
     def patch(self, request, pk):
-        participant_img = request.FILES['participant_image']
-        image = Participant.objects.get(id=pk)
-        image.participant_image = participant_img
-        image.save()
+        try:
+            participant_img = request.FILES['participant_image']
+            image = Participant.objects.get(id=pk)
+            image.participant_image = participant_img
+            image.save()
 
-        return JsonResponse("Image uploaded successfully", safe=False)
+            return JsonResponse("Image uploaded successfully", safe=False)
+        except:
+            return JsonResponse("Failed to uploaded image", safe=False)
 
 
 # Filtering events by slug
@@ -298,9 +301,12 @@ class FilteredEvent(APIView):
         return JsonResponse("0", safe=False)
 
     def delete(self, request, slug):
-        event_by_slug = Event.objects.get(slug=slug)
-        event_by_slug.delete()
-        return JsonResponse("Event deleted successfully", safe=False)
+        try:
+            event_by_slug = Event.objects.get(slug=slug)
+            event_by_slug.delete()
+            return JsonResponse("Event deleted successfully", safe=False)
+        except:
+            return JsonResponse("Failed to delete event", safe=False)
 
 
 # Uploading completion templates
@@ -316,19 +322,22 @@ class UploadCompletionTemplate(APIView):
         return JsonResponse("Failed to get images", safe=False)
 
     def post(self, request):
-        file = request.FILES['pptx_file']
-        contribute = request.data['contribute']
+        try:
+            file = request.FILES['pptx_file']
+            contribute = request.data['contribute']
 
-        if contribute == "true":
-            ContributedCompletionCertificates.objects.create(
-                template=file).save()
-        else:
-            user = request.user.id
-            user_id = User.objects.get(id=user)
-            CompletionCertificateTemplate.objects.create(
-                user=user_id, template=file).save()
+            if contribute == "true":
+                ContributedCompletionCertificates.objects.create(
+                    template=file).save()
+            else:
+                user = request.user.id
+                user_id = User.objects.get(id=user)
+                CompletionCertificateTemplate.objects.create(
+                    user=user_id, template=file).save()
 
-        return JsonResponse("Completion template uploaded successfully", safe=False)
+            return JsonResponse("Completion template uploaded successfully", safe=False)
+        except:
+            return JsonResponse("Failed to uploaded completion template", safe=False)
 
 
 # Uploading merit templates
@@ -344,18 +353,22 @@ class UploadMeritTemplate(APIView):
         return JsonResponse("Failed to get images", safe=False)
 
     def post(self, request):
-        file = request.FILES['pptx_file']
-        contribute = request.data['contribute']
+        try:
+            file = request.FILES['pptx_file']
+            contribute = request.data['contribute']
 
-        if contribute == "true":
-            ContributedMeritCertificates.objects.create(template=file).save()
-        else:
-            user = request.user.id
-            user_id = User.objects.get(id=user)
-            MeritCertificateTemplate.objects.create(
-                user=user_id, template=file).save()
+            if contribute == "true":
+                ContributedMeritCertificates.objects.create(
+                    template=file).save()
+            else:
+                user = request.user.id
+                user_id = User.objects.get(id=user)
+                MeritCertificateTemplate.objects.create(
+                    user=user_id, template=file).save()
 
-        return JsonResponse("Merit template uploaded successfully", safe=False)
+            return JsonResponse("Merit template uploaded successfully", safe=False)
+        except:
+            return JsonResponse("Failed to uploaded completion template", safe=False)
 
 
 # Upload contribute completion templates
@@ -395,12 +408,14 @@ class ParticipantImageAlbum(APIView):
         return JsonResponse("Failed to get images", safe=False)
 
     def post(self, request, slug):
-        album_images = request.FILES.getlist('album_images')
-        event = Event.objects.get(slug=slug)
+        try:
+            album_images = request.FILES.getlist('album_images')
+            event = Event.objects.get(slug=slug)
 
-        for img in album_images:
-            ParticipantAlbum.objects.create(
-                event=event, image_album=img)
+            for img in album_images:
+                ParticipantAlbum.objects.create(
+                    event=event, image_album=img)
 
-        return JsonResponse("Image uploaded successfully", safe=False)
-        # return JsonResponse("Failed to upload image", safe=False)
+            return JsonResponse("Image uploaded successfully", safe=False)
+        except:
+            return JsonResponse("Failed to upload image", safe=False)
