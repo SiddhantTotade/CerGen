@@ -131,17 +131,20 @@ def generate_uid(stu_id, eve_name, eve_dept, eve_date):
 class SenderCredentialView(APIView):
 
     def post(self, request):
-        user_id = request.user.id
-        user = User.objects.get(id=user_id)
+        try:
+            user_id = request.user.id
+            user = User.objects.get(id=user_id)
 
-        if User.objects.filter(id=user_id).exists():
-            SendersCredentials.objects.update(
-                user=user, senders_email=request.data['email'], senders_password=request.data['password'], senders_phone=request.data['phone'])
-        else:
-            SendersCredentials.objects.create(
-                user=user, senders_email=request.data['email'], senders_password=request.data['password'], senders_phone=request.data['phone'])
+            if User.objects.filter(id=user_id).exists():
+                SendersCredentials.objects.update(
+                    user=user, senders_email=request.data['email'], senders_password=request.data['password'], senders_phone=request.data['phone'])
+            else:
+                SendersCredentials.objects.create(
+                    user=user, senders_email=request.data['email'], senders_password=request.data['password'], senders_phone=request.data['phone'])
 
-        return JsonResponse("Senders credential saved successfully", safe=False)
+            return JsonResponse("Sender credentials saved successfully", safe=False)
+        except:
+            return JsonResponse("Failed to save credentials", safe=False)
 
 
 # Getting all events view
@@ -188,60 +191,66 @@ class UploadParticipant(APIView):
         return JsonResponse("No participant data", safe=False)
 
     def post(self, request):
-        event_id = request.data['event_id']
-        participant_file = request.data['participants_file']
+        try:
+            event_id = request.data['event_id']
+            participant_file = request.data['participants_file']
 
-        wb = openpyxl.load_workbook(participant_file)
-        work_sheet = wb['Form Responses 1']
+            wb = openpyxl.load_workbook(participant_file)
+            work_sheet = wb['Form Responses 1']
 
-        excel_data = list()
-        for row in islice(work_sheet.values, 1, work_sheet.max_row):
-            data = OrderedDict()
-            data['id'] = row[0]
-            data['Full_Name'] = row[1]
-            data['Participant_Id'] = row[2]
-            data['Email'] = row[3]
-            data['Phone'] = row[4]
-            data['Certificate_Status'] = row[5]
-            excel_data.append(data)
+            excel_data = list()
+            for row in islice(work_sheet.values, 1, work_sheet.max_row):
+                data = OrderedDict()
+                data['id'] = row[0]
+                data['Full_Name'] = row[1]
+                data['Participant_Id'] = row[2]
+                data['Email'] = row[3]
+                data['Phone'] = row[4]
+                data['Certificate_Status'] = row[5]
+                excel_data.append(data)
 
-        eve_id = Event.objects.filter(id=event_id)
-        event_new_id = Event.objects.get(id=event_id)
+            eve_id = Event.objects.filter(id=event_id)
+            event_new_id = Event.objects.get(id=event_id)
 
-        event_name = ''
-        event_dept = ''
-        event_date = ''
+            event_name = ''
+            event_dept = ''
+            event_date = ''
 
-        for eve in eve_id:
-            event_name = eve.event_name
-            event_dept = eve.event_department
-            event_date = eve.from_date
+            for eve in eve_id:
+                event_name = eve.event_name
+                event_dept = eve.event_department
+                event_date = eve.from_date
 
-        event_name_words = event_name.split()
-        event_name_chars_list = [word[0] for word in event_name_words]
-        event_name_chars_string = "".join(event_name_chars_list)
+            event_name_words = event_name.split()
+            event_name_chars_list = [word[0] for word in event_name_words]
+            event_name_chars_string = "".join(event_name_chars_list)
 
-        for data in excel_data:
-            participant_name = data['Full_Name']
-            participant_id = data['Participant_Id']
-            email = data['Email']
-            phone = data['Phone']
-            if "+91" in str(phone):
+            for data in excel_data:
+                participant_name = data['Full_Name']
+                participant_id = data['Participant_Id']
+                email = data['Email']
                 phone = data['Phone']
-            else:
-                phone = "+91"+str(data['Phone'])
-            certificate_status = data['Certificate_Status']
-            certificate_id = generate_uid(data['Participant_Id'], event_name_chars_string,
-                                          event_dept, event_date)
-            Event.id = Participant.objects.create(
-                event=event_new_id, participant_name=participant_name, participant_id=participant_id, email=email, phone=phone, certificate_status=certificate_status, certificate_id=certificate_id)
+                if "+91" in str(phone):
+                    phone = data['Phone']
+                else:
+                    phone = "+91"+str(data['Phone'])
+                certificate_status = data['Certificate_Status']
+                certificate_id = generate_uid(data['Participant_Id'], event_name_chars_string,
+                                              event_dept, event_date)
+                Event.id = Participant.objects.create(
+                    event=event_new_id, participant_name=participant_name, participant_id=participant_id, email=email, phone=phone, certificate_status=certificate_status, certificate_id=certificate_id)
 
-        return JsonResponse("Participants uploaded successfully", safe=False)
+            return JsonResponse("Participants uploaded successfully", safe=False)
+        except:
+            return JsonResponse("Failed to upload participants", safe=False)
 
     def delete(self, request, pk):
-        participant_by_slug = Participant.objects.get(pk=pk)
-        participant_by_slug.delete()
-        return JsonResponse("Participant deleted successfully", safe=False)
+        try:
+            participant_by_slug = Participant.objects.get(pk=pk)
+            participant_by_slug.delete()
+            return JsonResponse("Participant deleted successfully", safe=False)
+        except:
+            return JsonResponse("Failed to delete participants", safe=False)
 
 
 # Uploading each participant from xlsx file
