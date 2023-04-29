@@ -278,19 +278,17 @@ export default function MiniDrawer() {
               </List>
               <Divider />
               <List>
-                <Link to="/api/logout" onClick={handleLogout}>
-                  <ListItem disablePadding sx={listitem_sx} key="logout">
-                    <ListItemButton sx={listItemButton_sx}>
-                      <ListItemIcon sx={listItemIcon_sx}>
-                        <LogoutIcon />
-                      </ListItemIcon>
-                      <ListItemText
-                        primary="Logout"
-                        sx={{ opacity: open ? 1 : 0 }}
-                      />
-                    </ListItemButton>
-                  </ListItem>
-                </Link>
+                <ListItem onClick={handleLogout} disablePadding sx={listitem_sx} key="logout">
+                  <ListItemButton sx={listItemButton_sx}>
+                    <ListItemIcon sx={listItemIcon_sx}>
+                      <LogoutIcon />
+                    </ListItemIcon>
+                    <ListItemText
+                      primary="Logout"
+                      sx={{ opacity: open ? 1 : 0 }}
+                    />
+                  </ListItemButton>
+                </ListItem>
               </List>
             </Drawer>
             {location.pathname === "/api/home" ? <HomeAnimation /> : ""}

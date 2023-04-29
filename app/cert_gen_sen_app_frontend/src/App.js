@@ -4,6 +4,8 @@ import { AllEvents } from "./pages/AllEvents";
 import SpecificEvent from "./pages/SpecificEvent";
 import LoginPage from "./pages/authentication/Login";
 import RegisterPage from "./pages/authentication/Register";
+import ResetPasswordEmail from "./pages/authentication/ResetPasswordEmail";
+import ResetPassword from "./pages/authentication/ResetPassword";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 // import PrivateRoutes from "./PrivateRoutes";
 import { Navigate } from "react-router-dom";
@@ -45,6 +47,8 @@ function App() {
 
         <Route path="/api/all-events" element={<AllEvents />} />
         <Route path="/api/event/:slug" element={<SpecificEvent />} />
+        <Route path="/reset-password-email" element={<ResetPasswordEmail />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route path="*" element={<h1>Error 404. Page not found.</h1>} />
 
