@@ -14,7 +14,7 @@ urlpatterns = [
     path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(),
          name='reset_password'),
 
-    path('sender-credential', SenderCredentialView.as_view()),
+    path('sender-credential/', SenderCredentialView.as_view()),
     path("all-events/", EventsOperations.as_view()),
     path("all-events/<int:pk>", EventsOperations.as_view()),
     path("event/<slug:slug>", FilteredEvent.as_view()),
