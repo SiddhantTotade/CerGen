@@ -40,13 +40,14 @@ export const userAuthAPI = createApi({
       },
     }),
     changeUserPassword: builder.mutation({
-      query: ({ data }) => {
+      query: (data) => {
+        const formData = new FormData();
+        formData.append("password", data.password.new_password);
+        formData.append("password2", data.password.confirm_new_password);
         return {
           url: "change-password/",
           method: "POST",
-          body: {
-            data
-          },
+          body: formData,
           headers: {
             authorization: `Bearer ${data.access_token}`,
           },

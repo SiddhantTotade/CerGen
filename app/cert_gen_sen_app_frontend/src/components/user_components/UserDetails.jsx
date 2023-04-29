@@ -66,10 +66,10 @@ export default function UserDetails(props) {
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
-                        <UserEmailAndPassword user={props.user} />
+                        <UserEmailAndPassword user={props.user} onClose={props.onClose} />
                     </TabPanel>
                     <TabPanel value={value} index={1}>
-                        <SenderEmailAndPassword />
+                        <SenderEmailAndPassword onClose={props.onClose} />
                     </TabPanel>
                 </Box>
             </Dialog>

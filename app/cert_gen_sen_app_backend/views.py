@@ -84,7 +84,7 @@ class UserChangePasswordView(APIView):
             data=request.data, context={'user': request.user})
 
         serializer.is_valid(raise_exception=True)
-        return Response({'msg': 'Password changed successfully'}, status=status.HTTP_200_OK)
+        return Response({'data': 'Password changed successfully'}, status=status.HTTP_200_OK)
 
 
 # User send password-reset link view
