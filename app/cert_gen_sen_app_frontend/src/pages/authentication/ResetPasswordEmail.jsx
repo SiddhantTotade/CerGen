@@ -34,7 +34,7 @@ const ResetPasswordEmail = () => {
     return (
         <>
             <NavBar />
-            <Box component='form' id='login-form' noValidate onSubmit={handlePasswordResetEmail}>
+            <Box component='form' id="password-reset-form" noValidate onSubmit={handlePasswordResetEmail}>
                 <Container maxWidth="sm" sx={{ transform: "translate(0%,50%)", boxShadow: '10px 12px 20px gray', borderRadius: '5px', padding: 2 }}>
                     <Typography variant="h4" align="center" gutterBottom>Password Reset Email</Typography>
                     <TextField
@@ -44,6 +44,7 @@ const ResetPasswordEmail = () => {
                         margin="normal"
                         variant="outlined"
                         type='email'
+                        id='email'
                         name='email'
                     />
                     {error.email ? <Typography>{error.email[0]}</Typography> : ""}
@@ -62,6 +63,9 @@ const ResetPasswordEmail = () => {
                     <Box marginTop={2}>
                         {
                             error.non_fields_errors ? <Alert severity='error'>{error.non_fields_errors}</Alert> : ""
+                        }
+                        {
+                            successMsg.msg ? <Alert severity='success'>{successMsg.msg}</Alert> : ""
                         }
                     </Box>
                 </Container>

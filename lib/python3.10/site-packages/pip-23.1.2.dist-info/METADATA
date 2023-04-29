@@ -1,6 +1,6 @@
 Metadata-Version: 2.1
 Name: pip
-Version: 23.0.1
+Version: 23.1.2
 Summary: The PyPA recommended tool for installing Python packages.
 Home-page: https://pip.pypa.io/
 Author: The pip developers
@@ -25,6 +25,7 @@ Classifier: Programming Language :: Python :: Implementation :: CPython
 Classifier: Programming Language :: Python :: Implementation :: PyPy
 Requires-Python: >=3.7
 License-File: LICENSE.txt
+License-File: AUTHORS.txt
 
 pip - The Python Package Installer
 ==================================

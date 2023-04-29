@@ -7,9 +7,11 @@ from rest_framework import serializers
 from xml.dom import ValidationErr
 from .models import *
 from .renderers import *
-
+from .utils import *
 
 # User registration serializer
+
+
 class UserRegistrationSerializer(serializers.ModelSerializer):
     password2 = serializers.CharField(
         style={'input_type': 'password'}, write_only=True
@@ -86,7 +88,7 @@ class UserSendPasswordResetEmailSerializer(serializers.Serializer):
     def validate(self, attrs):
         email = attrs.get('email')
 
-        if User.object.filter(email=email).exists():
+        if User.objects.filter(email=email).exists():
             user = User.objects.get(email=email)
             uid = urlsafe_base64_encode(force_bytes(user.id))
             token = PasswordResetTokenGenerator().make_token(user)
@@ -97,6 +99,7 @@ class UserSendPasswordResetEmailSerializer(serializers.Serializer):
                 'email_body': body,
                 'to_email': user.email
             }
+            Util.send_email(data)
             return attrs
         else:
             raise serializers.ValidationError("You are not a registered admin")

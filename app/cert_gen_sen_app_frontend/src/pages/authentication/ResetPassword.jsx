@@ -57,6 +57,9 @@ const ResetPassword = () => {
                         {
                             error.non_fields_errors ? <Alert severity='error'>{error.non_fields_errors}</Alert> : ""
                         }
+                        {
+                            successMsg.msg ? <Alert severity='success'>{successMsg.msg}</Alert> : ""
+                        }
                     </Box>
                 </Container>
             </Box>
