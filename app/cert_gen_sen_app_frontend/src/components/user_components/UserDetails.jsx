@@ -54,7 +54,7 @@ export default function UserDetails(props) {
                 {...props}
             >
                 <DialogTitle>Credentials</DialogTitle>
-                <Box sx={{ width: "100%" }}>
+                <Box>
                     <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
                         <Tabs
                             value={value}
