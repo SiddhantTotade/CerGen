@@ -48,7 +48,7 @@ function App() {
         <Route path="/api/all-events" element={<AllEvents />} />
         <Route path="/api/event/:slug" element={<SpecificEvent />} />
         <Route path="/reset-password-email" element={<ResetPasswordEmail />} />
-        <Route path="/reset-password" element={<ResetPassword />} />
+        <Route path="/api/user/reset-password/:id/:token" element={<ResetPassword />} />
 
         <Route path="*" element={<h1>Error 404. Page not found.</h1>} />
 
