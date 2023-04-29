@@ -78,6 +78,18 @@ export const userAuthAPI = createApi({
         };
       },
     }),
+    senderCredential: builder.mutation({
+      query: (data) => {
+        return {
+          url: "sender-credential",
+          method: "POST",
+          body: "",
+          headers: {
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -88,4 +100,5 @@ export const {
   useChangeUserPasswordMutation,
   useSendPasswordResetEmailMutation,
   useResetPasswordMutation,
+  useSenderCredentialMutation,
 } = userAuthAPI;

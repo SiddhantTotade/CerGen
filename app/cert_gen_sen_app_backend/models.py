@@ -85,6 +85,13 @@ class User(AbstractBaseUser):
         return self.is_admin
 
 
+class SendersCredentials(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    senders_email = models.EmailField(null=True, blank=True)
+    senders_password = models.CharField(max_length=255, null=True, blank=True)
+    senders_phone = models.CharField(max_length=13, null=True, blank=True)
+
+
 class Event(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)

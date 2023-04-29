@@ -128,6 +128,17 @@ def generate_uid(stu_id, eve_name, eve_dept, eve_date):
     return certificate_id
 
 
+class SenderCredentialView(APIView):
+    def put(self, request):
+        user = User.objects.get(id=request.user)
+        credential_serializer = SenderCredentialSerializer(data=request.data)
+
+        if credential_serializer.is_valid():
+            credential_serializer.save()
+            return JsonResponse("Senders credential saved successfully", safe=False)
+        return JsonResponse("Failed to save senders credential", safe=False)
+
+
 # Getting all events view
 class EventsOperations(APIView):
     renderer_classes = [UserRenderer]

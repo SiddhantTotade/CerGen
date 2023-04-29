@@ -140,6 +140,13 @@ class UserPasswordResetSerializer(serializers.Serializer):
             raise ValidationErr("Token is not valid")
 
 
+# Sender credential serializer
+class SenderCredentialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SendersCredentials
+        fields = '__all__'
+
+
 # Event serializer
 class EventSerializer(serializers.ModelSerializer):
     class Meta:

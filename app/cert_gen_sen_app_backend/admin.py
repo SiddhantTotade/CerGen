@@ -27,6 +27,7 @@ class UserAdmin(BaseUserAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(SendersCredentials)
 admin.site.register(Event)
 admin.site.register(Participant)
 admin.site.register(EventFile)
