@@ -129,13 +129,16 @@ def generate_uid(stu_id, eve_name, eve_dept, eve_date):
 
 
 class SenderCredentialView(APIView):
-    def put(self, request):
+    def post(self, request):
+        print("Hello")
         user = User.objects.get(id=request.user)
-        credential_serializer = SenderCredentialSerializer(data=request.data)
+        # credential_serializer = SenderCredentialSerializer(data=request.data)
 
-        if credential_serializer.is_valid():
-            credential_serializer.save()
-            return JsonResponse("Senders credential saved successfully", safe=False)
+        # print(user)
+
+        # if credential_serializer.is_valid():
+        #     credential_serializer.save()
+        #     return JsonResponse("Senders credential saved successfully", safe=False)
         return JsonResponse("Failed to save senders credential", safe=False)
 
 

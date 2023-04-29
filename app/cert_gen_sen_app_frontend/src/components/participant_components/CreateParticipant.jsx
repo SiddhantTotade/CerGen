@@ -73,7 +73,6 @@ export default function CreateParticipant(props) {
     return certificateId.replace(/-/g, "");
   }
 
-
   const onSubmit = () => {
     createParticipant({ access_token: access_token, participant_data: participantData, event: data[0].id, phone: handlePhone(), certificate_id: generateCertificateId(participantData.participant_id, data[0].event_name, data[0].event_department, data[0].from_date) })
     setParticipantData({ event: "", student_name: "", student_id: "", email: "", phone: "", certificate_status: "", certificate_id: "" })

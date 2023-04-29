@@ -80,10 +80,14 @@ export const userAuthAPI = createApi({
     }),
     senderCredential: builder.mutation({
       query: (data) => {
+        const formData = new FormData();
+        formData.append("email", data.credential.email);
+        formData.append("password", data.credential.password);
+        formData.append("phone", data.phone);
         return {
-          url: "sender-credential",
+          url: "sender-credential/",
           method: "POST",
-          body: "",
+          body: formData,
           headers: {
             authorization: `Bearer ${data.access_token}`,
           },
