@@ -20,7 +20,7 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
-
+# Sending message to participant
 def send_message(participant_name, phone, senders_phone):
     account_sid = config("TWILIO_SID")
     auth_token = config("TWILIO_AUTH_TOKEN")
