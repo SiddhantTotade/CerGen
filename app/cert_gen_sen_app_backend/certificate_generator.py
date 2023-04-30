@@ -21,21 +21,22 @@ from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 
 
-def send_message(participant_name, phone):
+def send_message(participant_name, phone, senders_phone):
     account_sid = config("TWILIO_SID")
     auth_token = config("TWILIO_AUTH_TOKEN")
     client = Client(account_sid, auth_token)
     client.messages.create(
         body=f"Dear {participant_name}, thankyou for participating in the event/contest. Your certificate will be delivered to you via e-mail. Check your email.",
         from_="+15855951968",
+        # from_=senders_phone,
         to=phone
     )
     return "SENT"
 
 
-def send_mail(subject, body, email_to, certificate_file):
-    email_from = settings.EMAIL_HOST_USER
-    password = settings.EMAIL_HOST_PASSWORD
+def send_mail(subject, body, email_to, certificate_file, senders_email, senders_password):
+    email_from = senders_email
+    password = senders_password
     try:
         message = MIMEMultipart()
         message['From'] = email_from
@@ -210,6 +211,13 @@ class GenerateCertificate(APIView):
         completion_certificate_path = request.data['completion']
         merit_certificate_path = request.data['merit']
 
+        senders_email = SendersCredentials.objects.filter(
+            user=request.user.id).values('senders_email').first()['senders_email']
+        senders_password = SendersCredentials.objects.filter(
+            user=request.user.id).values('senders_password').first()['senders_password']
+        senders_phone = SendersCredentials.objects.filter(
+            user=request.user.id).values('senders_phone').first()['senders_phone']
+
         stu_data = []
         eve_data = OrderedDict()
 
@@ -241,9 +249,10 @@ class GenerateCertificate(APIView):
                     stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                 certificate_path = generate_participant_certificate(
                     stu["participant_name"], stu["certificate_id"], qrcode_path, completion_certificate_path)
-                send_message(stu["participant_name"], stu["phone"])
+                send_message(stu["participant_name"],
+                             stu["phone"], senders_phone)
                 send_certificate = send_mail("Certificate of Participation",
-                                             "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
+                                             "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
 
                 if send_certificate == "SENT":
                     Participant.objects.filter(
@@ -261,6 +270,13 @@ class GenerateCertificateById(APIView):
 
         stu_data = OrderedDict()
         eve_data = OrderedDict()
+
+        senders_email = SendersCredentials.objects.filter(
+            user=request.user.id).values('senders_email').first()['senders_email']
+        senders_password = SendersCredentials.objects.filter(
+            user=request.user.id).values('senders_password').first()['senders_password']
+        senders_phone = SendersCredentials.objects.filter(
+            user=request.user.id).values('senders_phone').first()['senders_phone']
 
         completion_certificate_path = request.data['completion']
         merit_certificate_path = request.data['merit']
@@ -288,9 +304,10 @@ class GenerateCertificateById(APIView):
                 stu_data["participant_name"], stu_data["participant_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
             certificate_path = generate_participant_certificate(
                 stu_data["participant_name"], stu_data["certificate_id"], qrcode_path, completion_certificate_path)
-            send_message(stu_data["participant_name"], stu_data["phone"])
+            send_message(stu_data["participant_name"],
+                         stu_data["phone"], senders_phone)
             send_certificate = send_mail("Certificate of Participation",
-                                         "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path)
+                                         "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path, senders_email, senders_password)
 
             if send_certificate == "SENT":
                 Participant.objects.filter(
