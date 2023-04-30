@@ -109,6 +109,8 @@ export default function SpecificEvent() {
 
   const [generateCertificateByIdForm, setGenerateCertificateByIdForm] = useState(false)
 
+  let eligibleForDownload = 0
+
   React.useEffect(() => {
     if (!eventData.isLoading) {
       setSpecificEventDetails(eventData.data[0])
@@ -185,16 +187,6 @@ export default function SpecificEvent() {
   ) => {
     setUpdateForm(true);
     setParticipantsDetails({ id: id, event: event, participant_name: participant_name, participant_id: participant_id, email: email, phone: phone, certificate_status: certificate_status, certificate_id: certificate_id, certificate_sent_status: certificate_sent_status, participant_img: participant_img })
-    // participantDetails.id = id;
-    // participantDetails.event = event;
-    // participantDetails.participant_name = participant_name;
-    // participantDetails.participant_id = participant_id;
-    // participantDetails.email = email;
-    // participantDetails.phone = phone;
-    // participantDetails.certificate_status = certificate_status;
-    // participantDetails.certificate_id = certificate_id;
-    // participantDetails.certificate_sent_status = certificate_sent_status;
-    // participantDetails.participant_img = participant_img;
   };
 
   const handleUpdateFormClose = () => {
@@ -209,6 +201,20 @@ export default function SpecificEvent() {
   const handleDeleteFormClose = () => {
     setDeleteForm(false);
   };
+
+  const checkDownloadCertificate = () => {
+    for (let index = 0; index < data.length; index++) {
+      if (data[index]['certificate_status'] === "F") {
+        eligibleForDownload = 1
+        return
+      }
+      else {
+        eligibleForDownload = 0
+      }
+    }
+
+    return eligibleForDownload
+  }
 
   return (
     <div className="flex justify-center items-center">
@@ -257,6 +263,16 @@ export default function SpecificEvent() {
           >
             Issue and Send Certificate
           </Button>
+          {
+            checkDownloadCertificate() === 0 ?
+              <Button
+                variant="contained"
+                sx={createBtns}
+                onClick={handleGenerateCertificateForm}
+              >
+                Issue and Download Certificate
+              </Button> : ""
+          }
           <Button
             variant="contained"
             sx={createBtns}
