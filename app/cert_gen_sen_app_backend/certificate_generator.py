@@ -34,6 +34,7 @@ def send_message(participant_name, phone, senders_phone):
     return "SENT"
 
 
+# Sending mail to participant
 def send_mail(subject, body, email_to, certificate_file, senders_email, senders_password):
     email_from = senders_email
     password = senders_password
