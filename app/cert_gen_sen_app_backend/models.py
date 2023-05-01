@@ -102,6 +102,10 @@ class Event(models.Model):
     to_date = models.DateField()
     event_year = models.IntegerField(blank=True, null=True)
     slug = models.SlugField(null=True, blank=True)
+    certificates_file = models.FileField(
+        upload_to='pdf-certificates-files', default="")
+    certificate_file_name = models.CharField(
+        max_length=255, null=True, blank=True)
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.event_name) + generate_random_string()

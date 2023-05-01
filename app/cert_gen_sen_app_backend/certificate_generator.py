@@ -33,6 +33,9 @@ def pdf_certificate_merger(pdf_list, event_slug):
         f'./cert_gen_sen_app_backend/certificate_data/merged-certificates/Certificates - {event_slug}.pdf')
     merger.close()
 
+    Event.objects.update(
+        certificates_file=f'./cert_gen_sen_app_backend/certificate_data/merged-certificates/Certificates - {event_slug}.pdf', certificate_file_name=f'Certificates - {event_slug}.pdf')
+
 
 # Sending message to participant
 def send_message(participant_name, phone, senders_phone):
