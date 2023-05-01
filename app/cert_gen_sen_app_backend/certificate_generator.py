@@ -23,13 +23,14 @@ from pypdf import PdfMerger
 
 
 # PDF merger
-def pdf_merger(pdf_list):
+def pdf_certificate_merger(pdf_list, event_slug):
     merger = PdfMerger()
 
     for pdf in pdf_list:
         merger.append(pdf)
 
-    merger.write('Result.pdf')
+    merger.write(
+        f'./cert_gen_sen_app_backend/certificate_data/merged-certificates/Certificates - {event_slug}.pdf')
     merger.close()
 
 
@@ -219,66 +220,70 @@ def generate_merit_certificate(stu_name, cert_id, rank, qrcode_path, merit_certi
 class GenerateCertificate(APIView):
     def post(self, request, slug):
         try:
-            pdf_list = [
-                '/certificate_data/participants-certificates/MU19BTCSE005ET2CSE202304014137 - Prakash Mandal.pdf',
-                '/certificate_data/participants-certificates/MU19BTCSE006ET2CSE202304011584 - Siddhant Totade.pdf',
-                '/certificate_data/participants-certificates/MU19BTCSE006ET2CSE202304014205 - Siddhant Totade.pdf',
-            ]
+            obj_event = Event.objects.get(slug=slug)
+            event = Event.objects.filter(slug=slug)
+            participants = Participant.objects.filter(event=obj_event)
 
-            pdf_merger(pdf_list)
-            # obj_event = Event.objects.get(slug=slug)
-            # event = Event.objects.filter(slug=slug)
-            # participants = Participant.objects.filter(event=obj_event)
+            completion_certificate_path = request.data['completion']
+            merit_certificate_path = request.data['merit']
 
-            # completion_certificate_path = request.data['completion']
-            # merit_certificate_path = request.data['merit']
+            senders_email = SendersCredentials.objects.filter(
+                user=request.user.id).values('senders_email').first()['senders_email']
+            senders_password = SendersCredentials.objects.filter(
+                user=request.user.id).values('senders_password').first()['senders_password']
+            senders_phone = SendersCredentials.objects.filter(
+                user=request.user.id).values('senders_phone').first()['senders_phone']
 
-            # senders_email = SendersCredentials.objects.filter(
-            #     user=request.user.id).values('senders_email').first()['senders_email']
-            # senders_password = SendersCredentials.objects.filter(
-            #     user=request.user.id).values('senders_password').first()['senders_password']
-            # senders_phone = SendersCredentials.objects.filter(
-            #     user=request.user.id).values('senders_phone').first()['senders_phone']
+            stu_data = []
+            eve_data = OrderedDict()
 
-            # stu_data = []
-            # eve_data = OrderedDict()
+            merge_certificate_path = []
 
-            # for stu in participants:
-            #     if stu.certificate_sent_status == False:
-            #         if stu.certificate_status == 'T' or stu.certificate_status == '1' or stu.certificate_status == '2' or stu.certificate_status == '3':
-            #             stu_data.append(dict(id=stu.id, participant_name=stu.participant_name, participant_id=stu.participant_id, email=stu.email, phone=stu.phone,
-            #                                  certificate_status=stu.certificate_status, certificate_id=stu.certificate_id))
+            for stu in participants:
+                if stu.certificate_sent_status == False:
+                    if stu.certificate_status == 'T' or stu.certificate_status == '1' or stu.certificate_status == '2' or stu.certificate_status == '3':
+                        stu_data.append(dict(id=stu.id, participant_name=stu.participant_name, participant_id=stu.participant_id, email=stu.email, phone=stu.phone,
+                                             certificate_status=stu.certificate_status, certificate_id=stu.certificate_id))
 
-            # for eve in event:
-            #     eve_data['event_name'] = eve.event_name
-            #     eve_data['event_department'] = eve.event_department
-            #     eve_data['from_date'] = eve.from_date.strftime('%d-%m-%Y')
+            for eve in event:
+                eve_data['event_name'] = eve.event_name
+                eve_data['event_department'] = eve.event_department
+                eve_data['from_date'] = eve.from_date.strftime('%d-%m-%Y')
+                eve_data['slug'] = eve.slug
 
-            # for stu in stu_data:
-            #     if stu['certificate_status'] == "1" or stu['certificate_status'] == "2" or stu['certificate_status'] == "3":
-            #         qrcode_path = generate_qrcode(
-            #             stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
-            #         certificate_path = generate_merit_certificate(
-            #             stu['participant_name'], stu['certificate_id'], stu['certificate_status'], qrcode_path, merit_certificate_path)
-            #         send_certificate = send_mail("Certificate of Participation",
-            #                                      "Thank you for participanting in the Event/Contest", stu["email"], certificate_path)
+            for stu in stu_data:
+                if stu['certificate_status'] == "1" or stu['certificate_status'] == "2" or stu['certificate_status'] == "3":
+                    qrcode_path = generate_qrcode(
+                        stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+                    certificate_path = generate_merit_certificate(
+                        stu['participant_name'], stu['certificate_id'], stu['certificate_status'], qrcode_path, merit_certificate_path)
+                    send_message(stu["participant_name"],
+                                 stu["phone"], senders_phone)
+                    send_certificate = send_mail("Certificate of Participation",
+                                                 "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
 
-            #         if send_certificate == "SENT":
-            #             Participant.objects.filter(
-            #                 id=stu['id']).update(certificate_sent_status=True)
-            #     else:
-            #         qrcode_path = generate_qrcode(
-            #             stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
-            #         certificate_path = generate_participant_certificate(
-            #             stu["participant_name"], stu["certificate_id"], qrcode_path, completion_certificate_path)
-            #         send_message(stu["participant_name"],
-            #                      stu["phone"], senders_phone)
-            #         send_certificate = send_mail("Certificate of Participation",
-            #                                      "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
+                    if send_certificate == "SENT":
+                        Participant.objects.filter(
+                            id=stu['id']).update(certificate_sent_status=True)
 
-            #         if send_certificate == "SENT":
-            #             Participant.objects.filter(
-            #                 id=stu['id']).update(certificate_sent_status=True)
+                    merge_certificate_path.append(certificate_path)
+                else:
+                    qrcode_path = generate_qrcode(
+                        stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
+                    certificate_path = generate_participant_certificate(
+                        stu["participant_name"], stu["certificate_id"], qrcode_path, completion_certificate_path)
+                    send_message(stu["participant_name"],
+                                 stu["phone"], senders_phone)
+                    send_certificate = send_mail("Certificate of Participation",
+                                                 "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
+
+                    if send_certificate == "SENT":
+                        Participant.objects.filter(
+                            id=stu['id']).update(certificate_sent_status=True)
+
+                    merge_certificate_path.append(certificate_path)
+
+            pdf_certificate_merger(merge_certificate_path, eve_data["slug"])
 
             return JsonResponse("Certificate generated and sended successfully", safe=False)
         except:
