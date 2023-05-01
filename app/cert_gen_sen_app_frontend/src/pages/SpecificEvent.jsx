@@ -32,6 +32,8 @@ import LoaderSkeleton from "../components/base_components/LoaderSkeleton";
 import { getToken } from "../services/LocalStorageService";
 import { useGetParticipantsQuery } from "../services/participantsAPI";
 import { useSpecificEventDetailQuery } from "../services/eventsAPI";
+import DownloadIcon from '@mui/icons-material/Download';
+import axios from "axios";
 
 const createBtns = {
   marginBottom: "10px",
@@ -203,21 +205,44 @@ export default function SpecificEvent() {
   };
 
   const checkDownloadCertificate = () => {
-    for (let index = 0; index < data.length; index++) {
-      if (data[index]['certificate_status'] === "F") {
-        eligibleForDownload = 1
-        return
-      }
-      else {
-        eligibleForDownload = 0
-      }
+    if (eventData.data[0]['certificates_file'] === null) {
+      return 0
     }
+    else {
+      return 1
+    }
+  }
 
-    return eligibleForDownload
+  const forceDownload = (file, file_name) => {
+    const url = window.URL.createObjectURL(new Blob([file.data]))
+    const link = document.createElement("a")
+    link.href = url
+    link.setAttribute('download', file_name)
+    document.body.appendChild(link)
+    link.click()
+    document.body.removeChild(link)
+  }
+
+  const downloadCertificate = (file_url, file_name) => {
+    const fileUrl = 'http://127.0.0.1:8000' + file_url
+
+    axios({
+      method: "GET",
+      url: fileUrl,
+      responseType: 'arraybuffer'
+    }).then((res) => {
+      forceDownload(res, file_name)
+    }).catch((err) => console.log(err))
   }
 
   return (
     <div className="flex justify-center items-center">
+      {
+        checkDownloadCertificate ?
+          <Box sx={{ position: 'absolute', zIndex: '15000', marginRight: '1400px', marginTop: '-300px' }}>
+            <Tooltip title="Download Certificate"><Button variant="contained" sx={{ borderRadius: '100px' }} onClick={() => downloadCertificate(eventData.data[0]['certificates_file'], eventData.data[0]['certificate_file_name'])} ><DownloadIcon /></Button></Tooltip>
+          </Box> : ""
+      }
       <Sidebar />
       <div className="w-3/4 mt-24">
         <Box sx={{
@@ -263,16 +288,6 @@ export default function SpecificEvent() {
           >
             Issue and Send Certificate
           </Button>
-          {
-            checkDownloadCertificate() === 0 ?
-              <Button
-                variant="contained"
-                sx={createBtns}
-                onClick={handleGenerateCertificateForm}
-              >
-                Issue and Download Certificate
-              </Button> : ""
-          }
           <Button
             variant="contained"
             sx={createBtns}

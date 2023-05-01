@@ -34,7 +34,7 @@ def pdf_certificate_merger(pdf_list, event_slug):
     merger.close()
 
     Event.objects.update(
-        certificates_file=f'./cert_gen_sen_app_backend/certificate_data/merged-certificates/Certificates - {event_slug}.pdf', certificate_file_name=f'Certificates - {event_slug}.pdf')
+        certificates_file=f'pdf-certificates-files/Certificates - {event_slug}.pdf', certificate_file_name=f'Certificates - {event_slug}.pdf')
 
 
 # Sending message to participant
@@ -275,14 +275,14 @@ class GenerateCertificate(APIView):
                         stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                     certificate_path = generate_participant_certificate(
                         stu["participant_name"], stu["certificate_id"], qrcode_path, completion_certificate_path)
-                    send_message(stu["participant_name"],
-                                 stu["phone"], senders_phone)
-                    send_certificate = send_mail("Certificate of Participation",
-                                                 "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
+                    # send_message(stu["participant_name"],
+                    #              stu["phone"], senders_phone)
+                    # send_certificate = send_mail("Certificate of Participation",
+                    #                              "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
 
-                    if send_certificate == "SENT":
-                        Participant.objects.filter(
-                            id=stu['id']).update(certificate_sent_status=True)
+                    # if send_certificate == "SENT":
+                    #     Participant.objects.filter(
+                    #         id=stu['id']).update(certificate_sent_status=True)
 
                     merge_certificate_path.append(certificate_path)
 
