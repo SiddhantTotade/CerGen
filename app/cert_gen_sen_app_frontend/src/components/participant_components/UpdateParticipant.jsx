@@ -53,14 +53,8 @@ export default function UpdateParticipant(props) {
   })
 
   React.useEffect(() => {
-    setParticipantData({ id: props.participant.id, participant_name: props.participant.participant_name, participant_id: props.participant.participant_id, email: props.participant.email, phone: props.participant.phone, certificate_status: props.participant.certificate_status, certificate_id: props.participant.certificate_id, certificate_sent_status: props.participant.certificate_sent_status, participant_img: props.participant.participant_img })
+    setParticipantData({ id: props.participant.id, event: props.participant.event, participant_name: props.participant.participant_name, participant_id: props.participant.participant_id, email: props.participant.email, phone: props.participant.phone, certificate_status: props.participant.certificate_status, certificate_id: props.participant.certificate_id, certificate_sent_status: props.participant.certificate_sent_status, participant_img: props.participant.participant_img })
   }, [props.participant])
-
-  // React.useEffect(() => {
-  //   if (!props.open) {
-  //     setParticipantData("")
-  //   }
-  // }, [props.open])
 
   function generateCertificateId(
     participant_id,
