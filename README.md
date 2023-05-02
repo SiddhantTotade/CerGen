@@ -1,4 +1,17 @@
 # Certificate Generator and Sender
+
+## About the project
+CerGen is a web application which generates the certificates for the participants and send it to their corrosponding email. This application has the ability of generating the certificates of the participants who are participated in the event/contest. Also this application sends text message to the participants on their corrosponding phone number. This applicaion sends the certificate of participantion and certification of merit at the same time.
+
+## Features of the project
++ Filter eligible participants.
++ Choose templates for the certificate of participation/merit.
++ Upload image of the participant receiving certificate.
++ Upload images of the event album.
++ Sends certificate to the individual participant.
++ Downloads the certificate of all generated certificates.
+
+
 ## Getting Started
 
 #### First - Running Django Server
