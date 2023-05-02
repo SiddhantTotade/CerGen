@@ -24,7 +24,6 @@ CerGen is a web application which generates the certificates for the participant
 + Change directory to 'app'. `cd app`.
 + Run the django serever. `python manage.py runserver`.
 + Change directory to cert_generator_sender_project. `cd cert_generator_sender_project`
-+ Open settings.py and enter your email in EMAIL_HOST_USER and password in EMAIL_HOST_PASSWORD. ( Do not put your actual email's password instead of that use email App Password )
 
 #### Second - Running React Server
 + Now, we have to run the frontend server in react. For that follow the below steps.
