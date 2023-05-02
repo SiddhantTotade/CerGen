@@ -24,7 +24,6 @@ import PersonIcon from "@mui/icons-material/Person";
 import EventForm from "../event_components/EventForm";
 import FileForm from "../event_components/FileForm";
 import FileUploadIcon from "@mui/icons-material/FileUpload";
-import BackdropSpinner from "./Backdrop";
 import { useState } from "react";
 import Footer from "./Footer";
 import HomeAnimation from "../../pages/HomeAnimation";
@@ -118,8 +117,6 @@ export default function MiniDrawer() {
   const theme = useTheme();
 
   const [open, setOpen] = React.useState(false);
-
-  const [openSpinner, setOpenSpinner] = useState(false);
 
   const navigate = useNavigate()
 
@@ -298,7 +295,6 @@ export default function MiniDrawer() {
             <EventForm open={form} onClose={handleFormClose} />
             <FileForm open={file_form} onClose={handleFileFormClose} />
           </Box>
-          <BackdropSpinner open={openSpinner} />
         </div>
         <UserDetails user={data} open={userDetails} onClose={handleUserDetailsClose} />
         <Footer />

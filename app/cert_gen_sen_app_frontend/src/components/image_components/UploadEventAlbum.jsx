@@ -61,20 +61,6 @@ export const UploadEventAlbum = (props) => {
         else {
             eventAlbum({ access_token: access_token, album: images, event_slug: props.event_slug })
         }
-        // const url = 'http://127.0.0.1:8000/api/upload-event-album/' + props.event_slug
-
-        // let formData = new FormData();
-        // formData.append('event', props.event_slug)
-        // images.forEach((img) => formData.append('album_images', img))
-
-        // let config = {
-        //     headers: {
-        //         "content-type": "multipart/form-data",
-        //         Authorization: "Token " + localStorage.getItem("token"),
-        //     },
-        // };
-
-        // await axios.post(url, formData, config).then((res) => console.log(res));
     };
 
     function handleCloseSnackbar() {

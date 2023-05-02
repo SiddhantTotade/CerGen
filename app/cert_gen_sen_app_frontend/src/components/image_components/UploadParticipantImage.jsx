@@ -54,7 +54,6 @@ export const UploadParticipantImage = (props) => {
         }
         else {
             uploadParticipantImage({ access_token: access_token, imgSrc: selectedFile, id: props.participant.id })
-            // props.onClose()
         }
     };
 

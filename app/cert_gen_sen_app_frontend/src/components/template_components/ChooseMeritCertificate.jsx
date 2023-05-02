@@ -3,7 +3,6 @@ import { DialogActions, Button, Paper, Grid, Typography } from "@mui/material";
 import { getToken } from "../../services/LocalStorageService";
 import { useGetMeritCertificateQuery } from "../../services/certificateGeneratorAPI";
 import { useGetContributeMeritCertificateQuery } from "../../services/certificateGeneratorAPI";
-import { setCertificatePath } from "../../services/LocalStorageService";
 import { setMeritPath } from "../../services/LocalStorageService";
 import AlertBar from "../base_components/AlertBar";
 import LoaderSkeleton from "../base_components/LoaderSkeleton";

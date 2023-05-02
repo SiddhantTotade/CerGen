@@ -7,7 +7,6 @@ import RegisterPage from "./pages/authentication/Register";
 import ResetPasswordEmail from "./pages/authentication/ResetPasswordEmail";
 import ResetPassword from "./pages/authentication/ResetPassword";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-// import PrivateRoutes from "./PrivateRoutes";
 import { Navigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import Layout from "./pages/Layout";
@@ -48,19 +47,12 @@ function App() {
         <Route path="/api/all-events" element={<AllEvents />} />
         <Route path="/api/event/:slug" element={<SpecificEvent />} />
         <Route path="/reset-password-email" element={<ResetPasswordEmail />} />
-        <Route path="/api/user/reset-password/:id/:token" element={<ResetPassword />} />
+        <Route
+          path="/api/user/reset-password/:id/:token"
+          element={<ResetPassword />}
+        />
 
         <Route path="*" element={<h1>Error 404. Page not found.</h1>} />
-
-        {/* <Route element={<PrivateRoutes />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/api/all-events" element={<AllEvents />} />
-          <Route path="/api/event/:slug" element={<SpecificEvent />} />
-          <Route path="/api/create-event/" element={<Home />} />
-          <Route path="/api/issue-certificate/" element={<Home />} />
-        </Route>
-        <Route path="/api/login" element={<LoginPage />} />
-        <Route path="/api/register" element={<RegisterPage />} /> */}
       </Routes>
     </Router>
   );
