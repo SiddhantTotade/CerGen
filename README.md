@@ -23,7 +23,6 @@ CerGen is a web application which generates the certificates for the participant
 + Open the project in a terminal and type `source bin/activate`. This will enables the virual environment.
 + Change directory to 'app'. `cd app`.
 + Run the django serever. `python manage.py runserver`.
-+ Change directory to cert_generator_sender_project. `cd cert_generator_sender_project`
 
 #### Second - Running React Server
 + Now, we have to run the frontend server in react. For that follow the below steps.
