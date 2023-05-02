@@ -202,15 +202,6 @@ export default function SpecificEvent() {
     setDeleteForm(false);
   };
 
-  const checkDownloadCertificate = () => {
-    if (eventData.data[0]['certificates_file'] === null) {
-      return 0
-    }
-    else {
-      return 1
-    }
-  }
-
   const forceDownload = (file, file_name) => {
     const url = window.URL.createObjectURL(new Blob([file.data]))
     const link = document.createElement("a")
@@ -233,10 +224,25 @@ export default function SpecificEvent() {
     }).catch((err) => console.log(err))
   }
 
+  function checkDownloadCertificate() {
+    if (eventData.data) {
+      if (eventData.data[0]['certificates_file'] === null) {
+        return false
+
+      }
+      else {
+        return true
+      }
+    }
+    else {
+      return false
+    }
+  }
+
   return (
     <div className="flex justify-center items-center">
       {
-        checkDownloadCertificate ?
+        checkDownloadCertificate() ?
           <Box sx={{ position: 'absolute', zIndex: '15000', marginRight: '1400px', marginTop: '-300px' }}>
             <Tooltip title="Download Certificate"><Button variant="contained" sx={{ borderRadius: '100px' }} onClick={() => downloadCertificate(eventData.data[0]['certificates_file'], eventData.data[0]['certificate_file_name'])} ><DownloadIcon /></Button></Tooltip>
           </Box> : ""
