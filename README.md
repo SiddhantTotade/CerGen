@@ -35,12 +35,17 @@ CerGen is a web application which generates the certificates for the participant
 ### Enjoy :relaxed: :relaxed:
 
 ## Project Images
+<div align="center" gap="10px" display="flex">
 
-![title](https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/app_image_11.png)
-![title](https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/app_image_1.png)
-![title](https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/app_image_2.png)
-![title](https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/app_image_3.png)
-![title](https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/app_image_4.png)
-![title](https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/app_image_5.png)
-![title](https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/certificate_img_1.png)
-![title](https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/certificate_img_2.png)
+<img src="https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/app_image_1.png" width="400px" />
+<img src="https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/app_image_2.png" width="400px" />
+<img src="https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/certificate_before.png" width="400px" />
+<img src="https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/certificate_after.png" width="350px" />
+
+<div/>
+
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="https://user-images.githubusercontent.com/25423296/163456776-7f95b81a-f1ed-45f7-b7ab-8fa810d529fa.png">
+  <source media="(prefers-color-scheme: light)" srcset="https://user-images.githubusercontent.com/25423296/163456779-a8556205-d0a5-45e2-ac17-42d089e3c3f8.png">
+  <img alt="Shows an illustrated sun in light mode and a moon with stars in dark mode." src="https://user-images.githubusercontent.com/25423296/163456779-a8556205-d0a5-45e2-ac17-42d089e3c3f8.png">
+</picture>
