@@ -1,5 +1,5 @@
 <div align="center" >
-  <img src="https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/CerGen.png" height="1000" />
+  <img src="https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/CerGen.png" />
 </div>
 
 ### About the project
