@@ -111,8 +111,6 @@ export default function SpecificEvent() {
 
   const [generateCertificateByIdForm, setGenerateCertificateByIdForm] = useState(false)
 
-  let eligibleForDownload = 0
-
   React.useEffect(() => {
     if (!eventData.isLoading) {
       setSpecificEventDetails(eventData.data[0])
