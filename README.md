@@ -11,7 +11,7 @@ CerGen is a web application which generates the certificates for the participant
 + Upload image of the participant receiving certificate.
 + Upload images of the event album.
 + Sends certificate to the individual participant.
-+ Downloads the certificate of all generated certificates.
++ Downloads all generated certificates.
 
 ### Technologies used
 ![Python](https://img.shields.io/badge/Python-FFD43B?style=for-the-badge&logo=python&logoColor=blue) &nbsp; ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=green) &nbsp; ![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB) &nbsp; ![Material UI](https://img.shields.io/badge/Material%20UI-007FFF?style=for-the-badge&logo=mui&logoColor=white) &nbsp; ![Tailwind Css](https://img.shields.io/badge/Tailwind_CSS-38B2AC?style=for-the-badge&logo=tailwind-css&logoColor=white)
