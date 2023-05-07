@@ -9,7 +9,7 @@ import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import { useState } from 'react';
-import { Select } from '@mui/material';
+import { Select, Typography } from '@mui/material';
 import AlertSnackbar from '../base_components/AlertSnackbar';
 import BackdropSpinner from '../base_components/Backdrop';
 import { useCreateEventMutation } from '../../services/eventsAPI';
@@ -25,9 +25,6 @@ const schema = yup.object().shape({
     event_name: yup.string().required("Event name is required"),
     subject: yup.string().required("Subject is required"),
     event_department: yup.string().required("Department is required"),
-    from_date: yup.string().required('From date is required').matches(/^\d{2}\/\d{2}\/\d{4}$/, 'From date must be in MM-DD-YYYY'),
-    to_date: yup.string().required('To date is required').matches(/^\d{2}\/\d{2}\/\d{4}$/, 'To date must be in MM-DD-YYYY'),
-    event_year: yup.number().required("Event year is required"),
 })
 
 export default function EventForm(props) {
@@ -75,6 +72,8 @@ export default function EventForm(props) {
         year: ""
     })
 
+    const [dateError, setDateError] = useState(false)
+
     let maxOffset = 10;
     let thisYear = (new Date()).getFullYear();
     let allYears = [];
@@ -113,10 +112,26 @@ export default function EventForm(props) {
     }
 
     const onSubmit = () => {
-        setEventData({ ...eventData, user: data.id });
-        createEvent({ access_token: access_token, eventData: eventData });
-        setEventData({ user: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" });
-        props.onClose()
+        if (eventData.from_date !== "" || eventData.to_date !== "" || eventData.event_year !== "") {
+            setEventData({ ...eventData, user: data.id });
+            createEvent({ access_token: access_token, eventData: eventData });
+            setEventData({ user: "", event_name: "", subject: "", event_department: "", event_year: "", from_date: "", to_date: "" });
+            props.onClose()
+        }
+        else {
+            if (eventData.from_date === "" && eventData.to_date === "" && eventData.event_year === "") {
+                setDateValidation({ from_date: "From date is required", to_date: "To date is required", year: "Event year is required" })
+            }
+            else if (eventData.from_date === "") {
+                setDateValidation({ ...dateValidation, from_date: "From date is required" })
+            }
+            else if (eventData.to_date === "") {
+                setDateValidation({ ...dateValidation, from_date: "To date is required" })
+            }
+            else if (eventData.event_year === "") {
+                setDateValidation({ ...dateValidation, year: "Event year is required" })
+            }
+        }
     }
 
     return (
@@ -132,10 +147,12 @@ export default function EventForm(props) {
                                     <TextField {...register('event_name')} error={Boolean(errors.event_name)} helperText={errors.event_name?.message} onChange={(e) => handleEventData(e)} value={eventData.event_name} autoFocus margin="dense" id="event_name" label="Event Name" type="text" fullWidth variant="standard" />
                                     <TextField {...register('subject')} error={Boolean(errors.subject)} helperText={errors.subject?.message} onChange={(e) => handleEventData(e)} value={eventData.subject} autoFocus margin="dense" id="subject" label="Event Subject" type="text" fullWidth variant="standard" />
                                     <TextField {...register('event_department')} error={Boolean(errors.event_department)} helpertext={errors.event_department?.message} onChange={(e) => handleEventData(e)} value={eventData.event_department} autoFocus margin="dense" id="event_department" label="Event Department" type="text" fullWidth variant="standard" />
-                                    <TextField {...register('from_date')} error={Boolean(errors.from_date)} helperText={errors.from_date?.message} onFocus={from_onFocus} onBlur={from_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) from_setHasValue(true); else from_setHasValue(false); }} type={from_hasValue || from_focus ? "date" : "text"} value={eventData.from_date} autoFocus margin="dense" id="from_date" label="Event - From Date" fullWidth variant="standard" />
-                                    <TextField {...register('to_date')} error={Boolean(errors.to_date)} helperText={errors.to_date?.message} onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" fullWidth variant="standard" />
-                                    <FormControl variant="standard" sx={{ width: "100%", marginTop: .5 }}  >
-                                        <InputLabel {...register('event_year')} error={Boolean(errors.event_year)} helpertext={errors.event_year?.message} id="demo-simple-select-label" variant='standard' >Choose Event Year</InputLabel>
+                                    <TextField onFocus={from_onFocus} onBlur={from_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) from_setHasValue(true); else from_setHasValue(false); }} type={from_hasValue || from_focus ? "date" : "text"} value={eventData.from_date} autoFocus margin="dense" id="from_date" label="Event - From Date" fullWidth variant="standard" />
+                                    <Typography fontSize={12} sx={{ color: 'red' }}>{dateValidation.from_date}</Typography>
+                                    <TextField onFocus={to_onFocus} onBlur={to_onBlur} onChange={(e) => { handleEventData(e); if (e.target.value) to_setHasValue(true); else to_setHasValue(false); }} type={to_hasValue || to_focus ? 'date' : 'text'} value={eventData.to_date} autoFocus margin="dense" id="to_date" label="Event - To Date" fullWidth variant="standard" />
+                                    <Typography fontSize={12} sx={{ color: 'red' }}>{dateValidation.to_date}</Typography>
+                                    <FormControl variant="standard" sx={{ width: "100%", marginTop: 1.2 }}  >
+                                        <InputLabel id="demo-simple-select-label" variant='standard' >Choose Event Year</InputLabel>
                                         <Select defaultValue='' labelId="demo-simple-select-label" id="event_year" variant="standard" onChange={(e) => setEventData({ ...eventData, event_year: e.target.value })} value={eventData.event_year}>
                                             <MenuItem value="" key="" >
                                                 <em>None</em>
@@ -143,6 +160,7 @@ export default function EventForm(props) {
                                             {yearList}
                                         </Select>
                                     </FormControl>
+                                    <Typography fontSize={12} sx={{ color: 'red' }}>{dateValidation.year}</Typography>
                                 </DialogContent>
                                 <DialogActions>
                                     <Button variant='contained' onClick={props.onClose}>Cancel</Button>
