@@ -69,6 +69,12 @@ export default function EventForm(props) {
     const to_onFocus = () => to_setFocused(true)
     const to_onBlur = () => to_setFocused(false)
 
+    const [dateValidation, setDateValidation] = useState({
+        from_date: "",
+        to_date: "",
+        year: ""
+    })
+
     let maxOffset = 10;
     let thisYear = (new Date()).getFullYear();
     let allYears = [];
