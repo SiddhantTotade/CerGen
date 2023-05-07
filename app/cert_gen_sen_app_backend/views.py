@@ -134,7 +134,7 @@ class SenderCredentialView(APIView):
             user_id = request.user.id
             user = User.objects.get(id=user_id)
 
-            if User.objects.filter(id=user_id).exists():
+            if SendersCredentials.objects.filter(user=user_id).exists():
                 SendersCredentials.objects.update(
                     user=user, senders_email=request.data['email'], senders_password=request.data['password'], senders_phone=request.data['phone'])
             else:
