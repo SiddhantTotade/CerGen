@@ -72,8 +72,6 @@ export default function EventForm(props) {
         year: ""
     })
 
-    const [dateError, setDateError] = useState(false)
-
     let maxOffset = 10;
     let thisYear = (new Date()).getFullYear();
     let allYears = [];
