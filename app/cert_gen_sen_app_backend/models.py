@@ -91,6 +91,9 @@ class SendersCredentials(models.Model):
     senders_password = models.CharField(max_length=255, null=True, blank=True)
     senders_phone = models.CharField(max_length=13, null=True, blank=True)
 
+    def __str__(self):
+        return str(self.user)
+
 
 class Event(models.Model):
     id = models.AutoField(primary_key=True)

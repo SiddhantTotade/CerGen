@@ -129,7 +129,6 @@ def generate_uid(stu_id, eve_name, eve_dept, eve_date):
 
 
 class SenderCredentialView(APIView):
-
     def post(self, request):
         try:
             user_id = request.user.id
