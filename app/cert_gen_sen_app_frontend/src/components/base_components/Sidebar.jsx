@@ -208,9 +208,11 @@ export default function MiniDrawer() {
                 >
                   <MenuIcon />
                 </IconButton>
-                <Typography sx={{ fontFamily: 'Bruno Ace' }} variant="h6" noWrap component="div">
-                  CerGen
-                </Typography>
+                <Link to="/api/home">
+                  <Typography sx={{ fontFamily: 'Bruno Ace' }} variant="h6" noWrap component="div">
+                    CerGen
+                  </Typography>
+                </Link>
               </Toolbar>
               <div className="flex absolute items-center top-20 right-2 hover:cursor-pointer hover:bg-blue-600 rounded-md text-white gap-5 bg-blue-500 shadow-lg shadow-sky-900 p-4" onClick={() => handleUserDetails()}>
                 <PersonIcon sx={{ borderRadius: '20px', boxShadow: '2px 2px 5px #02104f', background: '#0426c9', fontSize: '30px', padding: '5px' }} />
