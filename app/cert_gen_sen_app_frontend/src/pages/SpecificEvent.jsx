@@ -34,7 +34,49 @@ import { useGetParticipantsQuery } from "../services/participantsAPI";
 import { useSpecificEventDetailQuery } from "../services/eventsAPI";
 import DownloadIcon from '@mui/icons-material/Download';
 import axios from "axios";
-import TextField from "@mui/material/TextField";
+import InputBase from '@mui/material/InputBase';
+import { styled, alpha } from '@mui/material/styles';
+import SearchIcon from '@mui/icons-material/Search';
+
+const Search = styled('div')(({ theme }) => ({
+  position: 'relative',
+  borderRadius: theme.shape.borderRadius,
+  border: "1px solid gainsboro",
+  backgroundColor: alpha(theme.palette.common.white, 0.15),
+  '&:hover': {
+    backgroundColor: alpha(theme.palette.common.white, 0.25),
+  },
+  marginLeft: 0,
+  width: '100%',
+  [theme.breakpoints.up('sm')]: {
+    marginLeft: theme.spacing(3),
+    width: 'auto',
+  },
+}));
+
+const SearchIconWrapper = styled('div')(({ theme }) => ({
+  padding: theme.spacing(0, 2),
+  height: '100%',
+  position: 'absolute',
+  pointerEvents: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+}));
+
+const StyledInputBase = styled(InputBase)(({ theme }) => ({
+  color: 'inherit',
+  '& .MuiInputBase-input': {
+    padding: theme.spacing(1, 1, 1, 0),
+    // vertical padding + font size from searchIcon
+    paddingLeft: `calc(1em + ${theme.spacing(4)})`,
+    transition: theme.transitions.create('width'),
+    width: '100%',
+    [theme.breakpoints.up('md')]: {
+      width: '20ch',
+    },
+  },
+}));
 
 const createBtns = {
   marginBottom: "10px",
@@ -282,32 +324,44 @@ export default function SpecificEvent() {
             Absent Participants : {data.length - attendance}
           </small>
         </div>
-        <div className="gap-10 mt-5">
-          <Button variant="contained" sx={createBtns} onClick={handleForm}>
-            Create Participant
-          </Button>
-          <Button
-            variant="contained"
-            sx={createBtns}
-            onClick={handleGenerateCertificateForm}
-          >
-            Issue and Send Certificate
-          </Button>
-          <Button
-            variant="contained"
-            sx={createBtns}
-            onClick={handleUploadTemplateForm}
-          >
-            Templates
-          </Button>
-          <Button
-            variant="contained"
-            sx={createBtns}
-            onClick={handleAlbumForm}
-          >
-            View Album
-          </Button>
-          <TextField />
+        <div className="flex justify-between gap-10 mt-5">
+          <div>
+            <Button variant="contained" sx={createBtns} onClick={handleForm}>
+              Create Participant
+            </Button>
+            <Button
+              variant="contained"
+              sx={createBtns}
+              onClick={handleGenerateCertificateForm}
+            >
+              Issue and Send Certificate
+            </Button>
+            <Button
+              variant="contained"
+              sx={createBtns}
+              onClick={handleUploadTemplateForm}
+            >
+              Templates
+            </Button>
+            <Button
+              variant="contained"
+              sx={createBtns}
+              onClick={handleAlbumForm}
+            >
+              View Album
+            </Button>
+          </div>
+          <div>
+            <Search>
+              <SearchIconWrapper>
+                <SearchIcon />
+              </SearchIconWrapper>
+              <StyledInputBase
+                placeholder="Search…"
+                inputProps={{ 'aria-label': 'search' }}
+              />
+            </Search>
+          </div>
         </div>
         <TableContainer sx={{ height: '65vh', position: 'relative', overflow: 'auto', '::-webkit-scrollbar-thumb': { 'background': '#1976d2', borderRadius: '50px' }, '::-webkit-scrollbar-track': { background: '#f1f1f1' }, '::-webkit-scrollbar': { width: '3px', background: 'transparent' } }} component={Paper}>
           <Table stickyHeader sx={{ minWidth: 450, position: 'sticky' }} aria-label="simple table">
