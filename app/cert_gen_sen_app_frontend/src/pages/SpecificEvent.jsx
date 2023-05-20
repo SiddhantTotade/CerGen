@@ -34,6 +34,7 @@ import { useGetParticipantsQuery } from "../services/participantsAPI";
 import { useSpecificEventDetailQuery } from "../services/eventsAPI";
 import DownloadIcon from '@mui/icons-material/Download';
 import axios from "axios";
+import TextField from "@mui/material/TextField";
 
 const createBtns = {
   marginBottom: "10px",
@@ -306,6 +307,7 @@ export default function SpecificEvent() {
           >
             View Album
           </Button>
+          <TextField />
         </div>
         <TableContainer sx={{ height: '65vh', position: 'relative', overflow: 'auto', '::-webkit-scrollbar-thumb': { 'background': '#1976d2', borderRadius: '50px' }, '::-webkit-scrollbar-track': { background: '#f1f1f1' }, '::-webkit-scrollbar': { width: '3px', background: 'transparent' } }} component={Paper}>
           <Table stickyHeader sx={{ minWidth: 450, position: 'sticky' }} aria-label="simple table">
