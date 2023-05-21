@@ -8,10 +8,10 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.authentication import *
+from rest_framework.pagination import PageNumberPagination
 from .models import *
 from .serializers import *
 from .resources import *
-# from .serializers import UserSerializer, RegisterSerializer
 from .helpers import *
 from itertools import islice
 from collections import OrderedDict
@@ -145,17 +145,28 @@ class SenderCredentialView(APIView):
         except:
             return JsonResponse("Failed to save credentials", safe=False)
 
+# Pagination
+
+
+class MyPagination(PageNumberPagination):
+    page_size: 10
+    page_size_query_param = 'page_size'
+    max_page_size = 100
+
 
 # Getting all events view
 class EventsOperations(APIView):
     renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
+    pagination_class = MyPagination
 
     def get(self, request):
-        all_events = reversed(Event.objects.filter(user=request.user))
+        all_events = Event.objects.filter(user=request.user)
+        paginated_queryset = self.pagination_class().paginate_queryset(all_events, request)
 
         if all_events:
-            event_serializer_data = EventSerializer(all_events, many=True)
+            event_serializer_data = EventSerializer(
+                paginated_queryset, many=True)
             return JsonResponse(event_serializer_data.data, safe=False)
         return JsonResponse("No event data", safe=False)
 
