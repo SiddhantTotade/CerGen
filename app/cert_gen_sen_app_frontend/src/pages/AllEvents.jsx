@@ -12,6 +12,7 @@ import LoaderSkeleton from '../components/base_components/LoaderSkeleton';
 import UpdateEvent from '../components/event_components/UpdateEvent';
 import DeleteEvent from '../components/event_components/DeleteEvent';
 import { Pagination } from '@mui/material';
+import { Stack } from '@mui/system';
 
 const card_sx = {
     maxWidth: 400,
@@ -138,7 +139,9 @@ export const AllEvents = () => {
                                 </Card>
 
                             }) : <h2>No Data Available</h2>}
-                            <Pagination count={2} color='primary' defaultPage={page} onChange={(e, v) => setPage(v)} />
+                            <Stack spacing={2}>
+                                <Pagination count={2} color='primary' defaultPage={page} onChange={(e, v) => setPage(v)} />
+                            </Stack>
                         </div>
                     </>
             }
