@@ -8,7 +8,7 @@ from rest_framework.decorators import permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.authentication import *
-from rest_framework.pagination import PageNumberPagination
+from rest_framework.pagination import LimitOffsetPagination
 from .models import *
 from .serializers import *
 from .resources import *
@@ -148,7 +148,7 @@ class SenderCredentialView(APIView):
 # Pagination
 
 
-class Pagination(PageNumberPagination):
+class Pagination(LimitOffsetPagination):
     page_size: 10
     page_size_query_param = 'page_size'
     max_page_size = 100
@@ -158,6 +158,7 @@ class Pagination(PageNumberPagination):
 class EventsOperations(APIView):
     renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
+    pagination_class = LimitOffsetPagination
 
     def get(self, request):
         all_events = Event.objects.filter(user=request.user)
