@@ -148,7 +148,7 @@ class SenderCredentialView(APIView):
 # Pagination
 
 
-class MyPagination(PageNumberPagination):
+class Pagination(PageNumberPagination):
     page_size: 10
     page_size_query_param = 'page_size'
     max_page_size = 100
@@ -158,7 +158,7 @@ class MyPagination(PageNumberPagination):
 class EventsOperations(APIView):
     renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
-    pagination_class = MyPagination
+    pagination_class = Pagination
 
     def get(self, request):
         all_events = Event.objects.filter(user=request.user)
