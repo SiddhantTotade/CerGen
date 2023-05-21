@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -11,6 +11,7 @@ import { getToken } from '../services/LocalStorageService';
 import LoaderSkeleton from '../components/base_components/LoaderSkeleton';
 import UpdateEvent from '../components/event_components/UpdateEvent';
 import DeleteEvent from '../components/event_components/DeleteEvent';
+import { Pagination } from '@mui/material';
 
 const card_sx = {
     maxWidth: 400,
@@ -64,6 +65,14 @@ export const AllEvents = () => {
 
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
+    const [page, setPage] = useState(1)
+
+    const [posts, setPosts] = useState([])
+
+    useEffect(() => {
+        setPosts(data)
+    }, [data])
+
     const [updateForm, setUpdateForm] = useState(false);
 
     const [deleteForm, setDeleteForm] = useState(false);
@@ -100,7 +109,7 @@ export const AllEvents = () => {
                     :
                     <>
                         <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
-                            {data !== 'No event data' ? data.map((event) => {
+                            {data !== 'No event data' ? posts.map((event) => {
                                 let event_url = '/api/event/' + event.slug
                                 return <Card sx={card_sx} key={event.id} >
                                     <CardContent>
@@ -129,6 +138,7 @@ export const AllEvents = () => {
                                 </Card>
 
                             }) : <h2>No Data Available</h2>}
+                            <Pagination count={2} color='primary' defaultPage={page} onChange={(e, v) => setPage(v)} />
                         </div>
                     </>
             }
