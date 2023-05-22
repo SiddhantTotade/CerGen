@@ -156,15 +156,15 @@ class Pagination(PageNumberPagination):
 class EventsOperations(APIView):
     renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
-    pagination_class = Pagination
+    # pagination_class = Pagination
 
     def get(self, request):
         all_events = Event.objects.filter(user=request.user)
-        paginated_queryset = self.pagination_class().paginate_queryset(all_events, request)
+        # paginated_queryset = self.pagination_class().paginate_queryset(all_events, request)
 
         if all_events:
             event_serializer_data = EventSerializer(
-                paginated_queryset, many=True)
+                all_events, many=True)
             return JsonResponse(event_serializer_data.data, safe=False)
         return JsonResponse("No event data", safe=False)
 
