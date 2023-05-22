@@ -145,9 +145,8 @@ class SenderCredentialView(APIView):
         except:
             return JsonResponse("Failed to save credentials", safe=False)
 
+
 # Pagination
-
-
 class Pagination(PageNumberPagination):
     page_size: 1
 
