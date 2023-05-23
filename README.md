@@ -37,7 +37,6 @@ python manage.py runserver
 ```
 
 #### Second - Running React Server
-+ Now, we have to run the frontend server in react. For that follow the below steps.
 + Now, open another terminal and change directory to cert_gen_sen_app_frontend
 ```shell
 cd cert_gen_sen_app_frontend
