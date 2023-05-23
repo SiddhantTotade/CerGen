@@ -280,6 +280,9 @@ class GenerateCertificate(APIView):
                     send_certificate = send_mail("Certificate of Participation",
                                                  "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
 
+                    Participant.objects.filter(id=stu['id']).update(
+                        certificate_sent_status=True)
+
                     if send_certificate == "SENT":
                         Participant.objects.filter(
                             id=stu['id']).update(certificate_sent_status=True)
