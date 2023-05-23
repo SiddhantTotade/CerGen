@@ -18,7 +18,7 @@ CerGen is a web application which generates the certificates for the participant
 
 # Getting Started
 
-#### First - Running Django Server
+## First - Running Django Server
 + Clone the project in your PC or Laptop.
 ```shell
 git clone git@github.com:SiddhantTotade/cergen.git.
@@ -36,7 +36,7 @@ cd app
 python manage.py runserver
 ```
 
-#### Second - Running React Server
+## Second - Running React Server
 + Now, open another terminal and change directory to cert_gen_sen_app_frontend
 ```shell
 cd cert_gen_sen_app_frontend
