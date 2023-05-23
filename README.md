@@ -19,17 +19,41 @@ CerGen is a web application which generates the certificates for the participant
 # Getting Started
 
 #### First - Running Django Server
-+ Clone the project in your PC or Laptop. `git clone git@github.com:SiddhantTotade/cergen.git`.
-+ Open the project in a terminal and type `source bin/activate`. This will enables the virual environment.
-+ Change directory to 'app'. `cd app`.
-+ Run the django serever. `python manage.py runserver`.
++ Clone the project in your PC or Laptop.
+```shell
+git clone git@github.com:SiddhantTotade/cergen.git.
+```
++ Open the project in a terminal and type the following command
+```shell
+source bin/activate
+```
++ Change directory to 'app'
+```shell
+cd app
+```
++ Run the django serever
+```shell
+python manage.py runserver
+```
 
 #### Second - Running React Server
 + Now, we have to run the frontend server in react. For that follow the below steps.
-+ Now, open another terminal and change directory to cert_gen_sen_app_frontend. `cd cert_gen_sen_app_frontend`.
-+ Inside react directory, run command `npm install` to install node modules.
-+ After installing node modules, start the react server. `npm start`
-+ Also you need to configure tailwind css for this project. Follow this guide to configure `https://tailwindcss.com/docs/guides/create-react-app`
++ Now, open another terminal and change directory to cert_gen_sen_app_frontend
+```shell
+cd cert_gen_sen_app_frontend
+```
++ Inside react directory, run command to install node modules
+```shell
+npm install
+```
++ After installing node modules, start the react server
+```shell
+npm start
+```
++ Also you need to configure tailwind css for this project. Follow this guide to configure
+```shell
+https://tailwindcss.com/docs/guides/create-react-app
+```
 
 #### Leave a star if you like the project. :star:
 ### Enjoy :relaxed: :relaxed:
