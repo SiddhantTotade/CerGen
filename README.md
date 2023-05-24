@@ -49,7 +49,7 @@ source bin/activate
 ```shell
 deactivate
 ```
-Before installing the `requirements.txt` check if there is something exists or not. If the command shows nothing then nothing is installed yet 
++ Before installing the `requirements.txt` check if there is something exists or not. If the command shows nothing then nothing is installed yet 
 ```shell
 pip freeze
 ```
