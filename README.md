@@ -18,6 +18,42 @@ CerGen is a web application which generates the certificates for the participant
 
 # Getting Started
 
+## Setting up virtual environment
++ Clone the project
+```shell
+git clone git@github.com:SiddhantTotade/cergen.git
+```
++ Open the project in the terminal. The below command opens the project in VS-Code but you can choose any editor
+```shell
+code .
+```
++ In the terminal create a virtual environment. (Prefer root directory for `venv`)
+  + The below command create a virtual environment in a specific directory
+```shell
+python -m venv <name_of_venv>
+```
+OR
+  + The below command create a virtual envvironment in the current directory
+```shell
+python -m venv .
+```
++ After creating `venv`, Activate it. Go to the directory in which the `venv` exists and type command
+```shell
+source bin/activate
+```
++ Deactivate the virtual environment.
+```shell
+deactivate
+```
+Before installing the `requirements.txt` check if there is something exists or not. If the command shows nothing then nothing is installed yet 
+```shell
+pip freeze
+```
++ After activating `venv`, install the `requirements.txt`.
+```shell
+pip install -r requirements.txt
+```
+
 ## First - Running Django Server
 + Clone the project in your PC or Laptop.
 ```shell
