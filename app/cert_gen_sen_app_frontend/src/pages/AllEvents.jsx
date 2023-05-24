@@ -148,7 +148,7 @@ export const AllEvents = () => {
                                     </CardActions>
                                 </Card>
 
-                            }) : <h2>No Data Available</h2>}
+                            }) : <h2>No events available</h2>}
                             {/* <Stack spacing={2}>
                                 <Pagination count={2} color='primary' defaultPage={page} onChange={(e, v) => setPage(v)} />
                             </Stack> */}
