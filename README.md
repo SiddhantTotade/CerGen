@@ -3,7 +3,7 @@
 </div>
 
 # About the project
-CerGen is a web application which generates the certificates for the participants and send it to their corrosponding email. This application has the ability of generating the certificates of the participants who are participated in the event/contest. Also this application sends text message to the participants on their corrosponding phone number. This applicaion sends the certificate of participantion and certification of merit at the same time.
+CerGen is a web application which generates the certificates for the participants and send it to their corrosponding email. This application has the ability of generating the certificates for the participants who are participated in the event/contest. Also this application sends text message to the participants on their corrosponding phone number. This applicaion sends the certificate of participantion and certification of merit at the same time.
 
 ### Features of the project
 + Filter eligible participants.
@@ -23,11 +23,11 @@ CerGen is a web application which generates the certificates for the participant
 ```shell
 git clone git@github.com:SiddhantTotade/cergen.git
 ```
-+ Open the project in the terminal. The below command opens the project in VS-Code but you can choose any editor
++ Open the project in the terminal. The below command opens the project in vs-code but you can choose any editor
 ```shell
 code .
 ```
-+ In the terminal create a virtual environment. Prefer root directory for `venv`
++ In the terminal type command to create a virtual environment. Prefer root directory for `venv`
     + The below command create a virtual environment in a specific directory
   ```shell
   python -m venv <name_of_venv>
