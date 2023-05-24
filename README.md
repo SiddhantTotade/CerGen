@@ -27,7 +27,7 @@ git clone git@github.com:SiddhantTotade/cergen.git
 ```shell
 code .
 ```
-+ In the terminal create a virtual environment. (Prefer root directory for `venv`)
++ In the terminal create a virtual environment. Prefer root directory for `venv`
   + The below command create a virtual environment in a specific directory
 ```shell
 python -m venv <name_of_venv>
