@@ -21,7 +21,7 @@ CerGen is a web application which generates the certificates for the participant
 ## First - Running Django Server
 + Clone the project in your PC or Laptop.
 ```shell
-git clone git@github.com:SiddhantTotade/cergen.git.
+git clone git@github.com:SiddhantTotade/cergen.git
 ```
 + Open the project in a terminal and type the following command
 ```shell
