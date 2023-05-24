@@ -28,15 +28,19 @@ git clone git@github.com:SiddhantTotade/cergen.git
 code .
 ```
 + In the terminal create a virtual environment. Prefer root directory for `venv`
-  + The below command create a virtual environment in a specific directory
-```shell
-python -m venv <name_of_venv>
-```
-OR
-  + The below command create a virtual envvironment in the current directory
-```shell
-python -m venv .
-```
+    + The below command create a virtual environment in a specific directory
+  ```shell
+  python -m venv <name_of_venv>
+  ```
+  <div align="center">
+  OR
+  </div>
+  &nbsp;
+  
+    + The below command create a virtual envvironment in the current directory
+  ```shell
+  python -m venv .
+  ```
 + After creating `venv`, Activate it. Go to the directory in which the `venv` exists and type command
 ```shell
 source bin/activate
