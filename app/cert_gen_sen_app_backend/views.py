@@ -232,6 +232,8 @@ class UploadParticipant(APIView):
             event_name_chars_list = [word[0] for word in event_name_words]
             event_name_chars_string = "".join(event_name_chars_list)
 
+            participants_list = []
+
             for data in excel_data:
                 participant_name = data['Full_Name']
                 participant_id = data['Participant_Id']
@@ -244,8 +246,9 @@ class UploadParticipant(APIView):
                 certificate_status = data['Certificate_Status']
                 certificate_id = generate_uid(data['Participant_Id'], event_name_chars_string,
                                               event_dept, event_date)
-                Event.id = Participant.objects.create(
-                    event=event_new_id, participant_name=participant_name, participant_id=participant_id, email=email, phone=phone, certificate_status=certificate_status, certificate_id=certificate_id)
+                participants_list.append(Participant(event=event_new_id, participant_name=participant_name, participant_id=participant_id, email=email, phone=phone, certificate_status=certificate_status, certificate_id=certificate_id))
+            
+            Event.id = Participant.objects.bulk_create(participants_list)
 
             return JsonResponse("Participants uploaded successfully", safe=False)
         except:
