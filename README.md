@@ -23,7 +23,7 @@ CerGen is a web application which generates the certificates for the participant
 ```shell
 git clone git@github.com:SiddhantTotade/cergen.git
 ```
-+ Open the project in the terminal. The below command opens the project in VS-Code but you can choose any editor
++ Open the project in the terminal. The below command opens the project in vs-code but you can choose any editor
 ```shell
 code .
 ```
