@@ -1,6 +1,6 @@
 .env
 # .db.sqlite3
 # /bin
-.lib
+./lib
 # ./lib64
 # .pyvenv.cfg
