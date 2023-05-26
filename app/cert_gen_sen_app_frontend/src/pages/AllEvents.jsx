@@ -66,20 +66,6 @@ export const AllEvents = () => {
 
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
-    // const [page, setPage] = useState(1)
-
-    // const baseUrl = "http://127.0.0.1:8000/api"
-
-    // const [pageUrl, setPageUrl] = useState(baseUrl + 'all-events')
-
-    // const totalRes = data.length
-
-    // let link = []
-
-    // for (let index = 1; index <= totalRes; index++) {
-    //     link.push(<li key={index}><Link onClick={() => handlePagination(baseUrl + `all-events/?page=${index}`)} to={baseUrl + `/all-events/?page=${index}`} >{index}</Link></li>)
-    // }
-
     const [updateForm, setUpdateForm] = useState(false);
 
     const [deleteForm, setDeleteForm] = useState(false);
@@ -101,10 +87,6 @@ export const AllEvents = () => {
     const handleDeleteFormClose = () => {
         setDeleteForm(false)
     }
-
-    // const handlePagination = (url) => {
-    //     setPageUrl(url)
-    // }
 
     return (
         <>
@@ -149,9 +131,6 @@ export const AllEvents = () => {
                                 </Card>
 
                             }) : <h2>No events available</h2>}
-                            {/* <Stack spacing={2}>
-                                <Pagination count={2} color='primary' defaultPage={page} onChange={(e, v) => setPage(v)} />
-                            </Stack> */}
                         </div>
                     </>
             }
