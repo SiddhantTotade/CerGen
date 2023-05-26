@@ -146,23 +146,13 @@ class SenderCredentialView(APIView):
             return JsonResponse("Failed to save credentials", safe=False)
 
 
-# Pagination
-class Pagination(PageNumberPagination):
-    page_size: 6
-    page_size_query_param = 'page_size'
-    max_page_size = 50
-    page_query_param = 'p'
-
-
 # Getting all events view
 class EventsOperations(APIView):
     renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
-    pagination_class = Pagination
 
     def get(self, request):
         all_events = Event.objects.filter(user=request.user)
-        # paginated_queryset = self.pagination_class().paginate_queryset(all_events, request)
 
         if all_events:
             event_serializer_data = EventSerializer(
