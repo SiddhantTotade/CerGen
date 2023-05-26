@@ -148,14 +148,20 @@ class SenderCredentialView(APIView):
 
 # Pagination
 class Pagination(PageNumberPagination):
-    page_size: 1
+    page_size: 6
+    page_size_query_param = 'page_size'
+    max_page_size = 50
+    page_query_param = 'p'
 
 
 # Getting all events view
 class EventsOperations(APIView):
     renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
-    # pagination_class = Pagination
+    pagination_class = Pagination
+
+    def get_queryset(self,request):
+        return JsonResponse(Event.objects.filter(user=request.user))
 
     def get(self, request):
         all_events = Event.objects.filter(user=request.user)
@@ -164,6 +170,7 @@ class EventsOperations(APIView):
         if all_events:
             event_serializer_data = EventSerializer(
                 all_events, many=True)
+            print(event_serializer_data.data)
             return JsonResponse(event_serializer_data.data, safe=False)
         return JsonResponse("No event data", safe=False)
 
