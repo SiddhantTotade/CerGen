@@ -160,9 +160,6 @@ class EventsOperations(APIView):
     permission_classes = [IsAuthenticated]
     pagination_class = Pagination
 
-    def get_queryset(self,request):
-        return JsonResponse(Event.objects.filter(user=request.user))
-
     def get(self, request):
         all_events = Event.objects.filter(user=request.user)
         # paginated_queryset = self.pagination_class().paginate_queryset(all_events, request)
@@ -170,7 +167,6 @@ class EventsOperations(APIView):
         if all_events:
             event_serializer_data = EventSerializer(
                 all_events, many=True)
-            print(event_serializer_data.data)
             return JsonResponse(event_serializer_data.data, safe=False)
         return JsonResponse("No event data", safe=False)
 
