@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
@@ -11,8 +11,8 @@ import { getToken } from '../services/LocalStorageService';
 import LoaderSkeleton from '../components/base_components/LoaderSkeleton';
 import UpdateEvent from '../components/event_components/UpdateEvent';
 import DeleteEvent from '../components/event_components/DeleteEvent';
-import { Pagination } from '@mui/material';
-import { Stack } from '@mui/system';
+import ReactPaginate from 'react-paginate'
+import './styles/pagination.css'
 
 const card_sx = {
     maxWidth: 400,
@@ -62,13 +62,55 @@ export const AllEvents = () => {
 
     const { access_token } = getToken()
 
-    const { data = [], isLoading } = useGetAllEventsQuery(access_token)
+    const { data = [].slice(0, 5), isLoading } = useGetAllEventsQuery(access_token)
 
     let days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
     const [updateForm, setUpdateForm] = useState(false);
 
     const [deleteForm, setDeleteForm] = useState(false);
+
+    const [pageNumber, setPageNumber] = useState(0)
+
+    const dataPerPage = 6
+
+    const pageVisited = pageNumber * dataPerPage
+
+    const displayData = data.slice(pageVisited, pageVisited + dataPerPage).map((event) => {
+        let event_url = '/api/event/' + event.slug
+        return <Card sx={card_sx} key={event.id} >
+            <CardContent>
+                <div>
+                    <Typography gutterBottom variant="h5" component="div">
+                        {event.event_name}
+                    </Typography>
+                    <div className='flex flex-col'>
+                        <div>
+                            <small>{days[new Date(event.from_date).getDay()]}</small>
+                            {event.from_date !== event.to_date ? <small> - {days[new Date(event.to_date).getDay()]}</small> : ""}
+                        </div>
+                        <small>{new Date(event.from_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
+                    </div>
+                    <br />
+                </div>
+                <Typography variant="body2" color="text.secondary" sx={{ height: "5vh" }}>
+                    {event.subject.length > 100 ? event.subject.substring(0, 85) + "....." : event.subject}
+                </Typography>
+            </CardContent>
+            <CardActions>
+                <Button variant='contained' size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
+                <Button variant='contained' size="small" onClick={() => handleUpdateForm(event.id, event.event_name, event.subject, event.event_department, event.from_date, event.to_date, event.event_year, event.slug)}>Edit</Button>
+                <Button variant='contained' size="small" onClick={() => handleDeleteForm(event.id, event.event_name, event.subject, event.event_department, event.from_date, event.to_date, event.event_year, event.slug)} >Delete</Button>
+            </CardActions>
+        </Card>
+
+    })
+
+    const pageCount = Math.ceil(data.length / dataPerPage)
+
+    const changePage = ({ selected }) => {
+        setPageNumber(selected)
+    }
 
     const handleUpdateForm = (id, event_name, subject, event_department, from_date, to_date, event_year, slug) => {
         setUpdateForm(true)
@@ -102,36 +144,9 @@ export const AllEvents = () => {
                     :
                     <>
                         <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
-                            {data !== 'No event data' ? data.map((event) => {
-                                let event_url = '/api/event/' + event.slug
-                                return <Card sx={card_sx} key={event.id} >
-                                    <CardContent>
-                                        <div>
-                                            <Typography gutterBottom variant="h5" component="div">
-                                                {event.event_name}
-                                            </Typography>
-                                            <div className='flex flex-col'>
-                                                <div>
-                                                    <small>{days[new Date(event.from_date).getDay()]}</small>
-                                                    {event.from_date !== event.to_date ? <small> - {days[new Date(event.to_date).getDay()]}</small> : ""}
-                                                </div>
-                                                <small>{new Date(event.from_date).toLocaleDateString('en-GB')} - {new Date(event.to_date).toLocaleDateString('en-GB')}</small>
-                                            </div>
-                                            <br />
-                                        </div>
-                                        <Typography variant="body2" color="text.secondary" sx={{ height: "5vh" }}>
-                                            {event.subject.length > 100 ? event.subject.substring(0, 85) + "....." : event.subject}
-                                        </Typography>
-                                    </CardContent>
-                                    <CardActions>
-                                        <Button variant='contained' size="small"><Link sx={{ textDecoration: 'none' }} to={event_url}>View</Link></Button>
-                                        <Button variant='contained' size="small" onClick={() => handleUpdateForm(event.id, event.event_name, event.subject, event.event_department, event.from_date, event.to_date, event.event_year, event.slug)}>Edit</Button>
-                                        <Button variant='contained' size="small" onClick={() => handleDeleteForm(event.id, event.event_name, event.subject, event.event_department, event.from_date, event.to_date, event.event_year, event.slug)} >Delete</Button>
-                                    </CardActions>
-                                </Card>
-
-                            }) : <h2>No events available</h2>}
+                            {data !== 'No event data' ? <>{displayData} </> : <h2>No events available</h2>}
                         </div>
+                        <ReactPaginate previousLabel="<" nextLabel=">" pageCount={pageCount} onPageChange={changePage} containerClassName="pagination-btn" previousLinkClassName='prev-btn' nextLinkClassName='next-btn' disabledClassName='pagination-disabled' activeClassName='pagination-active' />
                     </>
             }
             <UpdateEvent open={updateForm} onClose={handleUpdateFormClose} event={eventData} />
