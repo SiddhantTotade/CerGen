@@ -104,7 +104,7 @@ export default function UpdateParticipant(props) {
                     error={Boolean(errors.participant_name)}
                     helperText={errors.participant_name?.message}
                     onChange={(e) => handleEventData(e)}
-                    value={props.participant.participant_name}
+                    defaultValue={props.participant.participant_name}
                     autoFocus
                     margin="dense"
                     id="participant_name"
