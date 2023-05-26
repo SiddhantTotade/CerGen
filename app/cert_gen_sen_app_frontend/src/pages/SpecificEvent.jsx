@@ -299,7 +299,6 @@ export default function SpecificEvent() {
     }
   }
 
-
   return (
     <div className="flex justify-center items-center">
       {
@@ -411,7 +410,7 @@ export default function SpecificEvent() {
             {
               isLoading ? tableSkeleton :
                 <TableBody>
-                  {data !== "0" ?
+                  {data.length !== 0 ?
                     value.length > 0 ?
                       tableFilter.map((row) => (
                         <TableRow
