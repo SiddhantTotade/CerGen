@@ -12,6 +12,8 @@ import LoaderSkeleton from '../components/base_components/LoaderSkeleton';
 import UpdateEvent from '../components/event_components/UpdateEvent';
 import DeleteEvent from '../components/event_components/DeleteEvent';
 import ReactPaginate from 'react-paginate'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import ArrowLeftIcon from '@mui/icons-material/ArrowLeft';
 import './styles/pagination.css'
 
 const card_sx = {
@@ -146,7 +148,7 @@ export const AllEvents = () => {
                         <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
                             {data !== 'No event data' ? <>{displayData} </> : <h2>No events available</h2>}
                         </div>
-                        <ReactPaginate previousLabel="<" nextLabel=">" pageCount={pageCount} onPageChange={changePage} containerClassName="pagination-btn" previousLinkClassName='prev-btn' nextLinkClassName='next-btn' disabledClassName='pagination-disabled' activeClassName='pagination-active' />
+                        <ReactPaginate previousLabel={<ArrowLeftIcon />} nextLabel={<ArrowRightIcon />} pageCount={pageCount} onPageChange={changePage} containerClassName="pagination-btn" previousLinkClassName='prev-btn' nextLinkClassName='next-btn' disabledClassName='pagination-disabled' activeClassName='pagination-active' />
                     </>
             }
             <UpdateEvent open={updateForm} onClose={handleUpdateFormClose} event={eventData} />
