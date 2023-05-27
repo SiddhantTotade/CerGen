@@ -138,6 +138,9 @@ export default function SpecificEvent() {
 
   let attendance = 0;
 
+  React.useEffect(() => {
+  }, [data])
+
   const [createParticiapantForm, setCreateParticiapantForm] =
     React.useState(false);
 
