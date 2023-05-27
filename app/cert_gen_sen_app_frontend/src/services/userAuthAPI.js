@@ -100,7 +100,7 @@ export const userAuthAPI = createApi({
           url: "sender-credential/",
           method: "GET",
           headers: {
-            authorization: `Bearer ${data.access_token}`,
+            authorization: `Bearer ${data}`,
           },
         };
       },
