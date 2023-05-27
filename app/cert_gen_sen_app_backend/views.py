@@ -109,6 +109,12 @@ class UserPasswordResetView(APIView):
         return Response({'msg': 'Password reset successfully'}, status=status.HTTP_200_OK)
 
 
+# Check sender email and password
+class CheckSenderEmailAndPassword(APIView):
+    def get(self, request):
+        pass
+
+
 # Getting single events by slug
 @permission_classes((IsAuthenticated,))
 def get_event_by_slug(request, slug):
@@ -238,8 +244,9 @@ class UploadParticipant(APIView):
                 certificate_status = data['Certificate_Status']
                 certificate_id = generate_uid(data['Participant_Id'], event_name_chars_string,
                                               event_dept, event_date)
-                participants_list.append(Participant(event=event_new_id, participant_name=participant_name, participant_id=participant_id, email=email, phone=phone, certificate_status=certificate_status, certificate_id=certificate_id))
-            
+                participants_list.append(Participant(event=event_new_id, participant_name=participant_name, participant_id=participant_id,
+                                         email=email, phone=phone, certificate_status=certificate_status, certificate_id=certificate_id))
+
             Event.id = Participant.objects.bulk_create(participants_list)
 
             return JsonResponse("Participants uploaded successfully", safe=False)
