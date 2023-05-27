@@ -201,7 +201,7 @@ export const UploadTemplate = (props) => {
             </Grid>
           </Grid>
           <DialogActions sx={{ marginTop: "20px" }}>
-            <Button variant="contained">Cancel</Button>
+            <Button variant="contained" onClick={props.props.onClose} >Cancel</Button>
             <Button variant="contained" onClick={() => previewTemplate({ access_token: access_token, previewFile: previewFile })}>
               {responsePreviewTemplate.isLoading ? <CircularProgress size={25} sx={{ color: 'white' }} /> : "Preview"}
             </Button>

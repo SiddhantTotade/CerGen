@@ -73,10 +73,10 @@ export default function CertificateTemplate(props) {
             </Tabs>
           </Box>
           <TabPanel value={value} index={0}>
-            <ChooseCompletionTemplate />
+            <ChooseCompletionTemplate props={props} />
           </TabPanel>
           <TabPanel value={value} index={1}>
-            <ChooseMeritTemplate />
+            <ChooseMeritTemplate props={props} />
           </TabPanel>
           <TabPanel value={value} index={2}>
             <UploadTemplate props={props} />

@@ -13,7 +13,7 @@ const templateCard = [...Array(card)].map((e, i) =>
   <LoaderSkeleton barPadding={9.1} barWidth="40%" key={i} />
 )
 
-export const ChooseCompletionTemplate = () => {
+export const ChooseCompletionTemplate = (props) => {
 
   const { access_token } = getToken()
 
@@ -101,7 +101,7 @@ export const ChooseCompletionTemplate = () => {
           </Grid>
         </Grid>
         <DialogActions sx={{ marginTop: "20px" }}>
-          <Button variant="contained">Cancel</Button>
+          <Button variant="contained" onClick={props.props.onClose} >Cancel</Button>
           <Button
             variant="contained"
             onClick={() => { setAlert(true); setCompletionPath({ completion: selectedImage.url }); setTimeout(() => { setAlert(false) }, 2000) }}
