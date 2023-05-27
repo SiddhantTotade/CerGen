@@ -36,6 +36,8 @@ import { getToken, removeToken } from "../../services/LocalStorageService";
 import { unsetUserInfo, setUserInfo } from "../../features/userSlice";
 import { unsetUserToken } from "../../features/authSlice";
 import UserDetails from "../user_components/UserDetails";
+import CheckIcon from '@mui/icons-material/Check';
+import CloseIcon from '@mui/icons-material/Close';
 
 const drawerWidth = 240;
 
@@ -299,6 +301,7 @@ export default function MiniDrawer() {
           </Box>
         </div>
         <UserDetails user={data} open={userDetails} onClose={handleUserDetailsClose} />
+        <div className="border-2 border-gray-400 rounded-lg cursor-pointer absolute bottom-20 ml-10 z-50 right-5 text-green-700" ><CheckIcon sx={{ fontSize: '40px' }} /></div>
         <Footer />
       </>
     </>
