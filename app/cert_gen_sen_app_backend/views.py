@@ -133,7 +133,7 @@ class SenderCredentialView(APIView):
             user_id = request.user.id
 
             if SendersCredentials.objects.filter(user=user_id).exists():
-                return JsonResponse("Something went wrong", safe=False)
+                return JsonResponse("OK", safe=False)
         except:
             return JsonResponse("Something went wrong", safe=False)
 
