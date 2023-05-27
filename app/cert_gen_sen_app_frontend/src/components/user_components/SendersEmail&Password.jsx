@@ -55,19 +55,21 @@ export const SenderEmailAndPassword = (props) => {
         <>
             {
                 responseCredential.isLoading ? <BackdropSpinner open={snackAndSpinner.openSpinner} /> :
-                    <Grid>
-                        <form onSubmit={handleSubmit(handleCredential)}>
-                            <TextField
-                                {...register('email')} error={Boolean(errors.email)} helperText={errors.email?.message} name="email" onChange={(e) => setCredential({ ...credential, email: e.target.value })} margin="dense" id="email" label="Senders Email" type="email" fullWidth variant="standard" />
-                            <TextField {...register('password')} error={Boolean(errors.password)} helperText={errors.password?.message} name="password" onChange={(e) => setCredential({ ...credential, password: e.target.value })} margin="dense" id="sender_password" label="Senders Password" type="password" fullWidth variant="standard" />
-                            <TextField {...register('phone')} error={Boolean(errors.phone)} helperText={errors.phone?.message} name="phone" onChange={(e) => setCredential({ ...credential, phone: e.target.value })} margin="dense" id="phone" label="Senders Phone" type="tel" fullWidth variant="standard" />
-                            <DialogActions sx={{ marginTop: "20px" }}>
-                                <Button variant="contained" onClick={() => props.onClose()}>Cancel</Button>
-                                <Button variant="contained" type="submit" >
-                                    Set Credentials
-                                </Button>
-                            </DialogActions>
-                        </form>
+                    <>
+                        <Grid>
+                            <form onSubmit={handleSubmit(handleCredential)}>
+                                <TextField
+                                    {...register('email')} error={Boolean(errors.email)} helperText={errors.email?.message} name="email" onChange={(e) => setCredential({ ...credential, email: e.target.value })} margin="dense" id="email" label="Senders Email" type="email" fullWidth variant="standard" />
+                                <TextField {...register('password')} error={Boolean(errors.password)} helperText={errors.password?.message} name="password" onChange={(e) => setCredential({ ...credential, password: e.target.value })} margin="dense" id="sender_password" label="Senders Password" type="password" fullWidth variant="standard" />
+                                <TextField {...register('phone')} error={Boolean(errors.phone)} helperText={errors.phone?.message} name="phone" onChange={(e) => setCredential({ ...credential, phone: e.target.value })} margin="dense" id="phone" label="Senders Phone" type="tel" fullWidth variant="standard" />
+                                <DialogActions sx={{ marginTop: "20px" }}>
+                                    <Button variant="contained" onClick={() => props.onClose()}>Cancel</Button>
+                                    <Button variant="contained" type="submit" >
+                                        Set Credentials
+                                    </Button>
+                                </DialogActions>
+                            </form>
+                        </Grid>
                         {
                             responseCredential.data ?
                                 <AlertSnackbar
@@ -78,7 +80,7 @@ export const SenderEmailAndPassword = (props) => {
                                     autoHideDuration={6000}
                                 /> : ""
                         }
-                    </Grid>
+                    </>
             }
         </>
     );
