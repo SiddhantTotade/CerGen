@@ -72,13 +72,7 @@ export const SenderEmailAndPassword = (props) => {
                         </Grid>
                         {
                             responseCredential.data ?
-                                <AlertSnackbar
-                                    open={snackAndSpinner.openSnack}
-                                    message={responseCredential.data}
-                                    severity={snackAndSpinner.alertType}
-                                    onClose={handleCloseSnackbar}
-                                    autoHideDuration={6000}
-                                /> : ""
+                                <AlertSnackbar open={snackAndSpinner.openSnack} message={responseCredential.data} severity={snackAndSpinner.alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} /> : ""
                         }
                     </>
             }
