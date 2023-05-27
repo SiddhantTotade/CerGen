@@ -94,6 +94,17 @@ export const userAuthAPI = createApi({
         };
       },
     }),
+    getCredential: builder.query({
+      query: (data) => {
+        return {
+          url: "sender-credential/",
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${data.access_token}`,
+          },
+        };
+      },
+    }),
   }),
 });
 
@@ -104,5 +115,6 @@ export const {
   useChangeUserPasswordMutation,
   useSendPasswordResetEmailMutation,
   useResetPasswordMutation,
+  useGetCredentialQuery,
   useSenderCredentialMutation,
 } = userAuthAPI;

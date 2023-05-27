@@ -109,12 +109,6 @@ class UserPasswordResetView(APIView):
         return Response({'msg': 'Password reset successfully'}, status=status.HTTP_200_OK)
 
 
-# Check sender email and password
-class CheckSenderEmailAndPassword(APIView):
-    def get(self, request):
-        pass
-
-
 # Getting single events by slug
 @permission_classes((IsAuthenticated,))
 def get_event_by_slug(request, slug):
@@ -134,6 +128,15 @@ def generate_uid(stu_id, eve_name, eve_dept, eve_date):
 
 
 class SenderCredentialView(APIView):
+    def get(self, request):
+        try:
+            user_id = request.user.id
+
+            if SendersCredentials.objects.filter(user=user_id).exists():
+                return JsonResponse("Something went wrong", safe=False)
+        except:
+            return JsonResponse("Something went wrong", safe=False)
+
     def post(self, request):
         try:
             user_id = request.user.id
@@ -152,7 +155,7 @@ class SenderCredentialView(APIView):
 
 
 # Getting all events view
-class EventsOperations(APIView):
+class EventsView(APIView):
     renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
 
@@ -185,7 +188,7 @@ class EventsOperations(APIView):
 
 
 # Getting data from xlsx and uploading to database
-class UploadParticipant(APIView):
+class UploadParticipantView(APIView):
     def get(self, request):
         all_participants = Participant.objects.all()
 
@@ -263,7 +266,7 @@ class UploadParticipant(APIView):
 
 
 # Uploading each participant from xlsx file
-class UploadEachParticipant(APIView):
+class UploadEachParticipantView(APIView):
     def post(self, request):
         participant_serialized_data = ParticipantSerializer(data=request.data)
 
@@ -284,7 +287,7 @@ class UploadEachParticipant(APIView):
 
 
 # Upload participant image
-class UploadParticipantImage(APIView):
+class UploadParticipantImageView(APIView):
     def patch(self, request, pk):
         try:
             participant_img = request.FILES['participant_image']
@@ -299,7 +302,7 @@ class UploadParticipantImage(APIView):
 
 # Filtering events by slug
 @ permission_classes((IsAuthenticated,))
-class FilteredEvent(APIView):
+class FilteredEventView(APIView):
     def get(self, request, slug):
         event = Event.objects.get(slug=slug)
         participants = reversed(Participant.objects.filter(event=event))
@@ -319,7 +322,7 @@ class FilteredEvent(APIView):
 
 
 # Uploading completion templates
-class UploadCompletionTemplate(APIView):
+class UploadCompletionTemplateView(APIView):
     def get(self, request):
         image_file = CompletionCertificateTemplate.objects.filter(
             user=request.user)
@@ -350,7 +353,7 @@ class UploadCompletionTemplate(APIView):
 
 
 # Uploading merit templates
-class UploadMeritTemplate(APIView):
+class UploadMeritTemplateView(APIView):
     def get(self, request):
         image_file = MeritCertificateTemplate.objects.filter(
             user=request.user)
@@ -381,7 +384,7 @@ class UploadMeritTemplate(APIView):
 
 
 # Upload contribute completion templates
-class ContributeCompletion(APIView):
+class ContributeCompletionView(APIView):
     def get(self, request):
         contribute_img = ContributedCompletionCertificates.objects.all()
 
@@ -393,7 +396,7 @@ class ContributeCompletion(APIView):
 
 
 # Upload contribute merit certificate
-class ContributeMerit(APIView):
+class ContributeMeritView(APIView):
     def get(self, request):
         contribute_img = ContributedMeritCertificates.objects.all()
 
@@ -405,7 +408,7 @@ class ContributeMerit(APIView):
 
 
 # Upload and get participant image album
-class ParticipantImageAlbum(APIView):
+class ParticipantImageAlbumView(APIView):
     def get(self, request, slug):
         image_album_slug = Event.objects.get(slug=slug)
         album_images = ParticipantAlbum.objects.filter(event=image_album_slug)

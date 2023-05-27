@@ -30,7 +30,7 @@ import HomeAnimation from "../../pages/HomeAnimation";
 import "../../pages/styles/home.css";
 import '../../pages/styles/home.css'
 import { useLocation } from "react-router-dom";
-import { useGetLoggedInUserQuery } from "../../services/userAuthAPI";
+import { useGetCredentialQuery, useGetLoggedInUserQuery } from "../../services/userAuthAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { getToken, removeToken } from "../../services/LocalStorageService";
 import { unsetUserInfo, setUserInfo } from "../../features/userSlice";
@@ -130,6 +130,10 @@ export default function MiniDrawer() {
   const { access_token } = getToken()
 
   const { data, isSuccess } = useGetLoggedInUserQuery(access_token)
+
+  const sendersCredential = useGetCredentialQuery(access_token)
+
+  console.log(sendersCredential);
 
   const listItemButton_sx = {
     minHeight: 48,
