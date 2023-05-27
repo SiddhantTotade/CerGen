@@ -55,7 +55,7 @@ export const SenderEmailAndPassword = (props) => {
         <>
             {
                 responseCredential.isLoading ? <BackdropSpinner open={snackAndSpinner.openSpinner} /> :
-                    <>
+                    <div>
                         <Grid>
                             <form onSubmit={handleSubmit(handleCredential)}>
                                 <TextField
@@ -74,7 +74,7 @@ export const SenderEmailAndPassword = (props) => {
                             responseCredential.data ?
                                 <AlertSnackbar open={snackAndSpinner.openSnack} message={responseCredential.data} severity={snackAndSpinner.alertType} onClose={handleCloseSnackbar} autoHideDuration={6000} /> : ""
                         }
-                    </>
+                    </div>
             }
         </>
     );
