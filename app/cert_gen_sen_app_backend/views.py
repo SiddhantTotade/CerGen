@@ -161,7 +161,7 @@ class EventsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        all_events = Event.objects.filter(user=request.user)
+        all_events = reversed(Event.objects.filter(user=request.user))
 
         if all_events:
             event_serializer_data = EventSerializer(
