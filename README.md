@@ -18,7 +18,7 @@ CerGen is a web application which generates the certificates for the participant
 
 # Getting Started
 
-## Setting up virtual environment
+## Setting Up Virtual Environment
 + Clone the project
 ```shell
 git clone git@github.com:SiddhantTotade/cergen.git
@@ -57,6 +57,15 @@ pip freeze
 ```shell
 pip install -r requirements.txt
 ```
+## Setting Up Application
++ After enabling the `venv`, run the command for creating migrations
+```shell
+python manage.py makemigrations
+```
++ After creating the migrations of all the models, run command
+```shell
+python manage.py migrate
+```
 
 ## First - Running Django Server
 + Change directory to `app`
@@ -85,6 +94,8 @@ npm start
 ```shell
 https://tailwindcss.com/docs/guides/create-react-app
 ```
+## Important Notes
++ Try to generate `app password` of gmail while sending certificates.
 
 #### Leave a star if you like the project. :star:
 ### Enjoy :relaxed: :relaxed:
