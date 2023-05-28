@@ -20,6 +20,8 @@ from email.mime.base import MIMEBase
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
 from pypdf import PdfMerger
+import imaplib
+import email
 
 
 # PDF merger
@@ -49,6 +51,29 @@ def send_message(participant_name, phone, senders_phone):
         to=phone
     )
     return "SENT"
+
+
+# Check mail sent or not
+def check_mail(sender_email, sender_password):
+    imap_server = 'imap.gmail.com'
+
+    sender_email = sender_email
+    password = sender_password
+
+    imap = imaplib.IMAP4_SSL(imap_server)
+    imap.login(sender_email, password)
+
+    imap.select('"[Gmail]/Sent Mail"')
+
+    _, msgnums = imap.search(None, "ALL")
+
+    message_id_list = msgnums[0].split()
+    latest_message = message_id_list[-1]
+
+    _, data = imap.fetch(latest_message, "(RFC822)")
+    raw_message = email.message_from_bytes(data[0][1])
+
+    return raw_message.get("To")
 
 
 # Sending mail to participant
@@ -82,7 +107,10 @@ def send_mail(subject, body, email_to, certificate_file, senders_email, senders_
             server.login(email_from, password)
             server.sendmail(email_from, email_to, text)
 
-        return "SENT"
+        mail = check_mail(email_from, password)
+
+        if mail == email_to:
+            return "SENT"
     except Exception as e:
         print(e)
 
@@ -279,9 +307,6 @@ class GenerateCertificate(APIView):
                                  stu["phone"], senders_phone)
                     send_certificate = send_mail("Certificate of Participation",
                                                  "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
-
-                    Participant.objects.filter(id=stu['id']).update(
-                        certificate_sent_status=True)
 
                     if send_certificate == "SENT":
                         Participant.objects.filter(

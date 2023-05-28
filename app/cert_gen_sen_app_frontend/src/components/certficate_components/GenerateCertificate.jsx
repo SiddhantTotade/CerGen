@@ -64,11 +64,11 @@ export default function GenerateCertificate(props) {
     }
 
     const checkTemplate = () => {
-        if ((meritCertificate === 'undefined' || meritCertificate === 'null' || meritCertificate === "") && (completionCertificate === 'undefined' || completionCertificate === 'null' || completionCertificate === "")) {
-            return false
+        if ((meritCertificate.includes("/certificate-data/merit-certificate-templates/")) || (completionCertificate.includes("/certificate-data/completion-certificate-templates/"))) {
+            return true
         }
         else {
-            return true
+            return false
         }
     }
 

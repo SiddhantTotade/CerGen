@@ -42,6 +42,6 @@ class Ppt2Image(APIView):
         #     str, content_type='image/jpg')
         # response['Content-Disposition'] = f'attachment; filename={file_name}'
 
-        # self.clear_preview()
+        self.clear_preview()
 
         return Response(str)

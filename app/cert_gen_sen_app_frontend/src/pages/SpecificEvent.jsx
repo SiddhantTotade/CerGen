@@ -306,7 +306,7 @@ export default function SpecificEvent() {
     <div className="flex justify-center items-center">
       {
         checkDownloadCertificate() ?
-          <Box sx={{ position: 'absolute', zIndex: '15000', marginRight: '1400px', marginTop: '-300px' }}>
+          <Box sx={{ position: 'absolute', marginRight: '1400px', marginTop: '-300px' }}>
             <Tooltip title="Download Certificate"><Button variant="contained" sx={{ borderRadius: '100px' }} onClick={() => downloadCertificate(eventData.data[0]['certificates_file'], eventData.data[0]['certificate_file_name'])} ><DownloadIcon /></Button></Tooltip>
           </Box> : ""
       }
