@@ -146,9 +146,12 @@ export const AllEvents = () => {
                     :
                     <>
                         <div className='grid gap-5 justify-center col-auto grid-cols-3 p-10 w-3/5 m-auto' >
-                            {data !== 'No event data' ? <>{displayData} </> : <h2>No events available</h2>}
+                            {data.length === 0 ? <h2>No events available</h2> : <>{displayData} </>}
                         </div>
-                        <ReactPaginate previousLabel={<ArrowLeftIcon />} nextLabel={<ArrowRightIcon />} pageCount={pageCount} onPageChange={changePage} containerClassName="pagination-btn" previousLinkClassName='prev-btn' nextLinkClassName='next-btn' disabledClassName='pagination-disabled' activeClassName='pagination-active' />
+                        {
+                            data.length === 0 ? "" :
+                                <ReactPaginate previousLabel={<ArrowLeftIcon />} nextLabel={<ArrowRightIcon />} pageCount={pageCount} onPageChange={changePage} containerClassName="pagination-btn" previousLinkClassName='prev-btn' nextLinkClassName='next-btn' disabledClassName='pagination-disabled' activeClassName='pagination-active' />
+                        }
                     </>
             }
             <UpdateEvent open={updateForm} onClose={handleUpdateFormClose} event={eventData} />
