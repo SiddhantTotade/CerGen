@@ -292,14 +292,14 @@ class GenerateCertificate(APIView):
                         stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                     certificate_path = generate_merit_certificate(
                         stu['participant_name'], stu['certificate_id'], stu['certificate_status'], qrcode_path, merit_certificate_path)
-                    # send_message(stu["participant_name"],
-                    #              stu["phone"], senders_phone)
+                    send_message(stu["participant_name"],
+                                 stu["phone"], senders_phone)
                     send_certificate = send_mail("Certificate of Participation",
                                                  "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
 
-                    # if send_certificate == "SENT":
-                    #     Participant.objects.filter(
-                    #         id=stu['id']).update(certificate_sent_status=True)
+                    if send_certificate == "SENT":
+                        Participant.objects.filter(
+                            id=stu['id']).update(certificate_sent_status=True)
 
                     merge_certificate_path.append(certificate_path)
                 else:
@@ -307,14 +307,14 @@ class GenerateCertificate(APIView):
                         stu["participant_name"], stu["participant_id"], stu["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                     certificate_path = generate_participant_certificate(
                         stu["participant_name"], stu["certificate_id"], qrcode_path, completion_certificate_path)
-                    # send_message(stu["participant_name"],
-                    #              stu["phone"], senders_phone)
+                    send_message(stu["participant_name"],
+                                 stu["phone"], senders_phone)
                     send_certificate = send_mail("Certificate of Participation",
                                                  "Thank you for participanting in the Event/Contest", stu["email"], certificate_path, senders_email, senders_password)
 
-                    # if send_certificate == "SENT":
-                    #     Participant.objects.filter(
-                    #         id=stu['id']).update(certificate_sent_status=True)
+                    if send_certificate == "SENT":
+                        Participant.objects.filter(
+                            id=stu['id']).update(certificate_sent_status=True)
 
                     merge_certificate_path.append(certificate_path)
 
@@ -369,8 +369,8 @@ class GenerateCertificateById(APIView):
                     stu_data["participant_name"], stu_data["participant_id"], stu_data["certificate_id"], eve_data["event_name"], eve_data["event_department"], eve_data["from_date"])
                 certificate_path = generate_merit_certificate(
                     stu_data["participant_name"], stu_data["certificate_id"], stu_data["certificate_status"], qrcode_path, merit_certificate_path)
-                # send_message(stu_data["participant_name"],
-                #              stu_data["phone"], senders_phone)
+                send_message(stu_data["participant_name"],
+                             stu_data["phone"], senders_phone)
                 send_certificate = send_mail("Certificate of Participation",
                                              "Thank you for participanting in the Event/Contest", stu_data["email"], certificate_path, senders_email, senders_password)
 
