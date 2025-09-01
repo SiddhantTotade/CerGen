@@ -1,6 +1,6 @@
-asgiref==3.5.2
-aspose-words==23.2.0
-Aspose.Slides==23.2.0
+asgiref>=3.7.2
+aspose-words>=25.7.0
+Aspose.Slides>=25.7.0
 certifi==2022.12.7
 cffi==1.15.1
 charset-normalizer==2.1.1
@@ -17,7 +17,7 @@ et-xmlfile==1.1.0
 idna==3.4
 lxml==4.9.2
 MarkupPy==1.14
-numpy==1.23.5
+numpy~=1.26.4
 odfpy==1.4.1
 opencv-python==4.6.0.66
 openpyxl==3.0.10
