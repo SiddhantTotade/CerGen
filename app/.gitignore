@@ -1,2 +1,8 @@
 .env
 db.sqlite3
+
+cergen_auth/__pycache__
+cergen_auth/migrations
+
+cert_gen_sen_app_backend/__pycache__
+cert_gen_sen_app_backend/migrations

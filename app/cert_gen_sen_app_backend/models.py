@@ -65,15 +65,7 @@ class EventFile(models.Model):
 
 class Participant(models.Model):
     event = models.ForeignKey(Event, on_delete=models.CASCADE)
-    participant_name = models.CharField(max_length=50, null=True, blank=True)
-    participant_id = models.CharField(max_length=50, null=True, blank=True)
-    email = models.EmailField(max_length=254, null=True, blank=True)
-    phone = models.CharField(max_length=13, blank=True)
-    certificate_status = models.CharField(max_length=10, null=True, blank=True)
-    certificate_id = models.CharField(max_length=50, null=True, blank=True)
-    certificate_sent_status = models.BooleanField(default=False)
-    participant_image = models.ImageField(
-        upload_to='participant-image', null=True, blank=True)
+    participant_details = models.JSONField(default=None)
 
 
 class CompletionCertificateTemplate(models.Model):
