@@ -35,24 +35,10 @@ class SendersCredentials(models.Model):
 
 
 class Event(models.Model):
-    id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    event_name = models.CharField(max_length=20, null=True, blank=True)
-    subject = models.CharField(max_length=250, null=True, blank=True)
-    event_department = models.CharField(max_length=20, null=True, blank=True)
-    from_date = models.DateField()
-    to_date = models.DateField()
-    event_year = models.IntegerField(blank=True, null=True)
-    slug = models.SlugField(null=True, blank=True)
-    certificates_file = models.FileField(
-        upload_to='pdf-certificates-files', default="")
-    certificate_file_name = models.CharField(
-        max_length=255, null=True, blank=True)
-
-    def save(self, *args, **kwargs):
-        self.slug = slugify(self.event_name) + generate_random_string()
-        return super().save(*args, **kwargs)
-
+    event = models.CharField(max_length=20, null=True, blank=True)
+    details = models.JSONField(default=None)
+    
     def __str__(self):
         return str(self.id)
 
