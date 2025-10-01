@@ -15,11 +15,11 @@ from collections import OrderedDict
 import openpyxl
 
 
-class CreateEvent(APIView):
+class EventView(APIView):
     renderer_classes = [UserRenderer]
     permission_classes = [IsAuthenticated]
 
-    def get(self, request):
+    def get(self, request, format=None):
         events = reversed(Event.objects.filter(user=request.user))
 
         if events:
