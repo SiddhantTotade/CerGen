@@ -70,8 +70,7 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "cert_generator_sender_project.urls"
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000"]
-# CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000",]
 CORS_ALLOW_CREDENTIALS = True
 
 TEMPLATES = [
@@ -169,7 +168,7 @@ EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
 
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
-        "rest_framework_simplejwt.authentication.JWTAuthentication",
+        "cergen_auth.authentication.CustomJWTAuthentication",
     ),
     "DEFAULT_RENDERER_CLASSES": ("rest_framework.renderers.JSONRenderer",),
 }
