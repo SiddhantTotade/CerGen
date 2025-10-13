@@ -14,6 +14,7 @@ urlpatterns = [
     #     path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(),
     #          name='reset_password'),
     path("event/", EventView.as_view()),
+    path("participant/", ParticipantsView.as_view()),
     path("sender-credential/", SenderCredentialView.as_view()),
     path("all-events/", EventsView.as_view()),
     path("all-events/<int:pk>", EventsView.as_view()),

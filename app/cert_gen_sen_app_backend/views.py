@@ -21,7 +21,7 @@ class EventView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request, format=None):
-        events = reversed(Event.objects.filter(user=request.user))
+        events = Event.objects.filter(user=request.user).order_by("-id")
 
         if events:
             serializer = EventSerializer(events, many=True)
@@ -30,15 +30,13 @@ class EventView(APIView):
             return Response("Events not found", status=status.HTTP_400_BAD_REQUEST)
 
     def post(self, request):
-        serializer = CreateEventSerializer(
-            data=request.data, context={"request": request}
-        )
+        serializer = EventSerializer(data=request.data, context={"request": request})
 
         if serializer.is_valid():
             serializer.save()
-            return Response("Event added", status=status.HTTP_201_CREATED)
+            return Response(serializer.data, status=status.HTTP_201_CREATED)
         else:
-            return Response("Failed to add event", status=status.HTTP_400_BAD_REQUEST)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request):
         event_id = request.data.get("id")
@@ -49,15 +47,102 @@ class EventView(APIView):
             )
 
         event = get_object_or_404(Event, id=event_id, user=request.user)
-        serializer = CreateEventSerializer(
+        serializer = EventSerializer(
             event, data=request.data, partial=True, context={"request": request}
         )
 
         if serializer.is_valid():
             serializer.save()
-            return Response("Event Updated", status=status.HTTP_200_OK)
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request):
+        event_id = request.data.get("id")
+
+        if not event_id:
+            return Response(
+                {"error": "Event ID is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        event = get_object_or_404(Event, id=event_id, user=request.user)
+        event.delete()
+
+        return Response("Event deleted", status=status.HTTP_204_NO_CONTENT)
+
+
+class ParticipantsView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        event_id = request.data.get("id")
+        participants = Participant.objects.filter(event__user=request.user)
+
+        if not event_id:
+            return Response(
+                {"error": "Event ID is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        event = get_object_or_404(Event, id=event_id, user=request.user)
+        participants = Participant.objects.filter(event=event)
+
+        serializer = ParticipantSerializer(participants, many=True)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def post(self, request):
+        serializer = ParticipantSerializer(
+            data=request.data, context={"request": request}
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
+
+    def put(self, request):
+        participant_id = request.data.get("id")
+
+        if not participant_id:
+            return Response(
+                {"error": "Participant ID is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        participant = get_object_or_404(
+            Participant, id=participant_id, event__user=request.user
+        )
+
+        serializer = ParticipantSerializer(
+            participant, data=request.data, partial=True, context={"request": request}
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+    def delete(self, request, pk=None):
+        participant_id = request.data.get("id")
+
+        if not participant_id:
+            return Response(
+                {"error": "Participant ID is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        participant = get_object_or_404(
+            Participant, id=participant_id, event__user=request.user
+        )
+
+        participant.delete()
+
+        return Response(
+            {"message": "Participant deleted successfully"}, status=status.HTTP_200_OK
+        )
 
 
 class SenderCredentialView(APIView):

@@ -10,7 +10,7 @@ from .renderers import *
 from .utils import *
 
 
-class CreateEventSerializer(serializers.ModelSerializer):
+class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
         fields = ["id", "event", "details"]
@@ -28,30 +28,41 @@ class SenderCredentialSerializer(serializers.ModelSerializer):
 
 
 # Event serializer
-class EventSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Event
-        fields = "__all__"
+# class EventSerializer(serializers.ModelSerializer):
+#     class Meta:
+#         model = Event
+#         fields = "__all__"
 
-    def create(self, validated_data):
-        event = Event.objects.create(
-            user=validated_data["user"],
-            event_name=validated_data["event_name"],
-            subject=validated_data["subject"],
-            event_department=validated_data["event_department"],
-            from_date=validated_data["from_date"],
-            to_date=validated_data["to_date"],
-            event_year=validated_data["event_year"],
-        )
-        event.save()
-        return event
+#     def create(self, validated_data):
+#         event = Event.objects.create(
+#             user=validated_data["user"],
+#             event_name=validated_data["event_name"],
+#             subject=validated_data["subject"],
+#             event_department=validated_data["event_department"],
+#             from_date=validated_data["from_date"],
+#             to_date=validated_data["to_date"],
+#             event_year=validated_data["event_year"],
+#         )
+#         event.save()
+#         return event
 
 
 # Participant serializer
 class ParticipantSerializer(serializers.ModelSerializer):
     class Meta:
         model = Participant
-        fields = "__all__"
+        fields = ["id", "event", "participant_details"]
+
+    def create(self, validated_data):
+        request = self.context.get("request")
+        event = validated_data.get("event")
+
+        if event.user != request.user:
+            return serializers.ValidationError(
+                "You do not have permission to add participants to this event"
+            )
+
+        return super().create(validated_data)
 
 
 # Participant image serializer
