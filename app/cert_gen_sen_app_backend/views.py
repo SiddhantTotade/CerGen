@@ -76,8 +76,7 @@ class ParticipantsView(APIView):
     permission_classes = [IsAuthenticated]
 
     def get(self, request):
-        event_id = request.data.get("id")
-        participants = Participant.objects.filter(event__user=request.user)
+        event_id = request.query_params.get("event")
 
         if not event_id:
             return Response(
@@ -85,6 +84,7 @@ class ParticipantsView(APIView):
             )
 
         event = get_object_or_404(Event, id=event_id, user=request.user)
+
         participants = Participant.objects.filter(event=event)
 
         serializer = ParticipantSerializer(participants, many=True)
