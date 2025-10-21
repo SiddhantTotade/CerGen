@@ -92,9 +92,15 @@ class ParticipantsView(APIView):
         return Response(serializer.data, status=status.HTTP_200_OK)
 
     def post(self, request):
-        serializer = ParticipantSerializer(
-            data=request.data, context={"request": request}
-        )
+        event_id = request.query_params.get("event")
+
+        if not event_id:
+            return Response({"error": "Event ID is required"}, status=400)
+
+        data = request.data.copy()
+        data["event"] = event_id
+
+        serializer = ParticipantSerializer(data=data, context={"request": request})
 
         if serializer.is_valid():
             serializer.save()
@@ -103,7 +109,7 @@ class ParticipantsView(APIView):
         return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     def put(self, request):
-        participant_id = request.data.get("id")
+        participant_id = request.query_params.get("participant")
 
         if not participant_id:
             return Response(
@@ -115,15 +121,20 @@ class ParticipantsView(APIView):
             Participant, id=participant_id, event__user=request.user
         )
 
-        serializer = ParticipantSerializer(
-            participant, data=request.data, partial=True, context={"request": request}
-        )
+        participant_details = request.data.get("participant_details")
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
+        if participant_details is None:
+            return Response(
+                {"error": "Participant details is required"},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        participant.participant_details = participant_details
+        participant.save(update_fields=["participant_details"])
+
+        serializer = ParticipantSerializer(participant)
+
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, pk=None):
         participant_id = request.data.get("id")
