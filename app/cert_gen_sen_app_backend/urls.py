@@ -13,6 +13,8 @@ urlpatterns = [
     #          name='send_reset_email_password'),
     #     path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(),
     #          name='reset_password'),
+    path("generate-event/", GenerateEventTemplatesAPIView.as_view()),
+    path("generate-participant/", GenerateParticipantTemplateAPIView.as_view()),
     path("event/", EventView.as_view()),
     path("participant/", ParticipantsView.as_view()),
     path("sender-credential/", SenderCredentialView.as_view()),

@@ -45,11 +45,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-
     # INSTALLED APPS
     "cergen_auth",
     "cert_gen_sen_app_backend",
-
     # THIRD PARTY APPS
     "rest_framework",
     "corsheaders",
@@ -70,7 +68,12 @@ MIDDLEWARE = [
 
 ROOT_URLCONF = "cert_generator_sender_project.urls"
 
-CORS_ALLOWED_ORIGINS = ["http://localhost:3000", "http://127.0.0.1:8000",]
+GRPC_SERVER_ADDRESS = "127.0.0.1:50051"
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
+    "http://127.0.0.1:8000",
+]
 CORS_ALLOW_CREDENTIALS = True
 
 TEMPLATES = [

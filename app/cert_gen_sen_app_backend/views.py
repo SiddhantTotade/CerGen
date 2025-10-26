@@ -1,4 +1,4 @@
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import get_object_or_404
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -13,7 +13,117 @@ from .resources import *
 from .helpers import *
 from itertools import islice
 from collections import OrderedDict
+from .services.grpc_client import generate_pdf_via_grpc
 import openpyxl
+import base64
+
+
+class GenerateEventTemplatesAPIView(APIView):
+    def post(self, request):
+        try:
+            event_id = request.data.get("event_id")
+            template_id = request.data.get("template_id")
+
+            if not event_id or not template_id:
+                return Response(
+                    {
+                        "success": False,
+                        "message": "event_id and template_id are required.",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            event = Event.objects.get(id=event_id)
+            template_obj = Template.objects.get(id=template_id, user=event.user)
+            participants = Participant.objects.filter(event=event)
+
+            rendered_outputs = []
+
+            for participant in participants:
+                html = TemplateRenderHelper.render_html(
+                    template_obj.html_content, event, participant
+                )
+                html_clean = html.replace("\r", "").replace("\n", "")
+
+                pdf_bytes = generate_pdf_via_grpc(template_id, html_clean)
+                rendered_outputs.append(
+                    {
+                        "participant_id": participant.id,
+                        "html": html_clean,
+                        "pdf_data": base64.b64encode(pdf_bytes).decode("utf-8"),
+                    }
+                )
+
+                return Response(
+                    {
+                        "success": True,
+                        "message": "Templates generated for all participants.",
+                        "data": rendered_outputs,
+                    },
+                    status=status.HTTP_200_OK,
+                )
+
+        except Event.DoesNotExist:
+            return Response(
+                {"success": False, "message": "Event not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Template.DoesNotExist:
+            return Response(
+                {"success": False, "message": "Template not found."},
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Exception as e:
+            return Response(
+                {"success": False, "message": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
+
+
+class GenerateParticipantTemplateAPIView(APIView):
+
+    def post(self, request):
+        try:
+            event_id = request.data.get("event_id")
+            template_id = request.data.get("template_id")
+            participant_id = request.data.get("participant_id")
+
+            if not event_id or not template_id or not participant_id:
+                return Response(
+                    {
+                        "success": False,
+                        "message": "event_id, template_id, and participant_id are required.",
+                    },
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+
+            event = Event.objects.get(id=event_id)
+            template_obj = Template.objects.get(id=template_id, user=event.user)
+            participant = Participant.objects.get(id=participant_id, event=event)
+
+            html = TemplateRenderHelper.render_html(
+                template_obj.html_content, event, participant
+            )
+
+            return HttpResponse(html)
+
+        except (
+            Event.DoesNotExist,
+            Participant.DoesNotExist,
+            Template.DoesNotExist,
+        ):
+            return Response(
+                {
+                    "success": False,
+                    "message": "Invalid event, participant, or template.",
+                },
+                status=status.HTTP_404_NOT_FOUND,
+            )
+        except Exception as e:
+            return Response(
+                {"success": False, "message": str(e)},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
 
 class EventView(APIView):

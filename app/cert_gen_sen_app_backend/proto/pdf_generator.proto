@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package certificate;
+
+option go_package = "github.com/SiddhantTotade/go_html_to_pdf/proto;pdf_generator";
+
+message PDFRequest {
+  string html_content = 1;
+  string file_name = 2;
+}
+
+message PDFResponse {
+  bytes pdf_data = 1;
+  string message = 2;
+  bool success = 3;
+}
+
+service PDFGenerator {
+  rpc GeneratePDF(PDFRequest) returns (PDFResponse);
+}

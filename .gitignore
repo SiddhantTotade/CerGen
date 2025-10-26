@@ -3,3 +3,4 @@
 /lib64
 pyvenv.cfg
 venv
+.vscode
