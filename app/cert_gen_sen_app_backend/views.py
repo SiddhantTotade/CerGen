@@ -23,6 +23,7 @@ class GenerateEventTemplatesAPIView(APIView):
         try:
             event_id = request.data.get("event_id")
             template_id = request.data.get("template_id")
+            orientation = request.data.get("orientation", "portrait")
 
             if not event_id or not template_id:
                 return Response(
@@ -45,7 +46,7 @@ class GenerateEventTemplatesAPIView(APIView):
                 )
                 html_clean = html.replace("\r", "").replace("\n", "")
 
-                pdf_bytes = generate_pdf_via_grpc(template_id, html_clean)
+                pdf_bytes = generate_pdf_via_grpc(template_id, html_clean, orientation)
                 rendered_outputs.append(
                     {
                         "participant_id": participant.id,
@@ -54,14 +55,14 @@ class GenerateEventTemplatesAPIView(APIView):
                     }
                 )
 
-                return Response(
-                    {
-                        "success": True,
-                        "message": "Templates generated for all participants.",
-                        "data": rendered_outputs,
-                    },
-                    status=status.HTTP_200_OK,
-                )
+            return Response(
+                {
+                    "success": True,
+                    "message": "Templates generated for all participants.",
+                    "data": rendered_outputs,
+                },
+                status=status.HTTP_200_OK,
+            )
 
         except Event.DoesNotExist:
             return Response(
@@ -264,6 +265,29 @@ class ParticipantsView(APIView):
         return Response(
             {"message": "Participant deleted successfully"}, status=status.HTTP_200_OK
         )
+
+
+class TemplateView(APIView):
+    renderer_classes = [UserRenderer]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        templates = Template.objects.filter(user=request.user).order_by("-id")
+
+        if templates:
+            serializer = TemplateSerializer(templates, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        else:
+            return Response("Templates not found", status=status.HTTP_400_BAD_REQUEST)
+
+    def post(self, request):
+        pass
+
+    def put(self, request):
+        pass
+
+    def delete(self, request):
+        pass
 
 
 class SenderCredentialView(APIView):

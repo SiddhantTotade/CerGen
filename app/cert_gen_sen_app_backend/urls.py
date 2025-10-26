@@ -17,6 +17,7 @@ urlpatterns = [
     path("generate-participant/", GenerateParticipantTemplateAPIView.as_view()),
     path("event/", EventView.as_view()),
     path("participant/", ParticipantsView.as_view()),
+    path("template/", TemplateView.as_view()),
     path("sender-credential/", SenderCredentialView.as_view()),
     path("all-events/", EventsView.as_view()),
     path("all-events/<int:pk>", EventsView.as_view()),

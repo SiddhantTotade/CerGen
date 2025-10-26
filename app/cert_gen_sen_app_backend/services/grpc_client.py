@@ -3,7 +3,7 @@ import logging
 logger = logging.getLogger(__name__)
 
 
-def generate_pdf_via_grpc(template_id, data):
+def generate_pdf_via_grpc(template_id, data, orientation="portrait"):
     import grpc
     from ..proto import pdf_generator_pb2, pdf_generator_pb2_grpc
 
@@ -13,7 +13,7 @@ def generate_pdf_via_grpc(template_id, data):
         logger.info("Stub created, sending request...")
 
         request = pdf_generator_pb2.PDFRequest(
-            html_content=data, file_name=f"{template_id}.pdf"
+            html_content=data, file_name=f"{template_id}.pdf", orientation=orientation
         )
         response = stub.GeneratePDF(request)
         logger.info("Received response from gRPC server")

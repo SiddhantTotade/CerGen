@@ -6,3 +6,9 @@ cergen_auth/migrations
 
 cert_gen_sen_app_backend/__pycache__
 cert_gen_sen_app_backend/migrations
+
+cert_gen_sen_app_backend/proto/__pycache__
+cert_gen_sen_app_backend/proto/pdf_generator_pb2.py
+cert_gen_sen_app_backend/proto/pdf_generator_pb2_grpc.py
+
+cert_gen_sen_app_backend/services/__pycache__

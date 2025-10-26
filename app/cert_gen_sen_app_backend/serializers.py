@@ -20,6 +20,16 @@ class EventSerializer(serializers.ModelSerializer):
         return super().create(validated_data)
 
 
+class TemplateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Template
+        fields = ["id", "template_name", "html_content"]
+
+    def create(self, validated_data):
+        validated_data["user"] = self.context["request"].user
+        return super().create(validated_data)
+
+
 # Sender credential serializer
 class SenderCredentialSerializer(serializers.ModelSerializer):
     class Meta:
