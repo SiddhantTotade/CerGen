@@ -290,10 +290,35 @@ class TemplateView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
     def put(self, request):
-        pass
+        template_id = request.data.get("id")
+
+        if not template_id:
+            return Response(
+                {"error": "Template ID is required"}, status=status.HTTP_400_BAD_REQUEST
+            )
+
+        template = get_object_or_404(Template, id=template_id, user=request.user)
+        serializer = TemplateSerializer(
+            template, data=request.data, partial=True, context={"request": request}
+        )
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+
+        return Response(serializer.errors, status.HTTP_400_BAD_REQUEST)
 
     def delete(self, request):
         pass
+
+
+class TemplateDetailView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, template_id):
+        template = get_object_or_404(Template, id=template_id, user=request.user)
+        serializer = TemplateSerializer(template)
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
 
 class SenderCredentialView(APIView):
