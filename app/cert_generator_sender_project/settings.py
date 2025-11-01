@@ -50,10 +50,15 @@ INSTALLED_APPS = [
     "cert_gen_sen_app_backend",
     # THIRD PARTY APPS
     "rest_framework",
+    "graphene_django",
     "corsheaders",
     "import_export",
     "rest_framework_simplejwt",
 ]
+
+GRAPHENE = {
+    "SCHEMA" : "cert_generator_sender_project.schema.schema"
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
