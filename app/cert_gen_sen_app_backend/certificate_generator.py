@@ -23,8 +23,6 @@ from pypdf import PdfMerger
 import imaplib
 import email
 
-
-# PDF merger
 def pdf_certificate_merger(pdf_list, event_slug):
     merger = PdfMerger()
 
@@ -39,7 +37,6 @@ def pdf_certificate_merger(pdf_list, event_slug):
         certificates_file=f'pdf-certificates-files/Certificates - {event_slug}.pdf', certificate_file_name=f'Certificates - {event_slug}.pdf')
 
 
-# Sending message to participant
 def send_message(participant_name, phone, senders_phone):
     account_sid = config("TWILIO_SID")
     auth_token = config("TWILIO_AUTH_TOKEN")
@@ -53,7 +50,6 @@ def send_message(participant_name, phone, senders_phone):
     return "SENT"
 
 
-# Check mail sent or not
 def check_mail(sender_email, sender_password):
     imap_server = 'imap.gmail.com'
 
