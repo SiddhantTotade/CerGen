@@ -2,6 +2,8 @@ from .views import *
 from django.urls import path
 from .certificate_generator import *
 from .ppt_2_image_preview import *
+from .schema.schema import schema
+from django.views.decorators.csrf import csrf_exempt
 
 urlpatterns = [
     #     path('register/', UserRegistrationView.as_view(), name='register'),
@@ -13,6 +15,10 @@ urlpatterns = [
     #          name='send_reset_email_password'),
     #     path('reset-password/<uid>/<token>/', UserPasswordResetView.as_view(),
     #          name='reset_password'),
+    path(
+        "api/",
+        csrf_exempt(AuthenticatedGraphQlView.as_view(graphiql=True, schema=schema)),
+    ),
     path("generate-event/", GenerateEventTemplatesAPIView.as_view()),
     path("generate-participant/", GenerateParticipantTemplateAPIView.as_view()),
     path("event/", EventView.as_view()),

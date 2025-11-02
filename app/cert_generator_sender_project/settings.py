@@ -57,7 +57,9 @@ INSTALLED_APPS = [
 ]
 
 GRAPHENE = {
-    "SCHEMA" : "cert_generator_sender_project.schema.schema"
+    "SCHEMA": "cert_generator_sender_project.schema.schema",
+    "MIDDLEWARE": [],
+    "CAMELCASE": False,
 }
 
 MIDDLEWARE = [

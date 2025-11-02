@@ -14,8 +14,28 @@ from .helpers import *
 from itertools import islice
 from collections import OrderedDict
 from .services.grpc_client import generate_pdf_via_grpc
+from cergen_auth.authentication import CustomJWTAuthentication
+from graphene_django.views import GraphQLView
 import openpyxl
 import base64
+
+
+class AuthenticatedGraphQlView(GraphQLView):
+    def dispatch(self, request, *args, **kwargs):
+        user = None
+        auth_classes = [CustomJWTAuthentication]
+
+        for auth_class in auth_classes:
+            auth = auth_class()
+            try:
+                user_auth_tuple = auth.authenticate(request)
+                if user_auth_tuple:
+                    user, _ = user_auth_tuple
+                    break
+            except Exception as e:
+                print("Auth error:", e)
+        request.user = user or request.user
+        return super().dispatch(request, *args, **kwargs)
 
 
 class GenerateEventTemplatesAPIView(APIView):

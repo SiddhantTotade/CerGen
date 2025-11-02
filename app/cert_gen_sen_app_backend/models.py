@@ -6,6 +6,7 @@ from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
 from django.utils.text import slugify
 from django.utils.translation import gettext as _
 from cergen_auth.models import User
+from django.utils import timezone
 
 
 # Create your models here.
@@ -40,9 +41,11 @@ class Event(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.CharField(max_length=20, null=True, blank=True)
     details = models.JSONField(default=None)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     def __str__(self):
-        return str(self.id)
+        return f"{self.event or 'Event'} (ID: {self.id})"
 
 
 class EventFile(models.Model):
