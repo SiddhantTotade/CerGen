@@ -3,6 +3,8 @@ db.sqlite3
 
 cergen_auth/__pycache__
 cergen_auth/migrations
+cergen_auth/serializers/__pycache__
+cergen_auth/views/__pycache__
 
 cert_gen_sen_app_backend/__pycache__
 cert_gen_sen_app_backend/migrations
@@ -12,3 +14,5 @@ cert_gen_sen_app_backend/proto/pdf_generator_pb2.py
 cert_gen_sen_app_backend/proto/pdf_generator_pb2_grpc.py
 
 cert_gen_sen_app_backend/services/__pycache__
+
+cert_gen_sen_app_backend/schema/__pycache__

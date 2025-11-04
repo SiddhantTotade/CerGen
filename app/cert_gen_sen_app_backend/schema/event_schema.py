@@ -1,8 +1,14 @@
 import graphene
 from graphene_django import DjangoObjectType
 from graphene.types.generic import GenericScalar
+from graphql import GraphQLError
 
-from ..models import Event
+from ..models import Event, Participant
+
+
+class EventKeysType(graphene.ObjectType):
+    detail_keys = graphene.List(graphene.String)
+    participant_detail_keys = graphene.List(graphene.String)
 
 
 class EventType(DjangoObjectType):
@@ -21,6 +27,7 @@ class EventType(DjangoObjectType):
 class Query(graphene.ObjectType):
     events = graphene.List(EventType)
     event = graphene.Field(EventType, id=graphene.Int(required=True))
+    event_data = graphene.Field(EventKeysType, event_id=graphene.Int(required=True))
 
     def resolve_events(self, info):
         user = info.context.user
@@ -36,6 +43,32 @@ class Query(graphene.ObjectType):
             return Event.objects.get(id=id, user=user)
         except Event.DoesNotExist:
             return None
+
+    def resolve_event_data(self, info, event_id):
+        user = info.context.user
+        if not user or not user.is_authenticated:
+            raise GraphQLError("Authentication required.")
+
+        try:
+            event = Event.objects.get(id=event_id, user=user)
+        except Event.DoesNotExist:
+            raise GraphQLError("Event not found or not accessible.")
+
+        detail_keys = (
+            list(event.details.keys()) if isinstance(event.details, dict) else []
+        )
+
+        participants = Participant.objects.filter(event=event)
+        participant_keys = set()
+
+        for p in participants:
+            if isinstance(p.participant_details, dict):
+                participant_keys.update(p.participant_details.keys())
+
+        return EventKeysType(
+            detail_keys=detail_keys,
+            participant_detail_keys=list(participant_keys),
+        )
 
 
 class CreateEvent(graphene.Mutation):
