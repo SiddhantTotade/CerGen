@@ -126,7 +126,24 @@ class GenerateEventTemplateAPIView(APIView):
             )
 
 
+import json
+import base64
+from django.template import Template as DjangoTemplate, Context
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .models import Event, Template, Participant
+# from .utils import generate_pdf_via_grpc, dict_to_namespace  # assume same helpers as before
+
+
 class GenerateEventTemplatesAPIView(APIView):
+    """
+    Generate PDF templates for all participants of a given event.
+    Context:
+        {{ e.<key> }} → event details
+        {{ p.<key> }} → participant details
+    """
+
     def post(self, request):
         try:
             event_id = request.data.get("event_id")
@@ -142,24 +159,68 @@ class GenerateEventTemplatesAPIView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
+            # Fetch event & template
             event = Event.objects.get(id=event_id)
             template_obj = Template.objects.get(id=template_id, user=event.user)
+
+            # Parse event details (handle both string/dict)
+            event_details = {}
+            if event.details:
+                try:
+                    if isinstance(event.details, str):
+                        event_details = json.loads(event.details)
+                    elif isinstance(event.details, dict):
+                        event_details = event.details
+                except Exception as e:
+                    print("Invalid JSON in event.details:", e)
+
+            event_obj = dict_to_namespace(event_details)
+
+            # Fetch participants
             participants = Participant.objects.filter(event=event)
+            if not participants.exists():
+                return Response(
+                    {
+                        "success": False,
+                        "message": "No participants found for this event.",
+                    },
+                    status=status.HTTP_404_NOT_FOUND,
+                )
 
             rendered_outputs = []
 
+            # Generate for each participant
             for participant in participants:
-                html = TemplateRenderHelper.render_html(
-                    template_obj.html_content, event, participant
-                )
-                html_clean = html.replace("\r", "").replace("\n", "")
+                # Parse participant details
+                participant_details = {}
+                if participant.participant_details:
+                    try:
+                        if isinstance(participant.participant_details, str):
+                            participant_details = json.loads(
+                                participant.participant_details
+                            )
+                        elif isinstance(participant.participant_details, dict):
+                            participant_details = participant.participant_details
+                    except Exception as e:
+                        print("Invalid JSON in participant_details:", e)
 
+                participant_obj = dict_to_namespace(participant_details)
+
+                # Render HTML
+                html_template = DjangoTemplate(template_obj.html_content or "")
+                context = Context({"e": event_obj, "p": participant_obj})
+                rendered_html = html_template.render(context)
+                html_clean = rendered_html.replace("\r", "").replace("\n", "")
+
+                # Generate PDF
                 pdf_bytes = generate_pdf_via_grpc(template_id, html_clean, orientation)
+                encoded_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
+
                 rendered_outputs.append(
                     {
                         "participant_id": participant.id,
-                        "html": html_clean,
-                        "pdf_data": base64.b64encode(pdf_bytes).decode("utf-8"),
+                        "html": rendered_html,
+                        "pdf_data": encoded_pdf,
                     }
                 )
 
@@ -177,12 +238,15 @@ class GenerateEventTemplatesAPIView(APIView):
                 {"success": False, "message": "Event not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
         except Template.DoesNotExist:
             return Response(
                 {"success": False, "message": "Template not found."},
                 status=status.HTTP_404_NOT_FOUND,
             )
+
         except Exception as e:
+            print("Unexpected error:", e)
             return Response(
                 {"success": False, "message": str(e)},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,

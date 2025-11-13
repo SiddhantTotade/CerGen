@@ -20,6 +20,7 @@ urlpatterns = [
         csrf_exempt(AuthenticatedGraphQlView.as_view(graphiql=True, schema=schema)),
     ),
     path("generate-event/", GenerateEventTemplateAPIView.as_view()),
+    path("generate-all/", GenerateEventTemplatesAPIView.as_view()),
     # path("generate-event/", GenerateEventTemplatesAPIView.as_view()),
     path("generate-participant/", GenerateParticipantTemplateAPIView.as_view()),
     path("event/", EventView.as_view()),
