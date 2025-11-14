@@ -150,3 +150,4 @@ https://tailwindcss.com/docs/guides/create-react-app
 <img src="https://github.com/SiddhantTotade/certificate-generator-and-sender/blob/main/app_images/certificate_after.png" width="400px" />
 
 <div/>
+
