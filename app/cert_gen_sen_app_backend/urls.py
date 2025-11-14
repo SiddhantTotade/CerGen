@@ -22,7 +22,7 @@ urlpatterns = [
     path("generate-event/", GenerateEventTemplateAPIView.as_view()),
     path("generate-all/", GenerateEventTemplatesAPIView.as_view()),
     # path("generate-event/", GenerateEventTemplatesAPIView.as_view()),
-    path("generate-participant/", GenerateParticipantTemplateAPIView.as_view()),
+    path("generate-participants/", GenerateEventTemplatesAPIView.as_view()),
     path("event/", EventView.as_view()),
     path("participant/", ParticipantsView.as_view()),
     path("template/", TemplateView.as_view()),
