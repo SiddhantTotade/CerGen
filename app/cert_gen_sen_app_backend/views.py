@@ -133,17 +133,9 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .models import Event, Template, Participant
-# from .utils import generate_pdf_via_grpc, dict_to_namespace  # assume same helpers as before
 
 
 class GenerateEventTemplatesAPIView(APIView):
-    """
-    Generate PDF templates for all participants of a given event.
-    Context:
-        {{ e.<key> }} → event details
-        {{ p.<key> }} → participant details
-    """
-
     def post(self, request):
         try:
             event_id = request.data.get("event_id")
@@ -159,11 +151,9 @@ class GenerateEventTemplatesAPIView(APIView):
                     status=status.HTTP_400_BAD_REQUEST,
                 )
 
-            # Fetch event & template
             event = Event.objects.get(id=event_id)
             template_obj = Template.objects.get(id=template_id, user=event.user)
 
-            # Parse event details (handle both string/dict)
             event_details = {}
             if event.details:
                 try:
@@ -176,7 +166,6 @@ class GenerateEventTemplatesAPIView(APIView):
 
             event_obj = dict_to_namespace(event_details)
 
-            # Fetch participants
             participants = Participant.objects.filter(event=event)
             if not participants.exists():
                 return Response(
@@ -189,9 +178,7 @@ class GenerateEventTemplatesAPIView(APIView):
 
             rendered_outputs = []
 
-            # Generate for each participant
             for participant in participants:
-                # Parse participant details
                 participant_details = {}
                 if participant.participant_details:
                     try:
@@ -206,13 +193,11 @@ class GenerateEventTemplatesAPIView(APIView):
 
                 participant_obj = dict_to_namespace(participant_details)
 
-                # Render HTML
                 html_template = DjangoTemplate(template_obj.html_content or "")
                 context = Context({"e": event_obj, "p": participant_obj})
                 rendered_html = html_template.render(context)
                 html_clean = rendered_html.replace("\r", "").replace("\n", "")
 
-                # Generate PDF
                 pdf_bytes = generate_pdf_via_grpc(template_id, html_clean, orientation)
                 encoded_pdf = base64.b64encode(pdf_bytes).decode("utf-8")
 
