@@ -1,5 +1,5 @@
 <div align="center" >
-  <img src="https://github.com/SiddhantTotade/CerGen-Frontend/blob/master/app_images/PaperLess.png" />
+  <img src="https://github.com/SiddhantTotade/CerGen-Frontend/blob/master/app_images/Paper.png" />
 </div>
 
 # About the project
