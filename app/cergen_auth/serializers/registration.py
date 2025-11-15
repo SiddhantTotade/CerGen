@@ -1,10 +1,18 @@
 from rest_framework import serializers
-
-from django.core.cache import cache
+from rest_framework.validators import UniqueValidator
 from ..models import User
 
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
+    email = serializers.EmailField(
+        required=True,
+        validators=[
+            UniqueValidator(
+                queryset=User.objects.all(),
+                message="A user with this email address already exists",
+            )
+        ],
+    )
     password2 = serializers.CharField(style={"input-type": "password"}, write_only=True)
 
     class Meta:
@@ -13,12 +21,17 @@ class UserRegistrationSerializer(serializers.ModelSerializer):
         extra_kwargs = {"password": {"write_only": True}}
 
     def validate(self, attrs):
-        password = attrs.get("password")
-        password2 = attrs.get("password2")
-
-        if password != password2:
+        if attrs["password"] != attrs["password2"]:
             raise serializers.ValidationError(
                 "Password and Confirm Password are not matching"
             )
-
         return attrs
+
+    def create(self, validated_data):
+        validated_data.pop("password2")
+        password = validated_data.pop("password")
+
+        user = User(**validated_data)
+        user.set_password(password)
+        user.save()
+        return user

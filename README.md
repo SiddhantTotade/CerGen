@@ -4,8 +4,8 @@
 
 # About the project
 
-CerGen is a web application which generates the certificates for the participants and send it to their corrosponding email. This application has the ability of generating the certificates for the participants who are participated in the event/contest. Also this application sends text message to the participants on their corrosponding phone number. This applicaion sends the certificate of participantion and certification of merit at the same time.
-
+PaperLess is a web application that generates PDF certificates from HTML templates and delivers them directly to the participant email.
+ 
 ### Features of the project
 
 - Filter eligible participants.
@@ -26,7 +26,7 @@ CerGen is a web application which generates the certificates for the participant
 - Clone the project
 
 ```shell
-git clone git@github.com:SiddhantTotade/cergen.git
+git clone git@github.com:SiddhantTotade/PaperLess.git
 ```
 
 - Open the project in the terminal. The below command opens the project in vs-code but you can choose any editor
