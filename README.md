@@ -4,7 +4,7 @@
 
 # About the project
 
-PaperLess is a web application that generates PDF certificates from HTML templates and delivers them directly to the participant email.
+PaperLess is a web application that generates PDF certificates from HTML templates and delivers them directly to the email.
  
 ### Features of the project
 
